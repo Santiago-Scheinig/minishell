@@ -2,7 +2,6 @@
 A simple Unix shell clone written in C.
 Supports built-in commands, redirections, pipes, and signal handling.
 
-# 🧠 Git Workflow (Team Version)
 # 🔄 General Git Commands
 Action					|	Command
 -----------------------------------------------------------------------
@@ -29,3 +28,10 @@ Delete local branch		|	git branch -d feature/feature_name
 
 Delete remote branch	|	git push origin --delete feature/feature_name
 
+#🛟 Useful Tips
+Use Case								|	Command
+------------------------------------------------------------------------
+Temporarily save uncommitted changes	|	git stash
+Apply stashed changes					|	git stash apply
+Check stash list						|	git stash list
+Resolve merge conflicts manually		|	Open the conflicted file and fix the sections marked by Git (<<<<<<<)
