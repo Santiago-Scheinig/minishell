@@ -28,6 +28,10 @@ Delete local branch		|	git branch -d feature/feature_name
 
 Delete remote branch	|	git push origin --delete feature/feature_name
 
+See local branches		|	git branch
+
+Pull a local main copy	|	git checkout -b main origin/main
+
 #🛟 Useful Tips
 Use Case								|	Command
 ------------------------------------------------------------------------
@@ -38,3 +42,22 @@ Apply stashed changes					|	git stash apply
 Check stash list						|	git stash list
 
 Resolve merge conflicts manually		|	Open the conflicted file and fix the sections marked by Git (<<<<<<<)
+
+# 💡 Typical Workflow
+1. Switch to main and pull the latest changes from GitHub
+git checkout main
+git pull origin main
+
+2. Create a new branch from updated main
+git checkout -b feature/new-builtin
+
+3. Work on the branch, then push it
+git add .
+git commit -m "Add new builtin command"
+git push origin feature/new-builtin
+
+4. Open a PR on GitHub and merge once approved
+
+5. Switch back to main and pull merged changes
+git checkout main
+git pull origin main
