@@ -47,6 +47,7 @@ Resolve merge conflicts manually		|	Open the conflicted file and fix the section
 1. Switch to main and pull the latest changes from GitHub
 
 git checkout main
+
 git pull origin main
 
 2. Create a new branch from updated main
@@ -56,7 +57,9 @@ git checkout -b feature/new-builtin
 3. Work on the branch, then push it
 
 git add .
+
 git commit -m "Add new builtin command"
+
 git push origin feature/new-builtin
 
 4. Open a PR on GitHub and merge once approved
@@ -64,4 +67,5 @@ git push origin feature/new-builtin
 5. Switch back to main and pull merged changes
 
 git checkout main
+
 git pull origin main
