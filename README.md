@@ -32,7 +32,7 @@ See local branches		|	git branch
 
 Pull a local main copy	|	git checkout -b main origin/main
 
-#🛟 Useful Tips
+# 🛟 Useful Tips
 Use Case								|	Command
 ------------------------------------------------------------------------
 Temporarily save uncommitted changes	|	git stash
