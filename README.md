@@ -5,7 +5,7 @@ Supports built-in commands, redirections, pipes, and signal handling.
 # 🔄 General Git Commands
 Action					|	Command
 -----------------------------------------------------------------------
-Add files or changes	|	git add .
+Add files or changes	|	git add . \n
 
 Commit changes			|	git commit -m "your message"
 
