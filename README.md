@@ -5,7 +5,7 @@ Supports built-in commands, redirections, pipes, and signal handling.
 # 🔄 General Git Commands
 Action					|	Command
 -----------------------------------------------------------------------
-Add files or changes	|	git add . \n
+Add files or changes	|	git add .
 
 Commit changes			|	git commit -m "your message"
 
@@ -46,26 +46,26 @@ Resolve merge conflicts manually		|	Open the conflicted file and fix the section
 # 💡 Typical Workflow
 1. Switch to main and pull the latest changes from GitHub
 
-git checkout main
+	git checkout main
 
-git pull origin main
+	git pull origin main
 
 2. Create a new branch from updated main
 
-git checkout -b feature/new-builtin
+	git checkout -b feature/new-builtin
 
 3. Work on the branch, then push it
 
-git add .
+	git add .
 
-git commit -m "Add new builtin command"
+	git commit -m "Add new builtin command"
 
-git push origin feature/new-builtin
+	git push origin feature/new-builtin
 
 4. Open a PR on GitHub and merge once approved
 
 5. Switch back to main and pull merged changes
 
-git checkout main
+	git checkout main
 
-git pull origin main
+	git pull origin main
