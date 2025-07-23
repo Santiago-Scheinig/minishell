@@ -32,6 +32,9 @@ Delete remote branch	|	git push origin --delete feature/feature_name
 Use Case								|	Command
 ------------------------------------------------------------------------
 Temporarily save uncommitted changes	|	git stash
+
 Apply stashed changes					|	git stash apply
+
 Check stash list						|	git stash list
+
 Resolve merge conflicts manually		|	Open the conflicted file and fix the sections marked by Git (<<<<<<<)
