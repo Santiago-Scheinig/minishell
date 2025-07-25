@@ -34,7 +34,7 @@
 int main(int argc, char **argv, char **envp)
 {
 	char	*input;
-	//t_cmd	**commands;
+	t_body	minishell;
 
 	if (argc >= 2)
 		return (1);
@@ -47,10 +47,9 @@ int main(int argc, char **argv, char **envp)
 			//add to history (only non-empty lines);
 		//if (!input)
 			//is it an error?
-		//commands = parser(input);
-			//we tokenize and validate everithing, if works, returns a T_CMD **.
-		//if (!commands)
-			//continue; (input wasn't valid, parser() should print the error);
+		parser(&minishell, input);
+		if (!minishell.commands)
+			continue; //(input wasn't valid, parser() should print the error);
 		//execute(commands)
 			//if only one cmd and it's built in - don't fork, any other way we fork.
 		if (!ft_strncmp(input, "exit", 5))
