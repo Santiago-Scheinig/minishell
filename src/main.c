@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "signals.h"
 
 /**
  * Short description of the function porpuse.
@@ -33,13 +34,14 @@
  */
 int main(int argc, char **argv, char **envp)
 {
+	t_body	minishell;
 	char	*input;
-	//t_cmd	**commands;
 
 	if (argc >= 2)
 		return (1);
 	if (argv || envp)
 		input = NULL;
+	recive_signals(&minishell);
 	while (1)
 	{
 		input = readline("minishell> ");

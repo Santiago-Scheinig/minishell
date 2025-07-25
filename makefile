@@ -14,8 +14,10 @@ NAME		=	minishell
 LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
-SRC			=	$(SRC_DIR)/main.c
-SRC_BON		=	$(SRC_DIR)/main_bonus.c
+SRC			=	$(SRC_DIR)/main.c			\
+				$(SRC_DIR)/signals.c		\
+
+SRC_BON		=	$(SRC_DIR)/main_bonus.c		\
 
 # The flags used to compile the objects.									#
 CFLAGS		=	-Wall -Wextra -Werror -g
@@ -24,7 +26,7 @@ CFLAGS		=	-Wall -Wextra -Werror -g
 DFLAGS		=	-MMD -MP
 
 # The preprocess flags used to compile the program.							#
-CPPFLAGS	=	-I $(INC_DIR)
+CPPFLAGS	=	-I$(INC_DIR)
 
 # ----------------------------- Folder Names ------------------------------ #
 
@@ -68,6 +70,7 @@ LIBFT		=	libft.a
 ifeq ($(LIBFT_USE), 1)
 	NAME_DEPS	= $(LIB_REG) $(LIBFT)
  	NAME_LIBS	= $(LIB_REG) $(LIBFT_ABS)
+	CPPFLAGS	+=	-Ilibft/include
 else
 	NAME_DEPS	= $(LIB_REG)
 	NAME_LIBS	= $(LIB_REG)

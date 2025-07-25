@@ -10,10 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/include/libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
+#ifndef MINISHELL_H
+# define MINISHELL_H
+# include "libft.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdio.h>
 
 typedef	struct s_cmd
 {
@@ -24,3 +26,12 @@ typedef	struct s_cmd
 	char	**argv;
 }	t_cmd;
 
+typedef struct s_body
+{
+	t_cmd	**commands;
+	int		errno;
+}	t_body;
+
+void	recive_signals(t_body *minishell);
+
+#endif
