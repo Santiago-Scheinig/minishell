@@ -14,8 +14,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdio.h>
-#include <>
-#include <>
 
 typedef	struct s_cmd
 {

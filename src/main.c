@@ -38,6 +38,8 @@ int main(int argc, char **argv, char **envp)
 
 	if (argc >= 2)
 		return (1);
+	if (argv || envp)
+		input = NULL;
 	while (1)
 	{
 		input = readline("minishell> ");
@@ -52,9 +54,15 @@ int main(int argc, char **argv, char **envp)
 		//execute(commands)
 			//if only one cmd and it's built in - don't fork, any other way we fork.
 		if (!ft_strncmp(input, "exit", 5))
+		{
+			free(input);
 			break ;
+		}
 		else
+		{
+			free(input);
 			ft_printf("Invalid command\n");
+		}
 	}
 	return (0);
 }
