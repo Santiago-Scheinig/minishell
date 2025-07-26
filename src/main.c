@@ -13,6 +13,8 @@
 #include "minishell.h"
 #include "signals.h"
 
+volatile sig_atomic_t signal_received = 0;
+
 /**
  * Short description of the function porpuse.
  * 
@@ -35,20 +37,14 @@
 int main(int argc, char **argv, char **envp)
 {
 	t_body	minishell;
-	char	*input;
 
 	if (argc >= 2)
 		return (1);
 	if (argv || envp)
-		input = NULL;
-	recive_signals(&minishell);
+		minishell.input = NULL;
 	while (1)
 	{
-		input = readline("minishell> ");
-		//if (input[0])
-			//add to history (only non-empty lines);
-		//if (!input)
-			//is it an error?
+		recive_signals(&minishell);
 		//commands = parser(input);
 			//we tokenize and validate everithing, if works, returns a T_CMD **.
 		//if (!commands)

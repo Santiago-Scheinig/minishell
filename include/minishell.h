@@ -29,6 +29,7 @@ typedef	struct s_cmd
 typedef struct s_body
 {
 	t_cmd	**commands;
+	char	*input;
 	int		errno;
 }	t_body;
 
