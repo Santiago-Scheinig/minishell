@@ -30,9 +30,14 @@ typedef struct s_body
 {
 	t_cmd	**commands;
 	char	*input;
+	int		*pipe_child;
+	int		pipe_child_count;
 	int		errno;
 }	t_body;
 
 void	recive_signals(t_body *minishell);
+
+//temporaly cleanup for test
+void cleanup(t_body *minishell);
 
 #endif

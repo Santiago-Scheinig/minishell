@@ -13,8 +13,6 @@
 #include "minishell.h"
 #include "signals.h"
 
-volatile sig_atomic_t signal_received = 0;
-
 /**
  * Short description of the function porpuse.
  * 
@@ -34,7 +32,23 @@ volatile sig_atomic_t signal_received = 0;
  * @note - You can add snippets using the "-" character at the beggining
  * 
  */
-int main(int argc, char **argv, char **envp)
+
+// temporal cleanup for tests
+void	cleanup(t_body *minishell)
+{
+	if (minishell->input)
+	{
+		free(minishell->input);
+		minishell->input = NULL;
+	}
+	if (minishell->pipe_child)
+	{
+		free(minishell->pipe_child);
+		minishell->pipe_child = NULL;
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_body	minishell;
 
@@ -44,23 +58,23 @@ int main(int argc, char **argv, char **envp)
 		minishell.input = NULL;
 	while (1)
 	{
+		minishell.pipe_child = malloc(1 * sizeof(int));
 		recive_signals(&minishell);
 		//commands = parser(input);
 			//we tokenize and validate everithing, if works, returns a T_CMD **.
 		//if (!commands)
 			//continue; (input wasn't valid, parser() should print the error);
 		//execute(commands)
-			//if only one cmd and it's built in - don't fork, any other way we fork.
-		if (!ft_strncmp(input, "exit", 5))
+		//if only one cmd and it's built in - don't fork, any other way we fork.
+		if (!ft_strncmp(minishell.input, "exit", 5))
 		{
-			free(input);
+			cleanup(&minishell);
 			break ;
 		}
+		else if (minishell.input[0] == '\0') //empty line
+			continue ;
 		else
-		{
-			free(input);
 			ft_printf("Invalid command\n");
-		}
 	}
 	return (0);
 }

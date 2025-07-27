@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/07/26 15:42:41 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/07/27 14:39:03 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@
  * 		   to track if a signal was received.
  */
 
-static void	child_clean(t_body *minishell)
+volatile sig_atomic_t	g_signal_received = 0;
+
+/*static void	child_clean(t_body *minishell)
 {
 	int	i;
 
@@ -44,48 +46,62 @@ static void	child_clean(t_body *minishell)
 		}
 		i++;
 	}
-}
+}*/
 
 static void	ctrl_c(int signum)
 {
-	signal_received = 1;
+	signum = 0;
+	g_signal_received = 1;
+	ft_printf("\n");
+	rl_on_new_line();
+	rl_redisplay();
 }
 
 static void	ctrl_quit(int signum)
 {
-	signal_received = 0;
+	rl_on_new_line();
+	rl_redisplay();
+	signum = 0;
 }
 
-static void	*handle_signals(t_body *minishell)
+static t_body	*handle_signals(t_body *minishell)
 {
 	if (signal(SIGINT, ctrl_c) == SIG_ERR)
 	{
-		cleanup();
+		cleanup(minishell);
 		perror("Error setting SIGINT handler");
 		return (NULL);
 	}
 	if (signal(SIGQUIT, ctrl_quit) == SIG_ERR)
 	{
-		cleanup();
+		cleanup(minishell);
 		perror("Error setting SIGQUIT handler");
 		return (NULL);
 	}
+	return (minishell);
 }
 
 void	recive_signals(t_body *minishell)
 {
-	int		bytes_read;
-	int		i;
-	
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term))
+	{
+		cleanup(minishell);
+		perror("Error setting STDIN_FILENO term");
+	}
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term))
+	{
+		cleanup(minishell);
+		perror("Error setting TCSANOW term");
+	}
 	if (!handle_signals(minishell))
 		return ;
-	if (signal_received)
-	{
-		child_clean(minishell);
+	if (g_signal_received)
 		cleanup(minishell);
-	}
 	minishell->input = readline("minishell> ");
-	if (minishell.input == NULL)
+	if (minishell->input == NULL)
 	{
 		cleanup(minishell);
 		exit(1);
