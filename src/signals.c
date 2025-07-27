@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/07/27 14:39:03 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/07/27 16:49:24 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,5 @@ void	recive_signals(t_body *minishell)
 	}
 	else
 		add_history(minishell->input);
+	kill(minishell->pid, SIGINT);
 }

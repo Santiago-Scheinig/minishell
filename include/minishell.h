@@ -16,8 +16,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdio.h>
+# include <signal.h>
 
-typedef	struct s_cmd
+extern volatile sig_atomic_t	g_signal_received;
+
+typedef struct s_cmd
 {
 	int		built_in;
 	int		infile;
@@ -38,6 +41,6 @@ typedef struct s_body
 void	recive_signals(t_body *minishell);
 
 //temporaly cleanup for test
-void cleanup(t_body *minishell);
+void	cleanup(t_body *minishell);
 
 #endif
