@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 18:53:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/04 22:25:52 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	parser(t_body *minishell, char *input)
 {
 	char	**split;
 
-	split = ft_iq_split(input, ' ');
+	split = shell_split(input);
 	free(input);
 	if (!split)
 		sigend(minishell, 1);

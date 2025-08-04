@@ -6,13 +6,15 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 18:53:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/04 22:09:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
+# include "shellft.h"
+# include "minishell.h"
 # include <fcntl.h>
 # include <unistd.h>
 

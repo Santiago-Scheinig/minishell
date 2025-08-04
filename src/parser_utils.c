@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 18:41:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 18:55:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/04 22:06:34 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,6 @@ void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst)
 		(*aux) = create_cmd(minishell, token_lst);
 	else
 		(*aux) = NULL;
-}
-
-static int	get_token_type(char *str)
-{
-	if (!str)
-		return (END);
-	if (!ft_strncmp(str, "|", 2))
-		return (PIPE);
-	if (!ft_strncmp(str, ">>", 3))
-		return (REDIR_APPEND);
-	if (!ft_strncmp(str, "<<", 3))
-		return (HEREDOC);
-	if (!ft_strncmp(str, "<", 2))
-		return (REDIR_IN);
-	if (!ft_strncmp(str, ">", 2))
-		return (REDIR_OUT);
-	return (WORD);
 }
 
 /**
