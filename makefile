@@ -14,7 +14,12 @@ NAME		=	minishell
 LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
-SRC			=	$(SRC_DIR)/main.c
+SRC			=	$(SRC_DIR)/main.c					\
+				$(SRC_DIR)/parser.c					\
+				$(SRC_DIR)/parser_utils.c			\
+				$(SRC_DIR)/parser_redir_utils.c		\
+				$(SRC_DIR)/sigend_parser.c			\
+
 SRC_BON		=	$(SRC_DIR)/main_bonus.c
 
 # The flags used to compile the objects.									#
@@ -24,7 +29,7 @@ CFLAGS		=	-Wall -Wextra -Werror -g
 DFLAGS		=	-MMD -MP
 
 # The preprocess flags used to compile the program.							#
-CPPFLAGS	=	-I $(INC_DIR)
+CPPFLAGS	=	-I $(INC_DIR) -I $(INC_LIB)
 
 # ----------------------------- Folder Names ------------------------------ #
 
@@ -42,6 +47,9 @@ DEP_DIR		=	dep
 
 # The directory name for index files.										#
 INC_DIR		=	include
+
+# The directory name for libft index files.									#
+INC_LIB		=	libft/include
 
 # --------------------------- Object Libraries ---------------------------- #
 

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parser.h"
 
 /**
  * Short description of the function porpuse.
@@ -34,12 +35,14 @@
 int main(int argc, char **argv, char **envp)
 {
 	char	*input;
+	t_token	*test;
 	t_body	minishell;
 
 	if (argc >= 2)
 		return (1);
 	if (argv || envp)
 		input = NULL;
+	memset(&minishell, 0, sizeof(minishell));
 	while (1)
 	{
 		input = readline("minishell> ");
@@ -48,8 +51,16 @@ int main(int argc, char **argv, char **envp)
 		//if (!input)
 			//is it an error?
 		parser(&minishell, input);
-		if (!minishell.commands)
+		if (!minishell.cmd_lst)
+		{
+			while (minishell.token_lst)
+			{
+				test = (t_token *) minishell.token_lst->content;
+				printf("%s - %i\n", test->str, test->type);
+				minishell.token_lst = minishell.token_lst->next;
+			}
 			continue; //(input wasn't valid, parser() should print the error);
+		}
 		//execute(commands)
 			//if only one cmd and it's built in - don't fork, any other way we fork.
 		if (!ft_strncmp(input, "exit", 5))

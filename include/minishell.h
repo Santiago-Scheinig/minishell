@@ -41,6 +41,8 @@ typedef struct s_body
 	int		errno;
 }	t_body;
 
+void	parser(t_body *minishell, char *input);
+
 void	recive_signals(t_body *minishell);
 
 //temporaly cleanup for test

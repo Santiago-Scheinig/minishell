@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/07/29 21:35:18 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/04 18:53:39 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	get_cmds(t_body *minishell)
 	t_token	*token_next;
 
 	lst_aux = minishell->token_lst;
-	new_cmd = create_cmd(minishell, minishell.token_lst);//here, during creation of cmd.
+	new_cmd = create_cmd(minishell, minishell->token_lst);//here, during creation of cmd.
 	while (lst_aux)
 	{
 		token_aux = (t_token *) lst_aux->content;
@@ -42,10 +42,10 @@ static void	get_cmds(t_body *minishell)
 			save_cmd(minishell, &new_cmd, lst_aux->next);//then save cmd re executes create_cmd
 		lst_aux = lst_aux->next;
 	}
-	save_cmd(minishell, &new_cmd);
+	save_cmd(minishell, &new_cmd, NULL);
 }
 
-static void	verify_tokens(t_body *minishell, t_token *arr)
+static void	verify_tokens(t_body *minishell)
 {
 	t_list	*lst_aux;
 	t_token	*token_aux;
@@ -88,7 +88,7 @@ static void	tokenize(t_body *minishell, char **split)
 		new_node = ft_lstnew(new_token);
 		if (!new_node)
 			sigend(minishell, 1);
-		add_back_token(&(minishell->token_lst), new_node);
+		ft_lstadd_back(&(minishell->token_lst), new_node);
 	}
 	free(split);
 }
@@ -107,6 +107,8 @@ void	parser(t_body *minishell, char *input)
 		sigend(minishell, 1);
 	tokenize(minishell, split);
 	verify_tokens(minishell);
+	return ;
+	//i should verify this work before keep going.
 	get_cmds(minishell);
 	ft_lstclear(&(minishell->token_lst), free);
 	minishell->token_lst = NULL;

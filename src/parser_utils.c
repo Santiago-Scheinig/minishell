@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 18:41:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/07/29 21:36:27 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/04 18:55:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ t_cmd	*create_cmd(t_body *minishell, t_list *token_lst)
 {
 	t_cmd *new_cmd;
 
-	new_cmd = malloc(sizeof(t_cmd *));
+	if (!token_lst)
+		sigend(minishell, 1);
+	new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		sigend(minishell, 1);
-	memset(new_cmd, 0, sizeof(t_cmd *));
+	memset(new_cmd, 0, sizeof(t_cmd));
 	new_cmd->outfile = 1;
 	new_cmd->heredoc[0] = -1;
 	new_cmd->heredoc[1] = -1;
@@ -43,7 +45,7 @@ void	update_cmd(t_token *aux, t_cmd *new)
 	i = 0;
 	while (new->argv[i])
 		i++;
-	new->argv[i] = aux.str;
+	new->argv[i] = aux->str;
 }
 
 void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst)
@@ -55,7 +57,7 @@ void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst)
 	if (!new_node)
 		sigend(minishell, 1);
 	ft_lstadd_back(&(minishell->cmd_lst), new_node);
-	aux = (t_token *) token_lst->content;
+	pipe = (t_token *) token_lst->content;
 	if (pipe->type == PIPE)
 		(*aux) = create_cmd(minishell, token_lst);
 	else
