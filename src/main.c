@@ -54,6 +54,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc >= 2)
 		return (1);
+	initialization();
 	if (argv || envp)
 		ft_memset(&minishell, 0, sizeof(t_body));
 	config_minishell(&minishell);
