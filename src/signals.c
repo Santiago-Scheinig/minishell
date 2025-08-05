@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/05 20:47:59 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:58:33 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	recive_signals(t_body *minishell)
 	cleanup(minishell);
 	minishell->input = readline("minishell> ");
 	if (minishell->input == NULL)
-	{	
+	{
 		cleanup(minishell);
 		exit(1);
 	}
