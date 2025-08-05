@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/05 16:53:33 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:47:59 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_body	*config_minishell(t_body *minishell)
 		cleanup(minishell);
 		perror("Error setting STDIN_FILENO term");
 	}
-	term.c_lflag &= ~ECHOCTL;
+	term.c_lflag |= ECHOCTL;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term))
 	{
 		cleanup(minishell);
