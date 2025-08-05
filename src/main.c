@@ -55,10 +55,9 @@ int	main(int argc, char **argv, char **envp)
 	if (argc >= 2)
 		return (1);
 	if (argv || envp)
-		minishell.input = NULL;
+		ft_memset(&minishell, 0, sizeof(t_body));
 	while (1)
 	{
-		minishell.pipe_child = malloc(1 * sizeof(int));
 		recive_signals(&minishell);
 		//commands = parser(input);
 			//we tokenize and validate everithing, if works, returns a T_CMD **.

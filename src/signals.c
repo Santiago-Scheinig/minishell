@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/07/27 16:49:24 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:24:45 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,12 @@ static void	ctrl_c(int signum)
 	signum = 0;
 	g_signal_received = 1;
 	ft_printf("\n");
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
 
-static void	ctrl_quit(int signum)
+static void	ctrl_do_nothing(int signum)
 {
 	rl_on_new_line();
 	rl_redisplay();
@@ -72,7 +73,7 @@ static t_body	*handle_signals(t_body *minishell)
 		perror("Error setting SIGINT handler");
 		return (NULL);
 	}
-	if (signal(SIGQUIT, ctrl_quit) == SIG_ERR)
+	if (signal(SIGQUIT, ctrl_do_nothing) == SIG_ERR)
 	{
 		cleanup(minishell);
 		perror("Error setting SIGQUIT handler");
@@ -90,7 +91,7 @@ void	recive_signals(t_body *minishell)
 		cleanup(minishell);
 		perror("Error setting STDIN_FILENO term");
 	}
-	term.c_lflag &= ~ECHOCTL;
+	term.c_lflag |= ECHOCTL;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term))
 	{
 		cleanup(minishell);
@@ -98,15 +99,13 @@ void	recive_signals(t_body *minishell)
 	}
 	if (!handle_signals(minishell))
 		return ;
-	if (g_signal_received)
-		cleanup(minishell);
+	cleanup(minishell);
 	minishell->input = readline("minishell> ");
 	if (minishell->input == NULL)
-	{
+	{	
 		cleanup(minishell);
 		exit(1);
 	}
 	else
 		add_history(minishell->input);
-	kill(minishell->pid, SIGINT);
 }
