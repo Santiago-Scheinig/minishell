@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 22:25:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/05 17:42:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,10 @@ void	parser(t_body *minishell, char *input)
 	free(input);
 	if (!split)
 		sigend(minishell, 1);
+	int i = -1;
+	while (split[++i])
+		printf("%s\n",split[i]);
+	return ;
 	tokenize(minishell, split);
 	verify_tokens(minishell);
 	return ;

@@ -6,25 +6,58 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 22:15:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:38:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shellft.h"
 
-static void	iq_memmove(char *dst_tmp, char *src_tmp, size_t n)
+static void	iq_moveup(char *dst_tmp, char *src_tmp, size_t n)
 {
-	char	*tmp;
-	char	quote;
+	size_t	i;
+	size_t	j;
 
-	if (src_tmp[n] == '\'')
-		quote = '\'';
-	if (src_tmp[n] == '\"')
-		quote = '\"';	
-	tmp = ft_strchr(&src_tmp[n], quote);
-	if (!tmp)
-		return;
-	dst_tmp[n] = src_tmp[n];
+	printf("MOVEUP\n");
+	i = 0;
+	j = 0;
+	while (i < n)
+	{
+		if (src_tmp[i] == '\'' || src_tmp[i] == '\"')
+		{
+			i++;
+			continue;
+		}
+		if (i < n)
+			dst_tmp[j] = src_tmp[i];
+		i++;
+		j++;
+	}
+}
+
+static void	iq_movedown(char *dst_tmp, char *src_tmp, size_t len)
+{
+	size_t	i;
+	size_t	dst_len;
+
+	i = -1;
+	dst_len = len;
+	while (src_tmp[++i] && len > i)
+		if (src_tmp[i] == '\'' || src_tmp[i] == '\"')
+			dst_len--;
+	while (len > 0 && dst_len > 0)
+	{
+		if (len > 0)
+		{
+			len--;
+			if (len > 0 &&(src_tmp[len] != '\'' && src_tmp[len] != '\"'))
+			{
+				dst_len--;
+				dst_tmp[dst_len] = src_tmp[len];
+			}
+		}
+	}
+	dst_len--;
+	dst_tmp[dst_len] = src_tmp[len];
 }
 
 /**
@@ -41,18 +74,15 @@ static void	*shell_memmove(void *dest, const void *src, size_t n)
 {
 	unsigned char	*dst_tmp;
 	unsigned char	*src_tmp;
-	size_t			i;
 
-	i = 0;
 	if (!dest && !src)
 		return (dest);
 	src_tmp = (unsigned char *) src;
 	dst_tmp = (unsigned char *) dest;
 	if (dst_tmp > src_tmp)
-		while (n > i)
-			iq_memmove((char *) dst_tmp,(char *) src_tmp, --n);
-	while (i < n)
-		iq_memmove((char *) dst_tmp,(char *) src_tmp, i++);
+		iq_movedown((char *) dst_tmp,(char *) src_tmp, n);
+	else
+		iq_moveup((char *) dst_tmp,(char *) src_tmp, n);
 	return (dest);
 }
 

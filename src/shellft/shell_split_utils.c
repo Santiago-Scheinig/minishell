@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:22:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 22:10:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/05 19:03:46 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	word_len(const char *s)
 			quote = '\"';
 		}
 		if (tmp && ++i)
-			while (s[i] != quote)
+			while (s[i] && s[i] != quote)
 				i++;
 		i++;
 	}
