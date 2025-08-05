@@ -15,8 +15,9 @@
 # include "libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <stdio.h>
+# include <termios.h>
 # include <signal.h>
+# include <stdio.h>
 
 extern volatile sig_atomic_t	g_signal_received;
 
@@ -29,13 +30,23 @@ typedef struct s_cmd
 	char	**argv;
 }	t_cmd;
 
+/*struct termios
+{
+	tcflag_t	c_cflag;   // Control flags
+	tcflag_t	c_lflag;   // Locals flags
+	tcflag_t	c_iflag;   // Enter flags
+	tcflag_t	c_oflag;   // Out flags
+	cc_t		c_cc[NCCS];// Special caracters (como EOF, INTR, etc)
+};*/
+
 typedef struct s_body
 {
-	t_cmd	**commands;
-	char	*input;
-	int		*pipe_child;
-	int		pipe_child_count;
-	int		errno;
+	struct termios	term;
+	t_cmd			**commands;
+	char			*input;
+	int				*pipe_child;
+	int				pipe_child_count;
+	int				errno;
 }	t_body;
 
 void	recive_signals(t_body *minishell);

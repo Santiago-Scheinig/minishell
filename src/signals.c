@@ -6,13 +6,13 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/05 14:24:45 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/05 16:53:33 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals.h"
 
-/**
+/** 
  * recive_signals - Handles signals for the minishell.
  * 
  * @param minishell The minishell structure containing the input and th childs.
@@ -32,21 +32,23 @@
 
 volatile sig_atomic_t	g_signal_received = 0;
 
-/*static void	child_clean(t_body *minishell)
+t_body	*config_minishell(t_body *minishell)
 {
-	int	i;
+	struct termios	term;
 
-	i = 0;
-	while (i < minishell->pipe_child_count)
+	if (tcgetattr(STDIN_FILENO, &term))
 	{
-		if (minishell->pipe_child[i] > 0)
-		{
-			kill(minishell->pipe_child[i], SIGTERM);
-			waitpid(minishell->pipe_child[i], NULL, 0);
-		}
-		i++;
+		cleanup(minishell);
+		perror("Error setting STDIN_FILENO term");
 	}
-}*/
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term))
+	{
+		cleanup(minishell);
+		perror("Error setting TCSANOW term");
+	}
+	return (minishell);
+}
 
 static void	ctrl_c(int signum)
 {
@@ -84,19 +86,6 @@ static t_body	*handle_signals(t_body *minishell)
 
 void	recive_signals(t_body *minishell)
 {
-	struct termios	term;
-
-	if (tcgetattr(STDIN_FILENO, &term))
-	{
-		cleanup(minishell);
-		perror("Error setting STDIN_FILENO term");
-	}
-	term.c_lflag |= ECHOCTL;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &term))
-	{
-		cleanup(minishell);
-		perror("Error setting TCSANOW term");
-	}
 	if (!handle_signals(minishell))
 		return ;
 	cleanup(minishell);
