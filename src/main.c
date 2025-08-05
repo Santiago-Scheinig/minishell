@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "signals.h"
 
 /**
  * Short description of the function porpuse.
@@ -31,38 +32,49 @@
  * @note - You can add snippets using the "-" character at the beggining
  * 
  */
-int main(int argc, char **argv, char **envp)
+
+// temporal cleanup for tests
+void	cleanup(t_body *minishell)
 {
-	char	*input;
-	//t_cmd	**commands;
+	if (minishell->input)
+	{
+		free(minishell->input);
+		minishell->input = NULL;
+	}
+	if (minishell->pipe_child)
+	{
+		free(minishell->pipe_child);
+		minishell->pipe_child = NULL;
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_body	minishell;
 
 	if (argc >= 2)
 		return (1);
 	if (argv || envp)
-		input = NULL;
+		ft_memset(&minishell, 0, sizeof(t_body));
+	config_minishell(&minishell);
 	while (1)
 	{
-		input = readline("minishell> ");
-		//if (input[0])
-			//add to history (only non-empty lines);
-		//if (!input)
-			//is it an error?
+		recive_signals(&minishell);
 		//commands = parser(input);
 			//we tokenize and validate everithing, if works, returns a T_CMD **.
 		//if (!commands)
 			//continue; (input wasn't valid, parser() should print the error);
 		//execute(commands)
-			//if only one cmd and it's built in - don't fork, any other way we fork.
-		if (!ft_strncmp(input, "exit", 5))
+		//if only one cmd and it's built in - don't fork, any other way we fork.
+		if (!ft_strncmp(minishell.input, "exit", 5))
 		{
-			free(input);
+			cleanup(&minishell);
 			break ;
 		}
+		else if (minishell.input[0] == '\0') //empty line
+			continue ;
 		else
-		{
-			free(input);
 			ft_printf("Invalid command\n");
-		}
 	}
 	return (0);
 }
