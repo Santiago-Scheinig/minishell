@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:22:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/05 19:03:46 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/08 15:32:40 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,24 +95,24 @@ int	word_len(const char *s)
 	char	quote;
 	int		i;
 
-	i = 0;
+	i = -1;
 	tmp = NULL;
-	while (s[i] && !is_divisor((char *) &s[i]))
+	while (s[++i] && !is_divisor((char *) &s[i]))
 	{
 		if (s[i] == '\'')
 		{
 			tmp = ft_strchr(&s[i + 1], '\'');
 			quote = '\'';
 		}
-		if (s[i] == '\"')
+		else if (s[i] == '\"')
 		{
 			tmp = ft_strchr(&s[i + 1], '\"');
 			quote = '\"';
 		}
-		if (tmp && ++i)
+		if (tmp && s[++i])
 			while (s[i] && s[i] != quote)
 				i++;
-		i++;
+		tmp = NULL;
 	}
 	return (i);
 }

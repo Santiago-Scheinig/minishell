@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 22:30:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:23:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	edit_infile_to_heredoc(t_token *next, t_cmd *new)
 }
 
 // -1 on either outfile or infile should skip that cmd execution.
-void	update_redir(t_token *aux, t_token *next, t_cmd *new)
+void	upd_redir(t_token *aux, t_token *next, t_cmd *new)
 {
 	if (aux->type == REDIR_IN)
 		edit_infile(next, new);

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/05 20:38:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/08 15:03:44 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	iq_moveup(char *dst_tmp, char *src_tmp, size_t n)
 	size_t	i;
 	size_t	j;
 
-	printf("MOVEUP\n");
 	i = 0;
 	j = 0;
 	while (i < n)
@@ -49,7 +48,7 @@ static void	iq_movedown(char *dst_tmp, char *src_tmp, size_t len)
 		if (len > 0)
 		{
 			len--;
-			if (len > 0 &&(src_tmp[len] != '\'' && src_tmp[len] != '\"'))
+			if (len > 0 && (src_tmp[len] != '\'' && src_tmp[len] != '\"'))
 			{
 				dst_len--;
 				dst_tmp[dst_len] = src_tmp[len];

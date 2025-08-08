@@ -14,18 +14,18 @@ NAME		=	minishell
 LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
-SRC			=	$(SRC_DIR)/main.c			\
-				$(SRC_DIR)/signals.c		\
-							\
-				$(SRC_DIR)/parser.c							\
-				$(SRC_DIR)/parser_utils.c					\
-				$(SRC_DIR)/parser_redir_utils.c				\
-				$(SRC_DIR)/sigend_parser.c					\
-				$(SRC_DIR)/shellft/shell_operator_strchr.c	\
-				$(SRC_DIR)/shellft/shell_split_utils.c		\
-				$(SRC_DIR)/shellft/shell_split.c			\
-				$(SRC_DIR)/shellft/shell_substr.c			\
-				$(SRC_DIR)/shellft/shell_word_strchr.c		\
+SRC			=	$(SRC_DIR)/main.c								\
+				$(SRC_DIR)/signals.c							\
+				$(SRC_DIR)/parser/parser.c						\
+				$(SRC_DIR)/parser/parser_cmd_utils.c			\
+				$(SRC_DIR)/parser/parser_token_utils.c			\
+				$(SRC_DIR)/parser/parser_redir_utils.c			\
+				$(SRC_DIR)/parser/parser_enviroment_var.c		\
+				$(SRC_DIR)/parser/parser_enviroment_var_utils.c	\
+				$(SRC_DIR)/shellft/shell_split.c				\
+				$(SRC_DIR)/shellft/shell_split_utils.c			\
+				$(SRC_DIR)/shellft/shell_substr.c				\
+				$(SRC_DIR)/shellft/shell_strchr.c				\
 
 SRC_BON		=	$(SRC_DIR)/main_bonus.c		\
 
@@ -107,7 +107,8 @@ all: $(NAME)
 # Creates a directory named $@.												#
 $(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
 	@mkdir -p $@
-	@mkdir -p obj/shellft
+	@mkdir -p $@/shellft
+	@mkdir -p $@/parser
 
 # Creates the regular library.												#
 $(LIB_REG): $(OBJ) | $(LIB_DIR)

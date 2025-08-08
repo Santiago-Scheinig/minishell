@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 22:09:17 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:23:40 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,14 @@ typedef struct s_token
 	t_token_type	type;	//	The type of token.
 }	t_token;
 
-/**
- * Creates and allocates a new T_TOKEN node.
- * @param minishell A pointer to the main enviroment structure of minishell.
- * @param content A pointer to the STRING to be tokenized.
- * @return A pointer to the new LIST node; or NULL in case of error.
- * @note The next node inside of the LIST node is set to NULL.
- */
-t_token	*create_token(t_body *minishell, char *str);
+void	tokenize(t_body *minishell, char **split);
 
-void	update_redir(t_token *aux, t_token *next, t_cmd *new);
+void	get_envar(t_list *token_lst, char **envp);
 
-void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst);
+void	get_cmds(t_body *minishell);
+
+void	upd_redir(t_token *aux, t_token *next, t_cmd *new);
 
 void	sigend(t_body *minishell, int errno);
-
-void	update_cmd(t_token *aux, t_cmd *new);
-
-t_cmd	*create_cmd(t_body *minishell, t_list *token_lst);
 
 #endif

@@ -32,46 +32,40 @@ typedef struct s_cmd
 	char	**argv;
 }	t_cmd;
 
-/*struct termios
-{
-	tcflag_t	c_cflag;   // Control flags
-	tcflag_t	c_lflag;   // Locals flags
-	tcflag_t	c_iflag;   // Enter flags
-	tcflag_t	c_oflag;   // Out flags
-	cc_t		c_cc[NCCS];// Special caracters (como EOF, INTR, etc)
-};*/
+/**
+ * Termios structure detailed
+ * 
+ * @param c_cflag	A TCFLAG_T sructure to control all flags.
+ * @param c_lflag	A TCFLAG_T structure to control local flags.
+ * @param c_iflag	A TCFLAG_T structure to enter flags.
+ * @param c_oflag	A TCFLAG_T structure to remove flags.
+ * @param c_cc		A CC_T structure with size [NCCS] for special characters
+ */
 
+/**
+ * Struct used to save the enviroment variables of the minishell.
+ * 
+ * @param term			Termios structure linked to the terminal initialization
+ * @param commands
+ * @param input
+ * @param childs_pid
+ * @param errno
+ */
 typedef struct s_body
 {
 	struct termios	term;
-	t_cmd			**commands;
+	t_list			*cmd_lst;
+	t_list			*token_lst;
+	char			*prompt;
 	char			*input;
-	int				*pipe_child;
-	int				pipe_child_count;
+	char			**envp;
+	int				*childs_pid;
 	int				errno;
 }	t_body;
 
-void	recive_signals(t_body *minishell);
-
 //temporaly cleanup for test
 void	cleanup(t_body *minishell);
 
-#endif
-typedef struct s_body
-{
-	t_list	*cmd_lst;//sigend parser
-	t_list	*token_lst;//sigend parser
-	char	*input;//always freed, even before error
-	int		*pipe_child;
-	int		pipe_child_count;
-	int		errno;
-}	t_body;
-
-void	parser(t_body *minishell, char *input);
-
-void	recive_signals(t_body *minishell);
-
-//temporaly cleanup for test
-void	cleanup(t_body *minishell);
+void	parser(t_body *minishell);
 
 #endif

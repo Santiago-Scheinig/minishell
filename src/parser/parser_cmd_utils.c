@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   parser_cmd_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 18:41:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 22:06:34 by sscheini         ###   ########.fr       */
+/*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
+/*   Updated: 2025/08/08 17:24:01 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
 
-t_cmd	*create_cmd(t_body *minishell, t_list *token_lst)
+static t_cmd	*create_cmd(t_body *minishell, t_list *token_lst)
 {
 	t_cmd *new_cmd;
 
@@ -35,7 +35,7 @@ t_cmd	*create_cmd(t_body *minishell, t_list *token_lst)
 	return (new_cmd);
 }
 
-void	update_cmd(t_token *aux, t_cmd *new)
+static void	update_cmd(t_token *aux, t_cmd *new)
 {
 	int	i;
 
@@ -48,7 +48,7 @@ void	update_cmd(t_token *aux, t_cmd *new)
 	new->argv[i] = aux->str;
 }
 
-void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst)
+static void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst)
 {
 	t_token	*pipe;
 	t_list	*new_node;
@@ -64,21 +64,34 @@ void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst)
 		(*aux) = NULL;
 }
 
-/**
- * Creates and allocates a new T_TOKEN node.
- * @param minishell A pointer to the main enviroment structure of minishell.
- * @param content A pointer to the STRING to be tokenized.
- * @return A pointer to the new LIST node; or NULL in case of error.
- * @note The next node inside of the LIST node is set to NULL.
- */
-t_token	*create_token(t_body *minishell, char *str)
+//i need to count the amount of arguments that exists by each pipe!!
+//i think ill be doing it in save_cmd? and before starting the loop, but
+//i need to trim some lines...
+void	get_cmds(t_body *minishell)
 {
-	t_token	*new;
+	t_list	*lst_aux;
+	t_cmd	*new_cmd;
+	t_token	*token_aux;
+	t_token	*token_next;
 
-	new = malloc(sizeof(t_token));
-	if (!new)
-		sigend(minishell, 1);
-	new->str = str;
-	new->type = get_token_type(str);
-	return (new);
+	lst_aux = minishell->token_lst;
+	new_cmd = create_cmd(minishell, minishell->token_lst);//here, during creation of cmd.
+	while (lst_aux)
+	{
+		token_aux = (t_token *) lst_aux->content;
+		if (lst_aux->next)
+			token_next = (t_token *) lst_aux->next->content;
+		if (token_aux->type == REDIR_IN || token_aux->type == REDIR_OUT
+			|| token_aux->type == REDIR_APPEND || token_aux->type == HEREDOC)
+		{
+			update_redir(token_aux, token_next, new_cmd);
+			lst_aux = lst_aux->next;
+		}
+		else if (token_aux->type == WORD)
+			update_cmd(token_aux, new_cmd);
+		else if (token_aux->type == PIPE)
+			save_cmd(minishell, &new_cmd, lst_aux->next);//then save cmd re executes create_cmd
+		lst_aux = lst_aux->next;
+	}
+	save_cmd(minishell, &new_cmd, NULL);
 }

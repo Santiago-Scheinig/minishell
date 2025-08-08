@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/05 20:27:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:50:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ static char	**create_split(char ***wrdstr, const char *s, int word_amount)
 	{
 		type = get_token_type((char *)&s[0]);
 		if (!type)
-			token_len = word_len(s);
+			token_len = word_len((char *) s);
 		else
 			token_len = operator_len(type);
-		(*wrdstr)[i] = shell_substr(s, 0, token_len);
+		(*wrdstr)[i] = ft_substr(s, 0, token_len);
 		if (!((*wrdstr)[i]))
 			return (memfree((*wrdstr), i));
 		while(token_len)
@@ -34,7 +34,7 @@ static char	**create_split(char ***wrdstr, const char *s, int word_amount)
 			token_len--;
 			s++;
 		}
-		while((*s) == ' ')
+		while((*s) == ' ' || (*s) == '\\' || (*s) == ';')
 			s++;
 	}
 	(*wrdstr)[i] = (void *)(0);
@@ -62,7 +62,7 @@ static int	word_count(const char *s)
 	if (s[0] == 0)
 		return (0);
 	type = get_token_type((char *) &s[0]);
-	if (!type)
+	if (!type && s[0] != ' ')
 		count++;
 	tmp = shell_word_strchr(&s[0]);
 	type = get_token_type((char *) &tmp[0]);

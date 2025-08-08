@@ -42,30 +42,37 @@ void	cleanup(t_body *minishell)
 		free(minishell->input);
 		minishell->input = NULL;
 	}
-	if (minishell->pipe_child)
+	if (minishell->token_lst)
 	{
-		free(minishell->pipe_child);
-		minishell->pipe_child = NULL;
+		ft_lstclear(&(minishell->token_lst), free);
+		minishell->token_lst = NULL;
+	}
+	if (minishell->cmd_lst)
+	{
+		ft_lstclear(&(minishell->cmd_lst), free);
+		minishell->cmd_lst = NULL;
+	}
+	if (minishell->childs_pid)
+	{
+		free(minishell->childs_pid);
+		minishell->childs_pid = NULL;
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_body	minishell;
-	char	*input;
 	t_token	*test;
-	t_body	minishell;
 
-	if (argc >= 2)
+	if (argc != 1 || !argv[0])
 		return (1);
-	if (argv || envp)
-		ft_memset(&minishell, 0, sizeof(t_body));
 	config_minishell(&minishell);
 	memset(&minishell, 0, sizeof(minishell));
+	minishell.envp = envp;
 	while (1)
 	{
 		recive_signals(&minishell);
-		parser(&minishell, input);
+		parser(&minishell);
 		if (!minishell.cmd_lst)
 		{
 			while (minishell.token_lst)
@@ -74,7 +81,6 @@ int	main(int argc, char **argv, char **envp)
 				printf("%s - %i\n", test->str, test->type);
 				minishell.token_lst = minishell.token_lst->next;
 			}
-			continue; //(input wasn't valid, parser() should print the error);
 		}
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
@@ -85,8 +91,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else if (minishell.input[0] == '\0') //empty line
 			continue ;
-		else
-			ft_printf("Invalid command\n");
 	}
 	return (0);
 }
