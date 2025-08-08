@@ -16,6 +16,7 @@ LIBFT_USE	:=	1
 # The name list for regular and bonus source files.							#
 SRC			=	$(SRC_DIR)/main.c			\
 				$(SRC_DIR)/signals.c		\
+				$(SRC_DIR)/terminal.c		\
 
 SRC_BON		=	$(SRC_DIR)/main_bonus.c		\
 
