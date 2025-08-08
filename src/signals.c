@@ -19,7 +19,6 @@
  * allowing proper prompt refresh and cleanup.
  * 
  * @note Declared volatile because it is modified from within a signal handler.
- */
 
 volatile sig_atomic_t	g_signal_received = 0;
 
