@@ -6,13 +6,27 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 18:21:17 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/08 19:00:18 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
 
+/**
+ * Verifies if any WORD token includes a valid '$' OPERATOR. If it does, 
+ * it expands it inside the T_TOKEN list following the quoting rules for
+ * expansion of enviromental variables:
+ * 
+ * - Single quote enclosing: The enviromental variable remains as plain text.
+ * 
+ * - Double quote enclosing: The enviromental variable expands, but remains as
+ * part of the WORD it was enclosed into.
+ * 
+ * - No quote enclosing: The enviromental variable expands and becomes 
+ * tokenized into WORDS divided only by ' ' (OPERATORS are treated as plain
+ * text after expansion).
+ */
 static void	verify_envar(t_body *minishell)
 {
 	t_list	*token_lst;
@@ -41,6 +55,20 @@ static void	verify_envar(t_body *minishell)
 	}
 }
 
+/**
+ * Verifies the correct sintax of the user input inside a T_TOKEN list
+ * by following the bash-shell rules:
+ * 
+ * - The list cannot beggin with a '|' OPERATOR.
+ * 
+ * - Any redirection OPERATOR must be followed by it's linked WORD.
+ * 
+ * - There cannot be two consecutive '|' OPERATORS.
+ * 
+ * - The list must allways end with a WORD.
+ * 
+ * @param minishell A pointer to the main enviroment structure of minishell.
+ */
 static void	verify_parser(t_body *minishell)
 {
 	t_list	*lst_aux;

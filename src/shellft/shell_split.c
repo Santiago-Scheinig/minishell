@@ -6,13 +6,24 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 14:50:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/08 18:48:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shellft.h"
 
-static char	**create_split(char ***wrdstr, const char *s, int word_amount)
+/**
+ * Initializes the ARRAY of STRINGS dividing WORDS and OPERATORS into 
+ * individual STRINGS.
+ * @param wrdstr An pointer to an empty initialized ARRAY of STRINGS.
+ * @param s	The main string to split.
+ * @param word_amount The max amount of splitted words.
+ * @return In success, returns the pointer to wrdstr. NULL in case of memory
+ * allocation error.
+ * @note Operators such as '\\' and ';' aren't interpreted by minishell, and as
+ * such they are ignored as independent words. 
+ */
+static char	***create_split(char ***wrdstr, const char *s, int word_amount)
 {
 	t_token_type	type;
 	int				token_len;
@@ -38,7 +49,7 @@ static char	**create_split(char ***wrdstr, const char *s, int word_amount)
 			s++;
 	}
 	(*wrdstr)[i] = (void *)(0);
-	return ((*wrdstr));
+	return (wrdstr);
 }
 
 /**

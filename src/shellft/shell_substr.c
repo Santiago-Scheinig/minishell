@@ -6,12 +6,21 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 15:03:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/08 18:52:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shellft.h"
 
+/**
+ * Moves n bytes from a src VOID pointer into a dest VOID pointer, specific
+ * when dst_tmp pointer is in a lower memory possition than src_tmp.
+ * @param dst_tmp The VOID pointer where to move bytes into.
+ * @param src_tmp The VOID pointer where to move bytes from.
+ * @param len The amount of bytes to be moved.
+ * @note Operators such as '\'' and '\"' are ignored, and as such, aren't
+ * moved to dst. This mimics the quote removal behaivor from bash-shell.
+ */
 static void	iq_moveup(char *dst_tmp, char *src_tmp, size_t n)
 {
 	size_t	i;
@@ -33,6 +42,15 @@ static void	iq_moveup(char *dst_tmp, char *src_tmp, size_t n)
 	}
 }
 
+/**
+ * Moves n bytes from a src VOID pointer into a dest VOID pointer, specific
+ * when dst_tmp pointer is in a higher memory possition than src_tmp.
+ * @param dst_tmp The VOID pointer where to move bytes into.
+ * @param src_tmp The VOID pointer where to move bytes from.
+ * @param len The amount of bytes to be moved.
+ * @note Operators such as '\'' and '\"' are ignored, and as such, aren't
+ * moved to dst. This mimics the quote removal behaivor from bash-shell.
+ */
 static void	iq_movedown(char *dst_tmp, char *src_tmp, size_t len)
 {
 	size_t	i;
