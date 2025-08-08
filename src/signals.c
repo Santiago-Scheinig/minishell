@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/08 14:35:42 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/08 18:37:58 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,17 @@ void	recive_signals(t_body *minishell)
 	if (!handle_signals(minishell))
 		return ;
 	cleanup(minishell);
-	minishell->input = readline("minishell> ");
+	minishell->input = readline(minishell->prompt);
 	if (minishell->input == NULL)
-		exit(1);
-	else
+	{
+		if (minishell->prompt)
+		{
+			free(minishell->prompt);
+			minishell->prompt = NULL;
+		}
+		rl_clear_history();
+		exit(0);
+	}
+	else if (minishell->input[0] != '\0')
 		add_history(minishell->input);
 }

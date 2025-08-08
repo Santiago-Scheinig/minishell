@@ -34,6 +34,7 @@ typedef struct s_body
 {
 	struct termios	term;
 	t_cmd			**commands;
+	char			*prompt;
 	char			*input;
 	int				*pipe_child;
 	int				pipe_child_count;
