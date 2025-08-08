@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:14:33 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/08 14:36:44 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:52:16 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,10 +155,10 @@
 /**
  * struct sigaction
  * {
- *     sigset_t  sa_mask;			Signals to block during handler execution
- *     void     (*sa_sigaction)(int, siginfo_t *, void *); // Extended handler
- *     void     (*sa_handler)(int);	Pointer to the signal handling function
- *     int       sa_flags;			Flags controlling handler behavior
+ *     sigset_t	sa_mask;			Signals to block during handler execution
+ *     void		(*sa_sigaction)(int, siginfo_t *, void *); // Extended handler
+ *     void		(*sa_handler)(int);	Pointer to the signal handling function
+ *     int		sa_flags;			Flags controlling handler behavior
  * };
  * 
  * sa_handler:
@@ -214,7 +214,43 @@
  * - Always handle signals carefully to avoid race conditions or unsafe behavior.
  */
 
+/**
+ * Handles shell input loop and signal setup.
+ * 
+ * This function installs signal handlers for SIGINT and SIGQUIT,
+ * performs cleanup, and prompts the user using readline.
+ * If the user inputs EOF (Ctrl+D), the shell exits.
+ * Otherwise, the input is added to the readline history.
+ * 
+ * @param minishell A pointer to the shell context (includes state, input, etc.).
+ * 
+ * @note If readline returns NULL (Ctrl+D), the shell exits cleanly.
+ * @note Cleanup is called before each input to reset shell state.
+ */
+
 void	recive_signals(t_body *minishell);
+
+/**
+ * Initializes the shell terminal and process group.
+ * 
+ * This function checks if STDIN is a terminal, sets the shell
+ * to its own process group, assigns terminal control to it, and
+ * configures terminal settings to show control characters (like ^C).
+ * 
+ * Steps performed:
+ * 
+ * - Checks if STDIN is a terminal (interactive shell).
+ * - Sets the current process as the leader of its own process group.
+ * - Takes control of the terminal with `tcsetpgrp`.
+ * - Retrieves current terminal settings.
+ * - Modifies terminal flags to enable ECHOCTL (shows ^C, ^\ on screen).
+ * 
+ * @note - ECHOCTL makes control characters like ^C visible in the prompt.
+ * @note - If any system call fails, the function prints an error and exits.
+ * 
+ * @warning - Must be called once at shell startup before prompting the user.
+ * 
+ */
 
 void	initialization(void);
 
