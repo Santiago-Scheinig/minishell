@@ -57,7 +57,6 @@ int	main(int argc, char **argv, char **envp)
 	initialization();
 	if (argv || envp)
 		ft_memset(&minishell, 0, sizeof(t_body));
-	config_minishell(&minishell);
 	while (1)
 	{
 		recive_signals(&minishell);

@@ -30,15 +30,6 @@ typedef struct s_cmd
 	char	**argv;
 }	t_cmd;
 
-/*struct termios
-{
-	tcflag_t	c_cflag;   // Control flags
-	tcflag_t	c_lflag;   // Locals flags
-	tcflag_t	c_iflag;   // Enter flags
-	tcflag_t	c_oflag;   // Out flags
-	cc_t		c_cc[NCCS];// Special caracters (como EOF, INTR, etc)
-};*/
-
 typedef struct s_body
 {
 	struct termios	term;
@@ -51,7 +42,6 @@ typedef struct s_body
 
 void	recive_signals(t_body *minishell);
 
-//temporaly cleanup for test
 void	cleanup(t_body *minishell);
 
 #endif

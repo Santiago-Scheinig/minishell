@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:14:33 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/05 16:53:24 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:36:44 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,24 @@
 /**
  * struct termios
  * {
- * tcflag_t	c_cflag;   // Control flags
- * tcflag_t	c_lflag;   // Locals flags
- * tcflag_t	c_iflag;   // Enter flags
- * tcflag_t	c_oflag;   // Out flags
- * cc_t		c_cc[NCCS];// Special caracters (como EOF, INTR, etc)
+ * tcflag_t	c_cflag;	Control flags
+ * tcflag_t	c_lflag;	Locals flags
+ * tcflag_t	c_iflag;	Enter flags
+ * tcflag_t	c_oflag;	Out flags
+ * cc_t		c_cc[NCCS];	Special caracters (como EOF, INTR, etc)
  * };
  * 
  * c_cflag (Control Flags):
- * Controls hardware-related terminal settings such as baud rate, character size
- * (number of bits per byte), parity, stop bits, and hardware flow control.
+ * Controls hardware-related terminal settings such as baud rate, character
+ * size (number of bits per byte), parity, stop bits, and hardware
+ * flow control.
  * These flags manage the physical and link-layer behavior of the serial line.
  * 
  * c_lflag (Local Flags):
  * Controls terminal features related to line discipline, input editing, signal
- * generation, and echoing. For example, enabling canonical mode (line buffering),
- * signal characters like Ctrl+C, or echoing typed characters to the screen.
+ * generation, and echoing. For example, enabling canonical mode
+ * (line buffering), signal characters like Ctrl+C, or echoing typed characters
+ * to the screen.
  * 
  * c_iflag (Input Flags):
  * Controls how input bytes are processed. This includes special handling for
@@ -150,9 +152,70 @@
  * VEOL		End-of-line character (additional)	
  */
 
-
-t_body	*config_minishell(t_body *minishell);
+/**
+ * struct sigaction
+ * {
+ *     sigset_t  sa_mask;			Signals to block during handler execution
+ *     void     (*sa_sigaction)(int, siginfo_t *, void *); // Extended handler
+ *     void     (*sa_handler)(int);	Pointer to the signal handling function
+ *     int       sa_flags;			Flags controlling handler behavior
+ * };
+ * 
+ * sa_handler:
+ * - Function pointer that defines the basic signal handler.
+ * - This function is called when the signal is delivered.
+ * - You must assign either `sa_handler` or `sa_sigaction`, not both.
+ * 
+ * sa_sigaction:
+ * - Alternative to `sa_handler` used for extended signal handling.
+ * - Provides more context via a `siginfo_t` structure and a `ucontext_t`
+ *   pointer.
+ * - Only used when the `SA_SIGINFO` flag is set in `sa_flags`.
+ * 
+ * sa_mask:
+ * - A set of signals that are **blocked during the execution** of the signal
+ *   handler.
+ * - Prevents the specified signals from interrupting the current handler.
+ * - Use `sigemptyset()`, `sigaddset()` and related functions to manipulate it.
+ * 
+ * sa_flags:
+ * Controls how the signal is handled. Common values include:
+ * 
+ * - SA_RESTART: Automatically restarts certain interrupted system calls.
+ * - SA_SIGINFO: Use `sa_sigaction` instead of `sa_handler`.
+ * - SA_NOCLDWAIT: Prevent zombie processes (for SIGCHLD).
+ * - SA_NOCLDSTOP: Prevents receiving SIGCHLD when children stop.
+ * - SA_NODEFER: Do not block the signal being handled.
+ * 
+ * To use `sigaction`:
+ * 
+ * 1. Declare and initialize a struct sigaction.
+ * 2. Set the handler function.
+ * 3. Set any desired flags (like SA_RESTART).
+ * 4. Define signals to block during the handler using `sa_mask`.
+ * 5. Register the signal with `sigaction(signum, &act, NULL);`
+ * 
+ * Example:
+ * 
+ * struct sigaction sa;
+ * sa.sa_handler = my_handler;
+ * sigemptyset(&sa.sa_mask);
+ * sigaddset(&sa.sa_mask, SIGINT); // Block SIGINT during handler
+ * sa.sa_flags = SA_RESTART;
+ * sigaction(SIGINT, &sa, NULL);
+ * 
+ * Compared to signal():
+ * - `sigaction` is more powerful and reliable.
+ * - `signal()` is older and has less consistent behavior across systems.
+ * 
+ * Notes:
+ * - If you're using `readline()`, `SA_RESTART` is usually necessary to avoid
+ *   the prompt being broken by Ctrl+C or other interruptions.
+ * - Always handle signals carefully to avoid race conditions or unsafe behavior.
+ */
 
 void	recive_signals(t_body *minishell);
+
+void	initialization(void);
 
 #endif
