@@ -43,6 +43,8 @@ typedef struct s_body
 
 void	recive_signals(t_body *minishell);
 
+int		path_minishell(t_body *minishell);
+
 void	cleanup(t_body *minishell);
 
 #endif
