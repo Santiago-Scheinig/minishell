@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 17:23:40 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:29:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,15 @@ typedef struct s_token
 	t_token_type	type;	//	The type of token.
 }	t_token;
 
+void	*lstadd_exp(t_list **token_lst, char **split);
+
+char	*envar_pathname(char *env_var);
+
+int		envar_len(char *env_var);
+
 void	tokenize(t_body *minishell, char **split);
 
-void	get_envar(t_list *token_lst, char **envp);
+void	get_envar(t_list *token_lst, t_body *minishell);
 
 void	get_cmds(t_body *minishell);
 

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 17:18:16 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/12 16:34:59 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	parser(t_body *minishell)
 	tokenize(minishell, split);
 	return ;
 	//i should verify this work before keep going.
-	cmds_dup(minishell);
+	get_cmds(minishell);
 	ft_lstclear(&(minishell->token_lst), free);
 	minishell->token_lst = NULL;
 }

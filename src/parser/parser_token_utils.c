@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 19:00:18 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/12 17:41:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,22 @@ static void	verify_envar(t_body *minishell)
 	while(token_lst)
 	{
 		content = (t_token *) token_lst->content;
-		if (content->type == WORD)
+		i = -1;
+		while (content->type == WORD && content->str[++i])
 		{
-			i = -1;
-			if (content->str[++i] == '$')
+			if (content->str[i] == '$')
 			{
-				if (!content->str[i + 1] || !ft_isalnum(content->str[i + 1]) 
-				|| content->str[i + 1] != '_' || content->str[i + 1] != '?')
+				if (content->str[i + 1] || ft_isalnum(content->str[i + 1]) 
+				|| content->str[i + 1] == '_' || content->str[i + 1] == '?')
+					get_envar(token_lst, minishell);
+				else
 				{
 					token_lst = token_lst->next;
 					continue;
 				}
-				else
-					get_envar(token_lst, minishell);
 			}
 		}
+		token_lst = token_lst->next;
 	}
 }
 

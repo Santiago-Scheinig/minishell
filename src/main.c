@@ -84,12 +84,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
-		if (!ft_strncmp(minishell.input, "exit", 5))
-		{
-			cleanup(&minishell);
-			break ;
-		}
-		else if (minishell.input[0] == '\0') //empty line
 			continue ;
 	}
 	return (0);

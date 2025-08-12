@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 17:24:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/12 16:36:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
 
-static t_cmd	*create_cmd(t_body *minishell, t_list *token_lst)
+static t_cmd	*cmdup(t_body *minishell, t_list *token_lst)
 {
 	t_cmd *new_cmd;
 
@@ -35,7 +35,7 @@ static t_cmd	*create_cmd(t_body *minishell, t_list *token_lst)
 	return (new_cmd);
 }
 
-static void	update_cmd(t_token *aux, t_cmd *new)
+static void	upd_cmd(t_token *aux, t_cmd *new)
 {
 	int	i;
 
@@ -59,7 +59,7 @@ static void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst)
 	ft_lstadd_back(&(minishell->cmd_lst), new_node);
 	pipe = (t_token *) token_lst->content;
 	if (pipe->type == PIPE)
-		(*aux) = create_cmd(minishell, token_lst);
+		(*aux) = cmdup(minishell, token_lst);
 	else
 		(*aux) = NULL;
 }
@@ -75,7 +75,7 @@ void	get_cmds(t_body *minishell)
 	t_token	*token_next;
 
 	lst_aux = minishell->token_lst;
-	new_cmd = create_cmd(minishell, minishell->token_lst);//here, during creation of cmd.
+	new_cmd = cmdup(minishell, minishell->token_lst);//here, during creation of cmd.
 	while (lst_aux)
 	{
 		token_aux = (t_token *) lst_aux->content;
@@ -84,11 +84,11 @@ void	get_cmds(t_body *minishell)
 		if (token_aux->type == REDIR_IN || token_aux->type == REDIR_OUT
 			|| token_aux->type == REDIR_APPEND || token_aux->type == HEREDOC)
 		{
-			update_redir(token_aux, token_next, new_cmd);
+			upd_redir(token_aux, token_next, new_cmd);
 			lst_aux = lst_aux->next;
 		}
 		else if (token_aux->type == WORD)
-			update_cmd(token_aux, new_cmd);
+			upd_cmd(token_aux, new_cmd);
 		else if (token_aux->type == PIPE)
 			save_cmd(minishell, &new_cmd, lst_aux->next);//then save cmd re executes create_cmd
 		lst_aux = lst_aux->next;
