@@ -17,11 +17,11 @@ LIBFT_USE	:=	1
 SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/signals.c							\
 				$(SRC_DIR)/parser/parser.c						\
-				$(SRC_DIR)/parser/parser_cmd_utils.c			\
-				$(SRC_DIR)/parser/parser_token_utils.c			\
-				$(SRC_DIR)/parser/parser_redir_utils.c			\
-				$(SRC_DIR)/parser/parser_enviroment_var.c		\
-				$(SRC_DIR)/parser/parser_enviroment_var_utils.c	\
+				$(SRC_DIR)/parser/parser_cmd.c					\
+				$(SRC_DIR)/parser/parser_token.c				\
+				$(SRC_DIR)/parser/parser_cmd_redir.c			\
+				$(SRC_DIR)/parser/parser_envar.c				\
+				$(SRC_DIR)/parser/parser_envar_utils.c			\
 				$(SRC_DIR)/shellft/shell_split.c				\
 				$(SRC_DIR)/shellft/shell_split_utils.c			\
 				$(SRC_DIR)/shellft/shell_substr.c				\

@@ -66,13 +66,16 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1 || !argv[0])
 		return (1);
+/* 	int i = -1;
+	while(envp[++i])
+		printf("%s\n", envp[i]); */
 	config_minishell(&minishell);
 	memset(&minishell, 0, sizeof(minishell));
 	minishell.envp = envp;
 	while (1)
 	{
-		recive_signals(&minishell);
-		parser(&minishell);
+		recive_signals(&minishell); // We cut if from here
+		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
 		if (!minishell.cmd_lst)
 		{
 			while (minishell.token_lst)

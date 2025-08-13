@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/12 17:29:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/13 22:03:46 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,40 @@ typedef struct s_token
 	t_token_type	type;	//	The type of token.
 }	t_token;
 
-void	*lstadd_exp(t_list **token_lst, char **split);
+/**
+ * Divides user input into tokens catalogated as the enum structure 
+ * T_TOKEN_TYPE indicates.
+ * 
+ * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param split The user input already divided with shell_split() parameters.
+ * @note If any error occurs during the tokenization step, the function will
+ * end with a sigend([errno]) call,
+ */
+void	parser_token(t_body *minishell, char **split);
+
+/**
+ * Verifies if any WORD token includes a valid '$' OPERATOR. If it does, 
+ * it expands it inside the T_TOKEN list following the quoting rules for
+ * expansion of enviromental variables:
+ * 
+ * - Single quote enclosing: The enviromental variable remains as plain text.
+ * 
+ * - Double quote enclosing: The enviromental variable expands, but remains as
+ * part of the WORD it was enclosed into.
+ * 
+ * - No quote enclosing: The enviromental variable expands and becomes 
+ * tokenized into WORDS divided only by ' ' (OPERATORS are treated as plain
+ * text after expansion).
+ */
+void	parser_envar(t_body *minishell);
+
+void	parser_cmds(t_body *minishell);
+
+void	*token_exp(t_list **token_lst, char **split);
+
+char	*exp_value(char *str, int start, char *value);
 
 char	*envar_pathname(char *env_var);
-
-int		envar_len(char *env_var);
-
-void	tokenize(t_body *minishell, char **split);
-
-void	get_envar(t_list *token_lst, t_body *minishell);
-
-void	get_cmds(t_body *minishell);
 
 void	upd_redir(t_token *aux, t_token *next, t_cmd *new);
 

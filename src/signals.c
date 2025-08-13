@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/08 16:52:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/13 21:38:41 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,14 @@ static t_body	*handle_signals(t_body *minishell)
 	return (minishell);
 }
 
+/**
+ * recive_user_input(), we put it inside of parser instead, 
+ * but as first function call. That being the First step of
+ * parsing, which also handles USER signals.
+ * 
+ * We also make the shell_split() after recieving input.
+ * //minishell.input_split = shell_split(minishell.input);
+ */
 void	recive_signals(t_body *minishell)
 {
 	if (!handle_signals(minishell))
@@ -97,6 +105,8 @@ void	recive_signals(t_body *minishell)
 		cleanup(minishell);
 		exit(1);
 	}
+/* 	else if (minishell->input[0] == '\n')
+		sigend(minishell, 1);///empty line */
 	else
 		add_history(minishell->input);
 }

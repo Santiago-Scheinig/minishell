@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_cmd_utils.c                                 :+:      :+:    :+:   */
+/*   parser_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/12 16:36:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:26:35 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	save_cmd(t_body *minishell, t_cmd **aux, t_list *token_lst)
 //i need to count the amount of arguments that exists by each pipe!!
 //i think ill be doing it in save_cmd? and before starting the loop, but
 //i need to trim some lines...
-void	get_cmds(t_body *minishell)
+void	parser_cmds(t_body *minishell)
 {
 	t_list	*lst_aux;
 	t_cmd	*new_cmd;

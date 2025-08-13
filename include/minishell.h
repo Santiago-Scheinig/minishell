@@ -58,6 +58,7 @@ typedef struct s_body
 	t_list			*token_lst;
 	char			*prompt;
 	char			*input;
+	char			**input_split;
 	char			**envp;
 	int				*childs_pid;
 	int				errno;
