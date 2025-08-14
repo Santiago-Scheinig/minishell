@@ -6,31 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 19:28:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/14 20:11:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
-
-/**
- * Creates and allocates a new T_TOKEN node.
- * @param minishell A pointer to the main enviroment structure of minishell.
- * @param content A pointer to the STRING to be tokenized.
- * @return A pointer to the new LIST node; or NULL in case of error.
- * @note The next node inside of the LIST node is set to NULL.
- */
-t_token	*token_dup(char *str)
-{
-	t_token	*new;
-
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (NULL);
-	new->str = str;
-	new->type = get_token_type(str);
-	return (new);
-}
 
 /**
  * Verifies the correct syntax of the user input inside a T_TOKEN list
@@ -82,7 +63,7 @@ static void	verify_syntax(t_body *minishell)
  * @param minishell A pointer to the main enviroment structure of minishell.
  * @param split The user input already divided with shell_split() parameters.
  * @note If any error occurs during the tokenization step, the function will
- * end with a sigend([errno]) call,
+ * end with a sigend([errno]) call.
  */
 void	parser_token(t_body *minishell, char **split)
 {
@@ -104,4 +85,21 @@ void	parser_token(t_body *minishell, char **split)
 	}
 	free(split);
 	verify_syntax(minishell);
+}
+
+/**
+ * Creates and allocates a new T_TOKEN node.
+ * @param str A pointer to the STRING to be tokenized.
+ * @return A pointer to the new T_TOKEN allocation; or NULL in case of error.
+ */
+t_token	*token_dup(char *str)
+{
+	t_token	*new;
+
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return (NULL);
+	new->str = str;
+	new->type = get_token_type(str);
+	return (new);
 }
