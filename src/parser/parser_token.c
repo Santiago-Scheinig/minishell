@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 20:11:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/14 21:38:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,23 @@ static void	verify_syntax(t_body *minishell)
 }
 
 /**
+ * Creates and allocates a new T_TOKEN node.
+ * @param str A pointer to the STRING to be tokenized.
+ * @return A pointer to the new T_TOKEN allocation; or NULL in case of error.
+ */
+t_token	*token_dup(char *str)
+{
+	t_token	*new;
+
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return (NULL);
+	new->str = str;
+	new->type = get_token_type(str);
+	return (new);
+}
+
+/**
  * Divides user input into tokens catalogated as the enum structure 
  * T_TOKEN_TYPE indicates.
  * 
@@ -77,29 +94,18 @@ void	parser_token(t_body *minishell, char **split)
 	{
 		new_token = token_dup(split[i]);
 		if (!new_token)
-			sigend(minishell, 1);
+			break;
 		new_node = ft_lstnew(new_token);
 		if (!new_node)
-			sigend(minishell, 1);
+			break;
 		ft_lstadd_back(&(minishell->token_lst), new_node);
+	}
+	if (!new_node || !new_token)
+	{
+		ft_split_free(&split[i]);
+		free(split);
+		sigend(minishell, 1);
 	}
 	free(split);
 	verify_syntax(minishell);
-}
-
-/**
- * Creates and allocates a new T_TOKEN node.
- * @param str A pointer to the STRING to be tokenized.
- * @return A pointer to the new T_TOKEN allocation; or NULL in case of error.
- */
-t_token	*token_dup(char *str)
-{
-	t_token	*new;
-
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (NULL);
-	new->str = str;
-	new->type = get_token_type(str);
-	return (new);
 }

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 21:00:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/14 21:32:01 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	sigend(t_body *minishell, int errno)
 	}
 	return;	
 }
+
 
 /**
  * Analizes user input, validates it's syntax and saves a list of commands

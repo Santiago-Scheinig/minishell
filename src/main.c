@@ -44,7 +44,8 @@ void	cleanup(t_body *minishell)
 	}
 	if (minishell->token_lst)
 	{
-		ft_lstclear(&(minishell->token_lst), free);
+		printf("hello?\n");
+		shell_lstclear(&(minishell->token_lst), free);
 		minishell->token_lst = NULL;
 	}
 	if (minishell->cmd_lst)
@@ -62,7 +63,7 @@ void	cleanup(t_body *minishell)
 int	main(int argc, char **argv, char **envp)
 {
 	t_body	minishell;
-	t_token	*test;
+	// t_token	*test;
 
 	if (argc != 1 || !argv[0])
 		return (1);
@@ -76,7 +77,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		recive_signals(&minishell); // We cut if from here
 		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
-		if (!minishell.cmd_lst)
+/* 		if (!minishell.cmd_lst)
 		{
 			while (minishell.token_lst)
 			{
@@ -84,10 +85,9 @@ int	main(int argc, char **argv, char **envp)
 				printf("%s - %i\n", test->str, test->type);
 				minishell.token_lst = minishell.token_lst->next;
 			}
-		}
+		} */
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
-			continue ;
 	}
 	return (0);
 }

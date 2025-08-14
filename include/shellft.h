@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 15:10:16 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/14 21:36:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
 int	is_divisor(char *str);
 
 int	get_token_type(char *str);
+
+/**
+ * Frees every node included on the LIST HEAD. 
+ * @param lst The LIST HEAD to free.
+ * @param del The function used to free each node.
+ * @note In general, the del function should be free().
+ */
+void	shell_lstclear(t_list **lst, void (*del)(void *));
 
 /**
  * Frees every pointer on an ARRAY of STRINGS and the ARRAY pointer, even
