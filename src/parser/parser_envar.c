@@ -6,51 +6,41 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 16:54:46 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/13 22:03:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/14 20:04:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
 
-/* static void	*envar_lst(); */
-
 /**
  * I split the words inside token_lst with ' ', using ft_iq_split to avoid split
  * between spaces, then i make every single word diveded by such into a new token
  * starting in the current position of the list.
  */
-/* static void	*envar_tkn(t_list *token_lst, t_body *minishell)
+static void	envar_tkn(t_list *token_lst, t_body *minishell)
 {
-	t_token	*aux;
-	t_list	*new_node;
+	char	**split;
 	int i;
 
-	i = -1;
-	while (split[++i])
+	i = 0;
+	split = ft_iq_split(((t_token *) token_lst->content)->str, ' ');
+	if (!split)
+		sigend(minishell, 1);
+	while (split[i])
+		i++;
+	while (i && split[--i])
 	{
-		aux = token_dup(split[i]);
-		if (!aux)
-			return (NULL);
-		aux->type = WORD;
-		if (!i)
+		if (!split[1])
+			break;
+		if (addlst_here(token_lst, split[i], i))
 		{
-			free((*token_lst)->content);
-			(*token_lst)->content = aux;
-			continue;
+			ft_split_free(split);
+			sigend(minishell, 1);
 		}
-		new_node = ft_lstnew(aux);
-		if (!new_node)
-		{
-			free(aux);
-			return (NULL);
-		}
-		new_node->next = (*token_lst)->next;
-		(*token_lst)->next = new_node;
-		(*token_lst) = new_node;
 	}
-	return (token_lst);
-} */
+	free(split);
+}
 
 static int	envar_exp(t_list *token_lst, char *str, int start, t_body *minishell)
 {
@@ -67,7 +57,7 @@ static int	envar_exp(t_list *token_lst, char *str, int start, t_body *minishell)
 	env_value = getenv(env_pathname);
 	free(env_pathname);
 	if (!env_value)
-		ret = exp_value(str, start, env_value);
+		ret = exp_value(str, start--, env_value);
 	else
 	{
 		ret = exp_value(str, start, env_value);
@@ -142,7 +132,7 @@ void	parser_envar(t_body *minishell)
 				|| content->str[i + 1] == '_' || content->str[i + 1] == '?'))
 				{
 					envar_syn(token_lst, minishell);
-					//envar_tkn(token_lst, minishell);
+					envar_tkn(token_lst, minishell);
 					break;
 				}
 			}

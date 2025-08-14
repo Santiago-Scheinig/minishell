@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/13 21:59:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/14 19:28:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @return A pointer to the new LIST node; or NULL in case of error.
  * @note The next node inside of the LIST node is set to NULL.
  */
-static t_token	*token_dup(char *str)
+t_token	*token_dup(char *str)
 {
 	t_token	*new;
 

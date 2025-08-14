@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/13 22:02:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/14 20:05:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,31 @@ char	*envar_pathname(char *env_var)
 	while(++i < env_var_len)
 		new_path[i] = env_var[i];
 	return (new_path);
+}
+
+int	addlst_here(t_list *token_list, char *str, int start)
+{
+	t_token *aux;
+	t_list	*new_node;
+	
+	if (!start)
+	{
+		if (((t_token *) token_list->content)->str)
+			free (((t_token *) token_list->content)->str);
+		((t_token *) token_list->content)->str = str;
+		return (0);
+	}
+	aux = token_dup(str);
+	if (!aux)
+		return (1);
+	aux->type = WORD;
+	new_node = ft_lstnew(aux);
+	if (!new_node)
+	{
+		free(aux);
+		return (1);
+	}
+	new_node->next = token_list->next;
+	token_list->next = new_node;
+	return (0);
 }

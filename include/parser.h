@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/13 22:03:46 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/14 20:05:16 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,16 @@ void	parser_envar(t_body *minishell);
 
 void	parser_cmds(t_body *minishell);
 
-void	*token_exp(t_list **token_lst, char **split);
+/**
+ * Creates and allocates a new T_TOKEN node.
+ * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param content A pointer to the STRING to be tokenized.
+ * @return A pointer to the new LIST node; or NULL in case of error.
+ * @note The next node inside of the LIST node is set to NULL.
+ */
+t_token	*token_dup(char *str);
+
+int	addlst_here(t_list *token_list, char *str, int start);
 
 char	*exp_value(char *str, int start, char *value);
 
