@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:56:42 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/08 18:39:30 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/16 14:07:19 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	config_shell(struct termios term, int shell_terminal)
 		exit (1);
 	}
 }
- 
+
 void	initialization(void)
 {
 	struct termios	term;
@@ -66,5 +66,4 @@ void	initialization(void)
 		exit (1);
 	}
 	config_shell(term, shell_terminal);
-	
 }

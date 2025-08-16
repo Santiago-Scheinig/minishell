@@ -46,7 +46,6 @@ void	cleanup(t_body *minishell)
 		free(minishell->pipe_child);
 		minishell->pipe_child = NULL;
 	}
-
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -58,10 +57,10 @@ int	main(int argc, char **argv, char **envp)
 	initialization();
 	if (argv || envp)
 		ft_memset(&minishell, 0, sizeof(t_body));
+	if (!path_minishell(&minishell))
+		return (1);
 	while (1)
 	{
-		if (!path_minishell(&minishell))
-			return (1);
 		recive_signals(&minishell);
 		//commands = parser(input);
 			//we tokenize and validate everithing, if works, returns a T_CMD **.

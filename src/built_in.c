@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/08 18:19:46 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/16 14:06:31 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	built_echo(char **args)
 	new_line = 1;
 	if (args[1] && !ft_strncmp(args[1], "-n", 3))
 	{
-		i++;	
+		i++;
 		new_line = 0;
 	}
 	while (args[i])
@@ -41,10 +41,12 @@ int	built_cd(char **args)
 		perror("incorrect path");
 		return (0);
 	}
-	if (chdir(args[1])!= 0)
+	if (chdir(args[1]) != 0)
 	{
 		perror("cd");
 		return (0);
 	}
+	if (!path_minishell(minishell))
+		return (0);
 	return (1);
 }
