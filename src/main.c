@@ -59,6 +59,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_memset(&minishell, 0, sizeof(t_body));
 	if (!path_minishell(&minishell))
 		return (1);
+	if (!path)
 	while (1)
 	{
 		recive_signals(&minishell);
@@ -75,8 +76,8 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else if (minishell.input[0] == '\0') //empty line
 			continue ;
-		else
-			ft_printf("Invalid command\n");
+		/*else
+			ft_printf("Invalid command\n");*/
 	}
 	return (0);
 }

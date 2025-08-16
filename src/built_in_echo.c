@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   built_in_echo.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/16 18:42:18 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/16 19:04:06 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
-# include "minishell.h"
-# include <unistd.h>
-# include <limits.h>
-# include <stdio.h>
+#include "builtin.h"
 
-void	built_export(char **args, char **envp);
+void	built_echo(char **args)
+{
+	int	new_line;
+	int	i;
 
-void	built_echo(char **args);
-
-int		built_cd(t_body *minishell, char *args);
-
-int		built_pwd(char **args);
-
-#endif
+	i = 1;
+	new_line = 1;
+	if (args[1] && !ft_strncmp(args[1], "-n", 3))
+	{
+		i++;
+		new_line = 0;
+	}
+	while (args[i])
+	{
+		ft_printf("%s", args[i]);
+		if (args[i++ + 1])
+			ft_printf(" ");
+	}
+	if (new_line)
+		ft_printf("\n");
+}

@@ -1,52 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in.c                                         :+:      :+:    :+:   */
+/*   built_in_pwd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/16 14:06:31 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/16 19:01:16 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bulitin.h"
+#include "builtin.h"
 
-void	built_echo(char **args)
+int	built_pwd(char **args)
 {
-	int	new_line;
-	int	i;
+	char	*path;
 
-	i = 1;
-	new_line = 1;
-	if (args[1] && !ft_strncmp(args[1], "-n", 3))
+	path = NULL;
+	if (args[1][0] == '-')
 	{
-		i++;
-		new_line = 0;
-	}
-	while (args[i])
-	{
-		ft_printf("%s", args[i]);
-		if (args[i++ + 1])
-			ft_printf(" ");
-	}
-	if (new_line)
-		ft_printf("\n");
-}
-
-int	built_cd(char **args)
-{
-	if (!args[1])
-	{
-		perror("incorrect path");
+		ft_printf("pwd: %c: invalid option\n", args[1][1]);
+		ft_printf("pwd: usage: pwd []");
 		return (0);
 	}
-	if (chdir(args[1]) != 0)
+	path = getcwd(NULL, 0);
+	if (!path)
 	{
-		perror("cd");
+		perror("pwd");
 		return (0);
 	}
-	if (!path_minishell(minishell))
-		return (0);
+	ft_printf("%s\n", path);
+	free(path);
 	return (1);
 }

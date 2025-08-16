@@ -12,14 +12,22 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include "libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>
 # include <signal.h>
 # include <stdio.h>
+# include "libft.h"
 
 extern volatile sig_atomic_t	g_signal_received;
+
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+	int		exported;
+	struct	s_env *next;
+}	t_env;
 
 typedef struct s_cmd
 {
@@ -34,6 +42,7 @@ typedef struct s_body
 {
 	struct termios	term;
 	t_cmd			**commands;
+	t_env			*env;
 	char			*prompt;
 	char			*input;
 	int				*pipe_child;
@@ -46,5 +55,7 @@ void	recive_signals(t_body *minishell);
 int		path_minishell(t_body *minishell);
 
 void	cleanup(t_body *minishell);
+
+void	initialization(void);
 
 #endif
