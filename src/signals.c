@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/08 18:37:58 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/17 15:49:33 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,21 @@ static t_body	*handle_signals(t_body *minishell)
  * @note Cleanup is called before each input to reset shell state.
  */
 
+//temporaly free lst
+void free_env_list(t_env *env)
+{
+	t_env *tmp;
+
+	while (env)
+	{
+		tmp = env;
+		env = env->next;
+		free(tmp->name);
+		free(tmp->value);
+		free(tmp);
+	}
+}
+
 void	recive_signals(t_body *minishell)
 {
 	if (!handle_signals(minishell))
@@ -156,6 +171,8 @@ void	recive_signals(t_body *minishell)
 	minishell->input = readline(minishell->prompt);
 	if (minishell->input == NULL)
 	{
+		free_env_list(minishell->env);
+		minishell->env = NULL;
 		if (minishell->prompt)
 		{
 			free(minishell->prompt);

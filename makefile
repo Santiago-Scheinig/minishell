@@ -17,6 +17,7 @@ LIBFT_USE	:=	1
 SRC			=	$(SRC_DIR)/main.c				\
 				$(SRC_DIR)/signals.c			\
 				$(SRC_DIR)/terminal.c			\
+				$(SRC_DIR)/sort_envp.c			\
 				$(SRC_DIR)/built_in_cd.c		\
 				$(SRC_DIR)/built_in_pwd.c		\
 				$(SRC_DIR)/path_terminal.c		\

@@ -34,6 +34,8 @@
  */
 
 // temporal cleanup for tests
+
+
 void	cleanup(t_body *minishell)
 {
 	if (minishell->input)
@@ -46,6 +48,7 @@ void	cleanup(t_body *minishell)
 		free(minishell->pipe_child);
 		minishell->pipe_child = NULL;
 	}
+
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -59,7 +62,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_memset(&minishell, 0, sizeof(t_body));
 	if (!path_minishell(&minishell))
 		return (1);
-	if (!path)
+	minishell.env = init_envp(envp);
 	while (1)
 	{
 		recive_signals(&minishell);
@@ -76,6 +79,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else if (minishell.input[0] == '\0') //empty line
 			continue ;
+		add_env(minishell.env, "ZZZZZZ=");
 		/*else
 			ft_printf("Invalid command\n");*/
 	}

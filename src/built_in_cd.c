@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/16 19:06:43 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/17 13:31:51 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	built_cd(t_body *minishell, char **args)
 
 	dir = NULL;
 	if (args[1])
-		return (perror("cd : too much args"));
+	{
+		perror("cd : too much args");
+		return (0);
+	}
 	if (!args[0])
 	{
 		dir = getenv("HOME");
