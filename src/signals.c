@@ -6,11 +6,12 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 17:52:10 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:43:41 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals.h"
+#include "builtin.h"
 
 /**
  * Global flag set when SIGINT (Ctrl+C) is received.
@@ -167,12 +168,15 @@ void	recive_signals(t_body *minishell)
 {
 	if (!handle_signals(minishell))
 		return ;
+	sort_env(minishell->lst_export);
 	cleanup(minishell);
 	minishell->input = readline(minishell->prompt);
 	if (minishell->input == NULL)
 	{
-		free_env_list(minishell->env);
-		minishell->env = NULL;
+		free_env_list(minishell->lst_export);
+		free_env_list(minishell->lst_env);
+		minishell->lst_export = NULL;
+		minishell->lst_env = NULL;
 		if (minishell->prompt)
 		{
 			free(minishell->prompt);

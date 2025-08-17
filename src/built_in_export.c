@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 18:03:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:08:39 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ t_env	*add_env(t_env *head, char *new_env)
 	current = head;
 	while (current)
 	{
-		if (!ft_strncmp(current->name, new_env, ft_strlen(current->name)))
+		if (!ft_strncmp(current->name, new_env, ft_strlen(current->name) + 1))
 		{
 			if (!change_value_env(current, new_env))
 				return (NULL);

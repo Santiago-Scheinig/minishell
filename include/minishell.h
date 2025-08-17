@@ -42,7 +42,8 @@ typedef struct s_body
 {
 	struct termios	term;
 	t_cmd			**commands;
-	t_env			*env;
+	t_env			*lst_export;
+	t_env			*lst_env;
 	char			*prompt;
 	char			*input;
 	int				*pipe_child;

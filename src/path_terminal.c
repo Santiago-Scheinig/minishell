@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/16 15:10:06 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:09:10 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	*short_home(char *tmp, char *path)
 	char	*short_path;
 
 	short_path = NULL;
-	if (ft_strncmp(path, tmp, ft_strlen(tmp)) == 0)
+	if (ft_strncmp(path, tmp, ft_strlen(tmp) + 1) == 0)
 	{
 		rest = ft_strlen(path + ft_strlen(tmp));
 		short_path = malloc(2 + rest + 1);

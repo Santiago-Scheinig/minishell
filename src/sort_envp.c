@@ -6,20 +6,38 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 18:02:10 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:41:37 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	print_env_list(t_env *env_lst)
+void	print_env(t_env *env_lst)
 {
 	t_env	*current;
 
 	current = env_lst;
 	while (current)
 	{
-		if (current->name)
+		if (current->name && current->exported)
+		{
+			printf("%s", current->name);
+			if (current->value)
+				printf("=\"%s\"", current->value);
+			printf("\n");
+		}
+		current = current->next;
+	}
+}
+
+void	print_export(t_env *env_lst)
+{
+	t_env	*current;
+
+	current = env_lst;
+	while (current)
+	{
+		if (current->name && current->exported)
 		{
 			printf("declare -x %s", current->name);
 			if (current->value)
@@ -60,7 +78,7 @@ void	sort_env(t_env *head)
 		current = head;
 		while (current->next)
 		{
-			len = ft_strlen(current->name);
+			len = ft_strlen(current->name) + 1;
 			if (ft_strncmp(current->name, current->next->name, len) > 0)
 			{
 				swap_env(current, current->next);

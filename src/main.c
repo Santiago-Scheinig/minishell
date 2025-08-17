@@ -60,7 +60,8 @@ int	main(int argc, char **argv, char **envp)
 		ft_memset(&minishell, 0, sizeof(t_body));
 	if (!path_minishell(&minishell))
 		return (1);
-	minishell.env = init_envp(envp);
+	minishell.lst_export = init_envp(envp);
+	minishell.lst_env = init_envp(envp);
 	while (1)
 	{
 		recive_signals(&minishell);
@@ -77,7 +78,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else if (minishell.input[0] == '\0') //empty line
 			continue ;
-		add_env(minishell.env, "ZZZZZZ=");
 		/*else
 			ft_printf("Invalid command\n");*/
 	}
