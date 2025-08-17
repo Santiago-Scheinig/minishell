@@ -35,7 +35,6 @@
 
 // temporal cleanup for tests
 
-
 void	cleanup(t_body *minishell)
 {
 	if (minishell->input)
@@ -48,7 +47,6 @@ void	cleanup(t_body *minishell)
 		free(minishell->pipe_child);
 		minishell->pipe_child = NULL;
 	}
-
 }
 
 int	main(int argc, char **argv, char **envp)

@@ -23,10 +23,10 @@ extern volatile sig_atomic_t	g_signal_received;
 
 typedef struct s_env
 {
-	struct	s_env *next;
-	char	*value;
-	char	*name;
-	int		exported;
+	struct s_env	*next;
+	char			*value;
+	char			*name;
+	int				exported;
 }	t_env;
 
 typedef struct s_cmd

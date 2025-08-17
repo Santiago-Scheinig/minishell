@@ -6,28 +6,12 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 17:45:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/17 18:03:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void print_env_list(t_env *env_list)
-{
-	t_env *current = env_list;
-
-	while (current != NULL)
-	{
-		if (current->name)
-		{
-			printf("declare -x %s", current->name);
-			if (current->value)
-				printf("=\"%s\"", current->value);
-			printf("\n");
-		}
-		current = current->next;
-	}
-}
 static t_env	*copy_envp(t_env *new, char *envp, char *sign, int i)
 {
 	char	*tmp;
@@ -113,7 +97,6 @@ t_env	*init_envp(char **envp)
 		current = new_node;
 	}
 	sort_env(head);
-	print_env_list(head);
 	return (head);
 }
 
@@ -145,8 +128,7 @@ t_env	*add_env(t_env *head, char *new_env)
 		{
 			if (!change_value_env(current, new_env))
 				return (NULL);
-			print_env_list(head);
-			return(head);
+			return (head);
 		}
 		current = current->next;
 	}
@@ -158,6 +140,5 @@ t_env	*add_env(t_env *head, char *new_env)
 		current = current->next;
 	current->next = new_node;
 	sort_env(head);
-	print_env_list(head);
 	return (head);
 }

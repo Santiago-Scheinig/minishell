@@ -6,11 +6,29 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 16:52:22 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/17 18:02:10 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+
+void	print_env_list(t_env *env_lst)
+{
+	t_env	*current;
+
+	current = env_lst;
+	while (current)
+	{
+		if (current->name)
+		{
+			printf("declare -x %s", current->name);
+			if (current->value)
+				printf("=\"%s\"", current->value);
+			printf("\n");
+		}
+		current = current->next;
+	}
+}
 
 static void	swap_env(t_env *a, t_env *b)
 {
@@ -21,11 +39,9 @@ static void	swap_env(t_env *a, t_env *b)
 	tmp_name = a->name;
 	tmp_value = a->value;
 	tmp_exported = a->exported;
-
 	a->name = b->name;
 	a->value = b->value;
 	a->exported = b->exported;
-
 	b->name = tmp_name;
 	b->value = tmp_value;
 	b->exported = tmp_exported;
