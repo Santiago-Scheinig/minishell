@@ -16,6 +16,7 @@ LIBFT_USE	:=	1
 # The name list for regular and bonus source files.							#
 SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/signals.c							\
+				$(SRC_DIR)/terminal.c						\
 				$(SRC_DIR)/parser/parser.c						\
 				$(SRC_DIR)/parser/parser_cmd.c					\
 				$(SRC_DIR)/parser/parser_token.c				\
@@ -27,7 +28,12 @@ SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/shellft/shell_substr.c				\
 				$(SRC_DIR)/shellft/shell_strchr.c				\
 				$(SRC_DIR)/shellft/shell_lstclear.c				\
-
+				$(SRC_DIR)/shell_prompt.c					\
+				$(SRC_DIR)/shell_sortenv.c					\
+				$(SRC_DIR)/built_in_cmds/built_in_cd.c		\
+				$(SRC_DIR)/built_in_cmds/built_in_pwd.c		\
+				$(SRC_DIR)/built_in_cmds/built_in_echo.c	\
+				$(SRC_DIR)/built_in_cmds/built_in_export.c	\
 
 SRC_BON		=	$(SRC_DIR)/main_bonus.c		\
 
@@ -111,6 +117,7 @@ $(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
 	@mkdir -p $@
 	@mkdir -p $@/shellft
 	@mkdir -p $@/parser
+	@mkdir -p $@/built_in_cmds
 
 # Creates the regular library.												#
 $(LIB_REG): $(OBJ) | $(LIB_DIR)

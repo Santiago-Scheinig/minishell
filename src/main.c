@@ -35,6 +35,7 @@
  */
 
 // temporal cleanup for tests
+
 void	cleanup(t_body *minishell)
 https://github.com/Santiago-Scheinig/minishell/pull/35/conflict?name=include%252Fminishell.h&ancestor_oid=0ca17f3df83afadea873b14aaf06c1326bdcb304&base_oid=f9b00f86bd4b4724c87fe68c4ae9f23e3abc27ba&head_oid=adfface19af4da9339a85db904208a67719edd83{
 	if (minishell->input)
@@ -66,30 +67,16 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1 || !argv[0])
 		return (1);
-/* 	int i = -1;
-	while(envp[++i])
-		printf("%s\n", envp[i]); */
-	config_minishell(&minishell);
-	memset(&minishell, 0, sizeof(minishell));
-	minishell.envp = envp;
+	initialization();
+  ft_memset(&minishell, 0, sizeof(t_body));
+	if (!shell_prompt(&minishell))
+		return (1);
+	minishell.lst_env = init_envp(envp);
+	minishell.lst_export = init_envp(envp);
 	while (1)
 	{
-		recive_signals(&minishell); // We cut if from here
+		recive_signals(&minishell);
 		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
-		aux = minishell.cmd_lst;
-		while (aux)
-		{
-			if (aux->content)
-			{
-				int i = -1;
-				while (((t_cmd *) aux->content)->argv[++i])
-					printf("argv[%i]: %s\n", i, ((t_cmd *) aux->content)->argv[i]);
-				printf("infile: %i\n", ((t_cmd *) aux->content)->infile);
-				printf("outfile: %i\n", ((t_cmd *) aux->content)->outfile);
-				printf("limitator: %s\n", ((t_cmd *) aux->content)->limitator);
-			}
-			aux = aux->next;
-		}
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
 	}

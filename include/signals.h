@@ -252,6 +252,4 @@ void	recive_signals(t_body *minishell);
  * 
  */
 
-void	initialization(void);
-
 #endif

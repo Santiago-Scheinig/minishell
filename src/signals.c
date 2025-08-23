@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "signals.h"
+#include "builtin.h"
 
 /**
  * Global flag set when SIGINT (Ctrl+C) is received.
@@ -19,6 +20,7 @@
  * allowing proper prompt refresh and cleanup.
  * 
  * @note Declared volatile because it is modified from within a signal handler.
+ */
 
 volatile sig_atomic_t	g_signal_received = 0;
 
@@ -153,19 +155,39 @@ static t_body	*handle_signals(t_body *minishell)
  * @note If readline returns NULL (Ctrl+D), the shell exits cleanly.
  * @note Cleanup is called before each input to reset shell state.
  */
+//temporaly free lst
+void	free_env_list(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env;
+		env = env->current_next;
+		free(tmp->name);
+		free(tmp->value);
+		free(tmp);
+	}
+}
+
 void	recive_signals(t_body *minishell)
 {
 	if (!handle_signals(minishell))
 		return ;
+	sortenv(minishell->lst_env);
 	cleanup(minishell);
-	minishell->prompt = "minishell>";
-	//get_prompt(minishell);
 	minishell->input = readline(minishell->prompt);
 	if (minishell->input == NULL)
-		exit(1);
+	{
+		free_env_list(minishell->lst_export);
+		free_env_list(minishell->lst_env);
+		if (minishell->prompt)
+			free(minishell->prompt);
+		rl_clear_history();
+		exit(0);
 	}
 	else if (!minishell->input[0])
 		recive_signals(minishell);
-	else
+	else if (minishell->input[0] != '\0')
 		add_history(minishell->input);
 }
