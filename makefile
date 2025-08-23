@@ -14,10 +14,20 @@ NAME		=	minishell
 LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
-
-SRC			=	$(SRC_DIR)/main.c							\
-				$(SRC_DIR)/signals.c						\
+SRC			=	$(SRC_DIR)/main.c								\
+				$(SRC_DIR)/signals.c							\
 				$(SRC_DIR)/terminal.c						\
+				$(SRC_DIR)/parser/parser.c						\
+				$(SRC_DIR)/parser/parser_cmd.c					\
+				$(SRC_DIR)/parser/parser_token.c				\
+				$(SRC_DIR)/parser/parser_cmd_redir.c			\
+				$(SRC_DIR)/parser/parser_envar.c				\
+				$(SRC_DIR)/parser/parser_envar_utils.c			\
+				$(SRC_DIR)/shellft/shell_split.c				\
+				$(SRC_DIR)/shellft/shell_split_utils.c			\
+				$(SRC_DIR)/shellft/shell_substr.c				\
+				$(SRC_DIR)/shellft/shell_strchr.c				\
+				$(SRC_DIR)/shellft/shell_lstclear.c				\
 				$(SRC_DIR)/shell_prompt.c					\
 				$(SRC_DIR)/shell_sortenv.c					\
 				$(SRC_DIR)/built_in_cmds/built_in_cd.c		\
@@ -34,7 +44,7 @@ CFLAGS		=	-Wall -Wextra -Werror -g
 DFLAGS		=	-MMD -MP
 
 # The preprocess flags used to compile the program.							#
-CPPFLAGS	=	-I$(INC_DIR)
+CPPFLAGS	=	-I$(INC_DIR) -I $(INC_LIB)
 
 # ----------------------------- Folder Names ------------------------------ #
 
@@ -52,6 +62,9 @@ DEP_DIR		=	dep
 
 # The directory name for index files.										#
 INC_DIR		=	include
+
+# The directory name for libft index files.									#
+INC_LIB		=	libft/include
 
 # --------------------------- Object Libraries ---------------------------- #
 
@@ -102,6 +115,8 @@ all: $(NAME)
 # Creates a directory named $@.												#
 $(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
 	@mkdir -p $@
+	@mkdir -p $@/shellft
+	@mkdir -p $@/parser
 	@mkdir -p $@/built_in_cmds
 
 # Creates the regular library.												#

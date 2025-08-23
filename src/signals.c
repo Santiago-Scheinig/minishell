@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 14:16:24 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 15:58:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,13 @@ static t_body	*sigquit(t_body *minishell)
 }
 
 /**
+ * recive_user_input(), we put it inside of parser instead, 
+ * but as first function call. That being the First step of
+ * parsing, which also handles USER signals.
+ * 
+ * We also make the shell_split() after recieving input.
+ * //minishell.input_split = shell_split(minishell.input);
+ *
  * Sets up signal handlers for the shell prompt context.
  * 
  * Installs custom handler for SIGINT and ignores SIGQUIT.
@@ -148,7 +155,6 @@ static t_body	*handle_signals(t_body *minishell)
  * @note If readline returns NULL (Ctrl+D), the shell exits cleanly.
  * @note Cleanup is called before each input to reset shell state.
  */
-
 //temporaly free lst
 void	free_env_list(t_env *env)
 {
@@ -180,6 +186,8 @@ void	recive_signals(t_body *minishell)
 		rl_clear_history();
 		exit(0);
 	}
+	else if (!minishell->input[0])
+		recive_signals(minishell);
 	else if (minishell->input[0] != '\0')
 		add_history(minishell->input);
 }

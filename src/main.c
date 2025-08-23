@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 #include "signals.h"
+#include "parser.h"
 
 /**
  * Short description of the function porpuse.
@@ -36,28 +37,38 @@
 // temporal cleanup for tests
 
 void	cleanup(t_body *minishell)
-{
+https://github.com/Santiago-Scheinig/minishell/pull/35/conflict?name=include%252Fminishell.h&ancestor_oid=0ca17f3df83afadea873b14aaf06c1326bdcb304&base_oid=f9b00f86bd4b4724c87fe68c4ae9f23e3abc27ba&head_oid=adfface19af4da9339a85db904208a67719edd83{
 	if (minishell->input)
 	{
 		free(minishell->input);
 		minishell->input = NULL;
 	}
-	if (minishell->pipe_child)
+	if (minishell->token_lst)
 	{
-		free(minishell->pipe_child);
-		minishell->pipe_child = NULL;
+		shell_lstclear(&(minishell->token_lst), shell_lstdeltkn);
+		minishell->token_lst = NULL;
+	}
+	if (minishell->cmd_lst)
+	{
+		shell_lstclear(&(minishell->cmd_lst), shell_lstdelcmd);
+		minishell->cmd_lst = NULL;
+	}
+	if (minishell->childs_pid)
+	{
+		free(minishell->childs_pid);
+		minishell->childs_pid = NULL;
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_body	minishell;
+	t_list	*aux;
 
-	if (argc >= 2)
+	if (argc != 1 || !argv[0])
 		return (1);
 	initialization();
-	if (argv || envp)
-		ft_memset(&minishell, 0, sizeof(t_body));
+  ft_memset(&minishell, 0, sizeof(t_body));
 	if (!shell_prompt(&minishell))
 		return (1);
 	minishell.lst_env = init_envp(envp);
@@ -65,21 +76,9 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		recive_signals(&minishell);
-		//commands = parser(input);
-			//we tokenize and validate everithing, if works, returns a T_CMD **.
-		//if (!commands)
-			//continue; (input wasn't valid, parser() should print the error);
+		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
-		print_export(minishell.lst_export);
-		print_env(minishell.lst_env);
-		if (!ft_strncmp(minishell.input, "exit", 5))
-		{
-			cleanup(&minishell);
-			break ;
-		}
-		else if (minishell.input[0] == '\0') //empty line
-			continue ;
 	}
 	return (0);
 }
