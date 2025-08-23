@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 19:43:41 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:16:24 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void	free_env_list(t_env *env)
 	while (env)
 	{
 		tmp = env;
-		env = env->next;
+		env = env->current_next;
 		free(tmp->name);
 		free(tmp->value);
 		free(tmp);
@@ -168,20 +168,15 @@ void	recive_signals(t_body *minishell)
 {
 	if (!handle_signals(minishell))
 		return ;
-	sort_env(minishell->lst_export);
+	sortenv(minishell->lst_env);
 	cleanup(minishell);
 	minishell->input = readline(minishell->prompt);
 	if (minishell->input == NULL)
 	{
 		free_env_list(minishell->lst_export);
 		free_env_list(minishell->lst_env);
-		minishell->lst_export = NULL;
-		minishell->lst_env = NULL;
 		if (minishell->prompt)
-		{
 			free(minishell->prompt);
-			minishell->prompt = NULL;
-		}
 		rl_clear_history();
 		exit(0);
 	}

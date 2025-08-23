@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path_terminal.c                                    :+:      :+:    :+:   */
+/*   shell_prompt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 19:09:10 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 12:51:26 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static char	*path_cwd(char *user)
 	return (path);
 }
 
-int	path_minishell(t_body *minishell)
+int	shell_prompt(t_body *minishell)
 {
 	size_t	size;
 	char	*user;

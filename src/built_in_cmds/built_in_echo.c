@@ -1,31 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   getenv.c                                           :+:      :+:    :+:   */
+/*   built_in_echo.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 19:50:14 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/23 12:40:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-char	*shell_getenv(t_body *minishell, const char *name)
+void	built_echo(char **args)
 {
-	t_env	*tmp;
+	int	new_line;
+	int	i;
 
-	tmp = minishell->env;
-	while (tmp)
+	i = 1;
+	new_line = 1;
+	if (args[0] && !ft_strncmp(args[0], "-n", 3))
 	{
-		if (!ft_strncmp(tmp->name, name, (ft_strlen(name) + 1)))
-		{
-			if (!tmp->value[0])
-				return (NULL);
-			return (tmp->value);
-		}
-		tmp = tmp->next;
+		i++;
+		new_line = 0;
 	}
-	return (NULL);
+	while (args[i])
+	{
+		ft_printf("%s", args[i]);
+		if (args[i++ + 1])
+			ft_printf(" ");
+	}
+	if (new_line)
+		ft_printf("\n");
 }

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 19:08:39 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:10:45 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static t_env	*create_envp(char *envp, int *error)
 		return (NULL);
 	}
 	new->exported = 1;
-	new->next = NULL;
+	new->current_next = NULL;
 	return (new);
 }
 
@@ -93,10 +93,9 @@ t_env	*init_envp(char **envp)
 		if (!head)
 			head = new_node;
 		else
-			current->next = new_node;
+			current->current_next = new_node;
 		current = new_node;
 	}
-	sort_env(head);
 	return (head);
 }
 
@@ -130,15 +129,14 @@ t_env	*add_env(t_env *head, char *new_env)
 				return (NULL);
 			return (head);
 		}
-		current = current->next;
+		current = current->current_next;
 	}
 	new_node = create_envp(new_env, &error);
 	if (!new_node)
 		return (NULL);
 	current = head;
-	while (current->next)
-		current = current->next;
-	current->next = new_node;
-	sort_env(head);
+	while (current->current_next)
+		current = current->current_next;
+	current->current_next = new_node;
 	return (head);
 }

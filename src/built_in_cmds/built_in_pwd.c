@@ -1,44 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in_cd.c                                      :+:      :+:    :+:   */
+/*   built_in_pwd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 13:31:51 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/23 12:42:14 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-int	built_cd(t_body *minishell, char **args)
+int	built_pwd(char **args)
 {
-	char	*dir;
+	char	*path;
 
-	dir = NULL;
-	if (args[1])
+	path = NULL;
+	if (args[1][0] == '-')
 	{
-		perror("cd : too much args");
+		ft_printf("pwd: %c: invalid option\n", args[1][1]);
+		ft_printf("pwd: usage: pwd []");
 		return (0);
 	}
-	if (!args[0])
+	path = getcwd(NULL, 0);
+	if (!path)
 	{
-		dir = getenv("HOME");
-		if (!dir)
-		{
-			perror("cd: HOME not set");
-			return (0);
-		}
-	}
-	else
-		dir = args[0];
-	if (chdir(dir) != 0)
-	{
-		ft_printf("cd : %s: No such file or directory", dir);
+		perror("pwd");
 		return (0);
 	}
-	if (!path_minishell(minishell))
-		return (0);
+	ft_printf("%s\n", path);
+	free(path);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 19:51:34 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 12:49:27 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	print_env(t_env *env_lst);
 
 void	built_echo(char **args);
 
-void	sort_env(t_env *head);
+void	sortenv(t_env *head);
 
 int		built_cd(t_body *minishell, char **args);
 

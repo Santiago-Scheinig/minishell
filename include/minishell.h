@@ -23,7 +23,8 @@ extern volatile sig_atomic_t	g_signal_received;
 
 typedef struct s_env
 {
-	struct s_env	*next;
+	struct s_env	*current_next;
+	struct s_env	*sort_next;
 	char			*value;
 	char			*name;
 	int				exported;
@@ -61,6 +62,10 @@ void	cleanup(t_body *minishell);
 
 void	initialization(void);
 
-int		path_minishell(t_body *minishell);
+int		shell_prompt(t_body *minishell);
+
+void	print_export(t_env *env_lst);
+
+void	print_env(t_env *env_lst);
 
 #endif

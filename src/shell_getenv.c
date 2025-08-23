@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in_pwd.c                                     :+:      :+:    :+:   */
+/*   shell_getenv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/16 19:01:16 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/23 13:00:20 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-int	built_pwd(char **args)
+char	*shell_getenv(t_body *minishell, const char *name)
 {
-	char	*path;
+	t_env	*tmp;
 
-	path = NULL;
-	if (args[1][0] == '-')
+	tmp = minishell->env;
+	while (tmp)
 	{
-		ft_printf("pwd: %c: invalid option\n", args[1][1]);
-		ft_printf("pwd: usage: pwd []");
-		return (0);
+		if (!ft_strncmp(tmp->name, name, (ft_strlen(name) + 1)))
+		{
+			if (!tmp->value[0])
+				return (NULL);
+			return (tmp->value);
+		}
+		tmp = tmp->current->next;
 	}
-	path = getcwd(NULL, 0);
-	if (!path)
-	{
-		perror("pwd");
-		return (0);
-	}
-	ft_printf("%s\n", path);
-	free(path);
-	return (1);
+	return (NULL);
 }

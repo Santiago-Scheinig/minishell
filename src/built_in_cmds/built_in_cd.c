@@ -1,35 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in_echo.c                                    :+:      :+:    :+:   */
+/*   built_in_cd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/16 19:04:06 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/23 12:54:59 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	built_echo(char **args)
+int	built_cd(t_body *minishell, char **args)
 {
-	int	new_line;
-	int	i;
+	char	*dir;
 
-	i = 1;
-	new_line = 1;
-	if (args[1] && !ft_strncmp(args[1], "-n", 3))
+	dir = NULL;
+	if (args[1])
 	{
-		i++;
-		new_line = 0;
+		perror("cd : too much args");
+		return (0);
 	}
-	while (args[i])
+	if (!args[0])
 	{
-		ft_printf("%s", args[i]);
-		if (args[i++ + 1])
-			ft_printf(" ");
+		dir = getenv("HOME");
+		if (!dir)
+		{
+			perror("cd: HOME not set");
+			return (0);
+		}
 	}
-	if (new_line)
-		ft_printf("\n");
+	else
+		dir = args[0];
+	if (chdir(dir) != 0)
+	{
+		ft_printf("cd : %s: No such file or directory", dir);
+		return (0);
+	}
+	if (!shell_prompt(minishell))
+		return (0);
+	return (1);
 }

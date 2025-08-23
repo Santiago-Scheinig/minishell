@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_envp.c                                        :+:      :+:    :+:   */
+/*   shell_sortenv.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 19:41:37 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:23:17 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	print_env(t_env *env_lst)
 				printf("=\"%s\"", current->value);
 			printf("\n");
 		}
-		current = current->next;
+		current = current->current_next;
 	}
 }
 
@@ -44,7 +44,7 @@ void	print_export(t_env *env_lst)
 				printf("=\"%s\"", current->value);
 			printf("\n");
 		}
-		current = current->next;
+		current = current->current_next;
 	}
 }
 
@@ -65,7 +65,7 @@ static void	swap_env(t_env *a, t_env *b)
 	b->exported = tmp_exported;
 }
 
-void	sort_env(t_env *head)
+void	sortenv(t_env *head)
 {
 	t_env	*current;
 	int		sorted;
@@ -76,15 +76,15 @@ void	sort_env(t_env *head)
 	{
 		sorted = 1;
 		current = head;
-		while (current->next)
+		while (current->current_next)
 		{
 			len = ft_strlen(current->name) + 1;
-			if (ft_strncmp(current->name, current->next->name, len) > 0)
+			if (ft_strncmp(current->name, current->current_next->name, len) > 0)
 			{
-				swap_env(current, current->next);
+				swap_env(current, current->current_next);
 				sorted = 0;
 			}
-			current = current->next;
+			current = current->current_next;
 		}
 	}
 }

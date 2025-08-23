@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/17 19:51:01 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 13:00:10 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ void	built_unset(t_env *env_lst, const char *name)
 		if (!ft_strncmp(current->name, name, len))
 		{
 			if (prev)
-				prev->next = current->next;
+				prev->current->next = current->current->next;
 			else
-				env_lst = current->next;
+				env_lst = current->current->next;
 			free(current->name);
 			free(current->value);
 			free(current);
 			return ;
 		}
 		prev = current;
-		current = current->next;
+		current = current->current->next;
 	}
 }
