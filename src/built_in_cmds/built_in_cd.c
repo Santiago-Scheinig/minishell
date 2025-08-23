@@ -6,10 +6,11 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 12:54:59 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 17:08:25 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "builtin.h"
 
 int	built_cd(t_body *minishell, char **args)

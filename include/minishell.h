@@ -76,21 +76,27 @@ typedef struct s_body
 	t_env			*lst_env;
 }	t_body;
 
+t_body	*init_env(t_body *minishell, char **envp);
+
+t_env	*create_envp(char *envp, int *error);
+
 t_env	*add_env(t_env *head, char *new_env);
 
 t_env	*init_envp(char **envp);
 
+char	**ft_realloc(char **envp, char *new_envp, int size);
+
 //temporaly cleanup for test
+void	print_export(t_env *env_lst);
+
 void	cleanup(t_body *minishell);
+
+void	print_env(t_env *env_lst);
 
 void	parser(t_body *minishell);
 
 void	initialization(void);
 
 int		shell_prompt(t_body *minishell);
-
-void	print_export(t_env *env_lst);
-
-void	print_env(t_env *env_lst);
 
 #endif

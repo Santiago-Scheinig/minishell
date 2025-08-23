@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 15:58:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:02:27 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,8 @@ void	recive_signals(t_body *minishell)
 {
 	if (!handle_signals(minishell))
 		return ;
-	sortenv(minishell->lst_env);
+	sortenv(minishell->lst_export);
+	print_export(minishell->lst_export);
 	cleanup(minishell);
 	minishell->input = readline(minishell->prompt);
 	if (minishell->input == NULL)

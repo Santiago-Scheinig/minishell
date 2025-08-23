@@ -6,10 +6,11 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 13:00:10 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 17:08:13 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "builtin.h"
 
 void	built_unset(t_env *env_lst, const char *name)

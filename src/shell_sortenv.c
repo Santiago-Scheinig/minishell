@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 14:23:17 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 18:01:50 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	sortenv(t_env *head)
 		while (current->current_next)
 		{
 			len = ft_strlen(current->name) + 1;
-			if (ft_strncmp(current->name, current->current_next->name, len) > 0)
+			if (ft_strncmp(current->name, current->current_next->name, len + 1) > 0)
 			{
 				swap_env(current, current->current_next);
 				sorted = 0;
