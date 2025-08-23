@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 21:36:20 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:06:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	get_token_type(char *str);
  * @param del The function used to free each node.
  * @note In general, the del function should be free().
  */
-void	shell_lstclear(t_list **lst, void (*del)(void *));
+void	shell_lstclear(t_list **lst, void (*del)(t_list *, void (*)(void *)));
 
 /**
  * Frees every pointer on an ARRAY of STRINGS and the ARRAY pointer, even
@@ -100,5 +100,21 @@ const char	*shell_operator_strchr(const char *s);
  * are treated as unexistent.
  */
 char	**shell_split(const char *s);
+
+/**
+ * Frees the content of a TOKEN NODE. then frees the NODE.
+ * @param lst The LIST node to free.
+ * @param del The function used to free the content.
+ * @note In general, the del function should be free().
+ */
+void	shell_lstdeltkn(t_list *lst, void (*del)(void *));
+
+/**
+ * Frees the content of a COMAND NODE. then frees the NODE.
+ * @param lst The LIST node to free.
+ * @param del The function used to free the content.
+ * @note In general, the del function should be free().
+ */
+void	shell_lstdelcmd(t_list *lst, void (*del)(void *));
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/13 21:38:41 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/23 15:58:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,8 @@ void	recive_signals(t_body *minishell)
 		cleanup(minishell);
 		exit(1);
 	}
-/* 	else if (minishell->input[0] == '\n')
-		sigend(minishell, 1);///empty line */
+	else if (!minishell->input[0])
+		recive_signals(minishell);
 	else
 		add_history(minishell->input);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_redir_utils.c                               :+:      :+:    :+:   */
+/*   parser_cmd_redir.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 17:23:51 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/23 15:55:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,11 @@ static void	edit_infile_to_heredoc(t_token *next, t_cmd *new)
 	if (new->limitator)
 		free(new->limitator);
 	new->limitator = next->str;
+	next->str = NULL;
 }
 
 // -1 on either outfile or infile should skip that cmd execution.
-void	upd_redir(t_token *aux, t_token *next, t_cmd *new)
+void	cmd_redirupd(t_token *aux, t_token *next, t_cmd *new)
 {
 	if (aux->type == REDIR_IN)
 		edit_infile(next, new);

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 21:32:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:48:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ void	parser(t_body *minishell)
 		sigend(minishell, 1);
 	parser_token(minishell, split);
 	parser_envar(minishell);
+	parser_cmds(minishell);
 	return ;
 	//i should verify this work before keep going.
-	parser_cmds(minishell);
-	ft_lstclear(&(minishell->token_lst), free);
-	minishell->token_lst = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 20:59:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:23:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ char	*exp_value(char *str, int start, char *value);
  */
 char	*envar_pathname(char *env_var);
 
-void	upd_redir(t_token *aux, t_token *next, t_cmd *new);
+void	cmd_redirupd(t_token *aux, t_token *next, t_cmd *new);
 
 void	sigend(t_body *minishell, int errno);
 

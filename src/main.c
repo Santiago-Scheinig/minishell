@@ -44,13 +44,12 @@ void	cleanup(t_body *minishell)
 	}
 	if (minishell->token_lst)
 	{
-		printf("hello?\n");
-		shell_lstclear(&(minishell->token_lst), free);
+		shell_lstclear(&(minishell->token_lst), shell_lstdeltkn);
 		minishell->token_lst = NULL;
 	}
 	if (minishell->cmd_lst)
 	{
-		ft_lstclear(&(minishell->cmd_lst), free);
+		shell_lstclear(&(minishell->cmd_lst), shell_lstdelcmd);
 		minishell->cmd_lst = NULL;
 	}
 	if (minishell->childs_pid)
@@ -63,7 +62,7 @@ void	cleanup(t_body *minishell)
 int	main(int argc, char **argv, char **envp)
 {
 	t_body	minishell;
-	// t_token	*test;
+	t_list	*aux;
 
 	if (argc != 1 || !argv[0])
 		return (1);
@@ -77,15 +76,20 @@ int	main(int argc, char **argv, char **envp)
 	{
 		recive_signals(&minishell); // We cut if from here
 		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
-/* 		if (!minishell.cmd_lst)
+		aux = minishell.cmd_lst;
+		while (aux)
 		{
-			while (minishell.token_lst)
+			if (aux->content)
 			{
-				test = (t_token *) minishell.token_lst->content;
-				printf("%s - %i\n", test->str, test->type);
-				minishell.token_lst = minishell.token_lst->next;
+				int i = -1;
+				while (((t_cmd *) aux->content)->argv[++i])
+					printf("argv[%i]: %s\n", i, ((t_cmd *) aux->content)->argv[i]);
+				printf("infile: %i\n", ((t_cmd *) aux->content)->infile);
+				printf("outfile: %i\n", ((t_cmd *) aux->content)->outfile);
+				printf("limitator: %s\n", ((t_cmd *) aux->content)->limitator);
 			}
-		} */
+			aux = aux->next;
+		}
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
 	}
