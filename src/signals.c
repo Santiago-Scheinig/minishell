@@ -6,11 +6,12 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/08 14:35:42 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:16:24 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals.h"
+#include "builtin.h"
 
 /**
  * Global flag set when SIGINT (Ctrl+C) is received.
@@ -19,6 +20,7 @@
  * allowing proper prompt refresh and cleanup.
  * 
  * @note Declared volatile because it is modified from within a signal handler.
+ */
 
 volatile sig_atomic_t	g_signal_received = 0;
 
@@ -147,14 +149,37 @@ static t_body	*handle_signals(t_body *minishell)
  * @note Cleanup is called before each input to reset shell state.
  */
 
+//temporaly free lst
+void	free_env_list(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env;
+		env = env->current_next;
+		free(tmp->name);
+		free(tmp->value);
+		free(tmp);
+	}
+}
+
 void	recive_signals(t_body *minishell)
 {
 	if (!handle_signals(minishell))
 		return ;
+	sortenv(minishell->lst_env);
 	cleanup(minishell);
-	minishell->input = readline("minishell> ");
+	minishell->input = readline(minishell->prompt);
 	if (minishell->input == NULL)
-		exit(1);
-	else
+	{
+		free_env_list(minishell->lst_export);
+		free_env_list(minishell->lst_env);
+		if (minishell->prompt)
+			free(minishell->prompt);
+		rl_clear_history();
+		exit(0);
+	}
+	else if (minishell->input[0] != '\0')
 		add_history(minishell->input);
 }

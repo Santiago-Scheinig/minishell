@@ -34,6 +34,7 @@
  */
 
 // temporal cleanup for tests
+
 void	cleanup(t_body *minishell)
 {
 	if (minishell->input)
@@ -57,6 +58,10 @@ int	main(int argc, char **argv, char **envp)
 	initialization();
 	if (argv || envp)
 		ft_memset(&minishell, 0, sizeof(t_body));
+	if (!shell_prompt(&minishell))
+		return (1);
+	minishell.lst_env = init_envp(envp);
+	minishell.lst_export = init_envp(envp);
 	while (1)
 	{
 		recive_signals(&minishell);
@@ -66,6 +71,8 @@ int	main(int argc, char **argv, char **envp)
 			//continue; (input wasn't valid, parser() should print the error);
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
+		print_export(minishell.lst_export);
+		print_env(minishell.lst_env);
 		if (!ft_strncmp(minishell.input, "exit", 5))
 		{
 			cleanup(&minishell);
@@ -73,8 +80,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else if (minishell.input[0] == '\0') //empty line
 			continue ;
-		else
-			ft_printf("Invalid command\n");
 	}
 	return (0);
 }

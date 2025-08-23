@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:14:33 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/05 16:53:24 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/16 14:19:40 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,5 @@ void	recive_signals(t_body *minishell);
  * @warning - Must be called once at shell startup before prompting the user.
  * 
  */
-
-void	initialization(void);
 
 #endif
