@@ -47,9 +47,6 @@ typedef struct s_body
 	t_env			*lst_env;
 	char			*prompt;
 	char			*input;
-	int				*pipe_child;
-	int				pipe_child_count;
-	int				errno;
 }	t_body;
 
 t_env	*add_env(t_env *head, char *new_env);

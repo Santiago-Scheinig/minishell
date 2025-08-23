@@ -80,8 +80,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else if (minishell.input[0] == '\0') //empty line
 			continue ;
-		/*else
-			ft_printf("Invalid command\n");*/
 	}
 	return (0);
 }
