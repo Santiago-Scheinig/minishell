@@ -28,6 +28,7 @@ SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/shellft/shell_strchr.c				\
 				$(SRC_DIR)/shellft/shell_lstclear.c				\
 
+
 SRC_BON		=	$(SRC_DIR)/main_bonus.c		\
 
 # The flags used to compile the objects.									#

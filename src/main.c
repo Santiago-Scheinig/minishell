@@ -36,7 +36,7 @@
 
 // temporal cleanup for tests
 void	cleanup(t_body *minishell)
-{
+https://github.com/Santiago-Scheinig/minishell/pull/35/conflict?name=include%252Fminishell.h&ancestor_oid=0ca17f3df83afadea873b14aaf06c1326bdcb304&base_oid=f9b00f86bd4b4724c87fe68c4ae9f23e3abc27ba&head_oid=adfface19af4da9339a85db904208a67719edd83{
 	if (minishell->input)
 	{
 		free(minishell->input);

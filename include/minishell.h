@@ -32,6 +32,7 @@ typedef struct s_cmd
 	char	**argv;
 }	t_cmd;
 
+
 /**
  * Termios structure detailed
  * 
@@ -63,6 +64,7 @@ typedef struct s_body
 	int				*childs_pid;
 	int				errno;
 }	t_body;
+
 
 //temporaly cleanup for test
 void	cleanup(t_body *minishell);
