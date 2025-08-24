@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/24 17:22:53 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/24 19:24:30 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,25 @@ char	**ft_realloc(char **envp, char **new_envp, int size)
 {
 	char	**tmp;
 	int		i;
+	int		j;
 
 	tmp = malloc((size + 1) * sizeof(char *));
 	if (!tmp)
 		return (NULL);
-	i = -1;
-	while (envp[++i])
-		ft_memmove(tmp, envp, (size) * sizeof(char *));
-	i = -1;
-	while (new_envp[++i])
+	i = 0;
+	while (envp[i])
+		i++;
+	j = 0;
+	ft_memmove(tmp, envp, i * sizeof(char *));
+	while (new_envp[++j])
 	{
-		tmp[size + i] = ft_strdup(new_envp[i]);
-		if (!tmp[size])
+		tmp[j + i] = ft_strdup(new_envp[j]);
+		if (!tmp[j + i])
 			return (NULL);
 	}
-	tmp[size + i] = NULL;
+	tmp[j + i] = NULL;
+	free(envp);
 	return (tmp);
-	
 }
 
 char	*shell_getenv(t_body *minishell, const char *name)

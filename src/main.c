@@ -63,7 +63,9 @@ void	cleanup(t_body *minishell)
 int	main(int argc, char **argv, char **envp)
 {
 	t_body	minishell;
+	t_cmd	*cmd;
 
+	cmd = NULL;
 	if (argc != 1 || !argv[0])
 		return (1);
 	initialization();
@@ -77,7 +79,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		recive_signals(&minishell);
 		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
-		built_in(&minishell, "cd", &minishell.input, minishell.lst_export);
+		cmd = (t_cmd *)minishell.cmd_lst->content;
+		built_in(&minishell, cmd->argv[0], cmd->argv, minishell.lst_export);
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
 	}

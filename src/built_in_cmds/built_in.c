@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 17:13:00 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/24 17:29:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/24 19:29:09 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 
 char	*built_in(t_body *minishell, char *pathname, char **args, t_env *envp)
 {
-	if (ft_strnstr(pathname, "export", ft_strlen(pathname)))
+	if (ft_strlen(pathname) == 6 && ft_strnstr(pathname, "export", 6))
 		built_export(minishell->envp, envp, args);
-	else if (ft_strnstr(pathname, "cd", ft_strlen(pathname)))
+	else if (ft_strnstr(pathname, "cd", 2))
 		built_cd(minishell, args);
 	//else if (ft_strnstr(pathname, "env", ft_strlen(pathname)))
 	//	built_env(args);
-	else if (ft_strnstr(pathname, "pwd", ft_strlen(pathname)))
+	else if (ft_strnstr(pathname, "pwd", 3))
 		built_pwd(args);
-	else if (ft_strnstr(pathname, "echo", ft_strlen(pathname)))
+	else if (ft_strnstr(pathname, "echo", 4))
 		built_echo(args);
 	//else if (ft_strnstr(pathname, "exit", ft_strlen(pathname)))
 	//	ft_exit(args);
-	else if (ft_strnstr(pathname, "unset", ft_strlen(pathname)))
+	else if (ft_strnstr(pathname, "unset", 5))
 		built_unset(args, envp);
 	return (pathname);
 }

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/24 15:55:21 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/24 18:31:04 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ int	built_pwd(char **args)
 	char	*path;
 
 	path = NULL;
-	if (args[1][0] == '-')
+	if (!args[1])
+		path = NULL;
+	else if (args[1][0] == '-')
 	{
 		built_end(args[0], "Invalid flags", "[]", args[1][1]);
 		return (0);
