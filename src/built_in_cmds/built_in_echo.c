@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 17:08:23 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/24 13:51:35 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	built_echo(char **args)
 
 	i = 1;
 	new_line = 1;
-	if (args[0] && !ft_strncmp(args[0], "-n", 3))
+	if (args[1] && !ft_strncmp(args[1], "-n", 3))
 	{
 		i++;
 		new_line = 0;

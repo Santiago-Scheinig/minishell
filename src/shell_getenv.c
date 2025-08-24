@@ -6,11 +6,11 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 19:33:45 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/24 17:22:53 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "minishell.h"
 
 t_body	*init_env(t_body *minishell, char **envp)
 {
@@ -34,31 +34,40 @@ t_body	*init_env(t_body *minishell, char **envp)
 			free(minishell->envp);
 			return (NULL);
 		}
+		j++;
 	}
 	minishell->envp[i] = NULL;
 	return (minishell);
 }
 
-char	**ft_realloc(char **envp, char *new_envp, int size)
+char	**ft_realloc(char **envp, char **new_envp, int size)
 {
 	char	**tmp;
+	int		i;
 
 	tmp = malloc((size + 1) * sizeof(char *));
 	if (!tmp)
 		return (NULL);
-	ft_memmove(tmp, envp, (size) * sizeof(char *));
-	tmp[size] = ft_strdup(new_envp);
-	if (!tmp[size])
-		return (NULL);
-	tmp[size + 1] = NULL;
+	i = -1;
+	while (envp[++i])
+		ft_memmove(tmp, envp, (size) * sizeof(char *));
+	i = -1;
+	while (new_envp[++i])
+	{
+		tmp[size + i] = ft_strdup(new_envp[i]);
+		if (!tmp[size])
+			return (NULL);
+	}
+	tmp[size + i] = NULL;
 	return (tmp);
+	
 }
 
 char	*shell_getenv(t_body *minishell, const char *name)
 {
 	t_env	*tmp;
 
-	tmp = minishell->env;
+	tmp = minishell->lst_export;
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->name, name, (ft_strlen(name) + 1)))
@@ -67,7 +76,7 @@ char	*shell_getenv(t_body *minishell, const char *name)
 				return (NULL);
 			return (tmp->value);
 		}
-		tmp = tmp->current->next;
+		tmp = tmp->current_next;
 	}
 	return (NULL);
 }

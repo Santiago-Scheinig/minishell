@@ -84,7 +84,9 @@ t_env	*add_env(t_env *head, char *new_env);
 
 t_env	*init_envp(char **envp);
 
-char	**ft_realloc(char **envp, char *new_envp, int size);
+char	**ft_realloc(char **envp, char **new_envp, int size);
+
+char	*built_in(t_body *minishell, char *pathname, char **args, t_env *envp);
 
 //temporaly cleanup for test
 void	print_export(t_env *env_lst);

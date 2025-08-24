@@ -70,13 +70,14 @@ int	main(int argc, char **argv, char **envp)
 	ft_memset(&minishell, 0, sizeof(t_body));
 	if (!shell_prompt(&minishell))
 		return (1);
-	minishell = *init_env(&minishell, minishell.envp);
+	minishell = *init_env(&minishell, envp);
 	minishell.lst_env = init_envp(envp);
 	minishell.lst_export = init_envp(envp);
 	while (1)
 	{
 		recive_signals(&minishell);
 		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
+		built_in(&minishell, "cd", &minishell.input, minishell.lst_export);
 		//execute(commands)
 		//if only one cmd and it's built in - don't fork, any other way we fork.
 	}

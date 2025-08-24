@@ -28,12 +28,16 @@ SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/shellft/shell_substr.c				\
 				$(SRC_DIR)/shellft/shell_strchr.c				\
 				$(SRC_DIR)/shellft/shell_lstclear.c				\
+				$(SRC_DIR)/shell_getenv.c					\
 				$(SRC_DIR)/shell_prompt.c					\
 				$(SRC_DIR)/shell_sortenv.c					\
 				$(SRC_DIR)/shell_lst_envp.c					\
+				$(SRC_DIR)/built_in_cmds/built_in.c			\
 				$(SRC_DIR)/built_in_cmds/built_in_cd.c		\
+				$(SRC_DIR)/built_in_cmds/built_in_end.c		\
 				$(SRC_DIR)/built_in_cmds/built_in_pwd.c		\
 				$(SRC_DIR)/built_in_cmds/built_in_echo.c	\
+				$(SRC_DIR)/built_in_cmds/built_in_unset.c	\
 				$(SRC_DIR)/built_in_cmds/built_in_export.c	\
 
 SRC_BON		=	$(SRC_DIR)/main_bonus.c		\

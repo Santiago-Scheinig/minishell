@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 17:08:25 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/24 17:46:23 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,24 @@ int	built_cd(t_body *minishell, char **args)
 
 	dir = NULL;
 	if (args[1])
+		if (args[2])
+			built_end(args[0], "Numbers of args", NULL, '\0');
+	if (args[1] && args[1][0] == '-')
 	{
-		perror("cd : too much args");
-		return (0);
+		if (args[1][1])
+			built_end(args[0], "Invalid flags", "[dir]", args[1][1]);
+		built_end(args[0], "Invalid flags", "[dir]", '\0');
 	}
-	if (!args[0])
+	if (!args[1])
 	{
 		dir = getenv("HOME");
 		if (!dir)
-		{
-			perror("cd: HOME not set");
-			return (0);
-		}
+			built_end(args[0], "System failed", NULL, '\0');
 	}
 	else
-		dir = args[0];
+		dir = args[1];
 	if (chdir(dir) != 0)
-	{
-		ft_printf("cd : %s: No such file or directory", dir);
-		return (0);
-	}
+		built_end(args[0], "System failed", NULL, '\0');
 	if (!shell_prompt(minishell))
 		return (0);
 	return (1);
