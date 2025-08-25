@@ -6,10 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/23 16:11:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/25 21:44:56 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "parser.h"
 #include "shellft.h"
 
 /**
@@ -68,7 +69,10 @@ void	shell_lstdeltkn(t_list *lst, void (*del)(void *))
 		word = (t_token *) lst->content;
 		if (word->str)
 			del(word->str);
+		if (word->mask)
+			del(word->mask);
 		word->str = NULL;
+		word->mask = NULL;
 		del(lst->content);
 	}
 	del(lst);

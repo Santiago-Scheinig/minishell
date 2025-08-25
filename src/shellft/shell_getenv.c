@@ -3,20 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   shell_getenv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 13:00:20 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:07:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "bicmd.h"
 
+/**
+ * Shell functions shouldn't need T_BODY, just as the libft, it should work with only
+ * with necesary information. Insead of the T_BODY, you should ask for the T_LST!
+ */
 char	*shell_getenv(t_body *minishell, const char *name)
 {
 	t_env	*tmp;
 
-	tmp = minishell->env;
+	tmp = minishell->lst_env;
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->name, name, (ft_strlen(name) + 1)))
@@ -25,7 +29,7 @@ char	*shell_getenv(t_body *minishell, const char *name)
 				return (NULL);
 			return (tmp->value);
 		}
-		tmp = tmp->current->next;
+		tmp = tmp->current_next;
 	}
 	return (NULL);
 }

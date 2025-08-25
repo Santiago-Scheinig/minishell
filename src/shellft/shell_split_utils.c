@@ -6,10 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:22:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 15:32:40 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/25 19:44:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "parser.h"
 #include "shellft.h"
 
 int	is_divisor(char *str)

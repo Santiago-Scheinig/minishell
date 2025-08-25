@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in_export.c                                  :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 14:10:45 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:23:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "bicmd.h"
 
-static t_env	*copy_envp(t_env *new, char *envp, char *sign, int i)
+static t_env	*copy_envp(t_env *new, const char *envp, char *sign, int i)
 {
 	char	*tmp;
 
@@ -43,7 +43,7 @@ static t_env	*copy_envp(t_env *new, char *envp, char *sign, int i)
 	return (new);
 }
 
-static t_env	*create_envp(char *envp, int *error)
+static t_env	*create_envp(const char *envp, int *error)
 {
 	t_env	*new;
 	char	*sign;
@@ -70,7 +70,7 @@ static t_env	*create_envp(char *envp, int *error)
 	return (new);
 }
 
-t_env	*init_envp(char **envp)
+t_env	*init_envp(const char **envp)
 {
 	t_env	*new_node;
 	t_env	*current;
@@ -113,7 +113,13 @@ static t_env	*change_value_env(t_env *current, char *new_env)
 	return (current);
 }
 
-t_env	*add_env(t_env *head, char *new_env)
+/**
+ * Im guessing this is a work in progress, hope this comment isn't in your way.
+ * If shell_sortenv.c is supposed to help here, i think you should move it as 
+ * export_utils.c not shell_sortenv.c; Cuz all i read in shell_sortenv looked
+ * more like a help for this, than specific utility functions.
+ */
+t_env	*export(t_env *head, char *new_env)
 {
 	t_env	*new_node;
 	t_env	*current;

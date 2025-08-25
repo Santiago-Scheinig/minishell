@@ -6,17 +6,17 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/23 14:23:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/25 21:09:01 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "shellft.h"
-# include "minishell.h"
-# include <fcntl.h>
 # include <unistd.h>
+# include <fcntl.h>
+# include "minishell.h"
+# include "shellft.h"
 
 /**
  * An enumeration list of token types.
@@ -38,6 +38,7 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	char			*str;	//	The raw token string.
+	char			*mask;	//	The mask of each character inside the string.
 	t_token_type	type;	//	The type of token.
 }	t_token;
 
@@ -107,6 +108,12 @@ int	addlst_here(t_list *token_list, char *str, int start);
  * it.
  */
 char	*exp_value(char *str, int start, char *value);
+
+char	*exp_mask(t_token *word, int start, char *value);
+
+void	parser_input(t_body *minishell);
+
+char	*maskstr(char *str);
 
 /**
  * Allocates and returns a clean STRING with only the enviromental variable

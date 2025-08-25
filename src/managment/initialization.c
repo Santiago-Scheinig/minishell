@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   terminal.c                                         :+:      :+:    :+:   */
+/*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:56:42 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/16 14:07:19 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:17:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "signals.h"
+#include "minishell.h"
 
 /**
  * Initializes the shell terminal and process group.
@@ -33,18 +33,21 @@
  * @warning - Must be called once at shell startup before prompting the user.
  * 
  */
-
 static void	config_shell(struct termios term, int shell_terminal)
 {
 	term.c_lflag |= ECHOCTL;
 	if (tcsetattr(shell_terminal, TCSANOW, &term))
 	{
 		perror("Error setting TCSANOW term");
-		exit (1);
+		exit (1);//FORCEND or a return to actually do it in the INITIALIZATION.
 	}
 }
 
-void	initialization(void)
+/**
+ * This is initialization, i agree all of this to be a setup, but lets not confuse
+ * signal handling with minishell setup.
+ */
+void	initialization(t_body *minishell, const char **envp)
 {
 	struct termios	term;
 	pid_t			shell_pgid;
@@ -52,18 +55,23 @@ void	initialization(void)
 
 	shell_terminal = STDIN_FILENO;
 	if (!isatty(shell_terminal))
-		return ;
+		return ;//FORCEND
 	shell_pgid = getpid();
 	if (setpgid(shell_pgid, shell_pgid) < 0)
 	{
 		perror("Couldn't put the shell in tis own process group");
-		exit(1);
+		exit(1);//FORCEND - If we forcend, theres no need to use the perror() above, cuz it's made inside of FORCEND passing it the correct errno that should print bash in case minishell ends like this.
 	}
 	tcsetpgrp(shell_terminal, shell_pgid);
 	if (tcgetattr(shell_terminal, &term))
 	{
 		perror("Error setting STDIN_FILENO term");
-		exit (1);
+		exit(1);//FORCEND - If we forcend, theres no need to use the perror() above, cuz it's made inside of FORCEND passing it the correct errno that should print bash in case minishell ends like this.
 	}
 	config_shell(term, shell_terminal);
+	ft_memset(minishell, 0, sizeof(t_body));
+	if (!shell_prompt(minishell))
+		exit(1);//FORCEND
+	minishell->lst_env = init_envp(envp);
+	minishell->lst_export = init_envp(envp);
 }

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   shell_sortenv.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 14:23:17 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:15:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "bicmd.h"
 
 void	print_env(t_env *env_lst)
 {
@@ -65,6 +65,11 @@ static void	swap_env(t_env *a, t_env *b)
 	b->exported = tmp_exported;
 }
 
+/**
+ * I really dont like ur special strucure for a double linked list, but this looks great!
+ * I do think T_ENV shouldn't be the name, since its confusing, cuz i ENV is undersand
+ * to be enviroment, and this is a list... a modified one. but a list nontheless.
+ */
 void	sortenv(t_env *head)
 {
 	t_env	*current;

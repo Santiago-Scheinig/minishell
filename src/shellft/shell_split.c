@@ -6,10 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 18:48:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/25 19:50:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "parser.h"
 #include "shellft.h"
 
 /**
@@ -45,7 +46,7 @@ static char	***create_split(char ***wrdstr, const char *s, int word_amount)
 			token_len--;
 			s++;
 		}
-		while((*s) == ' ' || (*s) == '\\' || (*s) == ';')
+		while((*s) == ' ')
 			s++;
 	}
 	(*wrdstr)[i] = (void *)(0);

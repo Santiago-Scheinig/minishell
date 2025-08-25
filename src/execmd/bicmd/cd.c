@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in_cd.c                                      :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 12:54:59 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:21:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-int	built_cd(t_body *minishell, char **args)
+/**
+ * No minishell structure, no error printing! 
+ * CD has to return the errno 
+ * equivalent to that specific error. Then the CHILDEND inside of pipex prints
+ * the error. I Don't know the error number, we have to search for it in google
+ * or the manual.
+ */
+int	cd(t_body *minishell, char **args)
 {
 	char	*dir;
 

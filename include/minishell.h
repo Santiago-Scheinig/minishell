@@ -14,9 +14,11 @@
 # define MINISHELL_H
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/types.h>
 # include <termios.h>
 # include <signal.h>
 # include <stdio.h>
+# include "shellft.h"
 # include "libft.h"
 
 extern volatile sig_atomic_t	g_signal_received;
@@ -70,27 +72,23 @@ typedef struct s_body
 	char			*input;
 	char			**input_split;
 	char			**envp;
-	int				*childs_pid;
+	pid_t			*childs_pid;
 	int				errno;
 	t_env			*lst_export;
 	t_env			*lst_env;
 }	t_body;
 
-t_env	*add_env(t_env *head, char *new_env);
-
-t_env	*init_envp(char **envp);
-
 //temporaly cleanup for test
 void	cleanup(t_body *minishell);
 
+void	initialization(t_body *minishell, const char **envp);
+
 void	parser(t_body *minishell);
 
-void	initialization(void);
+int		execmd(t_body *minishell);
 
 int		shell_prompt(t_body *minishell);
 
-void	print_export(t_env *env_lst);
-
-void	print_env(t_env *env_lst);
+t_env	*init_envp(const char **envp);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/23 14:48:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:28:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ void	parser(t_body *minishell)
 {
 	char	**split;
 
-	//recive_user_input(minishell);
+	parser_input(minishell);
 	split = shell_split(minishell->input);
 	if (!split)
 		sigend(minishell, 1);
-	parser_token(minishell, split);
-	parser_envar(minishell);
-	parser_cmds(minishell);
-	return ;
-	//i should verify this work before keep going.
+	parser_token(minishell, split);//Til here all good.
+	parser_envar(minishell);//Need to redo this using quoting masks, a fucking pain in the ass tbh.
+	return;
+	//parser_cleanup(minishell);Here we clean all the characters with O masks, using shell_substr(), though memset will need modifications.
+	parser_cmds(minishell);//Here all works great.
 }

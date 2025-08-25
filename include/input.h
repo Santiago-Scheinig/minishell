@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.h                                          :+:      :+:    :+:   */
+/*   input.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:14:33 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/08 12:49:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/25 19:34:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNALS_H
-# define SIGNALS_H
-# include "minishell.h"
-# include <sys/types.h>
+#ifndef INPUT_H
+# define INPUT_H
 # include <sys/wait.h>
-# include <termios.h>
 # include <stdlib.h>
-# include <signal.h>
 # include <unistd.h>
-# include <stdio.h>
+# include "minishell.h"
+
 
 /**
  * struct termios
@@ -228,7 +225,9 @@
  * @note Cleanup is called before each input to reset shell state.
  */
 
-void	recive_signals(t_body *minishell);
+void	recive_user_input(t_body *minishell);
+
+t_env	*add_env(t_env *head, char *new_env);
 
 /**
  * Initializes the shell terminal and process group.

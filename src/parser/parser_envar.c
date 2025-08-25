@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 16:54:46 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 20:51:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/25 21:43:01 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,16 @@ static void	envar_tkn(t_list *token_lst, t_body *minishell)
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
-static int	envar_exp(t_list *token_lst, char *str, int start, t_body *minishell)
+static int	envar_exp(t_token *word, int start, char mask, t_body *minishell)
 {
 	char	*env_pathname;
 	char	*env_value;
 	char	*ret;
 
-	if (str[start + 1] && (!ft_isalnum(str[start + 1]) 
-		&& str[start + 1] != '_' && str[start + 1] != '?'))
-			return (start + 1);
 	env_pathname = envar_pathname(&(str[start + 1]));
 	if (!env_pathname)
 		sigend(minishell, 1);
-	env_value = getenv(env_pathname);
+	env_value = getenv(env_pathname);//i need to change this to isma function, after i solve all that shit
 	free(env_pathname);
 	if (!env_value)
 		ret = exp_value(str, start--, env_value);
@@ -89,10 +86,10 @@ static int	envar_exp(t_list *token_lst, char *str, int start, t_body *minishell)
 		ret = exp_value(str, start, env_value);
 		if (!ret)
 			sigend(minishell, 1);
-		if (((t_token *) token_lst->content)->str)
-			free(((t_token *) token_lst->content)->str);
+		free(((t_token *) token_lst->content)->str);
 		((t_token *) token_lst->content)->str = ret;
 	}
+	exp_mask;
 	return(start);
 }
 
@@ -119,26 +116,23 @@ static void	envar_syn(t_list *token_lst, t_body *minishell)
 	word = (t_token *) token_lst->content;
 	while (word->str[++i])
 	{
-		if (word->str[i] == '\'')
-			quote = '\'';
-		if (word->str[i] == '\"')
-			quote = '\"';
-		if (quote)
-			tmp = ft_strchr(&word->str[i + 1], quote);
-		if (tmp)
-			while (word->str[i] && word->str[++i] != quote)
-				if (word->str[i] == '$' && quote != '\'')
-					i = envar_exp(token_lst, word->str, i, minishell);
-		if (word->str[i])
-			if (word->str[i] == '$')
-				i = envar_exp(token_lst, word->str, i, minishell);
+		while (word->str[i] == '$' && word->mask[i] != 'S')
+		{
+			if (word->str[i + 1] && (!ft_isalnum(word->str[i + 1]) 
+			&& word->str[i + 1] != '_' && word->str[i + 1] != '?'))
+			{
+				i++;
+				continue;
+			}
+			i = envar_exp(word, i, word->mask[i], minishell);
+		}
 	}
 }
 
 /**
- * Verifies if any WORD token includes a valid '$' OPERATOR. If it does, 
- * it expands it inside the T_TOKEN list following the quoting rules for
- * expansion of enviromental variables:
+ * Expands every enviromental value that could be inside of a WORD token 
+ * if it does, it expands it inside the T_TOKEN list following the 
+ * quoting rules for expansion of enviromental variables:
  * 
  * - Single quote enclosing: The enviromental variable remains as plain text.
  * 
@@ -157,25 +151,15 @@ void	parser_envar(t_body *minishell)
 {
 	t_list	*token_lst;
 	t_token *content;
-	int		i;
 
 	token_lst = minishell->token_lst;
 	while(token_lst)
 	{
 		content = (t_token *) token_lst->content;
-		i = -1;
-		while (content->str && content->type == WORD && content->str[++i])
+		if (content->str && content->type == WORD)
 		{
-			if (content->str[i] == '$')
-			{
-				if (content->str[i + 1] && (ft_isalnum(content->str[i + 1]) 
-				|| content->str[i + 1] == '_' || content->str[i + 1] == '?'))
-				{
-					envar_syn(token_lst, minishell);
-					envar_tkn(token_lst, minishell);
-					break;
-				}
-			}
+			envar_syn(token_lst, minishell);
+			envar_tkn(token_lst, minishell);
 		}
 		token_lst = token_lst->next;
 	}

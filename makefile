@@ -14,26 +14,34 @@ NAME		=	minishell
 LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
-SRC			=	$(SRC_DIR)/main.c								\
-				$(SRC_DIR)/signals.c							\
-				$(SRC_DIR)/terminal.c						\
-				$(SRC_DIR)/parser/parser.c						\
-				$(SRC_DIR)/parser/parser_cmd.c					\
-				$(SRC_DIR)/parser/parser_token.c				\
-				$(SRC_DIR)/parser/parser_cmd_redir.c			\
-				$(SRC_DIR)/parser/parser_envar.c				\
-				$(SRC_DIR)/parser/parser_envar_utils.c			\
-				$(SRC_DIR)/shellft/shell_split.c				\
-				$(SRC_DIR)/shellft/shell_split_utils.c			\
-				$(SRC_DIR)/shellft/shell_substr.c				\
-				$(SRC_DIR)/shellft/shell_strchr.c				\
-				$(SRC_DIR)/shellft/shell_lstclear.c				\
-				$(SRC_DIR)/shell_prompt.c					\
-				$(SRC_DIR)/shell_sortenv.c					\
-				$(SRC_DIR)/built_in_cmds/built_in_cd.c		\
-				$(SRC_DIR)/built_in_cmds/built_in_pwd.c		\
-				$(SRC_DIR)/built_in_cmds/built_in_echo.c	\
-				$(SRC_DIR)/built_in_cmds/built_in_export.c	\
+SRC			=	$(SRC_DIR)/main.c							\
+				$(SRC_DIR)/managment/initialization.c		\
+				$(SRC_DIR)/managment/troubleshoot_utils.c	\
+				$(SRC_DIR)/parser/parser.c					\
+				$(SRC_DIR)/parser/parser_cmd.c				\
+				$(SRC_DIR)/parser/parser_envar.c			\
+				$(SRC_DIR)/parser/parser_input.c			\
+				$(SRC_DIR)/parser/parser_token.c			\
+				$(SRC_DIR)/parser/parser_cmd_redir.c		\
+				$(SRC_DIR)/parser/parser_envar_utils.c		\
+				$(SRC_DIR)/shellft/shell_split.c			\
+				$(SRC_DIR)/shellft/shell_substr.c			\
+				$(SRC_DIR)/shellft/shell_strchr.c			\
+				$(SRC_DIR)/shellft/shell_prompt.c			\
+				$(SRC_DIR)/shellft/shell_getenv.c			\
+				$(SRC_DIR)/shellft/shell_sortenv.c			\
+				$(SRC_DIR)/shellft/shell_lstclear.c			\
+				$(SRC_DIR)/shellft/shell_split_utils.c		\
+ 				$(SRC_DIR)/execmd/bicmd/export.c			\
+# 				$(SRC_DIR)/execmd/execmd.c					\
+# 				$(SRC_DIR)/execmd/pipex_path_utils.c		\
+# 				$(SRC_DIR)/execmd/pipex_pipe_utils.c		\
+# 				$(SRC_DIR)/execmd/pipex_utils_bonus.c		\
+# 				$(SRC_DIR)/execmd/bicmd/cd.c				\
+# 				$(SRC_DIR)/execmd/bicmd/pwd.c				\
+# 				$(SRC_DIR)/execmd/bicmd/echo.c				\
+# 				$(SRC_DIR)/execmd/bicmd/unset.c				\
+
 
 SRC_BON		=	$(SRC_DIR)/main_bonus.c		\
 
@@ -117,7 +125,9 @@ $(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
 	@mkdir -p $@
 	@mkdir -p $@/shellft
 	@mkdir -p $@/parser
-	@mkdir -p $@/built_in_cmds
+	@mkdir -p $@/execmd
+	@mkdir -p $@/execmd/bicmd
+	@mkdir -p $@/managment
 
 # Creates the regular library.												#
 $(LIB_REG): $(OBJ) | $(LIB_DIR)

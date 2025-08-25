@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in_unset.c                                   :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 13:00:10 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:25:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "bicmd.h"
 
-void	built_unset(t_env *env_lst, const char *name)
+/**
+ * GORGEOUS!
+ */
+void	unset(t_env *env_lst, const char *name)
 {
 	t_env	*current;
 	t_env	*prev;

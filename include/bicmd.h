@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   bicmd.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/23 12:49:27 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/25 19:39:48 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
-# include "minishell.h"
+#ifndef BICMD_H
+# define BICMD_H
 # include <unistd.h>
 # include <limits.h>
-# include <stdio.h>
+# include "minishell.h"
+
+void	free_env_list(t_env *env);
 
 t_env	*built_export(t_body *minishell, char **args, char **envp);
 
 t_env	*add_env(t_env *head, char *new_env);
-
-t_env	*init_envp(char **envp);
 
 char	*shell_getenv(t_body *minishell, const char *name);
 

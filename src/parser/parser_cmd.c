@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/23 16:27:35 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/23 17:16:40 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static t_cmd	*cmd_init(t_list *token_lst, t_body *minishell)
 	new_cmd->heredoc[0] = -1;
 	new_cmd->heredoc[1] = -1;
 	argc = cmd_argc(token_lst) + 1;
-	printf("%i\n", argc);
 	new_cmd->argv = malloc((argc) * sizeof(char *));
 	if (!new_cmd->argv)
 		sigend(minishell, 1);

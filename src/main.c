@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "signals.h"
 #include "parser.h"
 
 /**
@@ -35,9 +34,8 @@
  */
 
 // temporal cleanup for tests
-
 void	cleanup(t_body *minishell)
-https://github.com/Santiago-Scheinig/minishell/pull/35/conflict?name=include%252Fminishell.h&ancestor_oid=0ca17f3df83afadea873b14aaf06c1326bdcb304&base_oid=f9b00f86bd4b4724c87fe68c4ae9f23e3abc27ba&head_oid=adfface19af4da9339a85db904208a67719edd83{
+{
 	if (minishell->input)
 	{
 		free(minishell->input);
@@ -60,25 +58,27 @@ https://github.com/Santiago-Scheinig/minishell/pull/35/conflict?name=include%252
 	}
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, const char **envp)
 {
 	t_body	minishell;
-	t_list	*aux;
+	t_list	*aux_lst;
+	t_token	*aux;	
 
 	if (argc != 1 || !argv[0])
 		return (1);
-	initialization();
-  ft_memset(&minishell, 0, sizeof(t_body));
-	if (!shell_prompt(&minishell))
-		return (1);
-	minishell.lst_env = init_envp(envp);
-	minishell.lst_export = init_envp(envp);
+	initialization(&minishell, envp);
 	while (1)
 	{
-		recive_signals(&minishell);
-		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
-		//execute(commands)
-		//if only one cmd and it's built in - don't fork, any other way we fork.
+		parser(&minishell);
+		aux_lst = (t_list *) minishell.token_lst;
+		while (aux_lst)
+		{
+			aux = (t_token *) aux_lst->content;
+			printf("%s\n", aux->str);
+			printf("%s\n", aux->mask);
+			aux_lst = aux_lst->next;
+		}
+		//execmd(&minishell);
 	}
 	return (0);
 }

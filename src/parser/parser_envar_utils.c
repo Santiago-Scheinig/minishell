@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 20:57:17 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/25 22:26:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,33 @@ static int	envar_len(char *env_var)
 	while (ft_isalnum(env_var[i]) || env_var[i] == '_')
 		i++;
 	return (i);
+}
+
+char	*exp_mask(t_token *word, int start, char *value)
+{
+	int 	aux_len;
+	int		aux_start;
+	char	*aux_mask;
+	char	*new_mask;
+
+	if (!value)
+	{
+		aux_len = envar_len(&(word->str[start]));
+		aux_start = start + aux_len;
+		aux_len = ft_strlen(&(word->str[aux_start])) + 1;
+		memmove(&(word->mask[start]), &(word->mask[aux_start]), aux_len);
+		return (word->mask);
+	}
+	aux_len = ft_strlen(word->str);
+	new_mask = ft_calloc(aux_len + 1, sizeof(char));
+	if (!new_mask)
+		return (NULL);
+	ft_strlcpy(new_mask, word->mask, aux_len + 1);
+	memset(&new_mask[start], word->mask[start], ft_strlen(value));
+	aux_mask = &(word->mask[start + envar_len(&(word->str[start]))]);
+	aux_start = ft_strlen(new_mask);
+	ft_strlcpy(&new_mask[aux_start], aux_mask, aux_len + 1);
+	return (new_mask);
 }
 
 /**
