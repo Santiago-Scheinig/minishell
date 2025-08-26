@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/25 17:42:50 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 18:24:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include <errno.h>
+# include <errno.h>//i should remove it!
 # include "minishell.h"
 # include "libft.h"
 

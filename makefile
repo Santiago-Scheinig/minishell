@@ -29,15 +29,15 @@ SRC			=	$(SRC_DIR)/main.c							\
 				$(SRC_DIR)/shellft/shell_strchr.c			\
 				$(SRC_DIR)/shellft/shell_prompt.c			\
 				$(SRC_DIR)/shellft/shell_getenv.c			\
+				$(SRC_DIR)/shellft/shell_strtrim.c			\
 				$(SRC_DIR)/shellft/shell_sortenv.c			\
 				$(SRC_DIR)/shellft/shell_lstclear.c			\
 				$(SRC_DIR)/shellft/shell_split_utils.c		\
 				$(SRC_DIR)/shellft/shell_addlst_token.c		\
  				$(SRC_DIR)/execmd/bicmd/export.c			\
 # 				$(SRC_DIR)/execmd/execmd.c					\
-# 				$(SRC_DIR)/execmd/pipex_path_utils.c		\
-# 				$(SRC_DIR)/execmd/pipex_pipe_utils.c		\
-# 				$(SRC_DIR)/execmd/pipex_utils_bonus.c		\
+# 				$(SRC_DIR)/execmd/execmd_utils.c			\
+# 				$(SRC_DIR)/execmd/execmd_path.c				\
 # 				$(SRC_DIR)/execmd/bicmd/cd.c				\
 # 				$(SRC_DIR)/execmd/bicmd/pwd.c				\
 # 				$(SRC_DIR)/execmd/bicmd/echo.c				\

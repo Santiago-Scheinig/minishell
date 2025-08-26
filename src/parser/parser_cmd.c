@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/23 17:16:40 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 17:04:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,22 @@ static t_cmd	*cmd_init(t_list *token_lst, t_body *minishell)
 
 static void	cmd_upd(t_cmd *new, t_token *aux)
 {
-	int	i;
+	char	*trimed;
+	int		i;
 
 	i = 0;
 	while (new->argv[i])
 		i++;
-	new->argv[i] = aux->str;
+	trimed = shell_strtrim(aux->str, aux->mask, "\"\'\\;");
+	if (!trimed[0])
+	{
+		free(trimed);
+		return;
+	}
+	free(trimed);
+	new->argv[i] = shell_substr(aux->str, aux->mask, 0, ft_strlen(aux->str));
+	if (aux->str)
+		free(aux->str);
 	aux->str = NULL;
 }
 

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/23 19:33:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 18:26:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ static void	edit_infile(t_token *next, t_cmd *new)
 		new->infile = open(next->str, O_RDONLY);
 		if (new->infile < 0)
 			strerror(0);
+		if (new->heredoc[0] >= 0)
+			close(new->heredoc[0]);
+		if (new->heredoc[1] >= 0)
+			close(new->heredoc[1]);
+		new->heredoc[0] = -1;
+		new->heredoc[1] = -1;
 	}
 	free(next->str);
 	next->str = NULL;
@@ -36,10 +42,13 @@ static void	edit_outfile(t_token *next, t_cmd *new)
 {
 	if (new->outfile && new->outfile > 2)
 		close(new->outfile);
-	if (access(next->str, W_OK))
+	if (!access(next->str, F_OK))
 	{
-		new->outfile = -1;
-		strerror(0);
+		if (access(next->str, W_OK))
+		{
+			new->outfile = -1;
+			strerror(0);
+		}
 	}
 	else
 	{
@@ -55,10 +64,13 @@ static void	edit_outfile_to_append(t_token *next, t_cmd *new)
 {
 	if (new->outfile != 1)
 		close(new->outfile);
-	if (access(next->str, W_OK))
+	if (!access(next->str, F_OK))
 	{
-		new->outfile = -1;
-		strerror(0);
+		if (access(next->str, W_OK))
+		{
+			new->outfile = -1;
+			strerror(0);
+		}
 	}
 	else
 	{
@@ -73,7 +85,10 @@ static void	edit_outfile_to_append(t_token *next, t_cmd *new)
 static void	edit_infile_to_heredoc(t_token *next, t_cmd *new)
 {
 	if (new->infile)
+	{
 		close(new->infile);
+		new->infile = -2;
+	}
 	if (new->heredoc[0] >= 0)
 		close(new->heredoc[0]);
 	if (new->heredoc[1] >= 0)

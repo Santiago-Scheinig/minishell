@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/25 17:45:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 18:23:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,123 +14,99 @@
 #include "execmd.h"
 
 /**
- * Pipex failsafe, in case of error, frees all memory that could remain
- * allocated in the main structure.
- * @param env The main environment pipex structure.
- * @param path The enviroment path where execve searches for binaries.
- * @param ft_error The function name where the error in question occured.
- */
-int	ft_forcend(t_pipex *env, char **path, char *ft_error)
-{
-	int	i;
-
-	if (env->cmd)
-	{
-		i = -1;
-		while (env->cmd[++i])
-		{
-			if (env->cmd[i]->args)
-				ft_split_free(env->cmd[i]->args);
-			if (env->cmd[i]->pathname)
-				free(env->cmd[i]->pathname);
-			free(env->cmd[i]);
-		}
-		free(env->cmd);
-	}
-	if (path)
-		ft_split_free(path);
-	if (ft_error)
-	{
-		perror(ft_error);
-		return (-1);
-	}
-	return (0);
-}
-
-/**
- * Creates and allocates a STRING with the definitive path to a cmd binary.
- * @param cmd The name of the command binary to find.
- * @param path The enviroment path where to search the command binary.
- * @return A pointer to the new STRING or NULL if the allocation failed or
- * the cmd can't be access or found as binary on path.
- */
-static char	*ft_get_cmd_path(const char *cmd, const char **path)
-{
-	char	*cmd_pathname;
-	char	*tmp;
-	int		i;
-
-	i = -1;
-	if (ft_strchr(cmd, '/'))
-	{
-		if (!access(cmd, X_OK))
-			return (ft_strdup(cmd));
-		return (NULL);
-	}
-	while (path[++i] && cmd)
-	{
-		tmp = ft_strjoin(path[i], "/");
-		if (!tmp)
-			return (NULL);
-		cmd_pathname = ft_strjoin(tmp, cmd);
-		if (!cmd_pathname)
-			return (NULL);
-		free(tmp);
-		if (!access(cmd_pathname, X_OK))
-			return (cmd_pathname);
-		free(cmd_pathname);
-	}
-	return (ft_strdup(""));
-}
-
-/**
- * Initializes the comands needed for here_doc to be executed.
- * Sets the infile to NULL, since we will be reading from the STDIN.
- * Sets the outfile name specified on the main arguments.
+ * Executes and pipes every command specified on the program enviroment,
+ * but the first command will read from the STDIN instead of the infile 
+ * (until the LIMITATOR is writen).
  * @param env The main enviroment pipex structure.
- * @param argv The main arguments.
  * @param envp The main enviroment path.
- * @param path The enviroment path where execve searches for binaries.
- * @return Returns 0 on a succesfull execution, and -1 in case of error.
- * @note If any error occurs, the function name and error type will be display
- * on STDERR. 
+ * @return Returns 0 on a successful execution and -1 in case of error.
+ * @note Regardless of the return, it will wait for any child process
+ * created during the command executions.
  */
-static int	ft_here_doc(t_pipex *env, char **argv, char **envp, char **path)
+void	exe_heredoc(t_cmd *exe, t_body *minishell)
 {
 	int	i;
+	int	infd;
+	int	pipefd[2];
 
-	i = -1;
+	env->waitpid_list = ft_calloc((env->cmd_count), sizeof(pid_t));
+	if (!env->waitpid_list)
+		sigend(minishell, 1);
 	while (++i < env->cmd_count)
 	{
-		env->cmd[i] = ft_new_cmd(argv[i + 3], (const char **) path);
-		if (!env->cmd[i])
-			return (ft_forcend(env, path, "Ft_new_cmd"));
+		if (!i)
+			infd = ft_read_to_limitator(limitator);
+		if (infd < 0 || pipe(pipefd) == -1)
+			return (ft_waitfor_childs(env, EXIT_FAILURE));
+		if (i == env->cmd_count - 1)
+		{
+			close(pipefd[1]);
+			pipefd[1] = open(env->outfile, O_CREAT | O_APPEND | O_WRONLY, 420);
+			if (pipefd[1] < 0)
+				return (ft_waitfor_childs(env, EXIT_FAILURE));
+		}
+		infd = ft_do_fork(env, infd, pipefd, envp);
 	}
-	env->infile = NULL;
-	env->outfile = argv[env->cmd_count + 3];
-	ft_split_free(path);
-	return (ft_do_here_doc(env, envp, argv[2]));
+	return (ft_waitfor_childs(env, EXIT_SUCCESS));
 }
 
 /**
- * Initializes the comands needed for the pipes to be executed.
- * Sets the infile name specified on the main arguments.
- * Sets the outfile name specified on the main arguments.
+ * Executes and pipes every command specified on the program enviroment.
  * @param env The main enviroment pipex structure.
- * @param argv The main arguments.
  * @param envp The main enviroment path.
- * @param path The enviroment path where execve searches for binaries.
- * @return Returns 0 on a succesfull execution, and -1 in case of error.
- * @note If any error occurs, the function name and error type will be display
- * on STDERR. 
+ * @return Returns 0 on a successful execution and -1 in case of error.
+ * @note Regardless of the return, it will wait for any child process
+ * created during the command executions.
  */
-static int	execute(t_cmd *exe, char **path, t_body *minishell)
+int	exe_child(t_pipex *env, char **envp)
 {
+	int	i;
+	int	infd;
+	int	pipefd[2];
 
-	if (exe->limitator)
-		ft_here_doc(minishell, path);
-	else
-		ft_do_pipe(env, envp);
+	i = -1;
+	infd = -1;
+	env->waitpid_list = ft_calloc((env->cmd_count), sizeof(pid_t));
+	if (!env->waitpid_list)
+		return (-1);
+	while (++i < env->cmd_count)
+	{
+		if (!i && env->infile)
+			infd = open(env->infile, O_RDONLY);
+		if (pipe(pipefd) == -1)
+			return (ft_waitfor_childs(env, EXIT_FAILURE));
+		if (i == env->cmd_count - 1)
+		{
+			close(pipefd[1]);
+			pipefd[1] = open(env->outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			if (pipefd[1] < 0)
+				return (ft_waitfor_childs(env, EXIT_FAILURE));
+		}
+		infd = ft_do_fork(env, infd, pipefd, envp);
+	}
+	return (ft_waitfor_childs(env, EXIT_SUCCESS));
+}
+
+static char	*cmd_verification(t_cmd *exe, char **path_env)
+{
+	char	*pathname;
+
+	if (exe->infile < 0)
+	{
+		if (exe->infile != -2 || !exe->limitator)
+			return (NULL);
+		else if (exe->heredoc[0] < 0 || exe->heredoc[1] < 0)
+			return (NULL);
+	}
+	else if (exe->outfile < 0)
+		return (NULL);
+	pathname = cmd_pathname(exe->argv[0], path_env);
+	if (!pathname)
+	{
+		strerror(0);
+		return (NULL);
+	}
+	return (pathname);
 }
 
 /**
@@ -146,27 +122,26 @@ int	execmd(t_body *minishell)
 	t_list	*cmd_lst;
 	t_cmd	*exe;
 	char	**path;
-	int		is_single;
 
 	cmd_lst = minishell->cmd_lst;
-	is_single = 0;
-	if (!cmd_lst->next)
-		is_single = 1;
 	while (cmd_lst)
 	{
 		exe = (t_cmd *) cmd_lst->content;
-		path_bin = ft_check_path(minishell->envp);
-		if (!path_bin)
+		path = ft_check_path(minishell->envp);
+		if (!path)
 			sigend(minishell, 1);
-		exe->pathname = cmd_path(exe->argv[0], path);
-		if (!exe->pathname)
+		exe->pathname = cmd_verification(exe, minishell);
+		if(exe->pathname) 
 		{
-			strerror(0);
-			cmd_lst = cmd_lst->next;
-			continue;
+			if (exe->built_in == 1 && !minishell->cmd_lst->next)//means theres only one
+				//exe_bicmd();
+			else if (exe->infile == -2 && exe->limitator)
+				exe_heredoc(exe, minishell);
+			else
+				exe_child(env, envp);
 		}
-		execute(exe, path, minishell);
 		cmd_lst = cmd_lst->next;
 	}
 	ft_split_free(path);
+	ft_waitfor_childs(minishell, minishell->errno);
 }

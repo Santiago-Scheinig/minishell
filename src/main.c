@@ -61,23 +61,16 @@ void	cleanup(t_body *minishell)
 int	main(int argc, char **argv, const char **envp)
 {
 	t_body	minishell;
-	t_list	*aux_lst;
-	t_token	*aux;	
 
-	if (argc != 1 || !argv[0])
-		return (1);
+	if (argc < 1 || argv[1])
+	{
+		printf("minishell: %s: No such file or directory\n", argv[1]);//This should be part of FORCEND
+		return (127);//return (forcend(127)), and forcend returns the error that bash also returns (127)
+	}
 	initialization(&minishell, envp);
 	while (1)
 	{
 		parser(&minishell);
-		aux_lst = (t_list *) minishell.token_lst;
-		while (aux_lst)
-		{
-			aux = (t_token *) aux_lst->content;
-			printf("%s\n", aux->str);
-			printf("%s\n", aux->mask);
-			aux_lst = aux_lst->next;
-		}
 		//execmd(&minishell);
 	}
 	return (0);

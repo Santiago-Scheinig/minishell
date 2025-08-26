@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 18:52:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:34:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * @note Operators such as '\'' and '\"' are ignored, and as such, aren't
  * moved to dst. This mimics the quote removal behaivor from bash-shell.
  */
-static void	iq_moveup(char *dst_tmp, char *src_tmp, size_t n)
+static void	iq_moveup(char *dst_tmp, char *src_tmp, char *src_mask, size_t n)
 {
 	size_t	i;
 	size_t	j;
@@ -30,7 +30,7 @@ static void	iq_moveup(char *dst_tmp, char *src_tmp, size_t n)
 	j = 0;
 	while (i < n)
 	{
-		if (src_tmp[i] == '\'' || src_tmp[i] == '\"')
+		if (src_mask[i] == 'O')
 		{
 			i++;
 			continue;
@@ -51,7 +51,7 @@ static void	iq_moveup(char *dst_tmp, char *src_tmp, size_t n)
  * @note Operators such as '\'' and '\"' are ignored, and as such, aren't
  * moved to dst. This mimics the quote removal behaivor from bash-shell.
  */
-static void	iq_movedown(char *dst_tmp, char *src_tmp, size_t len)
+static void	iq_movedown(char *dst_tmp, char *src_tmp, char *src_mask, size_t len)
 {
 	size_t	i;
 	size_t	dst_len;
@@ -59,14 +59,14 @@ static void	iq_movedown(char *dst_tmp, char *src_tmp, size_t len)
 	i = -1;
 	dst_len = len;
 	while (src_tmp[++i] && len > i)
-		if (src_tmp[i] == '\'' || src_tmp[i] == '\"')
+		if (src_mask[i] == 'O')
 			dst_len--;
 	while (len > 0 && dst_len > 0)
 	{
 		if (len > 0)
 		{
 			len--;
-			if (len > 0 && (src_tmp[len] != '\'' && src_tmp[len] != '\"'))
+			if (len > 0 && src_mask[len] != 'O')
 			{
 				dst_len--;
 				dst_tmp[dst_len] = src_tmp[len];
@@ -74,7 +74,8 @@ static void	iq_movedown(char *dst_tmp, char *src_tmp, size_t len)
 		}
 	}
 	dst_len--;
-	dst_tmp[dst_len] = src_tmp[len];
+	if (!dst_len && !len)
+		dst_tmp[dst_len] = src_tmp[len];
 }
 
 /**
@@ -87,7 +88,7 @@ static void	iq_movedown(char *dst_tmp, char *src_tmp, size_t len)
  * checks if the memory position of src is close to dest to avoid loosing
  * information during the movement.
  */
-static void	*shell_memmove(void *dest, const void *src, size_t n)
+static void	*shell_memmove(void *dest, void *src, void *mask, size_t n)
 {
 	unsigned char	*dst_tmp;
 	unsigned char	*src_tmp;
@@ -97,9 +98,9 @@ static void	*shell_memmove(void *dest, const void *src, size_t n)
 	src_tmp = (unsigned char *) src;
 	dst_tmp = (unsigned char *) dest;
 	if (dst_tmp > src_tmp)
-		iq_movedown((char *) dst_tmp,(char *) src_tmp, n);
+		iq_movedown((char *) dst_tmp,(char *) src_tmp, (char *) mask, n);
 	else
-		iq_moveup((char *) dst_tmp,(char *) src_tmp, n);
+		iq_moveup((char *) dst_tmp,(char *) src_tmp, (char *) mask, n);
 	return (dest);
 }
 
@@ -113,16 +114,16 @@ static void	*shell_memmove(void *dest, const void *src, size_t n)
  * @note - If size >= src_len + 1, it copies all of src into des.
  * @note - Else, it truncates the copy after size - 1 bytes.
  */
-static size_t	shell_strlcpy(char *dst, const char *src, size_t size)
+static size_t	shell_strlcpy(char *dst, char *src, char *mask, size_t size)
 {
 	size_t	src_len;
 
 	src_len = ft_strlen(src);
 	if (size >= src_len + 1)
-		shell_memmove(dst, src, src_len + 1);
+		shell_memmove(dst, src, mask, src_len + 1);
 	else if (size != 0)
 	{
-		shell_memmove(dst, src, size - 1);
+		shell_memmove(dst, src, mask, size - 1);
 		dst[size - 1] = 0;
 	}
 	return (src_len);
@@ -140,7 +141,7 @@ static size_t	shell_strlcpy(char *dst, const char *src, size_t size)
  * @note - If a single or double quote is found unclosed, it becomes
  * ignored and won't be copied into the new string.
  */
-char	*shell_substr(char const *s, unsigned int start, size_t len)
+char	*shell_substr(char *s, char *mask, unsigned int start, size_t len)
 {
 	char	*str;
 
@@ -153,6 +154,6 @@ char	*shell_substr(char const *s, unsigned int start, size_t len)
 	str = ft_calloc(len + 1, 1);
 	if (!str)
 		return (NULL);
-	shell_strlcpy(str, &s[start], len + 1);
+	shell_strlcpy(str, &s[start], mask, len + 1);
 	return (str);
 }

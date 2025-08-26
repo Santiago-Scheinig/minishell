@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 15:32:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 16:55:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	word_len(const char *s);
  * @note - If a single or double quote is found unclosed, it becomes
  * ignored and won't be copied into the new string.
  */
-char	*shell_substr(char const *s, unsigned int start, size_t len);
+char	*shell_substr(char *s, char *mask, unsigned int start, size_t len);
 
 /**
  * Searches for the first ocurrance of a space or an operator on a STRING.
@@ -127,5 +127,16 @@ void	shell_lstdelcmd(t_list *lst, void (*del)(void *));
  * @return Zero on success. or Malloc error. NEED TO CHANGE THIS LINE!!!!
  */
 int		shell_addlst_token(t_list *token_list, char *str, int start);
+
+/**
+ * Creates and allocates a new STRING resultant of the trimming of a 
+ * CONST STRING set in a CONST STRING s1.
+ * @param s1 The CONST STRING to be compared for trimming.
+ * @param set The character base to be trimmed.
+ * @return A pointer to the new STRING resultant of the trimming.
+ * @note - Cuts every match of 'set' from the start of 's1' until a non match.
+ * @note - Cuts every match of 'set' from the end of 's1' until a non match.
+ */
+char	*shell_strtrim(char const *s1, char const *mask, char const *set);
 
 #endif

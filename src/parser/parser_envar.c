@@ -6,12 +6,50 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 15:43:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 17:47:13 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
+
+/**
+ * Splits the WORD string and adds the words in sequence after the current
+ * position of token_lst, expanding the tokens using 'space' as the divisor
+ * operator, which aren't protected by quotes.
+ * 
+ * @param token_lst A pointer to the current position on the token list.
+ * @param minishell A pointer to the main enviroment structure of minishell.
+ * @note If the ARRAY of STRINGS is just one word, this step is skipped.
+ */
+static void	envar_tokenization(t_list *token_lst, t_body *minishell)
+{
+	char	**split;
+	int i;
+
+	i = 0;
+	split = ft_iq_split(((t_token *) token_lst->content)->str, ' ');
+	if (!split)
+		sigend(minishell, 1);
+	while (split[i])
+		i++;
+	while (i && split[--i])
+	{
+		if (!split[1])
+		{
+			ft_split_free(split);
+			split = NULL;
+			break;
+		}
+		if (shell_addlst_token(token_lst, split[i], i))
+		{
+			ft_split_free(split);
+			sigend(minishell, 1);
+		}
+	}
+	if (split)
+		free(split);
+}
 
 /**
  * Updates the WORD string mask to the new value of the declared enviromental 
@@ -39,7 +77,7 @@ static int	envar_mask(t_token *word, char *value, int start, t_body *minishell)
 
 	var_len = envar_len(&(word->str[start]));
 	if (!value)
-		ret = exp_mask(word, start, var_len, 0);//removed -- from start.
+		ret = exp_mask(word, start, var_len, 0);
 	else
 	{
 		value_len = ft_strlen(value);
@@ -84,7 +122,7 @@ static int	envar_expansion(t_token *word, int start, t_body *minishell)
 	if (!env_value)
 	{
 		envar_mask(word, env_value, start, minishell);
-		ret = exp_value(word->str, env_value, start);//removed -- from start.
+		ret = exp_value(word->str, env_value, start);
 	}
 	else
 	{
@@ -131,46 +169,10 @@ static void	envar_syntax(t_list *token_lst, t_body *minishell)
 				continue;
 			}
 			i = envar_expansion(word, i, minishell);
+			if (word->mask[i] == 'N')
+				envar_tokenization(token_lst, minishell);
 		}
 	}
-}
-
-/**
- * Splits the WORD string and adds the words in sequence after the current
- * position of token_lst, expanding the tokens using 'space' as the divisor
- * operator, which aren't protected by quotes.
- * 
- * @param token_lst A pointer to the current position on the token list.
- * @param minishell A pointer to the main enviroment structure of minishell.
- * @note If the ARRAY of STRINGS is just one word, this step is skipped.
- */
-static void	envar_tokenization(t_list *token_lst, t_body *minishell)
-{
-	char	**split;
-	int i;
-
-	i = 0;
-	split = ft_iq_split(((t_token *) token_lst->content)->str, ' ');
-	if (!split)
-		sigend(minishell, 1);
-	while (split[i])
-		i++;
-	while (i && split[--i])
-	{
-		if (!split[1])
-		{
-			ft_split_free(split);
-			split = NULL;
-			break;
-		}
-		if (shell_addlst_token(token_lst, split[i], i))
-		{
-			ft_split_free(split);
-			sigend(minishell, 1);
-		}
-	}
-	if (split)
-		free(split);
 }
 
 /**
@@ -201,10 +203,7 @@ void	parser_envar(t_body *minishell)
 	{
 		content = (t_token *) token_lst->content;
 		if (content->str && content->type == WORD)
-		{
 			envar_syntax(token_lst, minishell);
-			envar_tokenization(token_lst, minishell);
-		}
 		token_lst = token_lst->next;
 	}
 }
