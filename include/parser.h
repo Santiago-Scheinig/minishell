@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/25 21:09:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:32:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,37 +83,33 @@ void	parser_cmds(t_body *minishell);
 t_token	*token_dup(char *str);
 
 /**
- * Adds a new list node, after the current one, which also includes a 
- * new T_TOKEN content default setted as WORD.
- * 
- * @param token_list A pointer to the current position on the token list.
- * @param str A pointer to the new STRING to use content on the new token.
- * @param start A flag that if equals zero, will replace the content of 
- * the current token node, instead of creating a new node.
- * @return Zero on success. or Malloc error. NEED TO CHANGE THIS LINE!!!!
- */
-int	addlst_here(t_list *token_list, char *str, int start);
-
-/**
  * Expands an enviromental variable and returs the modified value.
  * 
  * @param str A pointer to the WORD string where to expand.
+ * @param value A pointer to the STRING to be expanded.
  * @param start An index to the start position of the enviromental
  * variable on [str].
- * @param value A pointer to the STRING to be expanded.
  * @return A pointer to the expanded STRING.
  * @note If value is NULL, no allocation is made and the original
  * [str] becomes cut removing the enviromental variable name of it.
  * Otherwise, it reallocates the new expanded string and returns
  * it.
  */
-char	*exp_value(char *str, int start, char *value);
+char	*exp_value(char *str, char *value, int start);
 
-char	*exp_mask(t_token *word, int start, char *value);
+char	*exp_mask(t_token *word, int start, int var_len, int value_len);
 
 void	parser_input(t_body *minishell);
 
-char	*maskstr(char *str);
+/**
+ * Calculates the length of the enviroment variable name.
+ * 
+ * @param env_var A pointer to where the enviromental variable name start's.
+ * @return The lenght of the enviroment variable name.
+ * @note The minimum lenght size of a enviroment variable is always one,
+ * on behalf of the '$' sign.
+ */
+int	envar_len(char *env_var);
 
 /**
  * Allocates and returns a clean STRING with only the enviromental variable

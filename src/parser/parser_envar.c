@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/08 16:54:46 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/25 21:43:01 by sscheini         ###   ########.fr       */
+/*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
+/*   Updated: 2025/08/26 15:43:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,82 +14,88 @@
 #include "parser.h"
 
 /**
- * Splits the WORD string and adds the words in sequence after the current
- * position of token_lst, expanding the tokens using 'space' as the divisor
- * operator, which aren't protected by quotes.
+ * Updates the WORD string mask to the new value of the declared enviromental 
+ * variable if any, and expands it accordingly.
  * 
- * @param token_lst A pointer to the current position on the token list.
+ * - If there's a value, the WORD token mask becomes reallocated and 
+ * expanded with the same mask value.
+ * 
+ * - Otherwise, the WORD token mask string becomes cut from memory, without 
+ * realocation, ereasing every character of the enviromental variable's mask.
+ * 
+ * @param word A pointer to the T_TOKEN to be expanded.
+ * @param value A pointer to the STRING value of the enviromental variable.
+ * @param start The position index of the enviromental variable on 
+ * the WORD token string.
  * @param minishell A pointer to the main enviroment structure of minishell.
- * @note If the ARRAY of STRINGS is just one word, this step is skipped.
+ * @note If any error occurs during the tokenization step, the function will
+ * end with a sigend([errno]) call.
  */
-static void	envar_tkn(t_list *token_lst, t_body *minishell)
+static int	envar_mask(t_token *word, char *value, int start, t_body *minishell)
 {
-	char	**split;
-	int i;
+	char	*ret;
+	int		var_len;
+	int		value_len;
 
-	i = 0;
-	split = ft_iq_split(((t_token *) token_lst->content)->str, ' ');
-	if (!split)
-		sigend(minishell, 1);
-	while (split[i])
-		i++;
-	while (i && split[--i])
+	var_len = envar_len(&(word->str[start]));
+	if (!value)
+		ret = exp_mask(word, start, var_len, 0);//removed -- from start.
+	else
 	{
-		if (!split[1])
-		{
-			ft_split_free(split);
-			split = NULL;
-			break;
-		}
-		if (addlst_here(token_lst, split[i], i))
-		{
-			ft_split_free(split);
+		value_len = ft_strlen(value);
+		ret = exp_mask(word, start, var_len, value_len);
+		if (!ret)
 			sigend(minishell, 1);
-		}
+		if (word->mask)
+			free(word->mask);
+		word->mask = ret;
 	}
-	if (split)
-		free(split);
+	return(start);
 }
 
 /**
  * Finds the value of the declared enviromental variable if any, then expands 
  * it accordingly.
  * 
- * - If there's a value, the WORD string becomes reallocated and expanded with
- * the new values.
+ * - If there's a value, the WORD token string becomes reallocated and 
+ * expanded with the new value.
  * 
- * - Otherwise, the WORD string becomes cut from memory, without realocation
- * and ereasing every character of the enviromental variable's name.
+ * - Otherwise, the WORD token string becomes cut from memory, without 
+ * realocation, ereasing every character of the enviromental variable's name.
  * 
- * @param token_lst A pointer with the current position on the token_lst.
- * @param str A STRING with the original string inside of the WORD token.
- * @param start The index where to start on the WORD string.
+ * @param word A pointer to the T_TOKEN to be expanded.
+ * @param start The position index of the enviromental variable on 
+ * the WORD token string.
  * @param minishell A pointer to the main enviroment structure of minishell.
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
-static int	envar_exp(t_token *word, int start, char mask, t_body *minishell)
+static int	envar_expansion(t_token *word, int start, t_body *minishell)
 {
 	char	*env_pathname;
 	char	*env_value;
 	char	*ret;
 
-	env_pathname = envar_pathname(&(str[start + 1]));
+	env_pathname = envar_pathname(&(word->str[start + 1]));
 	if (!env_pathname)
 		sigend(minishell, 1);
 	env_value = getenv(env_pathname);//i need to change this to isma function, after i solve all that shit
 	free(env_pathname);
 	if (!env_value)
-		ret = exp_value(str, start--, env_value);
+	{
+		envar_mask(word, env_value, start, minishell);
+		ret = exp_value(word->str, env_value, start);//removed -- from start.
+	}
 	else
 	{
-		ret = exp_value(str, start, env_value);
+		ret = exp_value(word->str, env_value, start);
 		if (!ret)
 			sigend(minishell, 1);
-		free(((t_token *) token_lst->content)->str);
-		((t_token *) token_lst->content)->str = ret;
+		envar_mask(word, env_value, start, minishell);
+		if (word->str)
+			free(word->str);
+		word->str = ret;
 	}
-	exp_mask;
 	return(start);
 }
 
@@ -103,7 +109,7 @@ static int	envar_exp(t_token *word, int start, char mask, t_body *minishell)
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
-static void	envar_syn(t_list *token_lst, t_body *minishell)
+static void	envar_syntax(t_list *token_lst, t_body *minishell)
 {
 	t_token	*word;
 	int		i;
@@ -124,24 +130,62 @@ static void	envar_syn(t_list *token_lst, t_body *minishell)
 				i++;
 				continue;
 			}
-			i = envar_exp(word, i, word->mask[i], minishell);
+			i = envar_expansion(word, i, minishell);
 		}
 	}
 }
 
 /**
- * Expands every enviromental value that could be inside of a WORD token 
- * if it does, it expands it inside the T_TOKEN list following the 
- * quoting rules for expansion of enviromental variables:
+ * Splits the WORD string and adds the words in sequence after the current
+ * position of token_lst, expanding the tokens using 'space' as the divisor
+ * operator, which aren't protected by quotes.
+ * 
+ * @param token_lst A pointer to the current position on the token list.
+ * @param minishell A pointer to the main enviroment structure of minishell.
+ * @note If the ARRAY of STRINGS is just one word, this step is skipped.
+ */
+static void	envar_tokenization(t_list *token_lst, t_body *minishell)
+{
+	char	**split;
+	int i;
+
+	i = 0;
+	split = ft_iq_split(((t_token *) token_lst->content)->str, ' ');
+	if (!split)
+		sigend(minishell, 1);
+	while (split[i])
+		i++;
+	while (i && split[--i])
+	{
+		if (!split[1])
+		{
+			ft_split_free(split);
+			split = NULL;
+			break;
+		}
+		if (shell_addlst_token(token_lst, split[i], i))
+		{
+			ft_split_free(split);
+			sigend(minishell, 1);
+		}
+	}
+	if (split)
+		free(split);
+}
+
+/**
+ * Loops through all the token list and expands every valid enviromental 
+ * variable found in WORD tokens. If an expansion is made, the list expands
+ * following the quoting rules for expansion of enviromental variables:
  * 
  * - Single quote enclosing: The enviromental variable remains as plain text.
  * 
  * - Double quote enclosing: The enviromental variable expands, but remains as
- * part of the WORD it was enclosed into.
+ * part of the WORD token it was enclosed into.
  * 
  * - No quote enclosing: The enviromental variable expands and becomes 
- * tokenized into WORDS divided only by ' ' (OPERATORS are treated as plain
- * text after expansion).
+ * tokenized into WORD tokens divided only by ' ' (OPERATORS are treated as 
+ * plain text after expansion).
  * 
  * @param minishell A pointer to the main enviroment structure of minishell
  * @note If any error occurs during the tokenization step, the function will
@@ -158,8 +202,8 @@ void	parser_envar(t_body *minishell)
 		content = (t_token *) token_lst->content;
 		if (content->str && content->type == WORD)
 		{
-			envar_syn(token_lst, minishell);
-			envar_tkn(token_lst, minishell);
+			envar_syntax(token_lst, minishell);
+			envar_tokenization(token_lst, minishell);
 		}
 		token_lst = token_lst->next;
 	}

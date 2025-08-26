@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/25 17:44:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/26 15:32:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,17 @@ void	shell_lstdeltkn(t_list *lst, void (*del)(void *));
  * @note In general, the del function should be free().
  */
 void	shell_lstdelcmd(t_list *lst, void (*del)(void *));
+
+/**
+ * Adds a new list node, after the current one, which also includes a 
+ * new T_TOKEN content default setted as WORD.
+ * 
+ * @param token_list A pointer to the current position on the token list.
+ * @param str A pointer to the new STRING to use content on the new token.
+ * @param start A flag that if equals zero, will replace the content of 
+ * the current token node, instead of creating a new node.
+ * @return Zero on success. or Malloc error. NEED TO CHANGE THIS LINE!!!!
+ */
+int		shell_addlst_token(t_list *token_list, char *str, int start);
 
 #endif
