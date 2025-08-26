@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:13:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/25 22:19:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/27 01:12:09 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ volatile sig_atomic_t	g_signal_received = 0;
  * @note Readline functions are used to ensure the shell prompt is restored
  * correctly.
  */
+
+static void	sigend(int signum)
+{
+	(void)signum;
+}
+
 static void	new_prompt(int signum)
 {
 	(void)signum;
@@ -42,6 +48,24 @@ static void	new_prompt(int signum)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+}
+
+static t_body	*siguser(t_body *minishell)
+{
+		struct sigaction	sa_user;
+
+	sa_user.sa_handler = sigend;
+	sigemptyset(&sa_user.sa_mask);
+	sigaddset(&sa_user.sa_mask, SIGQUIT);
+	sigaddset(&sa_user.sa_mask, SIGINT);
+	sa_user.sa_flags = SA_RESTART;//This is blank and im not sure why...
+	if (sigaction(SIGUSR1, &sa_user, NULL) == -1)//This intercepts a signal, it doesnt set or install. It tells the "system" how to behaive when this signal is intercepted.
+	{
+		cleanup(minishell);
+		perror("Error setting SIGINT handler");//We are not setting anything, we are intercepting!
+		return (NULL);
+	}
+	return (minishell);
 }
 
 /**
@@ -119,6 +143,8 @@ static void	*handle_signals(t_body *minishell)
 		return (NULL);//This should be FORCEND (cuz we cant fail to intercept a signal)
 	if (!sigquit(minishell))
 		return (NULL);//This should be FORCEND (cuz we cant fail to intercept a signal)
+	if (!siguser(minishell))
+		return (NULL);
 	return (minishell);
 }
 

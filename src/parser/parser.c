@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 17:46:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/27 00:57:00 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ void	sigend(t_body *minishell, int errno)
 	if (minishell || errno)
 	{
 		if (errno == 3)
+		{
 			printf("Invalid input\n");
+			kill(/** PID probably 0*/,SIGUSR1);	
+		}
 		return ;
 	}
 	return;	
