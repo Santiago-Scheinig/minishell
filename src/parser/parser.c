@@ -3,30 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/27 00:57:00 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/28 20:06:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "troubleshoot.h"
 #include "parser.h"
 
-void	sigend(t_body *minishell, int errno)
+/*This will likely have to be modified*/
+/*Should we print the new line here??*/
+void	new_prompt(int signum)
 {
-	if (minishell || errno)
-	{
-		if (errno == 3)
-		{
-			printf("Invalid input\n");
-			kill(/** PID probably 0*/,SIGUSR1);	
-		}
-		return ;
-	}
-	return;	
+	(void)signum;
+	g_signal_received = 1;
+	ft_printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
+void	parser_input(t_body *minishell)
+{
+	char	*prompt;
+
+	if (minishell->interactive)
+	{
+		//prompt = shell_prompt(minishell->envp);
+		//if (!prompt)
+		//	forcend(minishell, "malloc", MSHELL_FAILURE);
+		if (shell_prompt(minishell))//shell_prompt wont receive minishell anymore, just a char **envp that uses to get the expected prompt
+			forcend(minishell, "malloc", MSHELL_FAILURE);
+		minishell->input = readline(minishell->prompt);//minishell->input = readline(prompt);
+		//free(prompt);
+	}
+	else
+		minishell->input = get_next_line(STDIN_FILENO);
+	if (minishell->input == NULL)
+	{
+		free_env_list(minishell->lst_export);
+		free_env_list(minishell->lst_env);
+		if (minishell->prompt)
+			rl_clear_history();
+		forcend(minishell, NULL, MSHELL_SUCCESS);
+	}
+	else if (!minishell->input[0])
+		parser_input(minishell);
+	else if (minishell->interactive && minishell->input[0] != '\0')
+		add_history(minishell->input);
+}
 
 /**
  * Analizes user input, validates it's syntax and saves a list of commands
@@ -45,13 +73,16 @@ void	sigend(t_body *minishell, int errno)
  */
 void	parser(t_body *minishell)
 {
+	char	*input;
 	char	**split;
 
+	cleanup(minishell);//cleanup comes first. Which the first time wont do shit.
 	parser_input(minishell);
 	split = shell_split(minishell->input);
 	if (!split)
-		sigend(minishell, 1);
+		forcend(minishell, "malloc", MSHELL_FAILURE);
 	parser_token(minishell, split);
+	//verify global variable cuz of SIGUSR1, return if true!
 	parser_envar(minishell);
 	parser_cmds(minishell);
 	shell_lstclear(&(minishell->token_lst), shell_lstdeltkn);

@@ -23,6 +23,9 @@
 
 extern volatile sig_atomic_t	g_signal_received;
 
+/*Id like to change this to a envp structure, inside a t_list structure.*/
+/*If the only functions that are able to edit this, are shell functions,*/
+/*Then we put this inside of shellft.h instead, more clean.				*/
 typedef struct s_env
 {
 	struct s_env	*current_next;
@@ -31,28 +34,6 @@ typedef struct s_env
 	char			*name;
 	int				exported;
 }	t_env;
-
-typedef struct s_cmd
-{
-	int		built_in;
-	int		heredoc[2];
-	int		infile;
-	int		outfile;
-	char	*limitator;
-	char	*pathname;
-	char	**argv;
-}	t_cmd;
-
-
-/**
- * Termios structure detailed
- * 
- * @param c_cflag	A TCFLAG_T sructure to control all flags.
- * @param c_lflag	A TCFLAG_T structure to control local flags.
- * @param c_iflag	A TCFLAG_T structure to enter flags.
- * @param c_oflag	A TCFLAG_T structure to remove flags.
- * @param c_cc		A CC_T structure with size [NCCS] for special characters
- */
 
 /**
  * Struct used to save the enviroment variables of the minishell.
@@ -65,30 +46,24 @@ typedef struct s_cmd
  */
 typedef struct s_body
 {
-	struct termios	term;
-	t_list			*cmd_lst;
-	t_list			*token_lst;
-	char			*prompt;
-	char			*input;
-	char			**input_split;
-	char			**envp;
-	pid_t			*childs_pid;
+	struct termios	orig_term;
 	int				errno;
-	t_env			*lst_export;
-	t_env			*lst_env;
+	int				interactive;
+	char			**envp;//A copy of the original envp + post modifications
+	char			*input;//needed for history?
+	char			*prompt;//A char * promt, not really needed to save.
+	t_list			*cmd_lst;
+	///t_list		*envp_lst;
+	t_list			*token_lst;
+
+	t_env			*lst_export;//lets change it to one list
+	t_env			*lst_env;//lets change it to one list
 }	t_body;
 
-//temporaly cleanup for test
-void	cleanup(t_body *minishell);
-
-void	initialization(t_body *minishell, const char **envp);
+void	new_prompt(int signum);
 
 void	parser(t_body *minishell);
 
 int		execmd(t_body *minishell);
-
-int		shell_prompt(t_body *minishell);
-
-t_env	*init_envp(const char **envp);
 
 #endif

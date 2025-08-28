@@ -6,11 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 17:04:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:32:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "troubleshoot.h"
 #include "parser.h"
 
 static int	cmd_argc(t_list *token_lst)
@@ -39,11 +40,9 @@ static t_cmd	*cmd_init(t_list *token_lst, t_body *minishell)
 	t_cmd	*new_cmd;
 	int		argc;
 
-	if (!token_lst)
-		sigend(minishell, 1);
 	new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
-		sigend(minishell, 1);
+		forcend(minishell, "malloc", MSHELL_FAILURE);
 	memset(new_cmd, 0, sizeof(t_cmd));
 	new_cmd->outfile = 1;
 	new_cmd->heredoc[0] = -1;
@@ -51,11 +50,12 @@ static t_cmd	*cmd_init(t_list *token_lst, t_body *minishell)
 	argc = cmd_argc(token_lst) + 1;
 	new_cmd->argv = malloc((argc) * sizeof(char *));
 	if (!new_cmd->argv)
-		sigend(minishell, 1);
+		forcend(minishell, "malloc", MSHELL_FAILURE);
 	memset(new_cmd->argv, 0, (argc * sizeof(char *)));
 	return (new_cmd);
 }
 
+/*This needs either get minishell, or returns something, 2 mallocs are being made!*/
 static void	cmd_upd(t_cmd *new, t_token *aux)
 {
 	char	*trimed;
@@ -64,7 +64,6 @@ static void	cmd_upd(t_cmd *new, t_token *aux)
 	i = 0;
 	while (new->argv[i])
 		i++;
-	trimed = shell_strtrim(aux->str, aux->mask, "\"\'\\;");
 	if (!trimed[0])
 	{
 		free(trimed);
@@ -84,7 +83,7 @@ static void	cmd_save(t_body *minishell, t_cmd **aux, t_list *token_lst)
 
 	new_node = ft_lstnew((*aux));
 	if (!new_node)
-		sigend(minishell, 1);
+		forcend(minishell, "malloc", MSHELL_FAILURE);
 	ft_lstadd_back(&(minishell->cmd_lst), new_node);
 	if (token_lst)
 	{

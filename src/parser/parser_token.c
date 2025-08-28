@@ -6,11 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 17:12:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:23:34 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "troubleshoot.h"
 #include "parser.h"
 
 /**
@@ -27,7 +28,7 @@
  * 
  * @param minishell A pointer to the main enviroment structure of minishell.
  */
-static void	verify_syntax(t_body *minishell)
+static int	verify_syntax(t_body *minishell)
 {
 	t_list	*lst_aux;
 	t_token	*token_aux;
@@ -44,16 +45,16 @@ static void	verify_syntax(t_body *minishell)
 		if (token_aux->type == REDIR_IN || token_aux->type == REDIR_OUT
 			|| token_aux->type == REDIR_APPEND || token_aux->type == HEREDOC)
 			if (token_next->type != WORD)
-				sigend(minishell, 3);
+				return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
 		if (token_aux->type == PIPE && token_next->type == PIPE)
-			sigend(minishell, 3);
+			return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
 		if (!i && token_aux->type == PIPE)
-			sigend(minishell, 3);
+			return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
 		lst_aux = lst_aux->next;
 		i++;
 	}
 	if (((t_token *) lst_aux->content)->type != WORD)
-		sigend(minishell, 3);
+		return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
 }
 
 /**
@@ -162,7 +163,7 @@ void	parser_token(t_body *minishell, char **split)
 	{
 		ft_split_free(&split[i]);
 		free(split);
-		sigend(minishell, 1);
+		forcend(minishell, "malloc", MSHELL_FAILURE);
 	}
 	free(split);
 	verify_syntax(minishell);

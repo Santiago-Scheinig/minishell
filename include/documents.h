@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:14:33 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/25 19:34:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:49:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,22 +210,6 @@
  *   the prompt being broken by Ctrl+C or other interruptions.
  * - Always handle signals carefully to avoid race conditions or unsafe behavior.
  */
-
-/**
- * Handles shell input loop and signal setup.
- * 
- * This function installs signal handlers for SIGINT and SIGQUIT,
- * performs cleanup, and prompts the user using readline.
- * If the user inputs EOF (Ctrl+D), the shell exits.
- * Otherwise, the input is added to the readline history.
- * 
- * @param minishell A pointer to the shell context (includes state, input, etc.).
- * 
- * @note If readline returns NULL (Ctrl+D), the shell exits cleanly.
- * @note Cleanup is called before each input to reset shell state.
- */
-
-void	recive_user_input(t_body *minishell);
 
 t_env	*add_env(t_env *head, char *new_env);
 

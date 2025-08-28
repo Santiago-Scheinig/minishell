@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/25 22:13:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/28 17:12:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int	shell_prompt(t_body *minishell)
 	user = getenv("USER");
 	if (!user)
 	{
-		perror("USER no define");
+		perror("USER no define");//NO, this shouldnt end the minishell, just no user is printed on prommpt!
 		return (0);
 	}
 	path = path_cwd(user);

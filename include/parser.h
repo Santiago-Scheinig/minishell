@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 15:32:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/28 20:06:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,17 @@ typedef struct s_token
 	char			*mask;	//	The mask of each character inside the string.
 	t_token_type	type;	//	The type of token.
 }	t_token;
+
+typedef struct s_cmd
+{
+	int		built_in;
+	int		heredoc[2];
+	int		infile;
+	int		outfile;
+	char	*limitator;
+	char	*pathname;
+	char	**argv;
+}	t_cmd;
 
 /**
  * Divides user input into tokens catalogated as the enum structure 
@@ -99,8 +110,6 @@ char	*exp_value(char *str, char *value, int start);
 
 char	*exp_mask(t_token *word, int start, int var_len, int value_len);
 
-void	parser_input(t_body *minishell);
-
 /**
  * Calculates the length of the enviroment variable name.
  * 
@@ -124,6 +133,6 @@ char	*envar_pathname(char *env_var);
 
 void	cmd_redirupd(t_token *aux, t_token *next, t_cmd *new);
 
-void	sigend(t_body *minishell, int errno);
+void	sigend(t_error number);
 
 #endif

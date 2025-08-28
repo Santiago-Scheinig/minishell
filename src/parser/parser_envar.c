@@ -6,11 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 17:47:13 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:27:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "troubleshoot.h"
 #include "parser.h"
 
 /**
@@ -30,7 +31,7 @@ static void	envar_tokenization(t_list *token_lst, t_body *minishell)
 	i = 0;
 	split = ft_iq_split(((t_token *) token_lst->content)->str, ' ');
 	if (!split)
-		sigend(minishell, 1);
+		forcend(minishell, "malloc", MSHELL_FAILURE);
 	while (split[i])
 		i++;
 	while (i && split[--i])
@@ -44,7 +45,7 @@ static void	envar_tokenization(t_list *token_lst, t_body *minishell)
 		if (shell_addlst_token(token_lst, split[i], i))
 		{
 			ft_split_free(split);
-			sigend(minishell, 1);
+			forcend(minishell, "malloc", MSHELL_FAILURE);
 		}
 	}
 	if (split)
@@ -83,7 +84,7 @@ static int	envar_mask(t_token *word, char *value, int start, t_body *minishell)
 		value_len = ft_strlen(value);
 		ret = exp_mask(word, start, var_len, value_len);
 		if (!ret)
-			sigend(minishell, 1);
+			forcend(minishell, "malloc", MSHELL_FAILURE);
 		if (word->mask)
 			free(word->mask);
 		word->mask = ret;
@@ -116,7 +117,7 @@ static int	envar_expansion(t_token *word, int start, t_body *minishell)
 
 	env_pathname = envar_pathname(&(word->str[start + 1]));
 	if (!env_pathname)
-		sigend(minishell, 1);
+		forcend(minishell, "malloc", MSHELL_FAILURE);
 	env_value = getenv(env_pathname);//i need to change this to isma function, after i solve all that shit
 	free(env_pathname);
 	if (!env_value)
@@ -128,7 +129,7 @@ static int	envar_expansion(t_token *word, int start, t_body *minishell)
 	{
 		ret = exp_value(word->str, env_value, start);
 		if (!ret)
-			sigend(minishell, 1);
+			forcend(minishell, "malloc", MSHELL_FAILURE);
 		envar_mask(word, env_value, start, minishell);
 		if (word->str)
 			free(word->str);
@@ -162,7 +163,7 @@ static void	envar_syntax(t_list *token_lst, t_body *minishell)
 	{
 		while (word->str[i] == '$' && word->mask[i] != 'S')
 		{
-			if (word->str[i + 1] && (!ft_isalnum(word->str[i + 1]) 
+			if (word->str[i + 1] && !ft_isalpha(word->str[i + 1]
 			&& word->str[i + 1] != '_' && word->str[i + 1] != '?'))
 			{
 				i++;

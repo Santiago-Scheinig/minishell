@@ -73,7 +73,7 @@ DEP_DIR		=	dep
 INC_DIR		=	include
 
 # The directory name for libft index files.									#
-INC_LIB		=	libft/include
+INC_LIB		=	src/libft/include
 
 # --------------------------- Object Libraries ---------------------------- #
 
@@ -94,7 +94,7 @@ DEP			=	$(ALL_SRC:$(SRC_DIR)/%.c=$(DEP_DIR)/%.d)
 # --------------------------------- Libft --------------------------------- #
 
 LIBFT_ABS	=	$(LIBFT_DIR)/$(LIBFT)
-LIBFT_DIR	=	libft
+LIBFT_DIR	=	$(SRC_DIR)/libft
 LIBFT		=	libft.a
 
 ifeq ($(LIBFT_USE), 1)
@@ -121,14 +121,13 @@ C_END		=	\033[0m
 all: $(NAME)
 	@echo "$(C_G)[✓] $(NAME) - Program built successfully.$(C_END)"
 
-# Creates a directory named $@.												#
+# Creates an object directory named $@, and subdirectories.					#
 $(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
-	@mkdir -p $@
-	@mkdir -p $@/shellft
-	@mkdir -p $@/parser
-	@mkdir -p $@/execmd
-	@mkdir -p $@/execmd/bicmd
-	@mkdir -p $@/managment
+	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)/shellft
+	@mkdir -p $(OBJ_DIR)/parser
+	@mkdir -p $(OBJ_DIR)/execmd
+	@mkdir -p $(OBJ_DIR)/execmd/bicmd
 
 # Creates the regular library.												#
 $(LIB_REG): $(OBJ) | $(LIB_DIR)
