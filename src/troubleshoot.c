@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/28 19:57:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 17:44:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,14 @@ void	cleanup(t_body *minishell)
 	}
 }
 
-int	sigend(t_error number)
+int	sigend(const char *next, t_error number)
 {
 	if (number == MSHELL_MISSUSE)
-		printf("Invalid input\n");
+	{
+		if (!next)
+			next = "\n";
+		printf("minishell: parse error near \'%s\'\n", next);
+	}
 	kill(0, SIGUSR1);
 	return (number);
 }

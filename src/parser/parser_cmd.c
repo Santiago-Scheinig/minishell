@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/28 19:32:27 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 19:13:09 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,14 @@
 #include "troubleshoot.h"
 #include "parser.h"
 
-static int	cmd_argc(t_list *token_lst)
-{
-	t_token	*aux;
-	int		prev_type;
-	int		count;
-
-	count = 0;
-	prev_type = WORD;
-	while (token_lst)
-	{
-		aux = (t_token *) token_lst->content;
-		if (aux->type == PIPE)
-			break;
-		if (aux->type == WORD && prev_type == WORD)
-			count++;
-		prev_type = aux->type;
-		token_lst = token_lst->next;
-	}
-	return (count);
-}
-
-static t_cmd	*cmd_init(t_list *token_lst, t_body *minishell)
+static t_cmd	*cmd_init(t_list *token_lst)
 {
 	t_cmd	*new_cmd;
 	int		argc;
 
 	new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
-		forcend(minishell, "malloc", MSHELL_FAILURE);
+		return (NULL);
 	memset(new_cmd, 0, sizeof(t_cmd));
 	new_cmd->outfile = 1;
 	new_cmd->heredoc[0] = -1;
@@ -50,73 +29,85 @@ static t_cmd	*cmd_init(t_list *token_lst, t_body *minishell)
 	argc = cmd_argc(token_lst) + 1;
 	new_cmd->argv = malloc((argc) * sizeof(char *));
 	if (!new_cmd->argv)
-		forcend(minishell, "malloc", MSHELL_FAILURE);
+	{
+		free(new_cmd);
+		return (NULL);
+	}
 	memset(new_cmd->argv, 0, (argc * sizeof(char *)));
 	return (new_cmd);
 }
 
-/*This needs either get minishell, or returns something, 2 mallocs are being made!*/
-static void	cmd_upd(t_cmd *new, t_token *aux)
+static int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
 {
-	char	*trimed;
+	if (aux->type == REDIR_IN)
+		return(edit_infile(aux_next, new));
+	if (aux->type == REDIR_OUT)
+		return (edit_outfile(aux_next, new, O_TRUNC));
+	if (aux->type == REDIR_APPEND)
+		return (edit_outfile(aux_next, new, O_APPEND));
+	if (aux->type == HEREDOC)
+		return (edit_infile_to_heredoc(aux_next, new));
+	return (MSHELL_FAILURE)
+}
+
+static void	cmdupd_argv(t_token *aux, t_cmd *new_cmd, t_body *minishell)
+{
 	int		i;
 
 	i = 0;
 	while (new->argv[i])
 		i++;
-	if (!trimed[0])
-	{
-		free(trimed);
-		return;
-	}
-	free(trimed);
 	new->argv[i] = shell_substr(aux->str, aux->mask, 0, ft_strlen(aux->str));
+	if (!new->argv[i])
+		forcend(minishell, "malloc", MSHELL_FAILURE);
 	if (aux->str)
 		free(aux->str);
 	aux->str = NULL;
 }
 
-static void	cmd_save(t_body *minishell, t_cmd **aux, t_list *token_lst)
+static void	cmdupd_save( t_list *token_lst, t_cmd **new_cmd, t_body *minishell)
 {
-	t_token	*pipe;
 	t_list	*new_node;
 
-	new_node = ft_lstnew((*aux));
-	if (!new_node)
-		forcend(minishell, "malloc", MSHELL_FAILURE);
-	ft_lstadd_back(&(minishell->cmd_lst), new_node);
+	if ((*new_cmd))
+	{
+		new_node = ft_lstnew((*new_cmd));
+		if (!new_node)
+			forcend(minishell, "malloc", MSHELL_FAILURE);
+		ft_lstadd_back(&(minishell->cmd_lst), new_node);
+	}
 	if (token_lst)
 	{
-		pipe = (t_token *) token_lst->content;
-		(*aux) = cmd_init(token_lst, minishell);
+		(*new_cmd) = cmd_init(token_lst->next, minishell);
+		if (!(*new_cmd))
+			forcend(minishell, "malloc", MSHELL_FAILURE);
 	}
 }
 
 void	parser_cmds(t_body *minishell)
 {
-	t_list	*lst_aux;
 	t_cmd	*new_cmd;
-	t_token	*token_aux;
-	t_token	*token_next;
+	t_list	*aux_lst;
+	t_token	*aux_tkn;
 
-	lst_aux = minishell->token_lst;
-	new_cmd = cmd_init(minishell->token_lst, minishell);
-	while (lst_aux)
+	aux_lst = minishell->token_lst;
+	new_cmd = cmd_init(minishell->token_lst);
+	if (!new_cmd)
+		forcend(minishell, "malloc", MSHELL_FAILURE);
+	while (aux_lst)
 	{
-		token_aux = (t_token *) lst_aux->content;
-		if (lst_aux->next)
-			token_next = (t_token *) lst_aux->next->content;
-		if (token_aux->type == REDIR_IN || token_aux->type == REDIR_OUT
-			|| token_aux->type == REDIR_APPEND || token_aux->type == HEREDOC)
+		aux_tkn = (t_token *) token_lst->content;
+		if (aux_tkn->type && aux_tkn->type != PIPE && aux_tkn->type != END)
 		{
-			cmd_redirupd(token_aux, token_next, new_cmd);
-			lst_aux = lst_aux->next;
+			aux_lst = aux_lst->next;
+			if (cmdupd_redir(aux_tkn, (t_token *) aux_lst->content, new_cmd))
+				aux_lst = cmd_rerr(aux_lst, &new_cmd);
 		}
-		else if (token_aux->type == WORD)
-			cmd_upd(new_cmd, token_aux);
-		else if (token_aux->type == PIPE)
-			cmd_save(minishell, &new_cmd, lst_aux->next);
-		lst_aux = lst_aux->next;
+		else if (aux_tkn->type == WORD)
+			cmdupd_argv(aux_tkn, new_cmd);
+		else if (aux_tkn->type == PIPE)
+			cmdupd_save(aux_lst, new_cmd, minishell);
+		aux_lst = aux_lst->next;
 	}
-	cmd_save(minishell, &new_cmd, NULL);
+	cmdupd_save(NULL, new_cmd, minishell);
 }

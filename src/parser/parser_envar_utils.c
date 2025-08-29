@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 15:43:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 17:22:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*exp_mask(t_token *word, int start, int envar_len, int value_len)
 	{
 		aux_start = start + envar_len;
 		aux_len = ft_strlen(&(word->str[aux_start])) + 1;
-		memmove(&(word->mask[start]), &(word->mask[aux_start]), aux_len);
+		ft_memmove(&(word->mask[start]), &(word->mask[aux_start]), aux_len);
 		return (word->mask);
 	}
 	aux_len = ft_strlen(word->str) + value_len;
@@ -97,7 +97,7 @@ char	*exp_value(char *str, char *value, int start)
 		aux_len = envar_len(&(str[start]));
 		aux_start = start + aux_len;
 		aux_len = ft_strlen(&(str[aux_start])) + 1;
-		memmove(&(str[start]), &(str[aux_start]), aux_len);
+		ft_memmove(&(str[start]), &(str[aux_start]), aux_len);
 		return (str);
 	}
 	aux_len = ft_strlen(value) + ft_strlen(str) + 1;
