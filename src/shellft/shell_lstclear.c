@@ -3,15 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   shell_lstclear.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 15:50:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 18:09:10 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "shellft.h"
+
+void	shell_lstdelvar(t_list *list, void (*del)(void *))
+{
+	t_list	*tmp;
+	t_var	*aux;
+
+	tmp = list;
+	while (tmp)
+	{
+		tmp = list;
+		aux = (t_var *)tmp->content;
+		tmp = tmp->next;
+		del(aux->name);
+		del(aux->value);
+		del(aux);
+	}
+	del(list);
+}
 
 /**
  * Frees the content of a COMAND NODE. then frees the NODE.

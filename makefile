@@ -15,16 +15,15 @@ LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
 SRC			=	$(SRC_DIR)/main.c							\
-				$(SRC_DIR)/managment/initialization.c		\
-				$(SRC_DIR)/managment/troubleshoot_utils.c	\
+				$(SRC_DIR)/troubleshoot.c					\
 				$(SRC_DIR)/parser/parser.c					\
 				$(SRC_DIR)/parser/parser_cmd.c				\
 				$(SRC_DIR)/parser/parser_envar.c			\
-				$(SRC_DIR)/parser/parser_input.c			\
 				$(SRC_DIR)/parser/parser_token.c			\
 				$(SRC_DIR)/parser/parser_cmd_redir.c		\
 				$(SRC_DIR)/parser/parser_envar_utils.c		\
 				$(SRC_DIR)/shellft/shell_split.c			\
+				$(SRC_DIR)/shellft/shell_envdup.c			\
 				$(SRC_DIR)/shellft/shell_substr.c			\
 				$(SRC_DIR)/shellft/shell_strchr.c			\
 				$(SRC_DIR)/shellft/shell_prompt.c			\
@@ -32,6 +31,7 @@ SRC			=	$(SRC_DIR)/main.c							\
 				$(SRC_DIR)/shellft/shell_strtrim.c			\
 				$(SRC_DIR)/shellft/shell_sortenv.c			\
 				$(SRC_DIR)/shellft/shell_lstclear.c			\
+				$(SRC_DIR)/shellft/shell_newlst_var.c		\
 				$(SRC_DIR)/shellft/shell_split_utils.c		\
 				$(SRC_DIR)/shellft/shell_addlst_token.c		\
  				$(SRC_DIR)/execmd/bicmd/export.c			\
@@ -124,6 +124,8 @@ all: $(NAME)
 # Creates an object directory named $@, and subdirectories.					#
 $(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(DEP_DIR)
+	@mkdir -p $(LIB_DIR)
 	@mkdir -p $(OBJ_DIR)/shellft
 	@mkdir -p $(OBJ_DIR)/parser
 	@mkdir -p $(OBJ_DIR)/execmd

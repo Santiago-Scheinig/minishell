@@ -3,29 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   troubleshoot.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/28 19:57:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 18:03:53 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "troubleshoot.h"
-
-void	free_env_list(t_env *env)
-{
-	t_env	*tmp;
-
-	while (env)
-	{
-		tmp = env;
-		env = env->current_next;
-		free(tmp->name);
-		free(tmp->value);
-		free(tmp);
-	}
-}
 
 void	cleanup(t_body *minishell)
 {
@@ -38,11 +24,6 @@ void	cleanup(t_body *minishell)
 	{
 		ft_split_free(minishell->envp);
 		minishell->envp = NULL;
-	}
-	if (minishell->lst_env)
-	{
-		shell_lstclear(&(minishell->lst_env), shell_lstdelenv);
-		minishell->lst_env = NULL;
 	}
 	if (minishell->token_lst)
 	{

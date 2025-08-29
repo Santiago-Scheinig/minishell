@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 03:23:17 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/29 19:30:31 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static t_cmd	*cmd_init(t_list *token_lst, t_body *minishell)
 /*This needs either get minishell, or returns something, 2 mallocs are being made!*/
 static void	cmd_upd(t_cmd *new, t_token *aux)
 {
-	char	*trimed;
 	int		i;
 
 	i = 0;

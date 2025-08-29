@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/28 20:06:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 19:36:09 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,5 @@ int	envar_len(char *env_var);
 char	*envar_pathname(char *env_var);
 
 void	cmd_redirupd(t_token *aux, t_token *next, t_cmd *new);
-
-void	sigend(t_error number);
 
 #endif

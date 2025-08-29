@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/25 22:25:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 14:53:03 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * GORGEOUS!
  */
-void	unset(t_env *env_lst, const char *name)
+static void	end_unset(char **dup_envp, t_lst_envp *env_lst, char *name)
 {
 	t_env	*current;
 	t_env	*prev;
@@ -40,4 +40,9 @@ void	unset(t_env *env_lst, const char *name)
 		prev = current;
 		current = current->current->next;
 	}
+}
+
+int	unset(char **dup_envp, t_lst_envp *env_lst, char *name)
+{
+	
 }

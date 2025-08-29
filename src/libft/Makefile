@@ -1,6 +1,7 @@
 # --------------------------------- Makefile Main ---------------------------------- #
 
 SRC		=	$(SRCDIR)ft_argjoin.c					\
+SRC		=	$(SRCDIR)ft_arrlen.c					\
 			$(SRCDIR)ft_atoi.c						\
 			$(SRCDIR)ft_atol.c						\
 			$(SRCDIR)ft_atoi_base.c					\
@@ -38,6 +39,7 @@ SRC		=	$(SRCDIR)ft_argjoin.c					\
 			$(SRCDIR)ft_putchar_fd.c				\
 			$(SRCDIR)ft_putendl_fd.c				\
 			$(SRCDIR)ft_read_file.c					\
+			$(SRCDIR)ft_realloc.c					\
 			$(SRCDIR)ft_split.c						\
 			$(SRCDIR)ft_split_free.c				\
 			$(SRCDIR)ft_strchr.c					\
@@ -50,6 +52,7 @@ SRC		=	$(SRCDIR)ft_argjoin.c					\
 			$(SRCDIR)ft_strncmp.c					\
 			$(SRCDIR)ft_strnstr.c					\
 			$(SRCDIR)ft_strrchr.c					\
+			$(SRCDIR)ft_strtarr.c					\
 			$(SRCDIR)ft_strtrim.c					\
 			$(SRCDIR)ft_striteri.c					\
 			$(SRCDIR)ft_substr.c					\

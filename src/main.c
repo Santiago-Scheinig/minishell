@@ -117,9 +117,9 @@ static void	initialization(t_body *minishell, const char **envp)
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 	}
-	minishell->lst_env = init_envp(envp);//should we do this here or in initialization?
-	minishell->lst_export = init_envp(envp);//should we do this here or in initialization?
-	sortenv(minishell->lst_env);//should we do this here or in initialization?
+	minishell->envp_lst = shell_newlst_var(envp);
+	minishell->envp = shell_envpdup(envp);
+	sortenv(minishell->envp_lst);//should we do this here or in initialization?
 }
 
 int	main(int argc, char **argv, const char **envp)

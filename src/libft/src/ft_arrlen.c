@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   troubleshoot.h                                     :+:      :+:    :+:   */
+/*   ft_arrlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 16:03:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:36:12 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/29 18:25:37 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/29 18:26:13 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TROUBLESHOOT_H
-# define TROUBLESHOOT_H
+#include "libft.h"
 
-# include "minishell.h"
-
-typedef enum e_error
+int	ft_arrlen(const void **arr)
 {
-	MSHELL_FATAL = -1,
-	MSHELL_SUCCESS,
-	MSHELL_FAILURE,
-	MSHELL_MISSUSE,
-	MSHELL_CMD_INVEXE = 126,
-	MSHELL_CMD_NOTEXE,
-	MSHELL_SIG_HANDLR,
-}	t_error;
+	int			i;
 
-void	cleanup(t_body *minishell);
-
-int		forcend(t_body *minishell, char *function, t_error number);
-
-int		sigend(t_error number);
-
-#endif
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
+}

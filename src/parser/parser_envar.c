@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 03:21:39 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/29 19:30:55 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	envar_tokenization(t_list *token_lst, t_body *minishell)
 			split = NULL;
 			break;
 		}
-		if (shell_addlst_token(token_lst, tspli[i], i))
+		if (shell_addlst_token(token_lst, split[i], i))
 		{
 			ft_split_free(split);
 			forcend(minishell, "malloc", MSHELL_FAILURE);

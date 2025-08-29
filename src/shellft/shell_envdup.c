@@ -1,35 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   troubleshoot.h                                     :+:      :+:    :+:   */
+/*   shell_envdup.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 16:03:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:36:12 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/29 19:13:22 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/29 19:36:59 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TROUBLESHOOT_H
-# define TROUBLESHOOT_H
+#include "minishell.h"
 
-# include "minishell.h"
-
-typedef enum e_error
+char	**shell_envpdup(const char **envp)
 {
-	MSHELL_FATAL = -1,
-	MSHELL_SUCCESS,
-	MSHELL_FAILURE,
-	MSHELL_MISSUSE,
-	MSHELL_CMD_INVEXE = 126,
-	MSHELL_CMD_NOTEXE,
-	MSHELL_SIG_HANDLR,
-}	t_error;
+	char	**tmp;
+	int		i;
+	int		j;
 
-void	cleanup(t_body *minishell);
-
-int		forcend(t_body *minishell, char *function, t_error number);
-
-int		sigend(t_error number);
-
-#endif
+	i = 0;
+	tmp = malloc((i + 1) * sizeof(char *));
+	if (!tmp)
+		return (NULL);
+	j = 0;
+	while (j < i)
+	{
+		tmp[j] = ft_strdup(envp[j]);
+		if (!tmp[j])
+		{
+			while (--j >= 0)
+				free(tmp[j]);
+			free(tmp);
+			return (NULL);
+		}
+		j++;
+	}
+	tmp[i] = NULL;
+	return (tmp);
+}
