@@ -24,7 +24,6 @@ extern volatile sig_atomic_t	g_signal_received;
 typedef struct s_env
 {
 	struct s_env	*current_next;
-	struct s_env	*sort_next;
 	char			*value;
 	char			*name;
 	int				exported;
@@ -66,14 +65,13 @@ typedef struct s_body
 	struct termios	term;
 	t_list			*cmd_lst;
 	t_list			*token_lst;
+	t_list			*dup_envp_lst;
 	char			*prompt;
 	char			*input;
 	char			**input_split;
-	char			**envp;
+	char			**dup_envp;
 	int				*childs_pid;
 	int				errno;
-	t_env			*lst_export;
-	t_env			*lst_env;
 }	t_body;
 
 t_body	*init_env(t_body *minishell, char **envp);
