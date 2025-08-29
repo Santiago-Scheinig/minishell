@@ -101,7 +101,7 @@ static void	initialization(t_body *minishell, const char **envp)
 
 	ft_memset(minishell, 0, sizeof(t_body));
 	minishell->interactive = isatty(STDIN_FILENO);
-	if (minishell->interactive)
+	if (minishell->interactive && isatty(STDOUT_FILENO))
 	{
 		if (tcgetattr(STDIN_FILENO, &(minishell->orig_term)))
 			forcend(minishell, "tcgetattr", MSHELL_FATAL);

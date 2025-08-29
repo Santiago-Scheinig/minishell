@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/28 19:32:27 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 03:23:17 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,6 @@ static void	cmd_upd(t_cmd *new, t_token *aux)
 	i = 0;
 	while (new->argv[i])
 		i++;
-	if (!trimed[0])
-	{
-		free(trimed);
-		return;
-	}
-	free(trimed);
 	new->argv[i] = shell_substr(aux->str, aux->mask, 0, ft_strlen(aux->str));
 	if (aux->str)
 		free(aux->str);

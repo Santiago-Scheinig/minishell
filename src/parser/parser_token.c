@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/28 19:23:34 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 03:10:00 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ static int	verify_syntax(t_body *minishell)
 	while (lst_aux->next)
 	{
 		token_aux = (t_token *) lst_aux->content;
-		if (lst_aux->next)
-			token_next = (t_token *) lst_aux->next->content;
+		token_next = (t_token *) lst_aux->next->content;
 		if (token_aux->type == REDIR_IN || token_aux->type == REDIR_OUT
 			|| token_aux->type == REDIR_APPEND || token_aux->type == HEREDOC)
 			if (token_next->type != WORD)
