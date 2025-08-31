@@ -1,25 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_arrlen.c                                        :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/29 18:25:37 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 18:42:58 by ischeini         ###   ########.fr       */
+/*   Created: 2025/08/31 13:50:11 by ischeini          #+#    #+#             */
+/*   Updated: 2025/08/31 13:50:21 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "bicmd.h"
 
-int	ft_arrlen(const void **arr)
-{
-	int			i;
-
-	i = 0;
-	if (!arr || !arr[i])
-		return (i);
-	while (arr[i])
-		i++;
-	return (i);
-}

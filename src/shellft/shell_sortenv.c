@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/29 18:59:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/31 19:44:43 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,29 @@ void	print_export(t_list *env_lst)
 		{
 			ft_printf("declare -x %s", tmp->name);
 			if (tmp->value)
-				ft_printf("=\"%s\"", tmp->value);
+				ft_printf("\"%s\"", tmp->value);
 			ft_printf("\n");
 		}
 		current = current->next;
 	}
 }
 
-static void	swap_env(t_list *head, t_list *prev, t_list *crnt, t_list *next)
+static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next)
 {
 	crnt->next = next->next;
 	next->next = crnt;
 	if (prev)
 		prev->next = next;
 	else
-		head = next;
+		*head = next;
 	if (!prev)
-		prev = head;
+		prev = *head;
 	else
 		prev = prev->next;
+	return (head);
 }
 
-void	sortenv(t_list *head)
+void	sortenv(t_list **head)
 {
 	t_list	*current;
 	t_list	*prev;
@@ -68,16 +69,15 @@ void	sortenv(t_list *head)
 	{
 		prev = NULL;
 		sorted = 1;
-		current = head;
+		current = *head;
 		while (current && current->next)
 		{
 			tmp = (t_var *)current->content;
 			nxt = (t_var *)current->next->content;
 			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name) + 1) > 0)
 			{
-				swap_env(head, prev, current, current->next);
+				head = swap_env(head, prev, current, current->next);
 				sorted = 0;
-				continue ;
 			}
 			prev = current;
 			current = current->next;

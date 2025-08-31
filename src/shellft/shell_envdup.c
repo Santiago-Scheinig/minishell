@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 19:13:22 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:36:59 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/31 16:33:06 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	**shell_envpdup(const char **envp)
 	int		i;
 	int		j;
 
-	i = 0;
+	i = ft_arrlen((const void **)envp);
 	tmp = malloc((i + 1) * sizeof(char *));
 	if (!tmp)
 		return (NULL);

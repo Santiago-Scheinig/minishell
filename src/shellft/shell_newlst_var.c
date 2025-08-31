@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_create_envp.c                                :+:      :+:    :+:   */
+/*   shell_newlst_var.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:13:40 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/31 19:58:56 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@ static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 		return (NULL);
 	}
 	if (!sign)
+	{
+		tmp[i - 1] = '\0';
+		new->value = NULL;
 		return (new);
+	}
 	new->value = ft_strdup(sign + 1);
 	if (!new->value)
 	{
@@ -56,14 +60,14 @@ t_var	*create_envp(const char *envp)
 		return (NULL);
 	while (envp[i] && envp[i] != '=')
 		i++;
-	new = copy(new, envp, sign, i);
+	new = copy(new, envp, sign, i + 1);
 	if (!new)
 		return (NULL);
 	new->exported = 1;
 	return (new);
 }
 
-t_list	*shell_newlst_var(const char **envp)
+t_list	*shell_newlst_var(char **envp)
 {
 	t_var	*content;
 	t_list	*new_node;

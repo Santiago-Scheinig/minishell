@@ -10,8 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "troubleshoot.h"
+#include "minishell.h"
+#include "parser.h"
+#include "bicmd.h"
 
 /**
  * Global flag use to track signals.
@@ -117,14 +119,20 @@ static void	initialization(t_body *minishell, const char **envp)
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 	}
-	minishell->envp_lst = shell_newlst_var(envp);
 	minishell->envp = shell_envpdup(envp);
-	sortenv(minishell->envp_lst);//should we do this here or in initialization?
+	if (!minishell->envp)
+		forcend(minishell, "malloc", MSHELL_FAILURE);
+	minishell->envp_lst = shell_newlst_var(minishell->envp);
+	if (!minishell->envp_lst)
+		forcend(minishell, "malloc", MSHELL_FAILURE);
+	sortenv(&minishell->envp_lst);
 }
 
 int	main(int argc, char **argv, const char **envp)
 {
 	t_body	minishell;
+	t_list	*lst;
+	t_cmd	*cmd;
 
 	if (argc > 1 || argv[1])
 		return (forcend(&minishell, argv[1], MSHELL_CMD_NOTEXE));
@@ -133,6 +141,9 @@ int	main(int argc, char **argv, const char **envp)
 	{
 		//if global signal exists, wait until all signals are resolved, then continue.
 		parser(&minishell);
+		cmd = (t_cmd *)minishell.cmd_lst->content;
+		lst = (t_list *)minishell.envp_lst;
+		built_in(&minishell, cmd->argv[0], cmd->argv, lst);
 		//if global signal exists, wait until all signals are resolved, then continue.
 		//execmd(&minishell);//after each waitpid, if global siignal exists, end the execmd.
 	}

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:44:21 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:12:47 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,87 +17,90 @@ static int	is_valid_identifier(char *arg)
 	int i = 0;
 	
 	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
-	{
-		ft_printfd(2, "minishell: export: `%s': not a valid identifier\n",
-		arg);
-		return (0);
-	}
+		return (built_end("export", "Not valid identifier", arg, '\0'));
 	while (arg[i] && arg[i] != '=')
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
-		{
-			ft_printfd(2, "minishell: export: `%s': not a valid identifier\n",
-			arg);
-			return (0);
-		}
+			return (built_end("export", "Not valid identifier", arg, '\0'));
 		i++;
 	}
 	return (1);
 }
 
-static int	ft_isal_num(char **new_e, t_list *head)
+static int	ft_isal_num(char **args, t_list *head)
 {
-	int	error;
 	int	i;
 	int	j;
 
-	error = 0;
 	i = 0;
-	if (!new_e[1])
+	if (!args[0])
 	{
 		print_export(head);
 		return (2);	
 	}
-	if (new_e[1][0] == '-' && new_e[1][1])
-		built_end("export", "Invalid flags", "name[=value ...]", new_e[1][1]);
-	j = 0;
-	while (new_e[++j])
+	if (args[0][0] == '-' && args[0][1])
+		return (built_end("export", "Invalid flags", "name[=value ...]",
+		args[0][1]));
+	j = -1;
+	while (args[++j])
 	{
-		if (!is_valid_identifier(new_e[j]) && new_e[j][i] != '_')
-			error = 1;	
+		if (!is_valid_identifier(args[j]) && args[j][i] != '_')
+			return (1);
 	}
-	if (error)
-		built_end("export", NULL, NULL, '\0');
-	return (1);
+	return (0);
 }
 
-static t_var	*change_value_env(t_var *aux, char *new_env)
+static int	change_value_env(t_var *aux, char **envp, char *new_env)
 {
 	char	*sign;
+	size_t	i;
 
 	sign = ft_strchr(new_env, '=');
-	if (!sign)
-		return (NULL);
-	free(aux->value);
-	aux->value = ft_strdup(sign + 1);
-	if (!aux->value)
-		built_end("export", "malloc", NULL, '\0');
-	return (aux);
+	i = 0;
+	while (new_env[i] && new_env[i] != '=')
+		i++;
+	if (sign && i == ft_strlen(aux->name))
+	{
+		if (aux->value)
+			free(aux->value);
+		free(envp[0]);
+		aux->value = ft_strdup(sign + 1);
+		if (!aux->value)
+			return (built_end("export", "malloc", NULL, '\0'));
+		envp[0] = ft_strdup(new_env);
+		if (!envp)
+			return (built_end("export", "malloc", NULL, '\0'));
+	}
+	else
+		return (0);
+	ft_remove_arr(envp, 0);
+	return (0);
 }
 
-static t_var *new_envp(char **new_env, t_list *head)
+static t_list *new_envp(char **new_env, t_list *head)
 {
 	t_list	*current;
+	t_list	*next;
 	t_var	*new_node;
-	int			error;
 	int			i;
 
 	i = -1;
-	error = 0;
 	while (new_env[++i])
 	{
-		new_node = create_envp(new_env[i], &error);
+		new_node = create_envp(new_env[i]);
 		if (!new_node)
 			return (NULL);
+		next = ft_lstnew(new_node);
 		current = head;
 		while (current->next)
 			current = current->next;
-		current->next = new_node;
+		current->next = next;
 	}
 	return (head);
 }
 
-t_var	*export(char **envp, t_list *head, char **args)
+
+t_list	*b_export(char **envp, t_list *head, char **args)
 {
 	t_list	*tmp;
 	t_var	*aux;
@@ -106,19 +109,20 @@ t_var	*export(char **envp, t_list *head, char **args)
 
 	tmp = head;
 	j = 0;
-	if (ft_isal_num(args, head) == 2)
+	if (ft_isal_num(args, head))
 		return (head);
 	while (tmp)
 	{
-		i = 1;
+		i = -1;
 		aux = (t_var *)tmp->content;
 		while (args[++i])
-			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name) + 1))
-				aux = change_value_env(aux, args[i]);
+			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
+				if (change_value_env(aux, envp, args[i]) == 1)
+					return (NULL);
 		tmp = tmp->next;
-		j++;
 	}
-	envp = ft_realloc(envp, &args[1], j + i - 1);
-	new_envp(&args[1], head);
+	envp = shell_realloc(args, envp);
+	if (!new_envp(args, head) || !envp)
+		return (NULL);
 	return (head);
 }

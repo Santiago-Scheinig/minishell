@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:28:44 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:17:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,8 @@ void	shell_lstdelvar(t_list *list, void (*del)(void *));
 
 char	**shell_envpdup(const char **envp);
 
-t_list	*shell_newlst_var(const char **envp);
+t_list	*shell_newlst_var(char **envp);
 
-void	sortenv(t_list *head);
+void	sortenv(t_list **head);
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/29 14:39:42 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:58:29 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "bicmd.h"
 
 void	echo(char **args)
 {
@@ -19,7 +19,7 @@ void	echo(char **args)
 
 	i = 1;
 	new_line = 1;
-	if (args[0] && !ft_strncmp(args[0], "-n", 3))
+	if (args[1] && !ft_strncmp(args[1], "-n", 3))
 	{
 		i++;
 		new_line = 0;

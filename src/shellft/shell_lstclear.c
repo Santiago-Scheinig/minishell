@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 18:09:10 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/31 16:57:05 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ void	shell_lstdelvar(t_list *list, void (*del)(void *))
 	t_var	*aux;
 
 	tmp = list;
-	while (tmp)
+	aux = (t_var *)tmp->content;
+	if (aux)
 	{
-		tmp = list;
-		aux = (t_var *)tmp->content;
-		tmp = tmp->next;
-		del(aux->name);
-		del(aux->value);
+		if (aux->name)
+			del(aux->name);
+		if (aux->value)
+			del(aux->value);
 		del(aux);
 	}
-	del(list);
+	del(tmp);
 }
 
 /**

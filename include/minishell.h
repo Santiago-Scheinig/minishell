@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include "shellft.h"
 # include "libft.h"
+# include <errno.h>
 
 extern volatile sig_atomic_t	g_signal_received;
 
@@ -45,7 +46,7 @@ typedef struct t_var
 typedef struct s_body
 {
 	struct termios	orig_term;
-	int				errno;
+	int				shell_errno;
 	int				interactive;
 	char			**envp;//A copy of the original envp + post modifications
 	char			*input;//needed for history?
