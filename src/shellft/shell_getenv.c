@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   shell_getenv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 13:47:01 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:08:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bicmd.h"
 
 /**
- * Shell functions shouldn't need T_BODY, just as the libft, it should work with only
- * with necesary information. Insead of the T_BODY, you should ask for the T_LST!
+ * COMMENT PENDING
  */
 char	*shell_getenv(t_list *lst_var, const char *name)
 {

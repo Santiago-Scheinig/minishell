@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   shell_sortenv.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 19:44:43 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:09:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bicmd.h"
 
+/**
+ * COMMENT PENDING
+ */
 void	print_env(char **envp)
 {
 	int	i;
@@ -21,6 +24,9 @@ void	print_env(char **envp)
 		ft_printf("\"%s\"\n", envp[i++]);
 }
 
+/**
+ * COMMENT PENDING
+ */
 void	print_export(t_list *env_lst)
 {
 	t_list	*current;
@@ -41,6 +47,9 @@ void	print_export(t_list *env_lst)
 	}
 }
 
+/**
+ * COMMENT PENDING
+ */
 static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next)
 {
 	crnt->next = next->next;
@@ -56,6 +65,9 @@ static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next
 	return (head);
 }
 
+/**
+ * COMMENT PENDING
+ */
 void	sortenv(t_list **head)
 {
 	t_list	*current;

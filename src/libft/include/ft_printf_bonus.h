@@ -6,13 +6,17 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 21:18:11 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/19 16:49:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:06:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_BONUS_H
 # define FT_PRINTF_BONUS_H
 # include "libft.h"
+
+/**
+ * COMMENT UPDATE PENDING
+ */
 
 /**
  * Used to saved the information needed to print str with its detailed flags.

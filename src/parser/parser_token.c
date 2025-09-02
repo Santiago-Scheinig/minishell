@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 19:49:53 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:07:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "parser.h"
 
 /**
+ * COMMENT UPDATE
  * Verifies the correct syntax of the user input inside a T_TOKEN list
  * by following the bash-shell rules:
  * 
@@ -58,7 +59,7 @@ static int	verify_syntax(t_body *minishell)
 }
 
 /**
- * Working like a charm, need to comment only.
+ * COMMENT PENDING
  */
 static int	maskstr_quoted(char *str, char *mask_str, char quote)
 {
@@ -78,7 +79,7 @@ static int	maskstr_quoted(char *str, char *mask_str, char quote)
 }
 
 /**
- * Working like a charm, need to comment only.
+ * COMMENT PENDING
  */
 static char	*maskstr(char *str)
 {

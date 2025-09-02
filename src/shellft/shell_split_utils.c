@@ -6,13 +6,16 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:22:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 19:48:35 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:09:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "shellft.h"
 
+/**
+ * COMMENT PENDING
+ */
 int	is_divisor(char *str)
 {
 	if (!ft_strncmp(str, "|", 1))
@@ -30,6 +33,9 @@ int	is_divisor(char *str)
 	return (WORD);
 }
 
+/**
+ * COMMENT PENDING
+ */
 int	get_token_type(char *str)
 {
 	if (!str || !str[0])

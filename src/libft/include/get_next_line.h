@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 05:11:26 by root              #+#    #+#             */
-/*   Updated: 2025/05/27 16:46:21 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:06:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # endif
 # include "libft.h"
 # include "errno.h"
+
+/**
+ * COMMENT UPDATE PENDING
+ */
 
 /**
  * Ft_strlend returns the count of characters on 's' until a char end, not

@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   shell_envdup.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 19:13:22 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 16:33:06 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:08:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * COMMENT PENDING
+ */
 char	**shell_envpdup(const char **envp)
 {
 	char	**tmp;

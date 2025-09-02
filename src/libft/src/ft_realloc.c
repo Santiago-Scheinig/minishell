@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 18:24:31 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/29 18:26:50 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:05:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * COMMENT PENDING
+ */
 void	*ft_realloc(void *ptr, size_t new_size, size_t old_size)
 {
 	void	*new_alloc;

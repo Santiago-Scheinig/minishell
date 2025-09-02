@@ -6,10 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:32:30 by sscheini          #+#    #+#             */
-/*   Updated: 2024/10/18 17:28:40 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:04:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * COMMENT PENDING
+ */
 int	ft_isprint(int c)
 {
 	if (c >= 32 && c <= 126)

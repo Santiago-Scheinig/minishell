@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 20:32:40 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:20:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include "troubleshoot.h"
 #include "parser.h"
 
+/**
+ * COMMENT PENDING
+ */
 static t_cmd	*cmd_init(t_list *token_lst)
 {
 	t_cmd	*new_cmd;
@@ -37,6 +40,9 @@ static t_cmd	*cmd_init(t_list *token_lst)
 	return (new_cmd);
 }
 
+/**
+ * COMMENT PENDING
+ */
 static int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
 {
 	if (aux->type == REDIR_IN)
@@ -50,6 +56,9 @@ static int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
 	return (MSHELL_FAILURE);
 }
 
+/**
+ * COMMENT PENDING
+ */
 static void	cmdupd_argv(t_token *aux, t_cmd *new_cmd)
 {
 	int		i;
@@ -57,11 +66,14 @@ static void	cmdupd_argv(t_token *aux, t_cmd *new_cmd)
 	i = 0;
 	while (new_cmd->argv[i])
 		i++;
-	shell_memmove(aux->str, aux->str, aux->mask, ft_strlen(aux->str));
+	shell_memmove(aux->str, aux->str, aux->mask, ft_strlen(aux->str) + 1);
 	new_cmd->argv[i] = aux->str;
 	aux->str = NULL;
 }
 
+/**
+ * COMMENT PENDING
+ */
 static void	cmdupd_save( t_list *token_lst, t_cmd **new_cmd, t_body *minishell)
 {
 	t_list	*new_node;
@@ -78,6 +90,9 @@ static void	cmdupd_save( t_list *token_lst, t_cmd **new_cmd, t_body *minishell)
 	}
 }
 
+/**
+ * COMMENT PENDING
+ */
 void	parser_cmds(t_body *minishell)
 {
 	t_cmd	*new_cmd;

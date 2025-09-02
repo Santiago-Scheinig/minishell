@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 13:09:58 by sscheini          #+#    #+#             */
-/*   Updated: 2024/09/14 18:31:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:04:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ static	int	ft_islow(int c)
 	return (0);
 }
 
+/**
+ * COMMENT PENDING
+ */
 int	ft_isalpha(int c)
 {
 	if (ft_isupper(c) || ft_islow(c))

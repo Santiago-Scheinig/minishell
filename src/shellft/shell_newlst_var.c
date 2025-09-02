@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   shell_newlst_var.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 19:58:56 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:08:41 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * COMMENT PENDING
+ */
 static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 {
 	char	*tmp;
@@ -47,6 +50,9 @@ static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 	return (new);
 }
 
+/**
+ * COMMENT PENDING
+ */
 t_var	*create_envp(const char *envp)
 {
 	t_var	*new;
@@ -67,6 +73,9 @@ t_var	*create_envp(const char *envp)
 	return (new);
 }
 
+/**
+ * COMMENT PENDING
+ */
 t_list	*shell_newlst_var(char **envp)
 {
 	t_var	*content;

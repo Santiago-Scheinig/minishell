@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 20:46:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:07:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static void	envar_tokenization(t_list *token_lst, t_body *minishell)
 }
 
 /**
+ * COMMENT UPDATE
  * Updates the WORD string mask to the new value of the declared enviromental 
  * variable if any, and expands it accordingly.
  * 
@@ -93,6 +94,7 @@ static int	envar_mask(t_token *word, char *value, int start, t_body *minishell)
 }
 
 /**
+ * COMMENT UPDATE
  * Finds the value of the declared enviromental variable if any, then expands 
  * it accordingly.
  * 

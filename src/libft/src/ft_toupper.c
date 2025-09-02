@@ -6,10 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 19:45:14 by sscheini          #+#    #+#             */
-/*   Updated: 2024/09/14 20:49:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:05:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * COMMENT PENDING
+ */
 int	ft_toupper(int c)
 {
 	if (c >= 'a' && c <= 'z')

@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   shell_lstclear.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/31 16:57:05 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:08:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "shellft.h"
 
+/**
+ * COMMENT PENDING
+ */
 void	shell_lstdelvar(t_list *list, void (*del)(void *))
 {
 	t_list	*tmp;

@@ -6,13 +6,17 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 16:44:05 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/19 16:48:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:06:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 # include "libft.h"
+
+/**
+ * COMMENT UPDATE PENDING
+ */
 
 /**
  * Creates and returns a CONST CHAR * that includes an hexadecimal base

@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtarr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 18:25:23 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 16:22:16 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:05:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * COMMENT PENDING
+ */
 char	**ft_strtarr(char **arr, char *str)
 {
 	char	**tmp;

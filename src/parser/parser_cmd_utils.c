@@ -6,13 +6,16 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 20:59:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:06:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "troubleshoot.h"
 
+/**
+ * COMMENT PENDING
+ */
 t_list	*cmd_rerr(t_list *aux_lst, t_cmd **new_cmd)
 {
 	t_token *aux_tkn;
@@ -36,6 +39,9 @@ t_list	*cmd_rerr(t_list *aux_lst, t_cmd **new_cmd)
 	return (aux_lst);
 }
 
+/**
+ * COMMENT PENDING
+ */
 int	cmd_argc(t_list *token_lst)
 {
 	t_token	*aux;
@@ -57,6 +63,9 @@ int	cmd_argc(t_list *token_lst)
 	return (count);
 }
 
+/**
+ * COMMENT PENDING
+ */
 int	edit_infile(t_token *next, t_cmd *new)
 {
 	if (new->infile && new->infile > 2)
@@ -83,6 +92,9 @@ int	edit_infile(t_token *next, t_cmd *new)
 	return (MSHELL_SUCCESS);
 }
 
+/**
+ * COMMENT PENDING
+ */
 int	edit_outfile(t_token *next, t_cmd *new, int open_flag)
 {
 	if (new->outfile && new->outfile > 2)
@@ -98,6 +110,9 @@ int	edit_outfile(t_token *next, t_cmd *new, int open_flag)
 	return (MSHELL_SUCCESS);
 }
 
+/**
+ * COMMENT PENDING
+ */
 int	edit_infile_to_heredoc(t_token *next, t_cmd *new)
 {
 	if (new->infile)

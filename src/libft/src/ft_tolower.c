@@ -3,13 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 19:46:45 by sscheini          #+#    #+#             */
-/*   Updated: 2024/11/25 07:31:23 by root             ###   ########.fr       */
+/*   Updated: 2025/09/02 21:05:46 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * COMMENT PENDING
+ */
 int	ft_tolower(int c)
 {
 	if (c >= 'A' && c <= 'Z')

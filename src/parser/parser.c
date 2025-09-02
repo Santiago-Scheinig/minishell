@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 20:25:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:23:34 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include "troubleshoot.h"
 #include "parser.h"
 
-/*This will likely have to be modified*/
-/*Should we print the new line here??*/
+/**
+ * COMMENT PENDING
+ */
 void	new_prompt(int signum)
 {
 	(void)signum;
@@ -26,6 +27,9 @@ void	new_prompt(int signum)
 	rl_redisplay();
 }
 
+/**
+ * COMMENT PENDING
+ */
 void	parser_input(t_body *minishell)
 {
 	if (minishell->interactive)
@@ -48,6 +52,7 @@ void	parser_input(t_body *minishell)
 }
 
 /**
+ * COMMENT UPDATE
  * Analizes user input, validates it's syntax and saves a list of commands
  * to execute on the minishell enviroment structure. The parsing is diveded
  * in 4 different steps.

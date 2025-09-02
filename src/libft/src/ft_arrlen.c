@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_arrlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 18:25:37 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 18:42:58 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 21:03:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * COMMENT PENDING
+ */
 int	ft_arrlen(const void **arr)
 {
 	int			i;
