@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 16:30:18 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 19:49:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	word_count(const char *s)
 	if (s[0] == 0)
 		return (0);
 	type = get_token_type((char *) &s[0]);
-	if (!type && s[0] != ' ')
+	if (!type && s[0] != ' ' && s[0] != '\n')
 		count++;
 	tmp = shell_word_strchr(&s[0]);
 	type = get_token_type((char *) &tmp[0]);

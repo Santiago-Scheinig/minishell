@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:22:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/25 19:44:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 19:48:35 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	is_divisor(char *str)
 
 int	get_token_type(char *str)
 {
-	if (!str)
+	if (!str || !str[0])
 		return (END);
 	if (!ft_strncmp(str, "|", 1))
 		return (PIPE);

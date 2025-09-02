@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:07:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 20:59:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ int	edit_infile(t_token *next, t_cmd *new)
 	if (access(next->str, R_OK | F_OK))
 	{
 		new->infile = -1;
-		return(/*printerr()*/);
+		return(redirend(next->str, MSHELL_FAILURE));
 	}
 	else
 	{
 		new->infile = open(next->str, O_RDONLY);
 		if (new->infile < 0)
-			return(/*printerr()*/);
+			return(redirend(next->str, MSHELL_FAILURE));
 		if (new->heredoc[0] >= 0)
 			close(new->heredoc[0]);
 		if (new->heredoc[1] >= 0)
@@ -89,10 +89,10 @@ int	edit_outfile(t_token *next, t_cmd *new, int open_flag)
 		close(new->outfile);
 	if (!access(next->str, F_OK))
 		if (access(next->str, W_OK))
-			return(/*printerr()*/);
+			return(redirend(next->str, MSHELL_FAILURE));
 	new->outfile = open(next->str, O_WRONLY | O_CREAT | open_flag, 0644);
 	if (new->outfile < 0)
-		return(/*printerr()*/);
+		return(redirend(next->str, MSHELL_FAILURE));
 	free(next->str);
 	next->str = NULL;
 	return (MSHELL_SUCCESS);
@@ -110,7 +110,7 @@ int	edit_infile_to_heredoc(t_token *next, t_cmd *new)
 	if (new->heredoc[1] >= 0)
 		close(new->heredoc[1]);
 	if (pipe(new->heredoc) < 0)
-		return (/*printerr()*/);
+		return(redirend(NULL, MSHELL_FAILURE));
 	if (new->limitator)
 		free(new->limitator);
 	new->limitator = next->str;

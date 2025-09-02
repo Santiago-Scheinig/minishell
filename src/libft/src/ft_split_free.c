@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 19:58:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 21:23:45 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 19:54:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ void	*ft_split_free(char **split)
 	if (split)
 		while (split[++i])
 			free(split[i]);
+	free(split);
 	return (NULL);
 }

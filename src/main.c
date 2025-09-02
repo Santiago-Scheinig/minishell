@@ -25,23 +25,6 @@
  */
 volatile sig_atomic_t	g_signal_received = 0;
 
-static int	sigusr(void)
-{
-	struct sigaction	sa_usr;
-
-	sa_usr.sa_handler = new_prompt;
-	sigemptyset(&sa_usr.sa_mask);
-	sigaddset(&sa_usr.sa_mask, SIGQUIT);//whats this?
-	sigaddset(&sa_usr.sa_mask, SIGINT);//whats this?
-	sa_usr.sa_flags = SA_RESTART;//This is blank and im not sure why...
-	if (sigaction(SIGUSR1, &sa_usr, NULL) == -1)
-	{
-		perror("Error setting SIGINT handler");
-		return (MSHELL_FAILURE);
-	}
-	return (MSHELL_SUCCESS);
-}
-
 /**
  * Interpects the SIGINT signal and executes a signal handler.
  * 
@@ -111,14 +94,11 @@ static void	initialization(t_body *minishell, const char **envp)
 		new_term.c_lflag |= ECHOCTL;
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &new_term))
 			forcend(minishell, "tcsetattr", MSHELL_FATAL);
-		if (sigquit() || sigint() || sigusr())
+		if (sigquit() || sigint())
 			forcend(minishell, "sigaction", MSHELL_FAILURE);
 	}
-	else
-	{
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-	}
+	else if (signal(SIGINT, SIG_IGN) || signal(SIGQUIT, SIG_IGN))
+			forcend(minishell, "signal", MSHELL_FAILURE);
 	minishell->envp = shell_envpdup(envp);
 	if (!minishell->envp)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
@@ -131,8 +111,6 @@ static void	initialization(t_body *minishell, const char **envp)
 int	main(int argc, char **argv, const char **envp)
 {
 	t_body	minishell;
-	t_list	*lst;
-	t_cmd	*cmd;
 
 	if (argc > 1 || argv[1])
 		return (forcend(&minishell, argv[1], MSHELL_CMD_INVEXE));
@@ -140,12 +118,19 @@ int	main(int argc, char **argv, const char **envp)
 	while (1)
 	{
 		//if global signal exists, wait until all signals are resolved, then continue.
-		parser(&minishell);
-		cmd = (t_cmd *)minishell.cmd_lst->content;
+		if (parser(&minishell))
+			continue;
+		//i think this should be before a fork() that way the user has until the creation of 
+		//the first fork() to cancel with ctrl+c, after that is waitpid who intercepts the signal
+		if (g_signal_received)
+		{
+			g_signal_received = 0;
+			continue;
+		}
+/* 		cmd = (t_cmd *)minishell.cmd_lst->content;
 		lst = (t_list *)minishell.envp_lst;
-		built_in(&minishell, cmd->argv[0], cmd->argv, lst);
-		//if global signal exists, wait until all signals are resolved, then continue.
-		//execmd(&minishell);//after each waitpid, if global siignal exists, end the execmd.
+		built_in(&minishell, cmd->argv[0], cmd->argv, lst); */
+		//execmd(&minishell);after each waitpid, if global signal exists, end the execmd.
 	}
 	return (0);
 }

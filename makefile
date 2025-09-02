@@ -20,7 +20,7 @@ SRC			=	$(SRC_DIR)/main.c							\
 				$(SRC_DIR)/parser/parser_cmd.c				\
 				$(SRC_DIR)/parser/parser_envar.c			\
 				$(SRC_DIR)/parser/parser_token.c			\
-				$(SRC_DIR)/parser/parser_cmd_redir.c		\
+				$(SRC_DIR)/parser/parser_cmd_utils.c		\
 				$(SRC_DIR)/parser/parser_envar_utils.c		\
 				$(SRC_DIR)/shellft/shell_split.c			\
 				$(SRC_DIR)/shellft/shell_envdup.c			\
@@ -28,7 +28,6 @@ SRC			=	$(SRC_DIR)/main.c							\
 				$(SRC_DIR)/shellft/shell_strchr.c			\
 				$(SRC_DIR)/shellft/shell_prompt.c			\
 				$(SRC_DIR)/shellft/shell_getenv.c			\
-				$(SRC_DIR)/shellft/shell_strtrim.c			\
 				$(SRC_DIR)/shellft/shell_sortenv.c			\
 				$(SRC_DIR)/shellft/shell_lstclear.c			\
 				$(SRC_DIR)/shellft/shell_newlst_var.c		\

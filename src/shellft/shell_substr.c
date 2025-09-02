@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 16:34:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:53:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static void	iq_movedown(char *dst_tmp, char *src_tmp, char *src_mask, size_t len
  * checks if the memory position of src is close to dest to avoid loosing
  * information during the movement.
  */
-static void	*shell_memmove(void *dest, void *src, void *mask, size_t n)
+void	*shell_memmove(void *dest, void *src, void *mask, size_t n)
 {
 	unsigned char	*dst_tmp;
 	unsigned char	*src_tmp;

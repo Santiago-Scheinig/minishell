@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   troubleshoot.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:03:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:36:12 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 20:55:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define TROUBLESHOOT_H
 
 # include "minishell.h"
+# include <errno.h>
 
 typedef enum e_error
 {
@@ -30,6 +31,8 @@ void	cleanup(t_body *minishell);
 
 int		forcend(t_body *minishell, char *function, t_error number);
 
-int		sigend(t_error number);
+int		redirend(char *argv, t_error number);
+
+int		sigend(const char *next, t_error number, t_body *minishell);
 
 #endif

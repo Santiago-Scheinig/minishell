@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_envar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:30:55 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 20:46:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ static int	envar_expansion(t_token *word, int start, t_body *minishell)
 	env_pathname = envar_pathname(&(word->str[start + 1]));
 	if (!env_pathname)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
-	env_value = getenv(env_pathname);//i need to change this to isma function, after i solve all that shit
+	env_value = shell_getenv(minishell->envp_lst, env_pathname);
 	free(env_pathname);
 	if (!env_value)
 	{
@@ -163,7 +163,7 @@ static void	envar_syntax(t_list *token_lst, t_body *minishell)
 	{
 		while (word->str[i] == '$' && word->mask[i] != 'S')
 		{
-			if (word->str[i + 1] && !ft_isalpha(word->str[i + 1]
+			if (!word->str[i + 1] || (!ft_isalpha(word->str[i + 1])
 			&& word->str[i + 1] != '_' && word->str[i + 1] != '?'))
 			{
 				i++;

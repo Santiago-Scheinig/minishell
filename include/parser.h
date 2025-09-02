@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 18:46:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:53:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,11 @@ char	*exp_mask(t_token *word, int start, int var_len, int value_len);
  * on behalf of the '$' sign.
  */
 int	envar_len(char *env_var);
+
+int	edit_infile(t_token *next, t_cmd *new);
+int	edit_outfile(t_token *next, t_cmd *new, int open_flag);
+int	edit_infile_to_heredoc(t_token *next, t_cmd *new);
+void	*shell_memmove(void *dest, void *src, void *mask, size_t n);
 
 /**
  * Allocates and returns a clean STRING with only the enviromental variable

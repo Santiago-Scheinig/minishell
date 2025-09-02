@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_prompt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/29 17:26:55 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 20:09:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ static char	*path_cwd(char *user)
  * father function returns the error number. Or it's its own prompt.c file we can save in 
  * management. But again, if minishell is needed for this, then its probably better if it's
  * not here.
+ * 
+ * NO MINISHELL AS ARGUMENT BUT CHAR ** ENVP!!
  */
 int	shell_prompt(t_body *minishell)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shellft.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/31 17:17:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 20:10:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ char	*shell_substr(char *s, char *mask, unsigned int start, size_t len);
  * to be inside of single and double quotes (as long they open and close).
  */
 const char	*shell_word_strchr(const char *s);
+
+char	*shell_getenv(t_list *lst_var, const char *name);
 
 /**
  * Searches for the first ocurrance of an operator on a STRING.

@@ -48,6 +48,7 @@ typedef struct s_body
 	struct termios	orig_term;
 	int				shell_errno;
 	int				interactive;
+	int				line;
 	char			**envp;//A copy of the original envp + post modifications
 	char			*input;//needed for history?
 	char			*prompt;//A char * promt, not really needed to save.
@@ -58,7 +59,7 @@ typedef struct s_body
 
 void	new_prompt(int signum);
 
-void	parser(t_body *minishell);
+int		parser(t_body *minishell);
 
 int		execmd(t_body *minishell);
 

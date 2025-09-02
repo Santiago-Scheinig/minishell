@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:34:45 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 19:49:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,16 @@ static int	verify_syntax(t_body *minishell)
 		if (token_aux->type == REDIR_IN || token_aux->type == REDIR_OUT
 			|| token_aux->type == REDIR_APPEND || token_aux->type == HEREDOC)
 			if (token_next->type != WORD)
-				return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
+				return (sigend(token_next->str, MSHELL_MISSUSE, minishell));
 		if (token_aux->type == PIPE && token_next->type == PIPE)
-			return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
+			return (sigend(token_next->str, MSHELL_MISSUSE, minishell));
 		if (!i && token_aux->type == PIPE)
-			return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
+			return (sigend(token_aux->str, MSHELL_MISSUSE, minishell));
 		lst_aux = lst_aux->next;
 		i++;
 	}
 	if (((t_token *) lst_aux->content)->type != WORD)
-		return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
+		return (sigend(NULL, MSHELL_MISSUSE, minishell));
 	return (0);
 }
 

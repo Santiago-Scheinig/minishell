@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/31 17:23:04 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/02 20:25:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,12 @@ void	parser_input(t_body *minishell)
 		minishell->input = readline(minishell->prompt);
 	}
 	else
-		minishell->input = get_next_line(STDIN_FILENO);
-	if (minishell->input == NULL)
 	{
-		shell_lstclear(&minishell->envp_lst, shell_lstdelvar);
-		ft_split_free(minishell->envp);
-		if (minishell->interactive)
-			rl_clear_history();
-		forcend(minishell, NULL, MSHELL_SUCCESS);
+		minishell->input = get_next_line(STDIN_FILENO);
+		minishell->line++;
 	}
+	if (!minishell->input)
+		forcend(minishell, NULL, MSHELL_SUCCESS);
 	else if (!minishell->input[0])
 		parser_input(minishell);
 	else if (minishell->interactive && minishell->input[0] != '\0')
@@ -65,19 +62,24 @@ void	parser_input(t_body *minishell)
  * @note If any error occurs during the parsing, the function will end with
  * a sigend([errno]) call.
  */
-void	parser(t_body *minishell)
+int	parser(t_body *minishell)
 {
 	char	**split;
 
-	cleanup(minishell);//cleanup comes first. Which the first time wont do shit.
+	cleanup(minishell);
 	parser_input(minishell);
 	split = shell_split(minishell->input);
 	if (!split)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	parser_token(minishell, split);
-	//verify global variable cuz of SIGUSR1, return if true!
+	if (g_signal_received)
+	{
+		g_signal_received = 0;
+		return (MSHELL_MISSUSE);
+	}
 	parser_envar(minishell);
 	parser_cmds(minishell);
 	shell_lstclear(&(minishell->token_lst), shell_lstdeltkn);
 	minishell->token_lst = NULL;
+	return (MSHELL_SUCCESS);
 }
