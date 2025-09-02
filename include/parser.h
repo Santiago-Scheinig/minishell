@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 19:10:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:46:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,7 @@ int	envar_len(char *env_var);
  * of the enviromental variable.
  */
 char	*envar_pathname(char *env_var);
+
+void	cmd_redirupd(t_token *aux, t_token *next, t_cmd *new);
 
 #endif

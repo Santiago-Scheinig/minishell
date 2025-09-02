@@ -3,93 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   shell_sortenv.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/25 22:15:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/31 19:44:43 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bicmd.h"
 
-void	print_env(t_env *env_lst)
+void	print_env(char **envp)
 {
-	t_env	*current;
+	int	i;
+
+	i = 0;
+	while (envp[i])
+		ft_printf("\"%s\"\n", envp[i++]);
+}
+
+void	print_export(t_list *env_lst)
+{
+	t_list	*current;
+	t_var	*tmp;
 
 	current = env_lst;
 	while (current)
 	{
-		if (current->name && current->exported)
+		tmp = (t_var *)current->content;
+		if (tmp->name && tmp->exported)
 		{
-			printf("%s", current->name);
-			if (current->value)
-				printf("=\"%s\"", current->value);
-			printf("\n");
+			ft_printf("declare -x %s", tmp->name);
+			if (tmp->value)
+				ft_printf("\"%s\"", tmp->value);
+			ft_printf("\n");
 		}
-		current = current->current_next;
+		current = current->next;
 	}
 }
 
-void	print_export(t_env *env_lst)
+static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next)
 {
-	t_env	*current;
-
-	current = env_lst;
-	while (current)
-	{
-		if (current->name && current->exported)
-		{
-			printf("declare -x %s", current->name);
-			if (current->value)
-				printf("=\"%s\"", current->value);
-			printf("\n");
-		}
-		current = current->current_next;
-	}
+	crnt->next = next->next;
+	next->next = crnt;
+	if (prev)
+		prev->next = next;
+	else
+		*head = next;
+	if (!prev)
+		prev = *head;
+	else
+		prev = prev->next;
+	return (head);
 }
 
-static void	swap_env(t_env *a, t_env *b)
+void	sortenv(t_list **head)
 {
-	char	*tmp_name;
-	char	*tmp_value;
-	int		tmp_exported;
-
-	tmp_name = a->name;
-	tmp_value = a->value;
-	tmp_exported = a->exported;
-	a->name = b->name;
-	a->value = b->value;
-	a->exported = b->exported;
-	b->name = tmp_name;
-	b->value = tmp_value;
-	b->exported = tmp_exported;
-}
-
-/**
- * I really dont like ur special strucure for a double linked list, but this looks great!
- * I do think T_ENV shouldn't be the name, since its confusing, cuz i ENV is undersand
- * to be enviroment, and this is a list... a modified one. but a list nontheless.
- */
-void	sortenv(t_env *head)
-{
-	t_env	*current;
+	t_list	*current;
+	t_list	*prev;
+	t_var	*nxt;
+	t_var	*tmp;
 	int		sorted;
-	int		len;
 
 	sorted = 0;
 	while (!sorted)
 	{
+		prev = NULL;
 		sorted = 1;
-		current = head;
-		while (current->current_next)
+		current = *head;
+		while (current && current->next)
 		{
-			len = ft_strlen(current->name) + 1;
-			if (ft_strncmp(current->name, current->current_next->name, len) > 0)
+			tmp = (t_var *)current->content;
+			nxt = (t_var *)current->next->content;
+			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name) + 1) > 0)
 			{
-				swap_env(current, current->current_next);
+				head = swap_env(head, prev, current, current->next);
 				sorted = 0;
 			}
-			current = current->current_next;
+			prev = current;
+			current = current->next;
 		}
 	}
 }

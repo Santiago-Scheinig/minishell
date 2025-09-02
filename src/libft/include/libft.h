@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/14 21:31:00 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 18:24:11 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,6 +391,12 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
  * @param split The ARRAY of STRINGS to free.
  */
 void	*ft_split_free(char **split);
+
+void	*ft_realloc(void *ptr, size_t new_size, size_t old_size);
+
+int		ft_arrlen(const void **arr);
+
+char	**ft_strtarr(char **arr, char *str);
 
 /*--------------------------------------------------------------------------*/
 /*----------------------------------S_LIST----------------------------------*/

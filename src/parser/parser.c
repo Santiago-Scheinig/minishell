@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/28 20:06:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:23:04 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,19 @@ void	new_prompt(int signum)
 
 void	parser_input(t_body *minishell)
 {
-	char	*prompt;
-
 	if (minishell->interactive)
 	{
-		//prompt = shell_prompt(minishell->envp);
-		//if (!prompt)
-		//	forcend(minishell, "malloc", MSHELL_FAILURE);
-		if (shell_prompt(minishell))//shell_prompt wont receive minishell anymore, just a char **envp that uses to get the expected prompt
+		if (!shell_prompt(minishell))
 			forcend(minishell, "malloc", MSHELL_FAILURE);
-		minishell->input = readline(minishell->prompt);//minishell->input = readline(prompt);
-		//free(prompt);
+		minishell->input = readline(minishell->prompt);
 	}
 	else
 		minishell->input = get_next_line(STDIN_FILENO);
 	if (minishell->input == NULL)
 	{
-		free_env_list(minishell->lst_export);
-		free_env_list(minishell->lst_env);
-		if (minishell->prompt)
+		shell_lstclear(&minishell->envp_lst, shell_lstdelvar);
+		ft_split_free(minishell->envp);
+		if (minishell->interactive)
 			rl_clear_history();
 		forcend(minishell, NULL, MSHELL_SUCCESS);
 	}
@@ -73,7 +67,6 @@ void	parser_input(t_body *minishell)
  */
 void	parser(t_body *minishell)
 {
-	char	*input;
 	char	**split;
 
 	cleanup(minishell);//cleanup comes first. Which the first time wont do shit.

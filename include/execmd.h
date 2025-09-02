@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execmd.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 18:24:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:24:42 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include <errno.h>//i should remove it!
 # include "minishell.h"
 # include "libft.h"
 

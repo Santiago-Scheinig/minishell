@@ -6,26 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 17:44:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:46:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "troubleshoot.h"
-
-void	free_env_list(t_env *env)
-{
-	t_env	*tmp;
-
-	while (env)
-	{
-		tmp = env;
-		env = env->current_next;
-		free(tmp->name);
-		free(tmp->value);
-		free(tmp);
-	}
-}
 
 void	cleanup(t_body *minishell)
 {
@@ -33,16 +19,6 @@ void	cleanup(t_body *minishell)
 	{
 		free(minishell->input);
 		minishell->input = NULL;
-	}
-	if (minishell->envp)
-	{
-		ft_split_free(minishell->envp);
-		minishell->envp = NULL;
-	}
-	if (minishell->lst_env)
-	{
-		shell_lstclear(&(minishell->lst_env), shell_lstdelenv);
-		minishell->lst_env = NULL;
 	}
 	if (minishell->token_lst)
 	{
@@ -72,7 +48,7 @@ int	forcend(t_body *minishell, char *function, t_error number)
 {
 	cleanup(minishell);
 	if (number == MSHELL_SUCCESS && minishell->interactive)
-		//bi_exit(MSHELL_SUCCESS);
+		exit(MSHELL_SUCCESS);
 	if (number == MSHELL_FAILURE && function)
 		printf("\n");
 	if (number == MSHELL_CMD_NOTEXE && function)

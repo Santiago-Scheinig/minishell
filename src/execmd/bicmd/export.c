@@ -3,146 +3,126 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/25 22:23:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:12:47 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bicmd.h"
 
-static t_env	*copy_envp(t_env *new, const char *envp, char *sign, int i)
+static int	is_valid_identifier(char *arg)
 {
-	char	*tmp;
-
-	tmp = malloc((i + 1) * sizeof(char));
-	if (!tmp)
+	int i = 0;
+	
+	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
+		return (built_end("export", "Not valid identifier", arg, '\0'));
+	while (arg[i] && arg[i] != '=')
 	{
-		free(new);
-		return (NULL);
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (built_end("export", "Not valid identifier", arg, '\0'));
+		i++;
 	}
-	ft_memcpy(tmp, envp, i);
-	tmp[i] = '\0';
-	new->name = ft_strdup(tmp);
-	free(tmp);
-	if (!new->name)
-	{
-		free(new);
-		return (NULL);
-	}
-	if (!sign)
-		return (new);
-	new->value = ft_strdup(sign + 1);
-	if (!new->value)
-	{
-		free(new->name);
-		free(new);
-		return (NULL);
-	}
-	return (new);
+	return (1);
 }
 
-static t_env	*create_envp(const char *envp, int *error)
+static int	ft_isal_num(char **args, t_list *head)
 {
-	t_env	*new;
-	char	*sign;
-	int		i;
+	int	i;
+	int	j;
 
 	i = 0;
-	sign = ft_strchr(envp, '=');
-	new = malloc(sizeof(t_env));
-	if (!new)
+	if (!args[0])
 	{
-		error[0] = 1;
-		return (NULL);
+		print_export(head);
+		return (2);	
 	}
-	while (envp[i] && envp[i] != '=')
-		i++;
-	new = copy_envp(new, envp, sign, i);
-	if (!new)
+	if (args[0][0] == '-' && args[0][1])
+		return (built_end("export", "Invalid flags", "name[=value ...]",
+		args[0][1]));
+	j = -1;
+	while (args[++j])
 	{
-		error[0] = 1;
-		return (NULL);
+		if (!is_valid_identifier(args[j]) && args[j][i] != '_')
+			return (1);
 	}
-	new->exported = 1;
-	new->current_next = NULL;
-	return (new);
+	return (0);
 }
 
-t_env	*init_envp(const char **envp)
+static int	change_value_env(t_var *aux, char **envp, char *new_env)
 {
-	t_env	*new_node;
-	t_env	*current;
-	t_env	*head;
-	int		error;
-	int		i;
+	char	*sign;
+	size_t	i;
 
-	new_node = NULL;
-	current = NULL;
-	head = NULL;
-	error = 0;
-	i = -1;
-	while (envp[++i])
+	sign = ft_strchr(new_env, '=');
+	i = 0;
+	while (new_env[i] && new_env[i] != '=')
+		i++;
+	if (sign && i == ft_strlen(aux->name))
 	{
-		new_node = create_envp(envp[i], &error);
-		if (error)
-			return (NULL);
+		if (aux->value)
+			free(aux->value);
+		free(envp[0]);
+		aux->value = ft_strdup(sign + 1);
+		if (!aux->value)
+			return (built_end("export", "malloc", NULL, '\0'));
+		envp[0] = ft_strdup(new_env);
+		if (!envp)
+			return (built_end("export", "malloc", NULL, '\0'));
+	}
+	else
+		return (0);
+	ft_remove_arr(envp, 0);
+	return (0);
+}
+
+static t_list *new_envp(char **new_env, t_list *head)
+{
+	t_list	*current;
+	t_list	*next;
+	t_var	*new_node;
+	int			i;
+
+	i = -1;
+	while (new_env[++i])
+	{
+		new_node = create_envp(new_env[i]);
 		if (!new_node)
-			continue ;
-		if (!head)
-			head = new_node;
-		else
-			current->current_next = new_node;
-		current = new_node;
+			return (NULL);
+		next = ft_lstnew(new_node);
+		current = head;
+		while (current->next)
+			current = current->next;
+		current->next = next;
 	}
 	return (head);
 }
 
-static t_env	*change_value_env(t_env *current, char *new_env)
+
+t_list	*b_export(char **envp, t_list *head, char **args)
 {
-	char	*sign;
+	t_list	*tmp;
+	t_var	*aux;
+	int		i;
+	int		j;
 
-	sign = ft_strchr(new_env, '=');
-	if (!sign)
-		return (NULL);
-	free(current->value);
-	current->value = ft_strdup(sign + 1);
-	if (!current->value)
-		return (NULL);
-	return (current);
-}
-
-/**
- * Im guessing this is a work in progress, hope this comment isn't in your way.
- * If shell_sortenv.c is supposed to help here, i think you should move it as 
- * export_utils.c not shell_sortenv.c; Cuz all i read in shell_sortenv looked
- * more like a help for this, than specific utility functions.
- */
-t_env	*export(t_env *head, char *new_env)
-{
-	t_env	*new_node;
-	t_env	*current;
-	int		error;
-
-	error = 0;
-	current = head;
-	while (current)
+	tmp = head;
+	j = 0;
+	if (ft_isal_num(args, head))
+		return (head);
+	while (tmp)
 	{
-		if (!ft_strncmp(current->name, new_env, ft_strlen(current->name) + 1))
-		{
-			if (!change_value_env(current, new_env))
-				return (NULL);
-			return (head);
-		}
-		current = current->current_next;
+		i = -1;
+		aux = (t_var *)tmp->content;
+		while (args[++i])
+			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
+				if (change_value_env(aux, envp, args[i]) == 1)
+					return (NULL);
+		tmp = tmp->next;
 	}
-	new_node = create_envp(new_env, &error);
-	if (!new_node)
+	envp = shell_realloc(args, envp);
+	if (!new_envp(args, head) || !envp)
 		return (NULL);
-	current = head;
-	while (current->current_next)
-		current = current->current_next;
-	current->current_next = new_node;
 	return (head);
 }

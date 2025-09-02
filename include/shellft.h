@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shellft.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 16:55:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/31 17:17:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,5 +138,13 @@ int		shell_addlst_token(t_list *token_list, char *str, int start);
  * @note - Cuts every match of 'set' from the end of 's1' until a non match.
  */
 char	*shell_strtrim(char const *s1, char const *mask, char const *set);
+
+void	shell_lstdelvar(t_list *list, void (*del)(void *));
+
+char	**shell_envpdup(const char **envp);
+
+t_list	*shell_newlst_var(char **envp);
+
+void	sortenv(t_list **head);
 
 #endif

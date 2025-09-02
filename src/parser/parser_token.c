@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 03:10:00 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/08/29 19:34:45 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static int	verify_syntax(t_body *minishell)
 	}
 	if (((t_token *) lst_aux->content)->type != WORD)
 		return (sigend(MSHELL_MISSUSE));//This signals SIGUSR, which sets global and after parsing tells the loop to restart.
+	return (0);
 }
 
 /**

@@ -3,37 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   bicmd.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/25 19:39:48 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/31 20:13:20 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BICMD_H
 # define BICMD_H
+# include "minishell.h"
 # include <unistd.h>
 # include <limits.h>
-# include "minishell.h"
 
-void	free_env_list(t_env *env);
+void	free_env_list(t_var *env);
 
-t_env	*built_export(t_body *minishell, char **args, char **envp);
+t_list	*b_export(char **envp, t_list *head, char **args);
 
-t_env	*add_env(t_env *head, char *new_env);
+t_var	*add_env(t_var *head, char *new_env);
 
-char	*shell_getenv(t_body *minishell, const char *name);
+char	*shell_getenv(t_list *lst_var, const char *name);
 
-void	print_export(t_env *env_lst);
+void	print_export(t_list *env_lst);
 
-void	print_env(t_env *env_lst);
+void	print_env(char **envp);
 
-void	built_echo(char **args);
+char	**shell_realloc(char **args, char **envp);
 
-void	sortenv(t_env *head);
+void	echo(char **args);
 
-int		built_cd(t_body *minishell, char **args);
+int		cd(char **args, t_list *envp);
 
-int		built_pwd(char **args);
+int		pwd(char **args);
+
+char	**unset(char **envp, t_list *env_lst, char **name);
+
+t_var	*create_envp(const char *envp);
+
+int	built_end(char *name, char *type, char *flags, char error);
+
+char	*built_in(t_body *minishell, char *pathname, char **args, t_list *lst);
+
+char	**ft_remove_arr(char **arr, size_t index);
 
 #endif

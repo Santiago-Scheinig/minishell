@@ -20,20 +20,19 @@
 # include <stdio.h>
 # include "shellft.h"
 # include "libft.h"
+# include <errno.h>
 
 extern volatile sig_atomic_t	g_signal_received;
 
 /*Id like to change this to a envp structure, inside a t_list structure.*/
 /*If the only functions that are able to edit this, are shell functions,*/
 /*Then we put this inside of shellft.h instead, more clean.				*/
-typedef struct s_env
+typedef struct t_var
 {
-	struct s_env	*current_next;
-	struct s_env	*sort_next;
-	char			*value;
-	char			*name;
-	int				exported;
-}	t_env;
+	char				*value;
+	char				*name;
+	int					exported;
+}	t_var;
 
 /**
  * Struct used to save the enviroment variables of the minishell.
@@ -47,17 +46,14 @@ typedef struct s_env
 typedef struct s_body
 {
 	struct termios	orig_term;
-	int				errno;
+	int				shell_errno;
 	int				interactive;
 	char			**envp;//A copy of the original envp + post modifications
 	char			*input;//needed for history?
 	char			*prompt;//A char * promt, not really needed to save.
 	t_list			*cmd_lst;
-	///t_list		*envp_lst;
+	t_list			*envp_lst;
 	t_list			*token_lst;
-
-	t_env			*lst_export;//lets change it to one list
-	t_env			*lst_env;//lets change it to one list
 }	t_body;
 
 void	new_prompt(int signum);
@@ -65,5 +61,7 @@ void	new_prompt(int signum);
 void	parser(t_body *minishell);
 
 int		execmd(t_body *minishell);
+
+int		shell_prompt(t_body *minishell);
 
 #endif

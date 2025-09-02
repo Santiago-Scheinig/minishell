@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_prompt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/28 17:12:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/29 17:26:55 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,11 +143,6 @@ int	shell_prompt(t_body *minishell)
 		minishell->prompt = NULL;
 	}
 	user = getenv("USER");
-	if (!user)
-	{
-		perror("USER no define");//NO, this shouldnt end the minishell, just no user is printed on prommpt!
-		return (0);
-	}
 	path = path_cwd(user);
 	if (!path)
 		return (0);

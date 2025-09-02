@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_getenv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/25 22:07:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/08/31 13:47:01 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,22 @@
  * Shell functions shouldn't need T_BODY, just as the libft, it should work with only
  * with necesary information. Insead of the T_BODY, you should ask for the T_LST!
  */
-char	*shell_getenv(t_body *minishell, const char *name)
+char	*shell_getenv(t_list *lst_var, const char *name)
 {
-	t_env	*tmp;
+	t_list	*tmp;
+	t_var	*aux;
 
-	tmp = minishell->lst_env;
+	tmp = lst_var;
 	while (tmp)
 	{
-		if (!ft_strncmp(tmp->name, name, (ft_strlen(name) + 1)))
+		aux = (t_var *)tmp->content;
+		if (!ft_strncmp(aux->name, name, (ft_strlen(name) + 1)))
 		{
-			if (!tmp->value[0])
+			if (!aux->value[0])
 				return (NULL);
-			return (tmp->value);
+			return (aux->value);
 		}
-		tmp = tmp->current_next;
+		tmp = tmp->next;
 	}
 	return (NULL);
 }
