@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 18:53:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:55:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "minishell.h"
-# include "shellft.h"
+# include "execmd.h"
 
 /**
  * An enumeration list of token types.
@@ -41,17 +41,6 @@ typedef struct s_token
 	char			*mask;	//	The mask of each character inside the string.
 	t_token_type	type;	//	The type of token.
 }	t_token;
-
-typedef struct s_cmd
-{
-	int		built_in;
-	int		heredoc[2];
-	int		infile;
-	int		outfile;
-	char	*limitator;
-	char	*pathname;
-	char	**argv;
-}	t_cmd;
 
 /**
  * Divides user input into tokens catalogated as the enum structure 

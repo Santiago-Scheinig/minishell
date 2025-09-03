@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 20:10:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:56:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define SHELLFT_H
 
 # include "libft.h"
+# include "bicmd.h"
+# include "parser.h"
+
 
 int	is_divisor(char *str);
 

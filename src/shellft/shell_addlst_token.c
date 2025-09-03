@@ -6,12 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:29:19 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:08:16 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:56:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shellft.h"
-#include "parser.h"
 
 static int replace_token(t_token *word, char *str)
 {

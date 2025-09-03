@@ -6,13 +6,35 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:20:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:55:35 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "troubleshoot.h"
 #include "parser.h"
+
+/**
+ * COMMENT PENDING
+ */
+static int	cmd_argc(t_list *token_lst)
+{
+	t_token	*aux;
+	int		prev_type;
+	int		count;
+
+	count = 0;
+	prev_type = WORD;
+	while (token_lst)
+	{
+		aux = (t_token *) token_lst->content;
+		if (aux->type == PIPE)
+			break;
+		if (aux->type == WORD && prev_type == WORD)
+			count++;
+		prev_type = aux->type;
+		token_lst = token_lst->next;
+	}
+	return (count);
+}
 
 /**
  * COMMENT PENDING
@@ -26,7 +48,8 @@ static t_cmd	*cmd_init(t_list *token_lst)
 	if (!new_cmd)
 		return (NULL);
 	memset(new_cmd, 0, sizeof(t_cmd));
-	new_cmd->outfile = 1;
+	new_cmd->fd.exein = STDIN_FILENO;
+	new_cmd->fd.exeout = STDOUT_FILENO;
 	new_cmd->heredoc[0] = -1;
 	new_cmd->heredoc[1] = -1;
 	argc = cmd_argc(token_lst) + 1;
@@ -38,22 +61,6 @@ static t_cmd	*cmd_init(t_list *token_lst)
 	}
 	memset(new_cmd->argv, 0, (argc * sizeof(char *)));
 	return (new_cmd);
-}
-
-/**
- * COMMENT PENDING
- */
-static int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
-{
-	if (aux->type == REDIR_IN)
-		return(edit_infile(aux_next, new));
-	if (aux->type == REDIR_OUT)
-		return (edit_outfile(aux_next, new, O_TRUNC));
-	if (aux->type == REDIR_APPEND)
-		return (edit_outfile(aux_next, new, O_APPEND));
-	if (aux->type == HEREDOC)
-		return (edit_infile_to_heredoc(aux_next, new));
-	return (MSHELL_FAILURE);
 }
 
 /**
@@ -110,7 +117,7 @@ void	parser_cmds(t_body *minishell)
 		{
 			aux_lst = aux_lst->next;
 			if (cmdupd_redir(aux_tkn, (t_token *) aux_lst->content, new_cmd))
-				aux_lst = cmd_rerr(aux_lst, &new_cmd);
+				aux_lst = cmdupd_err(aux_lst, &new_cmd);
 		}
 		else if (aux_tkn->type == WORD)
 			cmdupd_argv(aux_tkn, new_cmd);

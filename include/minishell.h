@@ -12,27 +12,17 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include "troubleshoot.h"
+# include "shellft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
 # include <termios.h>
 # include <signal.h>
 # include <stdio.h>
-# include "shellft.h"
-# include "libft.h"
 # include <errno.h>
 
 extern volatile sig_atomic_t	g_signal_received;
-
-/*Id like to change this to a envp structure, inside a t_list structure.*/
-/*If the only functions that are able to edit this, are shell functions,*/
-/*Then we put this inside of shellft.h instead, more clean.				*/
-typedef struct t_var
-{
-	char				*value;
-	char				*name;
-	int					exported;
-}	t_var;
 
 /**
  * Struct used to save the enviroment variables of the minishell.
@@ -46,9 +36,10 @@ typedef struct t_var
 typedef struct s_body
 {
 	struct termios	orig_term;
-	int				shell_errno;
+	int				exit_status;
 	int				interactive;
 	int				line;
+	int				*childs_pid;
 	char			**envp;//A copy of the original envp + post modifications
 	char			*input;//needed for history?
 	char			*prompt;//A char * promt, not really needed to save.
@@ -63,6 +54,6 @@ int		parser(t_body *minishell);
 
 int		execmd(t_body *minishell);
 
-int		shell_prompt(t_body *minishell);
+// void	waitcmd(t_body *minishell);
 
 #endif

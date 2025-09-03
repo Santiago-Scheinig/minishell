@@ -6,142 +6,71 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 18:23:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:50:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "troubleshoot.h"
+#include "parser.h"
 #include "execmd.h"
 
-/**
- * Executes and pipes every command specified on the program enviroment,
- * but the first command will read from the STDIN instead of the infile 
- * (until the LIMITATOR is writen).
- * @param env The main enviroment pipex structure.
- * @param envp The main enviroment path.
- * @return Returns 0 on a successful execution and -1 in case of error.
- * @note Regardless of the return, it will wait for any child process
- * created during the command executions.
- */
-void	exe_heredoc(t_cmd *exe, t_body *minishell)
-{
-	int	i;
-	int	infd;
-	int	pipefd[2];
+// static void	exe_setup()
 
-	env->waitpid_list = ft_calloc((env->cmd_count), sizeof(pid_t));
-	if (!env->waitpid_list)
-		sigend(minishell, 1);
-	while (++i < env->cmd_count)
+static void	exe_child(t_cmd *exe, t_cmd *exe_next, char **path, t_body *minishell)
+{
+	static int	i;
+	int			pipefd[2];
+
+	if (fd_setexe(exe, exe_next, pipefd) || pipe(pipefd))
+		forcend(minishell, "pipe", MSHELL_FAILURE)//sets exein and exeout, if exein is heredoc, executes a reader, and saves heredoc[1] on exein. If exeout is default, it becomes replaced by pipefd[1]
+	minishell->waitpid_list[i] = fork();
+	if (!minishell->waitpid_list[i] && !(exe->fd.exein < 0))
 	{
-		if (!i)
-			infd = ft_read_to_limitator(limitator);
-		if (infd < 0 || pipe(pipefd) == -1)
-			return (ft_waitfor_childs(env, EXIT_FAILURE));
-		if (i == env->cmd_count - 1)
+		// setsigmask(); sets the list of signals saved on minishell to default.
+		if (dup2(exe->fd.exein, STDIN_FILENO) == -1
+			|| dup2(exe->fd.exeout, STDOUT_FILENO) == -1)
+			perror("Dup2");//childend();
+		if (exe_verification(exe, path))//verifies cmd before dup or execution
 		{
-			close(pipefd[1]);
-			pipefd[1] = open(env->outfile, O_CREAT | O_APPEND | O_WRONLY, 420);
-			if (pipefd[1] < 0)
-				return (ft_waitfor_childs(env, EXIT_FAILURE));
+			fd_endexe(exe, pipefd);
+			perror("msg");//childend();
 		}
-		infd = ft_do_fork(env, infd, pipefd, envp);
+		fd_endexe(exe, pipefd);//closes both exein and exeout.
+		if (execve(exe->pathname, exe->argv, path))
+			perror("Execve");//childend();
 	}
-	return (ft_waitfor_childs(env, EXIT_SUCCESS));
+	i++;
+	fd_endexe(exe, pipefd);//closes all the fds inside of the cmd and fd file structure that being infd outfd (only if they arent standard), heredoc[1] if valid, then fd.exein fd.exeout.
 }
 
-/**
- * Executes and pipes every command specified on the program enviroment.
- * @param env The main enviroment pipex structure.
- * @param envp The main enviroment path.
- * @return Returns 0 on a successful execution and -1 in case of error.
- * @note Regardless of the return, it will wait for any child process
- * created during the command executions.
- */
-int	exe_child(t_pipex *env, char **envp)
-{
-	int	i;
-	int	infd;
-	int	pipefd[2];
+// static void	exe_built()
 
-	i = -1;
-	infd = -1;
-	env->waitpid_list = ft_calloc((env->cmd_count), sizeof(pid_t));
-	if (!env->waitpid_list)
-		return (-1);
-	while (++i < env->cmd_count)
-	{
-		if (!i && env->infile)
-			infd = open(env->infile, O_RDONLY);
-		if (pipe(pipefd) == -1)
-			return (ft_waitfor_childs(env, EXIT_FAILURE));
-		if (i == env->cmd_count - 1)
-		{
-			close(pipefd[1]);
-			pipefd[1] = open(env->outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-			if (pipefd[1] < 0)
-				return (ft_waitfor_childs(env, EXIT_FAILURE));
-		}
-		infd = ft_do_fork(env, infd, pipefd, envp);
-	}
-	return (ft_waitfor_childs(env, EXIT_SUCCESS));
-}
-
-static char	*cmd_verification(t_cmd *exe, char **path_env)
-{
-	char	*pathname;
-
-	if (exe->infile < 0)
-	{
-		if (exe->infile != -2 || !exe->limitator)
-			return (NULL);
-		else if (exe->heredoc[0] < 0 || exe->heredoc[1] < 0)
-			return (NULL);
-	}
-	else if (exe->outfile < 0)
-		return (NULL);
-	pathname = cmd_pathname(exe->argv[0], path_env);
-	if (!pathname)
-	{
-		strerror(0);
-		return (NULL);
-	}
-	return (pathname);
-}
-
-/**
- * Pipex bonus works in the same way than the original, adding the following
- * extra functionalities:
- * 
- *	- Manage multiple pipes.
- *	- Accepts << and >> operators, when here\_doc is specified on the main
- *	argument as argv[1]; 
- */
 int	execmd(t_body *minishell)
 {
 	t_list	*cmd_lst;
 	t_cmd	*exe;
+	t_cmd	*exe_next;
 	char	**path;
 
 	cmd_lst = minishell->cmd_lst;
+	if (!cmd_lst->next)
+		//exe_built();//execute builtin only if it modifies the parent data
+	if (g_signal_received)
+	{
+		g_signal_received = 0;
+		return (MSHELL_SIG_HANDLR);
+	}
+	path = exe_setup(minishell);//returns path char ** and sets waitpid array inside minishell;
 	while (cmd_lst)
 	{
 		exe = (t_cmd *) cmd_lst->content;
-		path = ft_check_path(minishell->envp);
-		if (!path)
-			sigend(minishell, 1);
-		exe->pathname = cmd_verification(exe, minishell);
-		if(exe->pathname) 
-		{
-			if (exe->built_in == 1 && !minishell->cmd_lst->next)//means theres only one
-				//exe_bicmd();
-			else if (exe->infile == -2 && exe->limitator)
-				exe_heredoc(exe, minishell);
-			else
-				exe_child(env, envp);
-		}
+		exe_next = NULL;
+		if (cmd_lst->next)
+			exe_next = (t_cmd *) cmd_lst->next->content;
+		exe_child(exe, exe_next, path);
 		cmd_lst = cmd_lst->next;
 	}
-	ft_split_free(path);
-	ft_waitfor_childs(minishell, minishell->errno);
+	if (path)
+		ft_split_free(path);
 }

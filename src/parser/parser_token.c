@@ -6,12 +6,10 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:07:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:55:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "troubleshoot.h"
 #include "parser.h"
 
 /**

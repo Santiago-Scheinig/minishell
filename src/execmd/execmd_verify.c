@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_path_utils.c                                 :+:      :+:    :+:   */
+/*   execmd_verify.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/26 17:55:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:42:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,26 @@ static char	*ft_get_cmd_path(const char *cmd, const char **path)
 		free(cmd_pathname);
 	}
 	return (ft_strdup(""));
+}
+
+static char	*exe_verification(t_cmd *exe, char **path)
+{
+	char	*pathname;
+
+	if (exe->infile < 0)
+	{
+		if (exe->infile != -2 || !exe->limitator)
+			return (NULL);
+		else if (exe->heredoc[0] < 0 || exe->heredoc[1] < 0)
+			return (NULL);
+	}
+	else if (exe->outfile < 0)
+		return (NULL);
+	pathname = cmd_pathname(exe->argv[0], path_env);
+	if (!pathname)
+	{
+		strerror(0);
+		return (NULL);
+	}
+	return (pathname);
 }

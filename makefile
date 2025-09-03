@@ -15,7 +15,7 @@ LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
 SRC			=	$(SRC_DIR)/main.c							\
-				$(SRC_DIR)/troubleshoot.c					\
+				$(SRC_DIR)/troubleshoot/troublend.c			\
 				$(SRC_DIR)/parser/parser.c					\
 				$(SRC_DIR)/parser/parser_cmd.c				\
 				$(SRC_DIR)/parser/parser_envar.c			\
@@ -132,6 +132,7 @@ $(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
 	@mkdir -p $(OBJ_DIR)/parser
 	@mkdir -p $(OBJ_DIR)/execmd
 	@mkdir -p $(OBJ_DIR)/execmd/bicmd
+	@mkdir -p $(OBJ_DIR)/troubleshoot
 
 # Creates the regular library.												#
 $(LIB_REG): $(OBJ) | $(LIB_DIR)

@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "troubleshoot.h"
 #include "minishell.h"
-#include "parser.h"
-#include "bicmd.h"
 
 /**
  * Global flag use to track signals.
@@ -24,6 +21,10 @@
  * @note Declared volatile because it is modified from within a signal handler.
  */
 volatile sig_atomic_t	g_signal_received = 0;
+
+// Creates an array of signals so i can then set it with 
+// sigmask to ign on childs or non-interactive mode
+// static int	sigset(void)
 
 /**
  * Interpects the SIGINT signal and executes a signal handler.
@@ -112,25 +113,16 @@ int	main(int argc, char **argv, const char **envp)
 {
 	t_body	minishell;
 
-	if (argc > 1 || argv[1])
-		return (forcend(&minishell, argv[1], MSHELL_CMD_INVEXE));
 	initialization(&minishell, envp);
+	if (argc > 1 || argv[1])
+		return (forcend(&minishell, argv[1], MSHELL_CMD_NOTEXE));
 	while (1)
 	{
-		//if global signal exists, wait until all signals are resolved, then continue.
 		if (parser(&minishell))
 			continue;
-		//i think this should be before a fork() that way the user has until the creation of 
-		//the first fork() to cancel with ctrl+c, after that is waitpid who intercepts the signal
-		if (g_signal_received)
-		{
-			g_signal_received = 0;
-			continue;
-		}
-/* 		cmd = (t_cmd *)minishell.cmd_lst->content;
-		lst = (t_list *)minishell.envp_lst;
-		built_in(&minishell, cmd->argv[0], cmd->argv, lst); */
-		//execmd(&minishell);after each waitpid, if global signal exists, end the execmd.
+		// if (execmd(&minishell))
+		// 	continue;
+		//waitcmd(&minishell);
 	}
 	return (0);
 }

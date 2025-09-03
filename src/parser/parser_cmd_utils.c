@@ -6,17 +6,16 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:06:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:55:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "troubleshoot.h"
 
 /**
  * COMMENT PENDING
  */
-t_list	*cmd_rerr(t_list *aux_lst, t_cmd **new_cmd)
+t_list	*cmdupd_err(t_list *aux_lst, t_cmd **new_cmd)
 {
 	t_token *aux_tkn;
 
@@ -28,7 +27,7 @@ t_list	*cmd_rerr(t_list *aux_lst, t_cmd **new_cmd)
 		free((*new_cmd)->pathname);
 	if ((*new_cmd))
 		free((*new_cmd));
-	(*new_cmd) = NULL;
+	memset((*new_cmd), 0, sizeof(t_cmd));
 	while(aux_lst->next)
 	{
 		aux_tkn = (t_token *) aux_lst->next->content;
@@ -42,43 +41,19 @@ t_list	*cmd_rerr(t_list *aux_lst, t_cmd **new_cmd)
 /**
  * COMMENT PENDING
  */
-int	cmd_argc(t_list *token_lst)
+static int	cmdupd_infile(t_token *next, t_cmd *new)
 {
-	t_token	*aux;
-	int		prev_type;
-	int		count;
-
-	count = 0;
-	prev_type = WORD;
-	while (token_lst)
-	{
-		aux = (t_token *) token_lst->content;
-		if (aux->type == PIPE)
-			break;
-		if (aux->type == WORD && prev_type == WORD)
-			count++;
-		prev_type = aux->type;
-		token_lst = token_lst->next;
-	}
-	return (count);
-}
-
-/**
- * COMMENT PENDING
- */
-int	edit_infile(t_token *next, t_cmd *new)
-{
-	if (new->infile && new->infile > 2)
-		close(new->infile);
+	if (new->fd.exein && new->fd.exein > 2)
+		close(new->fd.exein);
 	if (access(next->str, R_OK | F_OK))
 	{
-		new->infile = -1;
+		new->fd.exein = -1;
 		return(redirend(next->str, MSHELL_FAILURE));
 	}
 	else
 	{
-		new->infile = open(next->str, O_RDONLY);
-		if (new->infile < 0)
+		new->fd.exein = open(next->str, O_RDONLY);
+		if (new->fd.exein < 0)
 			return(redirend(next->str, MSHELL_FAILURE));
 		if (new->heredoc[0] >= 0)
 			close(new->heredoc[0]);
@@ -95,15 +70,15 @@ int	edit_infile(t_token *next, t_cmd *new)
 /**
  * COMMENT PENDING
  */
-int	edit_outfile(t_token *next, t_cmd *new, int open_flag)
+static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
 {
-	if (new->outfile && new->outfile > 2)
-		close(new->outfile);
+	if (new->fd.exeout && new->fd.exeout > 2)
+		close(new->fd.exeout);
 	if (!access(next->str, F_OK))
 		if (access(next->str, W_OK))
 			return(redirend(next->str, MSHELL_FAILURE));
-	new->outfile = open(next->str, O_WRONLY | O_CREAT | open_flag, 0644);
-	if (new->outfile < 0)
+	new->fd.exeout = open(next->str, O_WRONLY | O_CREAT | open_flag, 0644);
+	if (new->fd.exeout < 0)
 		return(redirend(next->str, MSHELL_FAILURE));
 	free(next->str);
 	next->str = NULL;
@@ -113,12 +88,12 @@ int	edit_outfile(t_token *next, t_cmd *new, int open_flag)
 /**
  * COMMENT PENDING
  */
-int	edit_infile_to_heredoc(t_token *next, t_cmd *new)
+static int	cmdupd_heredoc(t_token *next, t_cmd *new)
 {
-	if (new->infile)
+	if (new->fd.exein)
 	{
-		close(new->infile);
-		new->infile = -2;
+		close(new->fd.exein);
+		new->fd.exein = -2;
 	}
 	if (new->heredoc[0] >= 0)
 		close(new->heredoc[0]);
@@ -131,4 +106,20 @@ int	edit_infile_to_heredoc(t_token *next, t_cmd *new)
 	new->limitator = next->str;
 	next->str = NULL;
 	return (MSHELL_SUCCESS);
+}
+
+/**
+ * COMMENT PENDING
+ */
+int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
+{
+	if (aux->type == REDIR_IN)
+		return(cmdupd_infile(aux_next, new));
+	if (aux->type == REDIR_OUT)
+		return (cmdupd_outfile(aux_next, new, O_TRUNC));
+	if (aux->type == REDIR_APPEND)
+		return (cmdupd_outfile(aux_next, new, O_APPEND));
+	if (aux->type == HEREDOC)
+		return (cmdupd_heredoc(aux_next, new));
+	return (MSHELL_FAILURE);
 }
