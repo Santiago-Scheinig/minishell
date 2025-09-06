@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 19:58:56 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/06 18:51:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 	}
 	if (!sign)
 	{
-		tmp[i - 1] = '\0';
 		new->value = NULL;
 		return (new);
 	}
@@ -60,7 +59,7 @@ t_var	*create_envp(const char *envp)
 		return (NULL);
 	while (envp[i] && envp[i] != '=')
 		i++;
-	new = copy(new, envp, sign, i + 1);
+	new = copy(new, envp, sign, i);
 	if (!new)
 		return (NULL);
 	new->exported = 1;

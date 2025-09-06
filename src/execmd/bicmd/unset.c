@@ -6,12 +6,11 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 20:13:05 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/06 20:19:26 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bicmd.h"
-
 
 static t_list *remove_lst(t_list *list)
 {
@@ -28,31 +27,66 @@ static t_list *remove_lst(t_list *list)
 	return (current);
 }
 
+static int	same_name_env(const char *env, const char *name)
+{
+	size_t i;
+
+	i = 0;
+	while (env[i] && env[i] != '=' && name[i])
+	{
+		if (env[i] != name[i])
+			return (0);
+		i++;
+	}
+	if (env[i] == '=' && name[i] == '\0')
+		return (1);
+	return (0);
+}
+
+static int	check_name(char **envp, char *name, t_list **lst)
+{
+	size_t	lst_len;
+	size_t	i;
+	size_t	j;
+	t_var	*tmp;
+	
+	i = 0;
+	tmp = (t_var *)(*lst)->content;
+	lst_len = ft_strlen(tmp->name);
+	if (!ft_strncmp(tmp->name, name, lst_len) && !tmp->name[lst_len])
+	{
+		j = 0;
+		while (envp[j])
+		{
+			if (same_name_env(envp[j], name))
+			{
+				envp = ft_remove_arr(envp, j);
+				break ;
+			}
+			j++;
+		}
+		(*lst) = remove_lst((*lst));
+		return (1);
+	}
+	return (0);
+}
+
 char	**unset(char **envp, t_list *env_lst, char **name)
 {
-	t_list	*current;
-	t_list	*prev;
-	t_var	*var;
+	t_list	**current;
 	size_t	i;
 
-	current = env_lst;
-	prev = NULL;
-	while (current)
+	i = 0;
+	while (name && name[i])
 	{
-		i = 0;
-		var = (t_var *)current->content;
-		while (name[i] && !ft_strncmp(var->name, name[i], ft_strlen(var->name) + 1))
+		current = &env_lst;
+		while (*current)
 		{
-			if (prev)
-				prev->next = current->next;
-			else
-				env_lst = current->next;
-			envp = ft_remove_arr(envp, i);
-			current = remove_lst(current);
-			return (envp);
+			if (check_name(&envp[0], name[i], current))
+				continue ;
+			current = &((*current)->next);
 		}
-		prev = current;
-		current = current->next;
+		i++;
 	}
 	return (envp);
 }

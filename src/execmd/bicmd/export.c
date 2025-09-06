@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 20:12:47 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/06 19:06:48 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	is_valid_identifier(char *arg)
 	return (1);
 }
 
-static int	ft_isal_num(char **args, t_list *head)
+static char	**ft_isal_num(char **args, char **envp, t_list *head)
 {
 	int	i;
 	int	j;
@@ -36,44 +36,39 @@ static int	ft_isal_num(char **args, t_list *head)
 	if (!args[0])
 	{
 		print_export(head);
-		return (2);	
+		return (NULL);	
 	}
 	if (args[0][0] == '-' && args[0][1])
-		return (built_end("export", "Invalid flags", "name[=value ...]",
-		args[0][1]));
+	{
+		built_end("export", "Invalid flags", "name[=value ...]", args[0][1]);
+		return (NULL);
+	}
 	j = -1;
 	while (args[++j])
 	{
 		if (!is_valid_identifier(args[j]) && args[j][i] != '_')
-			return (1);
+			args = ft_remove_arr(&args[0], j);
 	}
-	return (0);
+	args = export_no_dup(args);
+	args = export_no_equal(args, envp);
+	return (args);
 }
 
 static int	change_value_env(t_var *aux, char **envp, char *new_env)
 {
-	char	*sign;
 	size_t	i;
+	size_t	j;
+	char	*sign;
 
+	i = ft_strlen(aux->name);
+	j = 0;
+	while (new_env[j] && new_env[j] != '=')
+		j++;
+	if (j != i)
+		return (1);
 	sign = ft_strchr(new_env, '=');
-	i = 0;
-	while (new_env[i] && new_env[i] != '=')
-		i++;
-	if (sign && i == ft_strlen(aux->name))
-	{
-		if (aux->value)
-			free(aux->value);
-		free(envp[0]);
-		aux->value = ft_strdup(sign + 1);
-		if (!aux->value)
-			return (built_end("export", "malloc", NULL, '\0'));
-		envp[0] = ft_strdup(new_env);
-		if (!envp)
-			return (built_end("export", "malloc", NULL, '\0'));
-	}
-	else
-		return (0);
-	ft_remove_arr(envp, 0);
+	if (sign)
+		set_equal(aux, &envp[0], sign, new_env);
 	return (0);
 }
 
@@ -84,8 +79,8 @@ static t_list *new_envp(char **new_env, t_list *head)
 	t_var	*new_node;
 	int			i;
 
-	i = -1;
-	while (new_env[++i])
+	i = 0;
+	while (new_env[i])
 	{
 		new_node = create_envp(new_env[i]);
 		if (!new_node)
@@ -95,12 +90,13 @@ static t_list *new_envp(char **new_env, t_list *head)
 		while (current->next)
 			current = current->next;
 		current->next = next;
+		i++;
 	}
 	return (head);
 }
 
 
-t_list	*b_export(char **envp, t_list *head, char **args)
+t_list	*b_export(char ***envp, t_list *head, char **args)
 {
 	t_list	*tmp;
 	t_var	*aux;
@@ -109,7 +105,8 @@ t_list	*b_export(char **envp, t_list *head, char **args)
 
 	tmp = head;
 	j = 0;
-	if (ft_isal_num(args, head))
+	args = ft_isal_num(args, envp[0], head);
+	if (!args)
 		return (head);
 	while (tmp)
 	{
@@ -117,12 +114,12 @@ t_list	*b_export(char **envp, t_list *head, char **args)
 		aux = (t_var *)tmp->content;
 		while (args[++i])
 			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
-				if (change_value_env(aux, envp, args[i]) == 1)
-					return (NULL);
+				if (!change_value_env(aux, &envp[0][0], args[i]))
+					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}
-	envp = shell_realloc(args, envp);
-	if (!new_envp(args, head) || !envp)
+	envp[0] = shell_realloc(args, envp[0]);
+	if (!new_envp(args, head) || !envp[0])
 		return (NULL);
 	return (head);
 }

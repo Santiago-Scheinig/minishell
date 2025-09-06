@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 19:44:43 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/06 18:51:40 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_export(t_list *env_lst)
 		{
 			ft_printf("declare -x %s", tmp->name);
 			if (tmp->value)
-				ft_printf("\"%s\"", tmp->value);
+				ft_printf("=\"%s\"", tmp->value);
 			ft_printf("\n");
 		}
 		current = current->next;
@@ -74,7 +74,7 @@ void	sortenv(t_list **head)
 		{
 			tmp = (t_var *)current->content;
 			nxt = (t_var *)current->next->content;
-			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name) + 1) > 0)
+			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name)) > 0)
 			{
 				head = swap_env(head, prev, current, current->next);
 				sorted = 0;

@@ -25,7 +25,7 @@
  */
 volatile sig_atomic_t	g_signal_received = 0;
 
-static int	sigusr(void)
+/*static int	sigusr(void)
 {
 	struct sigaction	sa_usr;
 
@@ -40,7 +40,7 @@ static int	sigusr(void)
 		return (MSHELL_FAILURE);
 	}
 	return (MSHELL_SUCCESS);
-}
+}*/
 
 /**
  * Interpects the SIGINT signal and executes a signal handler.
@@ -54,7 +54,7 @@ static int	sigusr(void)
  * the handler's execution to prevent nested signals from interfering. Then
  * uses SA_RESTART to automatically restart interrupted syscalls.
  */
-static int	sigint(void)
+/*static int	sigint(void)
 {
 	struct sigaction	sa_int;
 
@@ -69,7 +69,7 @@ static int	sigint(void)
 		return (MSHELL_FAILURE);
 	}
 	return (MSHELL_SUCCESS);
-}
+}*/
 
 /**
  * Intercepts the SIGQUIT signal and executes a signal handler.
@@ -82,7 +82,7 @@ static int	sigint(void)
  * or NULL if the interception failed.
  * @note SIGQUIT is typically used to quit a process and produce a core dump.
  */
-static int	sigquit(void)
+/*static int	sigquit(void)
 {
 	struct sigaction	sa_quit;
 
@@ -95,15 +95,15 @@ static int	sigquit(void)
 		return (MSHELL_FAILURE);
 	}
 	return (MSHELL_SUCCESS);
-}
+}*/
 
 static void	initialization(t_body *minishell, const char **envp)
 {
-	struct termios new_term;
+	//struct termios new_term;
 
 	ft_memset(minishell, 0, sizeof(t_body));
 	minishell->interactive = isatty(STDIN_FILENO);
-	if (minishell->interactive && isatty(STDOUT_FILENO))
+	/*if (minishell->interactive && isatty(STDOUT_FILENO))
 	{
 		if (tcgetattr(STDIN_FILENO, &(minishell->orig_term)))
 			forcend(minishell, "tcgetattr", MSHELL_FATAL);
@@ -118,14 +118,13 @@ static void	initialization(t_body *minishell, const char **envp)
 	{
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
-	}
+	}*/
 	minishell->envp = shell_envpdup(envp);
 	if (!minishell->envp)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	minishell->envp_lst = shell_newlst_var(minishell->envp);
 	if (!minishell->envp_lst)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
-	sortenv(&minishell->envp_lst);
 }
 
 int	main(int argc, char **argv, const char **envp)
