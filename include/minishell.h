@@ -49,6 +49,7 @@ typedef struct s_body
 	int				shell_errno;
 	int				interactive;
 	char			**envp;//A copy of the original envp + post modifications
+	char			*user;
 	char			*input;//needed for history?
 	char			*prompt;//A char * promt, not really needed to save.
 	t_list			*cmd_lst;
@@ -63,5 +64,7 @@ void	parser(t_body *minishell);
 int		execmd(t_body *minishell);
 
 int		shell_prompt(t_body *minishell);
+
+char	*shell_getenv(t_list *lst_var, const char *name);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/06 19:08:41 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 17:47:22 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 	free(envp[i]);
 	aux->value = ft_strdup(sign + 1);
 	if (!aux->value)
-		return (built_end("export", "malloc", NULL, '\0'));
+		return (built_end("export", "System failed", NULL, '\0'));
 	envp[i] = ft_strdup(new_env);
 	if (!envp)
-		return (built_end("export", "malloc", NULL, '\0'));
+		return (built_end("export", "System failed", NULL, '\0'));
 	return (0);
 }
 
@@ -55,33 +55,32 @@ char	**ft_remove_arr(char **arr, int index)
 	return (arr);
 }
 
-char	**export_no_equal(char **args, char **envp)
+char	**export_no_equal(char **args, t_list *lst)
 {
-	int	k;
-	int	i;
-	int	j;
+	t_list	*current;
+	t_var	*var;
+	int		k;
+	int		i;
 	
 	i = -1;
 	while (args && args[++i])
 	{
-		j = i;
-		while (envp[++j])
+		current = lst;
+		while (current)
 		{
+			var = (t_var *)current->content;
 			k = 0;
 			while (args[i][k] && args[i][k] != '=')
 				k++;
-			if (!ft_strncmp(args[i], envp[j], k))
-			{
+			if (!ft_strncmp(args[i], var->name, ft_strlen(var->name)))
 				if (!ft_strchr(args[i], '='))
-				{
-					args = ft_remove_arr(args, i);
-					i--;
-				}
-			}
+					args = ft_remove_arr(args, i--);
+			current = current->next;
 		}
 	}
 	return (args);
 }
+
 
 char	**export_no_dup(char **args)
 {
@@ -96,12 +95,8 @@ char	**export_no_dup(char **args)
 		j = i;
 		while (args[++j])
 		{
-			k = 0;
-			while (args[i][k] && args[i][k] != '=')
-				k++;
-			p = 0;
-			while (args[j][p] && args[j][p] != '=')
-				p++;
+			k = ft_strlenchr(args[i], '=');
+			p = ft_strlenchr(args[j], '=');
 			if (k == p && !ft_strncmp(args[i], args[j], k))
 			{
 				if (ft_strchr(args[j], '='))
@@ -120,24 +115,24 @@ char	**shell_realloc(char **args, char **envp)
 	size_t	old_size;
 	size_t	new_size;
 	size_t	args_len;
-	size_t	i;
+	size_t	envp_len;
 	char	**tmp;
 
-	i = ft_arrlen((const void **)envp);
+	envp_len = ft_arrlen((const void **)envp);
 	args_len = ft_arrlen((const void **)args);
-	new_size = (args_len + i + 1) * sizeof(char *);
+	new_size = (args_len + envp_len + 1) * sizeof(char *);
 	old_size = (ft_arrlen((const void **)envp) + 1) * sizeof(char *);
 	tmp = ft_realloc(envp, new_size, old_size);	
 	if (!tmp)
 	{
-		built_end("export", "malloc", NULL, '\0');
+		built_end("export", "System failed", NULL, '\0');
 		return (NULL);
 	}
-	old_size = i;
-	i = -1;
-	while (++i < args_len)
-		tmp[i + old_size] = ft_strdup(args[i]);
-	tmp[i + old_size] = NULL;
+	old_size = envp_len;
+	envp_len = -1;
+	while (++envp_len < args_len)
+		tmp[envp_len + old_size] = ft_strdup(args[envp_len]);
+	tmp[envp_len + old_size] = NULL;
 	envp = tmp;
 	return (envp);
 }

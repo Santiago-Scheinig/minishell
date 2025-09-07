@@ -6,11 +6,11 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/06 12:47:19 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 18:20:47 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "minishell.h"
 
 /**
  * Shell functions shouldn't need T_BODY, just as the libft, it should work with only
@@ -22,6 +22,7 @@ char	*shell_getenv(t_list *lst_var, const char *name)
 	t_var	*aux;
 
 	tmp = lst_var;
+	sortenv(&tmp);
 	while (tmp)
 	{
 		aux = (t_var *)tmp->content;

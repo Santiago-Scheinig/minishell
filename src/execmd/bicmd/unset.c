@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/06 20:19:26 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 14:39:24 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,23 @@ static int	check_name(char **envp, char *name, t_list **lst)
 	return (0);
 }
 
-char	**unset(char **envp, t_list *env_lst, char **name)
+char	**unset(char **envp, t_list *env_lst, char **arg)
 {
 	t_list	**current;
 	size_t	i;
 
 	i = 0;
-	while (name && name[i])
+	if (arg[0][0] == '-')
+	{
+		built_end("unset", "Invalid flags", "[name ...]", arg[0][1]);
+		return (NULL);
+	}
+	while (arg && arg[i])
 	{
 		current = &env_lst;
 		while (*current)
 		{
-			if (check_name(&envp[0], name[i], current))
+			if (check_name(&envp[0], arg[i], current))
 				continue ;
 			current = &((*current)->next);
 		}

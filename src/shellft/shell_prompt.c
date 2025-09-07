@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/29 17:26:55 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 18:30:26 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,21 +133,26 @@ static char	*path_cwd(char *user)
  */
 int	shell_prompt(t_body *minishell)
 {
-	size_t	size;
 	char	*user;
 	char	*path;
 
 	if (minishell->prompt)
-	{
 		free(minishell->prompt);
-		minishell->prompt = NULL;
-	}
+	minishell->prompt = NULL;
 	user = getenv("USER");
 	path = path_cwd(user);
 	if (!path)
 		return (0);
-	size = ft_strlen(path) + 4 + ft_strlen(user);
 	if (!pwd_name(user, path, minishell))
 		return (0);
+	if (!shell_getenv(minishell->envp_lst, "HOME"))
+	{
+		if (minishell->prompt)
+			free(minishell->prompt);
+		minishell->prompt = NULL;
+		path = getcwd(NULL, 0);
+		if (!pwd_name(user, path, minishell))
+			return (0);
+	}
 	return (1);
 }

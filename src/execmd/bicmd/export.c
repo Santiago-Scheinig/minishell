@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/06 19:06:48 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 16:15:42 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	is_valid_identifier(char *arg)
 	return (1);
 }
 
-static char	**ft_isal_num(char **args, char **envp, t_list *head)
+static char	**ft_isal_num(char **args, t_list *head)
 {
 	int	i;
 	int	j;
@@ -38,9 +38,9 @@ static char	**ft_isal_num(char **args, char **envp, t_list *head)
 		print_export(head);
 		return (NULL);	
 	}
-	if (args[0][0] == '-' && args[0][1])
+	if (args[0][0] == '-')
 	{
-		built_end("export", "Invalid flags", "name[=value ...]", args[0][1]);
+		built_end("export", "Invalid flags", "[name[=value] ...]", args[0][1]);
 		return (NULL);
 	}
 	j = -1;
@@ -50,7 +50,7 @@ static char	**ft_isal_num(char **args, char **envp, t_list *head)
 			args = ft_remove_arr(&args[0], j);
 	}
 	args = export_no_dup(args);
-	args = export_no_equal(args, envp);
+	args = export_no_equal(args, head);
 	return (args);
 }
 
@@ -105,7 +105,7 @@ t_list	*b_export(char ***envp, t_list *head, char **args)
 
 	tmp = head;
 	j = 0;
-	args = ft_isal_num(args, envp[0], head);
+	args = ft_isal_num(args, head);
 	if (!args)
 		return (head);
 	while (tmp)
@@ -119,7 +119,7 @@ t_list	*b_export(char ***envp, t_list *head, char **args)
 		tmp = tmp->next;
 	}
 	envp[0] = shell_realloc(args, envp[0]);
-	if (!new_envp(args, head) || !envp[0])
+	if ( !envp[0] || !new_envp(args, head))
 		return (NULL);
 	return (head);
 }

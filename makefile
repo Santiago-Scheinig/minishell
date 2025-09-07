@@ -35,11 +35,12 @@ SRC			=	$(SRC_DIR)/main.c							\
 				$(SRC_DIR)/shellft/shell_split_utils.c		\
 				$(SRC_DIR)/shellft/shell_addlst_token.c		\
  				$(SRC_DIR)/execmd/bicmd/cd.c				\
+ 				$(SRC_DIR)/execmd/bicmd/env.c				\
  				$(SRC_DIR)/execmd/bicmd/pwd.c				\
  				$(SRC_DIR)/execmd/bicmd/echo.c				\
+ 				$(SRC_DIR)/execmd/bicmd/exit.c				\
  				$(SRC_DIR)/execmd/bicmd/unset.c				\
  				$(SRC_DIR)/execmd/bicmd/bi_cmd.c			\
- 				$(SRC_DIR)/execmd/bicmd/bi_end.c			\
  				$(SRC_DIR)/execmd/bicmd/export.c			\
  				$(SRC_DIR)/execmd/bicmd/export_utils.c		\
 # 				$(SRC_DIR)/execmd/execmd.c					\

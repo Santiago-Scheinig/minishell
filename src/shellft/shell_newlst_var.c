@@ -6,26 +6,15 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/06 18:51:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 18:06:12 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
+static t_var	*init_envp(t_var *new, const char *envp, char *sign, int i)
 {
-	char	*tmp;
-
-	tmp = malloc((i + 1) * sizeof(char));
-	if (!tmp)
-	{
-		free(new);
-		return (NULL);
-	}
-	ft_memcpy(tmp, envp, i);
-	tmp[i] = '\0';
-	new->name = ft_strdup(tmp);
-	free(tmp);
+	new->name = ft_substr(envp, 0, i);
 	if (!new->name)
 	{
 		free(new);
@@ -59,7 +48,7 @@ t_var	*create_envp(const char *envp)
 		return (NULL);
 	while (envp[i] && envp[i] != '=')
 		i++;
-	new = copy(new, envp, sign, i);
+	new = init_envp(new, envp, sign, i);
 	if (!new)
 		return (NULL);
 	new->exported = 1;
@@ -92,5 +81,6 @@ t_list	*shell_newlst_var(char **envp)
 		}
 		ft_lstadd_back(&head, new_node);
 	}
+	sortenv(&head);
 	return (head);
 }
