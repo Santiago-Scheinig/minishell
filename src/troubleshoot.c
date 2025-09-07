@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/31 17:23:27 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:20:49 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	forcend(t_body *minishell, char *function, t_error number)
 		printf("\n");
 	if (number == MSHELL_CMD_NOTEXE && function)
 		printf("minishell: %s: No such file or directory\n", function);
-	if (number != MSHELL_FATAL 
+	if (number != MSHELL_FATAL
 		&& tcsetattr(STDIN_FILENO, TCSANOW, &minishell->orig_term))
 	{
 		//perror();

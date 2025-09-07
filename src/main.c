@@ -31,9 +31,9 @@ static int	sigusr(void)
 
 	sa_usr.sa_handler = new_prompt;
 	sigemptyset(&sa_usr.sa_mask);
-	sigaddset(&sa_usr.sa_mask, SIGQUIT);//whats this?
-	sigaddset(&sa_usr.sa_mask, SIGINT);//whats this?
-	sa_usr.sa_flags = SA_RESTART;//This is blank and im not sure why...
+	sigaddset(&sa_usr.sa_mask, SIGQUIT);
+	sigaddset(&sa_usr.sa_mask, SIGINT);
+	sa_usr.sa_flags = SA_RESTART;
 	if (sigaction(SIGUSR1, &sa_usr, NULL) == -1)
 	{
 		perror("Error setting SIGINT handler");
@@ -60,9 +60,9 @@ static int	sigint(void)
 
 	sa_int.sa_handler = new_prompt;
 	sigemptyset(&sa_int.sa_mask);
-	sigaddset(&sa_int.sa_mask, SIGQUIT);//whats this?
-	sigaddset(&sa_int.sa_mask, SIGINT);//whats this?
-	sa_int.sa_flags = SA_RESTART;//This is blank and im not sure why...
+	sigaddset(&sa_int.sa_mask, SIGQUIT);
+	sigaddset(&sa_int.sa_mask, SIGINT);
+	sa_int.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
 		perror("Error setting SIGINT handler");
@@ -99,7 +99,7 @@ static int	sigquit(void)
 
 static void	initialization(t_body *minishell, const char **envp)
 {
-	struct termios new_term;
+	struct termios	new_term;
 
 	ft_memset(minishell, 0, sizeof(t_body));
 	minishell->interactive = isatty(STDIN_FILENO);
@@ -138,13 +138,10 @@ int	main(int argc, char **argv, const char **envp)
 	initialization(&minishell, envp);
 	while (1)
 	{
-		//if global signal exists, wait until all signals are resolved, then continue.
 		parser(&minishell);
 		cmd = (t_cmd *)minishell.cmd_lst->content;
 		lst = (t_list *)minishell.envp_lst;
 		built_in(&minishell, cmd->argv[0], cmd->argv, lst);
-		//if global signal exists, wait until all signals are resolved, then continue.
-		//execmd(&minishell);//after each waitpid, if global siignal exists, end the execmd.
 	}
 	return (0);
 }

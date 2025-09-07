@@ -6,17 +6,12 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 18:30:26 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:38:01 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Same here, if you need minishell to be properly executed, then it isn't a shellft.
- * Shellft is supposed to be a library of utility functions to make other "main" feautres
- * easy to execute and read.
- */
 static char	*pwd_name(char *user, char *path, t_body *minishell)
 {
 	char	*tmp1;
@@ -44,11 +39,6 @@ static char	*pwd_name(char *user, char *path, t_body *minishell)
 	return (minishell->prompt);
 }
 
-/**
- * This could be a shell function for example, used simply for that, short cut the home path.
- * YET! the perror("malloc") shouldnt be here, it should be done by which ever function is using it
- * after executing the respective SIGEND() or FORCEND(), that way we can properly track the errors.s
- */
 static char	*short_home(char *tmp, char *path)
 {
 	size_t	rest;
@@ -76,11 +66,6 @@ static char	*short_home(char *tmp, char *path)
 	return (path);
 }
 
-/**
- * This could be a shell function for example, used simply for that, short cut the home path.
- * YET! the perror("malloc") shouldnt be here, it should be done by which ever function is using it
- * after executing the respective SIGEND() or FORCEND(), that way we can properly track the errors.s
- */
 static char	*short_path_name(char *path, char *user)
 {
 	char	*tmp;
@@ -100,11 +85,6 @@ static char	*short_path_name(char *path, char *user)
 	return (path);
 }
 
-/**
- * This could be a shell function for example, used simply for that, short cut the home path.
- * YET! the perror("pwd") shouldnt be here, it should be done by which ever function is using it
- * after executing the respective SIGEND() or FORCEND(), that way we can properly track the errors.s
- */
 static char	*path_cwd(char *user)
 {
 	char	*path;
@@ -120,17 +100,6 @@ static char	*path_cwd(char *user)
 	return (path);
 }
 
-/**
- * Same here, if you need minishell to be properly executed, then it isn't a shellft.
- * Shellft is supposed to be a library of utility functions to make other "main" feautres
- * easy to execute and read.
- * 
- * Now if all of this functions are just ONE function splitted into five... then either we can
- * track the error made on your perrors as an int number that we recursively send back so THIS
- * father function returns the error number. Or it's its own prompt.c file we can save in 
- * management. But again, if minishell is needed for this, then its probably better if it's
- * not here.
- */
 int	shell_prompt(t_body *minishell)
 {
 	char	*user;

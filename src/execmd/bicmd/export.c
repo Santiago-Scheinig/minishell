@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 16:15:42 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:25:44 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 static int	is_valid_identifier(char *arg)
 {
-	int i = 0;
-	
+	int	i;
+
+	i = 0;
 	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
 		return (built_end("export", "Not valid identifier", arg, '\0'));
 	while (arg[i] && arg[i] != '=')
@@ -36,7 +37,7 @@ static char	**ft_isal_num(char **args, t_list *head)
 	if (!args[0])
 	{
 		print_export(head);
-		return (NULL);	
+		return (NULL);
 	}
 	if (args[0][0] == '-')
 	{
@@ -72,12 +73,12 @@ static int	change_value_env(t_var *aux, char **envp, char *new_env)
 	return (0);
 }
 
-static t_list *new_envp(char **new_env, t_list *head)
+static t_list	*new_envp(char **new_env, t_list *head)
 {
 	t_list	*current;
 	t_list	*next;
 	t_var	*new_node;
-	int			i;
+	int		i;
 
 	i = 0;
 	while (new_env[i])
@@ -94,7 +95,6 @@ static t_list *new_envp(char **new_env, t_list *head)
 	}
 	return (head);
 }
-
 
 t_list	*b_export(char ***envp, t_list *head, char **args)
 {
@@ -119,7 +119,7 @@ t_list	*b_export(char ***envp, t_list *head, char **args)
 		tmp = tmp->next;
 	}
 	envp[0] = shell_realloc(args, envp[0]);
-	if ( !envp[0] || !new_envp(args, head))
+	if (!envp[0] || !new_envp(args, head))
 		return (NULL);
 	return (head);
 }

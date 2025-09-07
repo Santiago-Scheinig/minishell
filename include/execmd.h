@@ -6,13 +6,12 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/31 17:24:42 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:17:09 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECMD_H
 # define EXECMD_H
-
 # include <sys/wait.h>
 # include <unistd.h>
 # include <fcntl.h>

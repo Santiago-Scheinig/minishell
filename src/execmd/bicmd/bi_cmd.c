@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 17:52:58 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 18:05:07 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:23:11 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	built_end(char *name, char *type, char *flags, char error)
 		ft_printfd(2, "%s%s: %s\n", shell, name, strerror(errno));
 	else if (ft_strnstr(type, "Not valid identifier", ft_strlen(type)))
 		ft_printfd(2, "%s%s: `%s': not a valid identifier\n", shell, name,
-		flags);
+			flags);
 	else if (ft_strnstr(type, "Numeric arg required", ft_strlen(type)))
 		ft_printfd(2, "%s%s: %s: numeric argument required\n", shell, name,
-		flags);
+			flags);
 	//$? = 1;
 	return (0);
 }
@@ -43,7 +43,7 @@ int	built_end(char *name, char *type, char *flags, char error)
 char	*built_in(t_body *minishell, char *pathname, char **args, t_list *lst)
 {
 	t_var	*envp;
-	
+
 	envp = (t_var *)lst->content;
 	if (ft_strlen(pathname) == 6 && ft_strnstr(pathname, "export", 6))
 		b_export(&minishell->envp, lst, &args[1]);

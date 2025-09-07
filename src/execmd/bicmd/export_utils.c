@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 17:47:22 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:23:50 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 {
 	size_t	len;
 	int		i;
-	
+
 	i = 0;
 	len = ft_strlen(aux->name);
 	while ((ft_strlen(envp[i]) == len) && ft_strncmp(envp[i], aux->name, len))
@@ -61,7 +61,7 @@ char	**export_no_equal(char **args, t_list *lst)
 	t_var	*var;
 	int		k;
 	int		i;
-	
+
 	i = -1;
 	while (args && args[++i])
 	{
@@ -81,14 +81,13 @@ char	**export_no_equal(char **args, t_list *lst)
 	return (args);
 }
 
-
 char	**export_no_dup(char **args)
 {
 	size_t	k;
 	size_t	p;
-	int	i;
-	int	j;
-	
+	int		i;
+	int		j;
+
 	i = -1;
 	while (args && args[++i])
 	{
@@ -122,7 +121,7 @@ char	**shell_realloc(char **args, char **envp)
 	args_len = ft_arrlen((const void **)args);
 	new_size = (args_len + envp_len + 1) * sizeof(char *);
 	old_size = (ft_arrlen((const void **)envp) + 1) * sizeof(char *);
-	tmp = ft_realloc(envp, new_size, old_size);	
+	tmp = ft_realloc(envp, new_size, old_size);
 	if (!tmp)
 	{
 		built_end("export", "System failed", NULL, '\0');

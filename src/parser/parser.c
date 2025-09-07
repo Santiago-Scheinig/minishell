@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/31 17:23:04 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:36:42 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	parser(t_body *minishell)
 {
 	char	**split;
 
+	sortenv(&minishell->envp_lst);
 	cleanup(minishell);//cleanup comes first. Which the first time wont do shit.
 	parser_input(minishell);
 	split = shell_split(minishell->input);

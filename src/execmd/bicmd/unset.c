@@ -6,13 +6,13 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 14:39:24 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:24:14 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bicmd.h"
 
-static t_list *remove_lst(t_list *list)
+static t_list	*remove_lst(t_list *list)
 {
 	t_list	*current;
 	t_var	*var;
@@ -29,7 +29,7 @@ static t_list *remove_lst(t_list *list)
 
 static int	same_name_env(const char *env, const char *name)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (env[i] && env[i] != '=' && name[i])
@@ -49,7 +49,7 @@ static int	check_name(char **envp, char *name, t_list **lst)
 	size_t	i;
 	size_t	j;
 	t_var	*tmp;
-	
+
 	i = 0;
 	tmp = (t_var *)(*lst)->content;
 	lst_len = ft_strlen(tmp->name);

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 18:06:12 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:35:56 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_list	*shell_newlst_var(char **envp)
 	t_var	*content;
 	t_list	*new_node;
 	t_list	*head;
-	int			i;
+	int		i;
 
 	new_node = NULL;
 	head = NULL;
@@ -77,10 +77,9 @@ t_list	*shell_newlst_var(char **envp)
 		if (!new_node)
 		{
 			shell_lstclear(&head, shell_lstdelvar);
-			return(NULL);
+			return (NULL);
 		}
 		ft_lstadd_back(&head, new_node);
 	}
-	sortenv(&head);
 	return (head);
 }

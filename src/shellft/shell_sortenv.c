@@ -6,13 +6,13 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 15:31:51 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:37:39 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bicmd.h"
 
-static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next)
+static t_list	**swap(t_list **head, t_list *prev, t_list *crnt, t_list *next)
 {
 	crnt->next = next->next;
 	next->next = crnt;
@@ -47,7 +47,7 @@ void	sortenv(t_list **head)
 			nxt = (t_var *)current->next->content;
 			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name)) > 0)
 			{
-				head = swap_env(head, prev, current, current->next);
+				head = swap(head, prev, current, current->next);
 				sorted = 0;
 			}
 			prev = current;
