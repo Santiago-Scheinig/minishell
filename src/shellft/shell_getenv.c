@@ -6,17 +6,12 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 19:21:28 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/14 14:03:11 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Shell functions shouldn't need T_BODY, just as the libft, 
- * it should work with only with necesary information. Insead of the T_BODY,
- *  you should ask for the T_LST!
- */
 char	*shell_getenv(t_list *lst_var, const char *name)
 {
 	t_list	*tmp;

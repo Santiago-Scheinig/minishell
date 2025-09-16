@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 17:56:19 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/16 14:26:11 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	cd(char **args, t_list *envp)
 	{
 		dir = shell_getenv(envp, "HOME");
 		if (!dir)
-			return (ft_printfd(2, "bash: cd: HOME not set\n"));
+			return (built_end(args[0], "HOME", NULL, '\0'));
 	}
 	else if (args[1] && args[1][0] == '-')
 	{

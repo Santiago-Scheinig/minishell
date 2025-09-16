@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 18:03:44 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/16 13:49:43 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		env(char **args, char **envp);
 
 void	print_export(t_list *env_lst);
 
-int		b_exit(char **args);
+int		b_exit(char **args, t_body *minishell);
 
 void	print_env(char **envp);
 
@@ -41,6 +41,8 @@ char	**shell_realloc(char **args, char **envp);
 void	echo(char **args);
 
 int		cd(char **args, t_list *envp);
+
+void	end_minishell(t_body *minishell);
 
 int		pwd(char **args);
 

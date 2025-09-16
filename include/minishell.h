@@ -49,7 +49,7 @@ typedef struct s_body
 	int				shell_errno;
 	int				interactive;
 	char			**envp;//A copy of the original envp + post modifications
-	char			*user;
+	char			*home;
 	char			*input;//needed for history?
 	char			*prompt;//A char * promt, not really needed to save.
 	t_list			*cmd_lst;

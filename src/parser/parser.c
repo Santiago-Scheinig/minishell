@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/07 19:36:42 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/14 14:16:33 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,7 @@ void	parser_input(t_body *minishell)
 	else
 		minishell->input = get_next_line(STDIN_FILENO);
 	if (minishell->input == NULL)
-	{
-		shell_lstclear(&minishell->envp_lst, shell_lstdelvar);
-		ft_split_free(minishell->envp);
-		if (minishell->interactive)
-			rl_clear_history();
-		forcend(minishell, NULL, MSHELL_SUCCESS);
-	}
+		end_minishell(minishell);
 	else if (!minishell->input[0])
 		parser_input(minishell);
 	else if (minishell->interactive && minishell->input[0] != '\0')
