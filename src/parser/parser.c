@@ -6,13 +6,58 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/14 14:16:33 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:40:46 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "troubleshoot.h"
 #include "parser.h"
+#include "bicmd.h"
+
+
+/*static void	print_export(t_list *env_lst)
+{
+	t_list	*current;
+	t_var	*tmp;
+
+	current = env_lst;
+	while (current)
+	{
+		tmp = (t_var *)current->content;
+		if (tmp->name && tmp->exported)
+		{
+			ft_printf("declare -x %s", tmp->name);
+			if (tmp->value)
+				ft_printf("|=\"%s\"", tmp->value);
+			ft_printf("\n");
+		}
+		current = current->next;
+	}
+}*/
+
+
+void	parser_input(t_body *minishell)
+{
+	char	*tmp;
+
+	if (minishell->interactive)
+	{
+		tmp = shell_prompt(minishell);
+		if (!tmp)
+			forcend(minishell, "malloc", MSHELL_FAILURE);
+		minishell->input = readline(tmp);
+		free(tmp);
+	}
+	else
+		minishell->input = get_next_line(STDIN_FILENO);
+	if (minishell->input == NULL)
+		end_minishell(minishell);
+	else if (!minishell->input[0])
+		parser_input(minishell);
+	else if (minishell->interactive && minishell->input[0] != '\0')
+		add_history(minishell->input);
+}
 
 /*This will likely have to be modified*/
 /*Should we print the new line here??*/
@@ -24,24 +69,6 @@ void	new_prompt(int signum)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
-}
-
-void	parser_input(t_body *minishell)
-{
-	if (minishell->interactive)
-	{
-		if (!shell_prompt(minishell))
-			forcend(minishell, "malloc", MSHELL_FAILURE);
-		minishell->input = readline(minishell->prompt);
-	}
-	else
-		minishell->input = get_next_line(STDIN_FILENO);
-	if (minishell->input == NULL)
-		end_minishell(minishell);
-	else if (!minishell->input[0])
-		parser_input(minishell);
-	else if (minishell->interactive && minishell->input[0] != '\0')
-		add_history(minishell->input);
 }
 
 /**

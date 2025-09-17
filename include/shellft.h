@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/31 17:17:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:05:19 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,5 +146,9 @@ char	**shell_envpdup(const char **envp);
 t_list	*shell_newlst_var(char **envp);
 
 void	sortenv(t_list **head);
+
+size_t	prompt_len(char *ps1, char *user, char *path);
+
+char	*transform_format(char *tmp, char *ps1, char *user, char *path);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 19:25:44 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:56:37 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bicmd.h"
 
-static int	is_valid_identifier(char *arg)
+int	is_valid_identifier(char *arg)
 {
 	int	i;
 
@@ -28,7 +28,7 @@ static int	is_valid_identifier(char *arg)
 	return (1);
 }
 
-static char	**ft_isal_num(char **args, t_list *head)
+char	**ft_isal_num(char **args, t_list *head)
 {
 	int	i;
 	int	j;
@@ -55,7 +55,7 @@ static char	**ft_isal_num(char **args, t_list *head)
 	return (args);
 }
 
-static int	change_value_env(t_var *aux, char **envp, char *new_env)
+int	change_value_env(t_var *aux, char ***envp, char *new_env)
 {
 	size_t	i;
 	size_t	j;
@@ -69,11 +69,16 @@ static int	change_value_env(t_var *aux, char **envp, char *new_env)
 		return (1);
 	sign = ft_strchr(new_env, '=');
 	if (sign)
-		set_equal(aux, &envp[0], sign, new_env);
+		set_equal(aux, envp[0], sign, new_env);
+	if (aux->exported == 0)
+	{
+		envp[0] = shell_realloc(&new_env, envp[0], 1);
+		aux->exported = 1;
+	}
 	return (0);
 }
 
-static t_list	*new_envp(char **new_env, t_list *head)
+t_list	*new_envp(char **new_env, t_list *head, int export)
 {
 	t_list	*current;
 	t_list	*next;
@@ -83,7 +88,7 @@ static t_list	*new_envp(char **new_env, t_list *head)
 	i = 0;
 	while (new_env[i])
 	{
-		new_node = create_envp(new_env[i]);
+		new_node = create_envp(new_env[i], export);
 		if (!new_node)
 			return (NULL);
 		next = ft_lstnew(new_node);
@@ -114,12 +119,12 @@ t_list	*b_export(char ***envp, t_list *head, char **args)
 		aux = (t_var *)tmp->content;
 		while (args[++i])
 			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
-				if (!change_value_env(aux, &envp[0][0], args[i]))
+				if (!change_value_env(aux, &envp[0], args[i]))
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}
-	envp[0] = shell_realloc(args, envp[0]);
-	if (!envp[0] || !new_envp(args, head))
+	envp[0] = shell_realloc(args, envp[0], ft_arrlen((const void **)args));
+	if (!envp[0] || !new_envp(args, head, 1))
 		return (NULL);
 	return (head);
 }

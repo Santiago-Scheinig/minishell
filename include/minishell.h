@@ -63,8 +63,10 @@ void	parser(t_body *minishell);
 
 int		execmd(t_body *minishell);
 
-int		shell_prompt(t_body *minishell);
+char	*shell_prompt(t_body *minishell);
 
 char	*shell_getenv(t_list *lst_var, const char *name);
+
+t_var	*create_envp(const char *envp, int export);
 
 #endif

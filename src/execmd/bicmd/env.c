@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:50:11 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 16:12:46 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/16 15:33:29 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,32 @@ void	print_export(t_list *env_lst)
 	}
 }
 
-void	print_env(char **envp)
+void	print_env(char **envp, t_list *env_lst)
 {
-	int	i;
+	t_list	*current;
+	t_var	*tmp;
+	int		i;
 
 	i = 0;
 	while (envp[i])
 	{
-		ft_printf("%s\n", envp[i]);
+		current = env_lst;
+		while (current)
+		{
+			tmp = (t_var *)current->content;
+			if (!ft_strncmp(tmp->name, envp[i], ft_strlen(tmp->name)))
+			{
+				if (tmp->exported)
+					ft_printf("%s\n", envp[i]);
+				break ;
+			}
+			current = current->next;
+		}
 		i++;
 	}
 }
 
-int	env(char **args, char **envp)
+int	env(char **args, char **envp, t_list *env_lst)
 {
 	int	i;
 
@@ -53,6 +66,6 @@ int	env(char **args, char **envp)
 		return (built_end(args[0], "Invalid flags", "[]", args[1][1]));
 	else if (args[1])
 		return (built_end(args[0], "Numbers of args", NULL, '\0'));
-	print_env(envp);
+	print_env(envp, env_lst);
 	return (0);
 }

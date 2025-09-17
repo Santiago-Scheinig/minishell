@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 19:24:14 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:15:47 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	check_name(char **envp, char *name, t_list **lst)
 			}
 			j++;
 		}
-		(*lst) = remove_lst((*lst));
+		lst[0] = remove_lst(lst[0]);
 		return (1);
 	}
 	return (0);

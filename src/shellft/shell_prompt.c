@@ -6,38 +6,32 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/16 13:48:19 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:28:50 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "bicmd.h"
 
-static char	*pwd_name(char *user, char *path, t_body *minishell)
+static char	*pwd_name(char *ps1, char *path, t_body *minishell)
 {
-	char	*tmp1;
-	char	*tmp2;
+	size_t	len;
+	char	*user;
+	char	*tmp;
 
-	tmp1 = ft_strjoin(user, ":");
-	if (!tmp1)
+	user = shell_getenv(minishell->envp_lst, "USER");
+	if (!user)
+		user = "";
+	len = prompt_len(ps1, user, path);
+	tmp = malloc((len + 1) * sizeof(char));
+	if (!tmp)
 	{
-		free(path);
-		free(minishell->prompt);
+		perror("malloc");
 		return (NULL);
 	}
-	tmp2 = ft_strjoin(tmp1, path);
-	free(tmp1);
+	tmp = transform_format(tmp, ps1, user, path);
 	free(path);
-	if (!tmp2)
-	{
-		free(minishell->prompt);
-		return (NULL);
-	}
-	minishell->prompt = ft_strjoin(tmp2, "$ ");
-	free(tmp2);
-	if (!minishell->prompt)
-		return (NULL);
-	return (minishell->prompt);
+	return (tmp);
 }
 
 static char	*short_home(char *home, char *path)
@@ -89,31 +83,29 @@ static char *path_cwd(t_body *minishell)
 	}
 	minishell->home = NULL;
 	path = short_path_name(minishell, path);
+	if (!minishell->home)
+	{
+		free(path);
+		path = getcwd(NULL, 0);
+	}
 	return (path);
 }
 
-int shell_prompt(t_body *minishell)
+char *shell_prompt(t_body *minishell)
 {
-	char	*user;
+	char	*prompt;
 	char	*path;
+	char	*ps1;
 
-	if (minishell->prompt)
-		free(minishell->prompt);
-	minishell->prompt = NULL;
-	user = getenv("USER");
+	ps1 = shell_getenv(minishell->envp_lst, "PS1");
 	path = path_cwd(minishell);
 	if (!path)
-		return (0);
-	if (!pwd_name(user, path, minishell))
-		return (0);
-	if (!minishell->home)
+		return (NULL);
+	prompt = pwd_name(ps1, path, minishell);
+	if (!prompt)
 	{
-		if (minishell->prompt)
-			free(minishell->prompt);
-		minishell->prompt = NULL;
-		path = getcwd(NULL, 0);
-		if (!pwd_name(user, path, minishell))
-			return (0);
+		free(path);
+		return (NULL);
 	}
-	return (1);
+	return (prompt);
 }

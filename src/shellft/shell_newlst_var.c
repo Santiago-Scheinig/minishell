@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 19:35:56 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/16 15:51:06 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static t_var	*init_envp(t_var *new, const char *envp, char *sign, int i)
 	return (new);
 }
 
-t_var	*create_envp(const char *envp)
+t_var	*create_envp(const char *envp, int export)
 {
 	t_var	*new;
 	char	*sign;
@@ -51,7 +51,7 @@ t_var	*create_envp(const char *envp)
 	new = init_envp(new, envp, sign, i);
 	if (!new)
 		return (NULL);
-	new->exported = 1;
+	new->exported = export;
 	return (new);
 }
 
@@ -67,7 +67,7 @@ t_list	*shell_newlst_var(char **envp)
 	i = -1;
 	while (envp[++i])
 	{
-		content = create_envp(envp[i]);
+		content = create_envp(envp[i], 1);
 		if (!content)
 		{
 			shell_lstclear(&head, shell_lstdelvar);

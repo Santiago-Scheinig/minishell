@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 19:23:50 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:14:14 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 
 	i = 0;
 	len = ft_strlen(aux->name);
+	if (!envp[i])
+		return (0);
 	while ((ft_strlen(envp[i]) == len) && ft_strncmp(envp[i], aux->name, len))
 		i++;
 	if (aux->value)
@@ -74,7 +76,10 @@ char	**export_no_equal(char **args, t_list *lst)
 				k++;
 			if (!ft_strncmp(args[i], var->name, ft_strlen(var->name)))
 				if (!ft_strchr(args[i], '='))
+				{
+					var->exported = 1;
 					args = ft_remove_arr(args, i--);
+				}
 			current = current->next;
 		}
 	}
@@ -109,7 +114,7 @@ char	**export_no_dup(char **args)
 	return (args);
 }
 
-char	**shell_realloc(char **args, char **envp)
+char	**shell_realloc(char **args, char **envp, size_t size)
 {
 	size_t	old_size;
 	size_t	new_size;
@@ -117,8 +122,8 @@ char	**shell_realloc(char **args, char **envp)
 	size_t	envp_len;
 	char	**tmp;
 
+	args_len = size;
 	envp_len = ft_arrlen((const void **)envp);
-	args_len = ft_arrlen((const void **)args);
 	new_size = (args_len + envp_len + 1) * sizeof(char *);
 	old_size = (ft_arrlen((const void **)envp) + 1) * sizeof(char *);
 	tmp = ft_realloc(envp, new_size, old_size);
@@ -132,6 +137,5 @@ char	**shell_realloc(char **args, char **envp)
 	while (++envp_len < args_len)
 		tmp[envp_len + old_size] = ft_strdup(args[envp_len]);
 	tmp[envp_len + old_size] = NULL;
-	envp = tmp;
-	return (envp);
+	return (tmp);
 }
