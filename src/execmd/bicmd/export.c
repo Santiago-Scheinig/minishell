@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 14:56:37 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 19:24:43 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	**ft_isal_num(char **args, t_list *head)
 	return (args);
 }
 
-int	change_value_env(t_var *aux, char ***envp, char *new_env)
+int	change_value_env(t_var *aux, char ***envp, char *new_env, int export)
 {
 	size_t	i;
 	size_t	j;
@@ -70,10 +70,10 @@ int	change_value_env(t_var *aux, char ***envp, char *new_env)
 	sign = ft_strchr(new_env, '=');
 	if (sign)
 		set_equal(aux, envp[0], sign, new_env);
-	if (aux->exported == 0)
+	if (export == 1 && aux->exported == 0)
 	{
 		envp[0] = shell_realloc(&new_env, envp[0], 1);
-		aux->exported = 1;
+		aux->exported = export;
 	}
 	return (0);
 }
@@ -119,7 +119,7 @@ t_list	*b_export(char ***envp, t_list *head, char **args)
 		aux = (t_var *)tmp->content;
 		while (args[++i])
 			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
-				if (!change_value_env(aux, &envp[0], args[i]))
+				if (!change_value_env(aux, &envp[0], args[i], 1))
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}

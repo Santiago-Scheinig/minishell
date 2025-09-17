@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 17:52:58 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 14:59:47 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 17:48:24 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*built_in(t_body *minishell, char *pathname, char **args, t_list *lst)
 		b_exit(args, minishell);
 	else if (ft_strnstr(pathname, "unset", 5))
 		unset(minishell->envp, lst, &args[1]);
-	else if (ft_strchr(args[0], '='))
+	else
 		inport(&minishell->envp, lst, args);
 	return (pathname);
 }

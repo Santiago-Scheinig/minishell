@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 14:59:09 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/17 17:43:17 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		is_valid_identifier(char *arg);
 
 char	**ft_isal_num(char **args, t_list *head);
 
-int		change_value_env(t_var *aux, char ***envp, char *new_env);
+int		change_value_env(t_var *aux, char ***envp, char *new_env, int export);
 
 t_list	*new_envp(char **new_env, t_list *head, int export);
 
