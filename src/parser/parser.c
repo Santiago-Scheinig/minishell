@@ -6,11 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:21:18 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:26:45 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
+#include "msh_cmd.h"
 
 /**
  * COMMENT PENDING
@@ -30,9 +31,12 @@ static void	parser_input(t_body *minishell)
 	else
 		minishell->input = get_next_line(STDIN_FILENO);
 	if (minishell->input == NULL)
-		end_minishell(minishell);
+		forcend(minishell, NULL, 0);
 	else if (!minishell->input[0])
+	{
+		free(minishell->input);
 		parser_input(minishell);
+	}
 	else if (minishell->interactive && minishell->input[0] != '\0')
 		add_history(minishell->input);
 }

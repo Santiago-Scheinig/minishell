@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:45:21 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:27:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*shell_getenv(t_list *lst_var, const char *name)
 	t_var	*aux;
 
 	tmp = lst_var;
-	sortenv(&tmp);
+	shell_sortenv(&tmp);
 	while (tmp)
 	{
 		aux = (t_var *)tmp->content;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:46:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:38:16 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,17 @@ char	**ft_remove_arr(char **arr, int index)
 		index++;
 	}
 	arr[len - 1] = NULL;
-	//HAY UN PROBLEMA PORQUE TIENE QUE HABER UN REALLOC, PERO CUANDO HAY FALLA!
 	return (arr);
 }
 
-char	**msh_unset(char **envp, t_list *env_lst, char **arg)
+int	msh_unset(char **envp, t_list *env_lst, char **arg)
 {
 	t_list	*current;
 	size_t	i;
 
 	i = 0;
 	if (arg[0][0] == '-')
-	{
-		built_end("unset", "Invalid flags", "[name ...]", arg[0][1]);
-		return (NULL);
-	}
+		return (built_end("unset", "Invalid flags", "[name ...]", arg[0][1]));
 	while (arg && arg[i])
 	{
 		current = env_lst;
@@ -116,5 +112,5 @@ char	**msh_unset(char **envp, t_list *env_lst, char **arg)
 		}
 		i++;
 	}
-	return (envp);
+	return (0);
 }

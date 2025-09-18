@@ -31,15 +31,15 @@ static void	init_envp(t_body *minishell, const char **envp)
 	if (!minishell->envp)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	minishell->envp_lst = shell_newlst_var(minishell->envp);
-	sortenv(&minishell->envp_lst);
+	shell_sortenv(&minishell->envp_lst);
 	if (!minishell->envp_lst)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	ps1 = shell_pmtstr(minishell->envp_lst);
 	if (!ps1)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
-	msh_import(minishell->envp, minishell->envp_lst, ps1);
+	msh_import(&minishell->envp, &minishell->envp_lst, ps1);
 	ft_split_free(ps1);
-	sortenv(&minishell->envp_lst);
+	shell_sortenv(&minishell->envp_lst);
 }
 
 /**
