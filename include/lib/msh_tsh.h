@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_tsh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 17:16:00 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:35:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:56:22 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@
 
 extern volatile sig_atomic_t	g_signal_received;
 
-int	siginit(void);
+int	sigint(void);
+
+int	sigquit(void);
+
 
 /**
  * 

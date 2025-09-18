@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_std.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:58:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:59:30 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,13 +237,15 @@ char	**shell_envpdup(const char **envp);
 
 t_list	*shell_newlst_var(char **envp);
 
-void	sortenv(t_list **head);
+void	shell_sortenv(t_list **head);
 
 size_t	prompt_len(char *ps1, char *user, char *path);
 
 char	*transform_format(char *tmp, char *ps1, char *user, char *path);
 
-char	*shell_pmtstr(t_list *envp);
+char	**shell_pmtstr(t_list *envp_lst);
+
+t_var	*create_envp(const char *envp, int export);
 
 char	*shell_pmtexp(t_list *envp);
 

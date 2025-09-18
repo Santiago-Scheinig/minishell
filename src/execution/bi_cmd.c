@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   bi_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 17:52:58 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:56:18 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:50:48 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
+#include "msh_cmd.h"
 
 /**
  * Handles error messages for built-in shell commands and print stderr.
@@ -73,26 +74,31 @@ int	built_end(char *name, char *type, char *flags, char error)
  * @note This function assumes commands are matched by name and delegates
  * execution accordingly.
  */
-char	*built_in(t_body *minishell, char **args, t_list *lst)
+int built_in(char **args, t_body *minishell)
 {
-	t_var	*envp;
-
-	envp = (t_var *)lst->content;
 	if (!ft_strncmp(args[0], "export", 7))
-		b_export(&minishell->envp, lst, &args[1]);
+		return (msh_export(&minishell->envp, &minishell->envp_lst, &args[1]));
 	else if (!ft_strncmp(args[0], "cd", 3))
-		cd(args, lst);
+		return (msh_cd(args, minishell->envp_lst));
 	else if (!ft_strncmp(args[0], "env", 4))
-		env(args, &minishell->envp[0], minishell->envp_lst);
+		return (msh_env(args, &minishell->envp[0], minishell->envp_lst));
 	else if (!ft_strncmp(args[0], "pwd", 4))
-		pwd(args);
+		return (msh_pwd(args));
 	else if (!ft_strncmp(args[0], "echo", 5))
-		echo(args);
-	else if (!ft_strncmp(args[0], "exit", 5))
-		b_exit(args, minishell);
+		msh_echo(args);
 	else if (!ft_strncmp(args[0], "unset", 6))
-		unset(minishell->envp, lst, &args[1]);
+		return (msh_unset(minishell->envp, minishell->envp_lst, &args[1]));
+	else if (!ft_strncmp(args[0], "exit", 5))
+	{
+		msh_exit(args, minishell);
+		return (1);
+	}
 	else
-		inport(&minishell->envp, lst, args);
-	return (args[0]);
+		return (msh_import(&minishell->envp, &minishell->envp_lst, args));
+	return (0);
 }
+
+/*int	exe_built(t_cmd *exe, t_body *minishell)
+{
+	
+}*/

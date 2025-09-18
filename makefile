@@ -15,6 +15,7 @@ LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
 SRC			=	$(SRC_DIR)/main.c								\
+				$(SRC_DIR)/siginit.c							\
 				$(SRC_DIR)/troubleshoot/troublend.c				\
 				$(SRC_DIR)/parser/parser.c						\
 				$(SRC_DIR)/parser/parser_cmd.c					\
@@ -25,29 +26,29 @@ SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/shellft/shell_split.c				\
 				$(SRC_DIR)/shellft/shell_envdup.c				\
 				$(SRC_DIR)/shellft/shell_memmove.c				\
+				$(SRC_DIR)/shellft/shell_pmtstr.c				\
+				$(SRC_DIR)/shellft/shell_pmtexp.c				\
 				$(SRC_DIR)/shellft/shell_strchr.c				\
 				$(SRC_DIR)/shellft/shell_getenv.c				\
 				$(SRC_DIR)/shellft/shell_sortenv.c				\
 				$(SRC_DIR)/shellft/shell_lstclear.c				\
+				$(SRC_DIR)/shellft/shell_newlst_var.c			\
 				$(SRC_DIR)/shellft/shell_split_utils.c			\
 				$(SRC_DIR)/shellft/shell_addlst_token.c			\
 				$(SRC_DIR)/shellft/shell_pmtexp_utils.c			\
+ 				$(SRC_DIR)/execution/bi_cmd.c					\
  				$(SRC_DIR)/execution/msh_cmd/msh_cd.c			\
  				$(SRC_DIR)/execution/msh_cmd/msh_env.c			\
  				$(SRC_DIR)/execution/msh_cmd/msh_pwd.c			\
  				$(SRC_DIR)/execution/msh_cmd/msh_echo.c			\
  				$(SRC_DIR)/execution/msh_cmd/msh_exit.c			\
  				$(SRC_DIR)/execution/msh_cmd/msh_unset.c		\
+ 				$(SRC_DIR)/execution/msh_cmd/msh_export.c		\
  				$(SRC_DIR)/execution/msh_cmd/msh_import.c		\
  				$(SRC_DIR)/execution/msh_cmd/msh_export_utils.c	\
 # 				$(SRC_DIR)/execution/execmd.c					\
 # 				$(SRC_DIR)/execution/execmd_utils.c				\
 # 				$(SRC_DIR)/execution/execmd_path.c				\
- 				$(SRC_DIR)/execution/bi_cmd.c					\
- 				$(SRC_DIR)/execution/bicmd/export.c				\
-				$(SRC_DIR)/shellft/shell_pmtstr.c				\
-				$(SRC_DIR)/shellft/shell_pmtexp.c				\
-				$(SRC_DIR)/shellft/shell_newlst_var.c			\
 
 
 

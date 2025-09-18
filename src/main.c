@@ -27,18 +27,21 @@
 
 static void	init_envp(t_body *minishell, const char **envp)
 {
+	char	**ps1;
+
 	minishell->envp = shell_envpdup(envp);
 	if (!minishell->envp)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	minishell->envp_lst = shell_newlst_var(minishell->envp);
-	sortenv(&minishell->envp_lst);
+	shell_sortenv(&minishell->envp_lst);
 	if (!minishell->envp_lst)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
-	if (!shell_pmtstr(minishell->envp_lst))
+	ps1 = shell_pmtstr(minishell->envp_lst);
+	if (!ps1)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
-	if (!shell_pmtexp(minishell->envp_lst))
-		forcend(minishell, "malloc", MSHELL_FAILURE);
-	sortenv(&minishell->envp_lst);
+	msh_import(&minishell->envp, &minishell->envp_lst, ps1);
+	ft_split_free(ps1);
+	shell_sortenv(&minishell->envp_lst);
 }
 
 static void	init_term(t_body *minishell)
@@ -55,10 +58,10 @@ static void	init_term(t_body *minishell)
 		new_term.c_lflag |= ECHOCTL;
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &new_term))
 			forcend(minishell, "tcsetattr", MSHELL_FATAL);
-		if (siginit())
+		if (sigint() || sigquit())
 			forcend(minishell, "sigaction", MSHELL_FAILURE);
 	}
-	else if (siginit())
+	else if (sigint() || sigquit())
 			forcend(minishell, "signal", MSHELL_FAILURE);
 }
 

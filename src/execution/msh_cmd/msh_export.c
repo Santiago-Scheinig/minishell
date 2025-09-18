@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   msh_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:45:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:04:37 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
+#include "lib/msh_std.h"
 
 int	is_valid_identifier(char *arg)
 {
@@ -72,7 +73,9 @@ int	change_value_env(t_var *aux, char ***envp, char *new_env, int export)
 		set_equal(aux, envp[0], sign, new_env);
 	if (export == 1 && aux->exported == 0)
 	{
-		envp[0] = shell_realloc(&new_env, envp[0], 1);
+		envp[0] = exp_resize(&new_env, envp[0], 1);
+		if (!envp[0])
+			return (1);
 		aux->exported = export;
 	}
 	return (0);
@@ -101,18 +104,18 @@ t_list	*new_envp(char **new_env, t_list *head, int export)
 	return (head);
 }
 
-t_list	*msh_export(char ***envp, t_list *head, char **args)
+int	msh_export(char ***envp, t_list **head, char **args)
 {
 	t_list	*tmp;
 	t_var	*aux;
 	int		i;
 	int		j;
 
-	tmp = head;
+	tmp = *head;
 	j = 0;
-	args = ft_isal_num(args, head);
+	args = ft_isal_num(args, *head);
 	if (!args)
-		return (head);
+		return (0);
 	while (tmp)
 	{
 		i = -1;
@@ -123,8 +126,8 @@ t_list	*msh_export(char ***envp, t_list *head, char **args)
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}
-	envp[0] = shell_realloc(args, envp[0], ft_arrlen((const void **)args));
-	if (!envp[0] || !new_envp(args, head, 1))
-		return (NULL);
-	return (head);
+	envp[0] = exp_resize(args, envp[0], ft_arrlen((const void **)args));
+	if (!envp[0] || !new_envp(args, *head, 1))
+		return (1);
+	return (0);
 }

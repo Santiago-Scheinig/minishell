@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_newlst_var.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 18:13:12 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * COMMENT PENDING
  */
-static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
+static t_var	*init_envp(t_var *new, const char *envp, char *sign, int i)
 {
 	new->name = ft_substr(envp, 0, i);
 	if (!new->name)
@@ -41,7 +41,7 @@ static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 /**
  * COMMENT PENDING
  */
-t_var	*create_envp(const char *envp)
+t_var	*create_envp(const char *envp, int export)
 {
 	t_var	*new;
 	char	*sign;

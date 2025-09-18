@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_import.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:44:12 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:46:00 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:51:28 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,17 @@ static int	check_args(char **args)
 	return (1);
 }
 
-t_list	*msh_import(char ***envp, t_list *head, char **args)
+int	msh_import(char ***envp, t_list **head, char **args)
 {
 	t_list	*tmp;
 	t_var	*aux;
 	int		i;
 
-	tmp = head;
+	tmp = *head;
 	if (!check_args(args))
-		return (NULL);
+		return (0);
 	if (!args)
-		return (head);
+		return (0);
 	while (tmp)
 	{
 		i = -1;
@@ -57,7 +57,7 @@ t_list	*msh_import(char ***envp, t_list *head, char **args)
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}
-	if (!new_envp(args, head, 0))
-		return (NULL);
-	return (head);
+	if (!new_envp(args, *head, 0))
+		return (1);
+	return (0);
 }

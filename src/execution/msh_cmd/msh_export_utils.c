@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_utils.c                                     :+:      :+:    :+:   */
+/*   msh_export_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:40:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:24:12 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,7 @@ char	**exp_resize(char **args, char **envp, size_t size)
 	old_size = (ft_arrlen((const void **)envp) + 1) * sizeof(char *);
 	tmp = ft_realloc(envp, new_size, old_size);
 	if (!tmp)
-	{
-		built_end("export", "System failed", NULL, '\0');
 		return (NULL);
-	}
 	old_size = envp_len;
 	envp_len = -1;
 	while (++envp_len < args_len)

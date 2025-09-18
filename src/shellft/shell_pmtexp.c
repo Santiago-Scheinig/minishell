@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_pmtexp.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 18:32:48 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 /**
  * COMMENT PENDING
  */
-static char	*pwd_name(char *user, char *path, t_body *minishell)
+static char	*pwd_name(char *ps1, char *path, t_list *envp_lst)
 {
 	size_t	len;
 	char	*user;
 	char	*tmp;
 
-	user = shell_getenv(minishell->envp_lst, "USER");
+	user = shell_getenv(envp_lst, "USER");
 	if (!user)
 		user = "";
 	len = prompt_len(ps1, user, path);
@@ -73,7 +73,7 @@ static char	*short_path_name(t_list *envp, char *path)
 
 	home = shell_getenv(envp, "HOME");
 	i = ft_strlen(home);
-	if (home && home[i - 1] && home[i - 1] != '/' && !access(minishell->home, X_OK))
+	if (home && home[i - 1] && home[i - 1] != '/' && !access(home, X_OK))
 		path = short_home(home, path);
 	if (!path)
 		return (NULL);
@@ -90,12 +90,9 @@ static char	*path_cwd(t_list *envp)
 
 	path = getcwd(NULL, 0);
 	if (!path)
-	{
-		built_end("pwd", "System failed", NULL, '\0');
 		return (NULL);
-	}
 	prompt = short_path_name(envp, path);
-	if (!minishell->home)
+	if (!shell_getenv(envp, "HOME"))
 	{
 		free(path);
 		prompt = getcwd(NULL, 0);
@@ -117,7 +114,7 @@ char	*shell_pmtexp(t_list *envp)
 	path = path_cwd(envp);
 	if (!path)
 		return (NULL);
-	prompt = pwd_name(ps1, path, minishell);
+	prompt = pwd_name(ps1, path, envp);
 	if (!prompt)
 	{
 		free(path);
