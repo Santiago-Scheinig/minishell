@@ -6,13 +6,16 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 17:16:00 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:25:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:32:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MSH_TSH_H
 # define MSH_TSH_H
 
+# include "lib/msh_std.h"
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <signal.h>
 # include <errno.h>
 

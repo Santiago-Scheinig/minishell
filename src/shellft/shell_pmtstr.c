@@ -6,20 +6,20 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:51:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:27:20 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:33:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
-char	*shell_pmtstr(t_list *envp)
+char	**shell_pmtstr(t_list *envp)
 {
 	t_var	*tmp;
 	char	**ps1;
 	
-	while (envp_lst)
+	while (envp)
 	{
-		tmp = (t_var *)envp_lst->content;
+		tmp = (t_var *)envp->content;
 		if (!ft_strncmp(tmp->name, "PS1", 3))
 		{
 			free(tmp->value);
@@ -28,7 +28,7 @@ char	*shell_pmtstr(t_list *envp)
 				return (NULL);//forcend
 			return (&tmp->value);
 		}
-		envp_lst = envp_lst->next;
+		envp = envp->next;
 	}
 	ps1 = malloc(2 * sizeof(char *));
 	if (!ps1)

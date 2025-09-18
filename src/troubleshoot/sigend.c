@@ -6,11 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:54:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:28:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:30:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "lib/msh_tsh.h"
 
 /**
  * Global flag use to track signals.

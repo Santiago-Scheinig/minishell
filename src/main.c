@@ -66,8 +66,8 @@ static void	init_term(t_body *minishell)
 		if (sigquit() || sigint())
 			forcend(minishell, "sigaction", MSHELL_FAILURE);
 	}
-	else if (/*setearlas a SIG*/)
-			forcend(minishell, "sigaction", MSHELL_FAILURE);
+/* 	else if (setearlas a SIG)
+			forcend(minishell, "sigaction", MSHELL_FAILURE); */
 }
 
 int	main(int argc, char **argv, const char **envp)

@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   msh_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:04:37 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:35:21 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
-#include "lib/msh_std.h"
+
+/**
+ * COMMENT PENDING ISMA
+ */
+t_var	*create_envp(const char *envp, int export);
 
 int	is_valid_identifier(char *arg)
 {

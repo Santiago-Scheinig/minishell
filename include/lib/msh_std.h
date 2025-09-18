@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:24:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:29:39 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,11 @@ typedef struct s_var
  * @note In general, the del function should be free().
  */
 void		shell_lstclear(t_list **lst, void (*del)(t_list *, void (*)(void *)));
+
+/**
+ * COMMENT PENDING ISMA
+ */
+void		shell_sortenv(t_list **head);
 
 /**
  * Creates and allocates a new STRING with len bytes copied from the 
@@ -226,7 +231,7 @@ t_list		*shell_newlst_var(char **envp);
 /**
  * COMMENT PENDING ISMA
  */
-char		*shell_pmtstr(t_list *envp);
+char		**shell_pmtstr(t_list *envp);
 
 /**
  * COMMENT PENDING ISMA

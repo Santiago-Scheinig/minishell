@@ -15,7 +15,7 @@ LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
 SRC			=	$(SRC_DIR)/main.c								\
-				$(SRC_DIR)/siginit.c							\
+				$(SRC_DIR)/troubleshoot/sigend.c				\
 				$(SRC_DIR)/troubleshoot/troublend.c				\
 				$(SRC_DIR)/parser/parser.c						\
 				$(SRC_DIR)/parser/parser_cmd.c					\
