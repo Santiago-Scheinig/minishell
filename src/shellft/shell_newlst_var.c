@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:57:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 14:46:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,7 @@
  */
 static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 {
-	char	*tmp;
-
-	tmp = malloc((i + 1) * sizeof(char));
-	if (!tmp)
-	{
-		free(new);
-		return (NULL);
-	}
-	ft_memcpy(tmp, envp, i);
-	tmp[i] = '\0';
-	new->name = ft_strdup(tmp);
-	free(tmp);
+	new->name = ft_substr(envp, 0, i);
 	if (!new->name)
 	{
 		free(new);
@@ -36,7 +25,6 @@ static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 	}
 	if (!sign)
 	{
-		tmp[i - 1] = '\0';
 		new->value = NULL;
 		return (new);
 	}
@@ -66,10 +54,10 @@ t_var	*create_envp(const char *envp)
 		return (NULL);
 	while (envp[i] && envp[i] != '=')
 		i++;
-	new = copy(new, envp, sign, i + 1);
+	new = init_envp(new, envp, sign, i);
 	if (!new)
 		return (NULL);
-	new->exported = 1;
+	new->exported = export;
 	return (new);
 }
 
@@ -81,14 +69,14 @@ t_list	*shell_newlst_var(char **envp)
 	t_var	*content;
 	t_list	*new_node;
 	t_list	*head;
-	int			i;
+	int		i;
 
 	new_node = NULL;
 	head = NULL;
 	i = -1;
 	while (envp[++i])
 	{
-		content = create_envp(envp[i]);
+		content = create_envp(envp[i], 1);
 		if (!content)
 		{
 			shell_lstclear(&head, shell_lstdelvar);
@@ -98,7 +86,7 @@ t_list	*shell_newlst_var(char **envp)
 		if (!new_node)
 		{
 			shell_lstclear(&head, shell_lstdelvar);
-			return(NULL);
+			return (NULL);
 		}
 		ft_lstadd_back(&head, new_node);
 	}

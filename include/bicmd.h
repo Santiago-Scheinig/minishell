@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:46:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 14:48:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,50 @@ typedef struct s_var
 
 void	free_env_list(t_var *env);
 
-t_list	*b_export(char **envp, t_list *head, char **args);
+char	**export_no_equal(char **args, t_list *lst);
+
+char	**export_no_dup(char **args);
+
+t_list	*b_export(char ***envp, t_list *head, char **args);
 
 t_var	*add_env(t_var *head, char *new_env);
 
-char	*shell_getenv(t_list *lst_var, const char *name);
+int		set_equal(t_var *aux, char **envp, char *sign, char *new_env);
+
+int		env(char **args, char **envp, t_list *env_lst);
 
 void	print_export(t_list *env_lst);
 
-void	print_env(char **envp);
+int		b_exit(char **args, t_body *minishell);
 
-char	**shell_realloc(char **args, char **envp);
+void	print_env(char **envp, t_list *env_lst);
+
+char	**shell_realloc(char **args, char **envp, size_t size);
 
 void	echo(char **args);
 
 int		cd(char **args, t_list *envp);
 
+void	end_minishell(t_body *minishell);
+
 int		pwd(char **args);
 
 char	**unset(char **envp, t_list *env_lst, char **name);
 
-t_var	*create_envp(const char *envp);
+int		built_end(char *name, char *type, char *flags, char error);
 
-int	built_end(char *name, char *type, char *flags, char error);
+char	*built_in(t_body *minishell, char *pathname, char **args, t_list *lst);
 
-char	**ft_remove_arr(char **arr, size_t index);
+char	**ft_remove_arr(char **arr, int index);
+
+int		is_valid_identifier(char *arg);
+
+char	**ft_isal_num(char **args, t_list *head);
+
+int		change_value_env(t_var *aux, char ***envp, char *new_env, int export);
+
+t_list	*new_envp(char **new_env, t_list *head, int export);
+
+t_list	*inport(char ***envp, t_list *head, char **args);
 
 #endif

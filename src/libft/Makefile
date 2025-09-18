@@ -55,6 +55,7 @@ SRC		=	$(SRCDIR)ft_argjoin.c					\
 			$(SRCDIR)ft_strtarr.c					\
 			$(SRCDIR)ft_strtrim.c					\
 			$(SRCDIR)ft_striteri.c					\
+			$(SRCDIR)ft_strlenchr.c					\
 			$(SRCDIR)ft_substr.c					\
 			$(SRCDIR)ft_tolower.c					\
 			$(SRCDIR)ft_toupper.c					\

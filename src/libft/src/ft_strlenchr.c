@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_strlenchr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 19:24:29 by ischeini         ###   ########.fr       */
+/*   Created: 2025/09/07 17:47:41 by ischeini          #+#    #+#             */
+/*   Updated: 2025/09/07 17:50:29 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "libft.h"
 
-int	pwd(char **args)
+/**
+ * Counts the amount of characters on a STRING until the CHAR.
+ * @param str The STRING to count characters from.
+ * @param c the CHAR until gona count.
+ * @return An INT with the amount of characters counted.
+ * @note This function doesn't count the '\0' character.
+ */
+int	ft_strlenchr(char *str, char c)
 {
-	char	*path;
+	int	i;
 
-	path = NULL;
-	if (args[1] && args[1][0] == '-')
-	{
-		built_end(args[0], "Invalid flags", "[]", args[1][1]);
-		return (0);
-	}
-	path = getcwd(NULL, 0);
-	if (!path)
-	{
-		built_end("pwd", "System failed", NULL, '\0');
-		return (0);
-	}
-	ft_printf("%s\n", path);
-	free(path);
-	return (1);
+	i = 0;
+	while (str[i] && str[i] != c)
+		i++;
+	return (i);
 }

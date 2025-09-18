@@ -41,6 +41,7 @@ typedef struct s_body
 	int				line;
 	int				*childs_pid;
 	char			**envp;//A copy of the original envp + post modifications
+	char			*home;
 	char			*input;//needed for history?
 	char			*prompt;//A char * promt, not really needed to save.
 	t_list			*cmd_lst;
@@ -55,5 +56,12 @@ int		parser(t_body *minishell);
 int		execmd(t_body *minishell);
 
 // void	waitcmd(t_body *minishell);
+char	*shell_prompt(t_body *minishell);
+
+char	*shell_getenv(t_list *lst_var, const char *name);
+
+t_var	*create_envp(const char *envp, int export);
+
+void	init_shell(t_body *minishell, const char **envp);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:56:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 14:46:43 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	shell_lstdelcmd(t_list *lst, void (*del)(void *))
  */
 void	shell_lstdeltkn(t_list *lst, void (*del)(void *))
 {
-	t_token *word;
+	t_token	*word;
 
 	if (lst->content != NULL)
 	{

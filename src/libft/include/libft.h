@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/29 18:24:11 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/07 17:50:56 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -395,6 +395,8 @@ void	*ft_split_free(char **split);
 void	*ft_realloc(void *ptr, size_t new_size, size_t old_size);
 
 int		ft_arrlen(const void **arr);
+
+int		ft_strlenchr(char *str, char c);
 
 char	**ft_strtarr(char **arr, char *str);
 

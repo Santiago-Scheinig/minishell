@@ -6,40 +6,35 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:09:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 14:47:01 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "bicmd.h"
 
 /**
  * COMMENT PENDING
  */
 static char	*pwd_name(char *user, char *path, t_body *minishell)
 {
-	char	*tmp1;
-	char	*tmp2;
+	size_t	len;
+	char	*user;
+	char	*tmp;
 
-	tmp1 = ft_strjoin(user, ":");
-	if (!tmp1)
+	user = shell_getenv(minishell->envp_lst, "USER");
+	if (!user)
+		user = "";
+	len = prompt_len(ps1, user, path);
+	tmp = malloc((len + 1) * sizeof(char));
+	if (!tmp)
 	{
-		free(path);
-		free(minishell->prompt);
+		perror("malloc");
 		return (NULL);
 	}
-	tmp2 = ft_strjoin(tmp1, path);
-	free(tmp1);
+	tmp = transform_format(tmp, ps1, user, path);
 	free(path);
-	if (!tmp2)
-	{
-		free(minishell->prompt);
-		return (NULL);
-	}
-	minishell->prompt = ft_strjoin(tmp2, "$ ");
-	free(tmp2);
-	if (!minishell->prompt)
-		return (NULL);
-	return (minishell->prompt);
+	return (tmp);
 }
 
 /**
@@ -51,24 +46,21 @@ static char	*short_home(char *tmp, char *path)
 	char	*short_path;
 
 	short_path = NULL;
-	if (ft_strncmp(path, tmp, ft_strlen(tmp)) == 0)
+	if (ft_strncmp(path, home, ft_strlen(home)) == 0)
 	{
-		rest = ft_strlen(path + ft_strlen(tmp));
+		rest = ft_strlen(path + ft_strlen(home));
 		short_path = malloc(2 + rest + 1);
 		if (!short_path)
 		{
-			perror("malloc");
-			free(tmp);
-			free(path);
-			return (NULL);
+		    perror("malloc");
+		    free(path);
+		    return (NULL);
 		}
 		short_path[0] = '~';
-		ft_strlcpy(short_path + 1, path + ft_strlen(tmp), rest + 1);
-		free(tmp);
+		ft_strlcpy(short_path + 1, path + ft_strlen(home), rest + 1);
 		free(path);
 		return (short_path);
 	}
-	free(tmp);
 	return (path);
 }
 
@@ -77,18 +69,12 @@ static char	*short_home(char *tmp, char *path)
  */
 static char	*short_path_name(char *path, char *user)
 {
-	char	*tmp;
+	int	i;
 
-	tmp = malloc((6 + ft_strlen(user) + 1) * sizeof(char));
-	if (!tmp)
-	{
-		perror("malloc");
-		free(path);
-		return (NULL);
-	}
-	ft_strlcpy(tmp, "/home/", 7);
-	ft_strlcat(tmp, user, 6 + ft_strlen(user) + 1);
-	path = short_home(tmp, path);
+	minishell->home = shell_getenv(minishell->envp_lst, "HOME");
+	i = ft_strlen(minishell->home);
+	if (minishell->home && minishell->home[i - 1] && minishell->home[i - 1] != '/' && !access(minishell->home, X_OK))
+		path = short_home(minishell->home, path);
 	if (!path)
 		return (NULL);
 	return (path);
@@ -104,11 +90,16 @@ static char	*path_cwd(char *user)
 	path = getcwd(NULL, 0);
 	if (!path)
 	{
-		perror("pwd");
+		built_end("pwd", "System failed", NULL, '\0');
 		return (NULL);
 	}
-	if (ft_strlen(path) > 5)
-		path = short_path_name(path, user);
+	minishell->home = NULL;
+	path = short_path_name(minishell, path);
+	if (!minishell->home)
+	{
+		free(path);
+		path = getcwd(NULL, 0);
+	}
 	return (path);
 }
 
@@ -118,21 +109,19 @@ static char	*path_cwd(char *user)
  */
 int	shell_prompt(t_body *minishell)
 {
-	size_t	size;
-	char	*user;
+	char	*prompt;
 	char	*path;
+	char	*ps1;
 
-	if (minishell->prompt)
-	{
-		free(minishell->prompt);
-		minishell->prompt = NULL;
-	}
-	user = getenv("USER");
-	path = path_cwd(user);
+	ps1 = shell_getenv(minishell->envp_lst, "PS1");
+	path = path_cwd(minishell);
 	if (!path)
-		return (0);
-	size = ft_strlen(path) + 4 + ft_strlen(user);
-	if (!pwd_name(user, path, minishell))
-		return (0);
-	return (1);
+		return (NULL);
+	prompt = pwd_name(ps1, path, minishell);
+	if (!prompt)
+	{
+		free(path);
+		return (NULL);
+	}
+	return (prompt);
 }

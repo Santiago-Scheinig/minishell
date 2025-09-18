@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:57:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 14:47:18 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ void	sortenv(t_list **head)
 		{
 			tmp = (t_var *)current->content;
 			nxt = (t_var *)current->next->content;
-			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name) + 1) > 0)
+			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name)) > 0)
 			{
-				head = swap_env(head, prev, current, current->next);
+				head = swap(head, prev, current, current->next);
 				sorted = 0;
 			}
 			prev = current;

@@ -44,9 +44,9 @@ static int	sigint(void)
 
 	sa_int.sa_handler = new_prompt;
 	sigemptyset(&sa_int.sa_mask);
-	sigaddset(&sa_int.sa_mask, SIGQUIT);//whats this?
-	sigaddset(&sa_int.sa_mask, SIGINT);//whats this?
-	sa_int.sa_flags = SA_RESTART;//This is blank and im not sure why...
+	sigaddset(&sa_int.sa_mask, SIGQUIT);
+	sigaddset(&sa_int.sa_mask, SIGINT);
+	sa_int.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
 		perror("Error setting SIGINT handler");
@@ -81,9 +81,10 @@ static int	sigquit(void)
 	return (MSHELL_SUCCESS);
 }
 
+
 static void	initialization(t_body *minishell, const char **envp)
 {
-	struct termios new_term;
+	struct termios	new_term;
 
 	ft_memset(minishell, 0, sizeof(t_body));
 	minishell->interactive = isatty(STDIN_FILENO);

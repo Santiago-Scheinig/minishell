@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 11:58:18 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 22:08:07 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/14 15:00:04 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 
 	if (n == 0)
 		return (0);
+	if (!s1 || !s2)
+		return (1);
 	i = 0;
 	while (i < n && s1[i] == s2[i] && s1[i] && s2[i])
 		i++;

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:03:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:29:13 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 14:44:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,7 @@ int		forcend(t_body *minishell, char *function, t_error number);
 int		redirend(char *argv, t_error number);
 
 int		sigend(const char *next, t_error number, t_body *minishell);
+
+void	end_minishell(t_body *minishell);
 
 #endif
