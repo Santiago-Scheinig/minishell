@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 19:33:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:54:41 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:15 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Creates and allocates a new STRING with the result of concatenate two
  * other STRINGS.
+ * 
  * @param s1 The first STRING to be concatenated.
  * @param s2 The second STRING ot be concatenated.
  * @return A pointer to the new allocated STRING, resulted from the 

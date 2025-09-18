@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:33:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:22:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Verifies the existence of path enviroment.
+ * 
  * @param envp The main enviroment where to search for the path enviroment.
  * @return If path exists, returns a CHAR ** with each definitive path specified
  * on it (divided by ':'); If not, returns NULL.
@@ -31,6 +32,7 @@ char	**ft_check_path(const char **envp)
 
 /**
  * Creates and allocates a STRING with the definitive path to a cmd binary.
+ * 
  * @param cmd The name of the command binary to find.
  * @param path The enviroment path where to search the command binary.
  * @return A pointer to the new STRING or NULL if the allocation failed or
@@ -65,6 +67,9 @@ static char	*ft_get_cmd_path(const char *cmd, const char **path)
 	return (ft_strdup(""));
 }
 
+/**
+ * COMMENT PENDING
+ */
 static char	*exe_verification(t_cmd *exe, char **path)
 {
 	char	*pathname;

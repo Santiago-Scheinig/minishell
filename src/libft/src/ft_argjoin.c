@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 18:13:33 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 22:57:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:59:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Creates and allocates a pointer to a STRING that includes every character 
  * included in all STRINGS of ARGV.
+ * 
  * @param argv The main arguments.
  * @param c The character used to joined the STRINGS.
  * @return A pointer to the new joined STRING.

@@ -6,12 +6,15 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 15:32:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:16 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:45:52 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
+/**
+ * COMMENT PENDING ISMA
+ */
 char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 {
 	size_t	j;
@@ -44,6 +47,9 @@ char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 	return (tmp);
 }
 
+/**
+ * COMMENT PENDING ISMA
+ */
 size_t	prompt_len(char *ps1, char *user, char *path)
 {
 	size_t	len;

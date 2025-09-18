@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 19:26:08 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 22:02:56 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Copies size bytes from a CONST STRING src at the end of a STRING des.
+ * 
  * @param dst The STRING where to copy src.
  * @param src The CONST STRING to copy from.
  * @param size The amount of bytes to be copied from src into des.

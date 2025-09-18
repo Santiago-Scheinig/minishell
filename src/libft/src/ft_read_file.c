@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 18:32:09 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:47:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Reads and saves a file until EOF, specified by a file descriptor and 
  * dividing it by lines.
+ * 
  * @param lines The LIST HEAD where to create new nodes for every line read.
  * @param fd The file descriptor to read from.
  * @return The amount of lines read or -1 in case of error.

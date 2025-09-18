@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 20:51:56 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:12:48 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Creates and allocates a new LIST result of iterating a FUNCTION on every
  * content of the original LIST.
+ * 
  * @param lst The starting node to start iterating.
  * @param f The FUNCTION to iterate on every content.
  * @param del The FUNCTION used to free each content in case of error.

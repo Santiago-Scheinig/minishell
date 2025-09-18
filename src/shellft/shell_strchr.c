@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 19:08:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:31:18 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:47:38 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Searches for the first ocurrance of a space or an operator on a STRING.
+ * 
  * @param s The STRING where to find the ocurrance.
  * @return A pointer to a position of the STRING with the first 
  * character ocurrance. If no ocurrance is found, returns NULL. 
@@ -48,6 +49,7 @@ const char	*shell_word_strchr(const char *s)
 
 /**
  * Searches for the first ocurrance of an operator on a STRING.
+ * 
  * @param s The STRING where to find the ocurrance.
  * @return A pointer to a position of the STRING with the first 
  * character ocurrance. If no ocurrance is found, returns NULL. 

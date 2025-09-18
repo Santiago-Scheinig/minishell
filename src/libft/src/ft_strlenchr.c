@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlenchr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 17:47:41 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 17:50:29 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Counts the amount of characters on a STRING until the CHAR.
+ * 
  * @param str The STRING to count characters from.
  * @param c the CHAR until gona count.
  * @return An INT with the amount of characters counted.

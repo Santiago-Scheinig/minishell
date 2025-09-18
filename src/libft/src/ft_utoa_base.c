@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 14:47:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 22:20:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:52 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Counts the amount of digits of a SIZE_T.
+ * 
  * @param n The number to count digits from.
  * @param base_len The base lenght that defines the digit size.
  * @return An INT with the amount of digits counted.
@@ -36,6 +37,7 @@ static int	ft_nbrlen(size_t n, size_t base_len)
 /**
  * Creates and allocates a STRING writen with the UNSIGNED LONG INT 
  * passed as argument, following the specified base.
+ 
  * @param n The number to write inside of the STRING.
  * @param base The base in which the number must be found
  * @return A pointer to the new allocated STRING; Or NULL in case of error.

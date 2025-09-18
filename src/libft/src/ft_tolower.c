@@ -6,13 +6,10 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 19:46:45 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:05:46 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * COMMENT PENDING
- */
 int	ft_tolower(int c)
 {
 	if (c >= 'A' && c <= 'Z')

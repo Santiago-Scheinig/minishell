@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 19:32:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:25:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Moves n bytes from a src VOID pointer into a dest VOID pointer.
+ * 
  * @param dest The VOID pointer where to move bytes into.
  * @param src The VOID pointer where to move bytes from.
  * @param n The amount of bytes to be moved.

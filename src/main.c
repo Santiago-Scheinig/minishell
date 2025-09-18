@@ -12,21 +12,21 @@
 
 #include "msh.h"
 
-/**
- * Global flag use to track signals.
- * 
- * This flag is used to notify the shell that the signal was intercepted,
- * allowing proper prompt refresh and cleanup.
- * 
- * @note Declared volatile because it is modified from within a signal handler.
- */
-
 // Creates an array of signals so i can then set it with 
 // sigmask to ign on childs or non-interactive mode
 // static int	sigset(void)
+// static void	init_sigs(t_body *minishell);
 
+/**
+ * Initializes the enviromental variables needed to execute minishell.
+ * 
+ * @param minishell A pointer to the minishell enviroment structure.
+ * @param envp The array of strings of the main envp.
+ */
 static void	init_envp(t_body *minishell, const char **envp)
 {
+	char **ps1;
+
 	minishell->envp = shell_envpdup(envp);
 	if (!minishell->envp)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
@@ -34,13 +34,21 @@ static void	init_envp(t_body *minishell, const char **envp)
 	sortenv(&minishell->envp_lst);
 	if (!minishell->envp_lst)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
-	if (!shell_pmtstr(minishell->envp_lst))
+	ps1 = shell_pmtstr(minishell->envp_lst);
+	if (!ps1)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
-	if (!shell_pmtexp(minishell->envp_lst))
-		forcend(minishell, "malloc", MSHELL_FAILURE);
+	msh_import(minishell->envp, minishell->envp_lst, ps1);
+	ft_split_free(ps1);
 	sortenv(&minishell->envp_lst);
 }
 
+/**
+ * Initializes the setting of the terminal needed to execute minishell.
+ * 
+ * @param minishell A pointer to the minishell enviroment structure.
+ * @note This allows msh to have two different modes, interactive and
+ * automatic.
+ */
 static void	init_term(t_body *minishell)
 {
 	struct termios	new_term;
@@ -55,11 +63,11 @@ static void	init_term(t_body *minishell)
 		new_term.c_lflag |= ECHOCTL;
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &new_term))
 			forcend(minishell, "tcsetattr", MSHELL_FATAL);
-		if (siginit())
+		if (sigquit() || sigint())
 			forcend(minishell, "sigaction", MSHELL_FAILURE);
 	}
-	else if (siginit())
-			forcend(minishell, "signal", MSHELL_FAILURE);
+	else if (/*setearlas a SIG*/)
+			forcend(minishell, "sigaction", MSHELL_FAILURE);
 }
 
 int	main(int argc, char **argv, const char **envp)

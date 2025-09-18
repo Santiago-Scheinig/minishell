@@ -6,14 +6,17 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:22:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:31:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:52:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING
+ * Verifies and returns if the string is a divisor operator.
+ * 
+ * @param str A string in which to verify the token type.
+ * @note Returns 0 if it's not a divisor operator and  >0 if it is.
  */
 int	is_divisor(char *str)
 {
@@ -33,7 +36,10 @@ int	is_divisor(char *str)
 }
 
 /**
- * COMMENT PENDING
+ * Returns a correspondent number to the token type following the 
+ * [enum t_token_type] definition.
+ * 
+ * @param str A string in which to verify the token type.
  */
 int	get_token_type(char *str)
 {
@@ -55,6 +61,7 @@ int	get_token_type(char *str)
 /**
  * Frees every pointer on an ARRAY of STRINGS and the ARRAY pointer, even
  * if it's not NULL terminated.
+ * 
  * @param wrdstr The ARRAY of STRINGS to free.
  * @param index The amount of STRINGS to free inside of the array.
  */
@@ -74,6 +81,7 @@ void	*memfree(char **wrdstr, int index)
 
 /**
  * Returns the proper length of the operator type sent as argument.
+ * 
  * @param type The T_TOKEN_TYPE that describers the operator type.
  * @return The lenght of the operator type.
  * @note If the operator isn't valid, returns 0.
@@ -90,6 +98,7 @@ int	operator_len(int type)
 /**
  * Counts the lenght of the first word on a STRING, until it reaches a
  * space, shell operator or '\0'
+ * 
  * @param s The STRING where to count the lenght of the first word.
  * @return An INT with the lenght of the word.
  * @note This function will ignore any divisor coincidences that happen 

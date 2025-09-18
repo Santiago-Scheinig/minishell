@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 12:07:52 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 22:06:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Creates and allocates a new STRING with the result of iterate a 
  * FUNCTION on every character of a CONST STRING.
+ * 
  * @param s The CONST STRING to be iterated.
  * @param f The FUNCTION to be iterated on every character of the
  * CONST STRING.

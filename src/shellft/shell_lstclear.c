@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:45:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 void	shell_lstdelvar(t_list *list, void (*del)(void *))
 {

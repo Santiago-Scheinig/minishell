@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:46:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next)
 {
@@ -31,7 +31,7 @@ static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next
 }
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 void	shell_sortenv(t_list **head)
 {

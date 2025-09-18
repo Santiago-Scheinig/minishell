@@ -6,13 +6,10 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 16:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:04:48 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:00:43 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * COMMENT PENDING
- */
 int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')

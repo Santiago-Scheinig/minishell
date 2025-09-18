@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:23:46 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:35:33 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Writes a STRING into a specific file descriptor.
+ * 
  * @param s The STRING to be printed.
  * @param fd The file descriptor to print into.
  * @return The amount of characters printed.

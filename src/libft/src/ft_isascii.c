@@ -6,13 +6,10 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:46:25 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:04:45 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:00:41 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * COMMENT PENDING
- */
 int	ft_isascii(int c)
 {
 	if (c >= 0 && c <= 127)

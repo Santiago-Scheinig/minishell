@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:44:50 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 20:59:46 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:00:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Swap and reverses all the characters of a STRING.
+ * 
  * @param str The string to swap.
  * @return The modified string.
  * @note This functions modifies the original str, doesn't allocate
@@ -42,6 +43,7 @@ static	char	*ft_swap(char *str)
 
 /**
  * Allocates a STRING to save an INT number into.
+ * 
  * @param n The number to be written.
  * @param len The digit lenght of the number.
  * @return A pointer to the STRING.
@@ -69,6 +71,7 @@ static	char	*ft_setstr(int n, int len)
 /**
  * Creates and allocates a STRING with the INT_MIN number
  * writen on it.
+ * 
  * @return A pointer to the STRING.
  */
 static	char	*ft_min(void)
@@ -84,6 +87,7 @@ static	char	*ft_min(void)
 
 /**
  * Counts the amount of digits that an INT variable has.
+ * 
  * @param n The number which to count it's digits.
  * @return The amount of digits counted. 
  */
@@ -106,6 +110,7 @@ static	int	ft_nbrlen(int n)
 /**
  * Creates and allocates a STRING writen with the INT passed as
  * argument.
+ * 
  * @param n The number to write inside of the STRING.
  * @return A pointer to the STRING.
  */

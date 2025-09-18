@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 13:39:12 by sscheini          #+#    #+#             */
-/*   Updated: 2025/06/03 18:43:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Compares two VOID pointers for n bytes.
+ * 
  * @param s1 The first VOID pointer to be compared.
  * @param s2 The second VOID pointer to be compared.
  * @param n The amount of bytes to be compared.

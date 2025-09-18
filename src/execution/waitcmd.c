@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:11:35 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 15:21:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:47:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 /**
  * Waits for every child process executed to finish before exiting the
  * pipex program.
+ * 
  * @param env The main enviroment pipex structure.
  * @param exit_status The status which the pipex program will exit.
  * @return If exit_error is false returns 0; else will return -1;

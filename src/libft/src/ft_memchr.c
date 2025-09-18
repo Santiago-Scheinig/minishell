@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 12:55:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:16:41 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Searches for an INT value inside of a VOID pointer for n bytes.
+ * 
  * @param s The VOID pointer where to search the INT.
  * @param int The int to be searched.
  * @param n The amount of bytes to search inside of the pointer.

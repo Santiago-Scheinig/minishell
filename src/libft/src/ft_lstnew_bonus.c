@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:49:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:13:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Creates and allocates a new LIST node.
+ * 
  * @param content A pointer to the content to be included inside of the new
  * node.
  * @return A pointer to the new LIST node; or NULL in case of error.

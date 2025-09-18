@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:45:21 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 char	*shell_getenv(t_list *lst_var, const char *name)
 {

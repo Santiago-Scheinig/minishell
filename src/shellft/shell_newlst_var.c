@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:45:41 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 {
@@ -39,7 +39,7 @@ static t_var	*copy(t_var *new, const char *envp, char *sign, int i)
 }
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 t_var	*create_envp(const char *envp)
 {
@@ -62,7 +62,7 @@ t_var	*create_envp(const char *envp)
 }
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 t_list	*shell_newlst_var(char **envp)
 {

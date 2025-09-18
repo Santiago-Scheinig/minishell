@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 20:49:13 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 22:12:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Searches for the last ocurrance of a character on a STRING.
+ * 
  * @param s The STRING where to find the ocurrance.
  * @param c The character to be found.
  * @return A pointer to a position of the STRING with the last 

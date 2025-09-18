@@ -6,12 +6,15 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:52:50 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:21:18 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
 
+/**
+ * COMMENT PENDING
+ */
 static void	parser_input(t_body *minishell)
 {
 	char	*tmp;
@@ -35,20 +38,25 @@ static void	parser_input(t_body *minishell)
 }
 
 /**
- * COMMENT UPDATE
  * Analizes user input, validates it's syntax and saves a list of commands
- * to execute on the minishell enviroment structure. The parsing is diveded
- * in 4 different steps.
+ * to execute on the minishell. The parsing is divided in different steps.
  * 
- * - READ_INPUT: Reads user input from user stopping at a newline, and 
- * intercepts user signals.
+ * - READ_INPUT: Reads user input stopping at a newline.
+ * 
  * - TOKENIZATION: Breaks the input line into tokens (words, operators).
+ * 
  * - VARIABLE_EXPANSION: Replaces and expands all $VAR on every token.
- * - QUOTE_REMOVAL: Removes quotes '\' and ';' since they aren't interpreted.
+ * 
+ * - COMAND_CASTING: Creats a list of commands by analizing the token list.
+ * 
+ * - REDIRECTIONS: Opens and close all redirections made with respective operators 
+ * within each individual command on the list.
+ * 
+ * - OPERATOR_REMOVAL: Removes syntax quotes, \\ and ;.
  * 
  * @param minishell A pointer to the minishell enviroment structure.
  * @note If any error occurs during the parsing, the function will end with
- * a sigend([errno]) call.
+ * a forcend([errno]) call.
  */
 int	parser(t_body *minishell)
 {

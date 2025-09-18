@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 18:25:23 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/02 21:05:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:35 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 char	**ft_strtarr(char **arr, char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:31:15 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:47:45 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Initializes the ARRAY of STRINGS dividing WORDS and OPERATORS into 
  * individual STRINGS.
+ * 
  * @param wrdstr An pointer to an empty initialized ARRAY of STRINGS.
  * @param s	The main string to split.
  * @param word_amount The max amount of splitted words.
@@ -55,6 +56,7 @@ static char	***create_split(char ***wrdstr, const char *s, int word_amount)
 /**
  * Counts the amount of words found on a STRING; a word being all the 
  * characters between spaces, shell operators and/or '\0'.
+ * 
  * @param s The STRING where to count words.
  * @return An INT with the amount of words counted.
  * @note This function will ignore any divisor character coincidences that 
@@ -87,6 +89,7 @@ static int	word_count(const char *s)
 /**
  * Counts the amount of shell operators found on a STRING; a shell operator
  * being "|", "<<", ">>", "<" and ">".
+ * 
  * @param s The STRING where to count the shell operators.
  * @return An INT with the amount of words counted.
  * @note This function will ignore any C coincidences that happen to be inside
@@ -119,6 +122,7 @@ static int	operator_count(const char *s)
 /**
  * Splits a STRING into an ARRAY of STRINGS, divided between words and 
  * shell operators, while also using spaces as divisor characters.
+ * 
  * @param s The STRING to split.
  * @return An ARRAY of STRINGS that includes every divided shell token and is 
  * NULL terminated.

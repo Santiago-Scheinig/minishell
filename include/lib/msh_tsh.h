@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 17:16:00 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:35:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:19:33 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,50 @@
 # include <signal.h>
 # include <errno.h>
 
-extern volatile sig_atomic_t	g_signal_received;
-
-int	siginit(void);
+/*--------------------------------------------------------------------------*/
+/*------------------------------SIGNAL HANDLERS-----------------------------*/
+/*--------------------------------------------------------------------------*/
 
 /**
+ * Global flag use to track signals.
  * 
+ * This flag is used to notify the shell that the signal was intercepted,
+ * allowing proper prompt refresh and cleanup.
  * 
+ * @note Declared volatile because it is modified from within a signal handler.
  */
+extern volatile sig_atomic_t	g_signal_received;
+
+/**
+ * Interpects the SIGINT signal and executes a signal handler.
+ * 
+ * The intercepted signal indicates the program to execute new_prompt().
+ * 
+ * @param minishell A pointer to the main enviroment structure of minishell.
+ * @return A pointer to the main enviroment structure of minishell, 
+ * or NULL if the interception failed.
+ * @note Additionally, it blocks both SIGINT and SIGQUIT signals during
+ * the handler's execution to prevent nested signals from interfering. Then
+ * uses SA_RESTART to automatically restart interrupted syscalls.
+ */
+int	sigint(void);
+
+/**
+ * Intercepts the SIGQUIT signal and executes a signal handler.
+ * 
+ * The intercepted signal is indicated to SIG_IGN, which tells the program 
+ * to ignore it entirely.
+ * 
+ * @param minishell A pointer to the main enviroment structure of minishell.
+ * @return A pointer to the main enviroment structure of minishell, 
+ * or NULL if the interception failed.
+ * @note SIGQUIT is typically used to quit a process and produce a core dump.
+ */
+int	sigquit(void);
+
+/*--------------------------------------------------------------------------*/
+/*-----------------------------SHELL TROUBLESHOOT---------------------------*/
+/*--------------------------------------------------------------------------*/
 
 typedef enum e_error
 {

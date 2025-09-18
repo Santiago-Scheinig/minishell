@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 19:58:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 19:55:40 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:57 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Frees an ARRAY of STRINGS, usually allocated by ft_split().
+ * 
  * @param split The ARRAY of STRINGS to free.
  */
 void	*ft_split_free(char **split)

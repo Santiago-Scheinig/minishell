@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:29:19 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:29:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:57:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static char	*maskstr(char *str)
 
 /**
  * Creates and allocates a new T_TOKEN node.
+ * 
  * @param str A pointer to the STRING to be tokenized.
  * @return A pointer to the new T_TOKEN allocation; or NULL in case of error.
  */
@@ -87,6 +88,15 @@ static t_token	*token_dup(char *str)
 	return (new);
 }
 
+/**
+ * Replaces the current token string with a new one.
+ * 
+ * @param word A pointer to the token to replace it's string.
+ * @param str The string to be replaced into [word].
+ * @return Always returns 0.
+ * @note The previous mask is also replaced to match the string
+ * characters with the flag for each set as N (None).
+ */
 static int replace_token(t_token *word, char *str)
 {
 	if (word->str)
@@ -105,7 +115,7 @@ static int replace_token(t_token *word, char *str)
  * @param str A pointer to the new STRING to use content on the new token.
  * @param start A flag that if equals zero, will replace the content of 
  * the current token node, instead of creating a new node.
- * @return Zero on success. or Malloc error. NEED TO CHANGE THIS LINE!!!!
+ * @return Returns 0 on success and >0 on error.
  */
 int	shell_addlst_token(t_list *token_list, char *str, int start)
 {

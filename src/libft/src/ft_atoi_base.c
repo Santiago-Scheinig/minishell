@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:52:46 by sscheini          #+#    #+#             */
-/*   Updated: 2025/06/03 21:57:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:00:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static int	ft_check_base(char *str, const char *base)
 
 /**
  * Finds the first number on a STRING following the specified base.
+ * 
  * @param str The string where the base number is saved.
  * @param base The base in which the number must be found.
  * @return The INT found on STR following the BASE.

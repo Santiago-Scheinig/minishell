@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 19:49:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:50:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Counts the amount of words found on a STRING; a word being all the 
  * characters included between the divisor character and/or '\0'.
+ * 
  * @param s The STRING where to count words.
  * @param c The character which divides each word.
  * @return An INT with the amount of words counted.
@@ -39,7 +40,8 @@ static	int	ft_wrdcount(char const *s, char c)
 
 /**
  * Counts the lenght of the first word on a STRING, until it reaches the 
- * divisor character or '\0'
+ * divisor character or '\0'.
+ * 
  * @param s The STRING where to count the lenght of the first word.
  * @param c The character which divides each word.
  * @return An INT with the lenght of the word.
@@ -57,6 +59,7 @@ static	int	ft_wrdlen(char const *s, char c)
 /**
  * Frees every pointer on an ARRAY of STRINGS and the ARRAY pointer, even
  * if it's not NULL terminated.
+ * 
  * @param wrdstr The ARRAY of STRINGS to free.
  * @param index The amount of STRINGS to free inside of the array.
  */
@@ -76,6 +79,7 @@ static	void	ft_memfree(char **wrdstr, int index)
 /**
  * Splits a STRING into an ARRAY of STRINGS, using a divisor character.
  * @param s The STRING to split.
+ * 
  * @param c The character which divides each word.
  * @return An ARRAY of STRINGS that includes every divided word and is 
  * NULL terminated.

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:33:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:59:10 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Reads from the STDIN until the specified LIMITATOR is written next to a
  * line jump '\n', writing everything that is sent into a new pipefd[1].
+ * 
  * @param limitator The string that will work as LIMITATOR.
  * @return Returns the pipefd[0] from where to read everything that was 
  * written on pipefd[1];

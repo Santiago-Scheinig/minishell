@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/07 17:50:56 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:06:01 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 /**
  * Copies size bytes from a CONST STRING src at the end of a STRING des.
+ * 
  * @param dst The STRING where to copy src.
  * @param src The CONST STRING to copy from.
  * @param size The amount of bytes to be copied from src into des.
@@ -39,6 +40,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 
 /**
  * Concatenates size bytes from a CONST STRING src at the end of a STRING des.
+ * 
  * @param dst The STRING where to concatenate src.
  * @param src The CONST STRING to be concatenated into des.
  * @param size The amount of bytes to be concatenated from src into des.
@@ -52,6 +54,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 
 /**
  * Counts the amount of characters on a CONST STRING.
+ * 
  * @param s The CONST STRING to count characters from.
  * @return An INT with the amount of characters counted.
  * @note This function doesn't count the '\0' character.
@@ -60,6 +63,7 @@ size_t	ft_strlen(const char *s);
 
 /**
  * Splits a STRING into an ARRAY of STRINGS, using a divisor character.
+ * 
  * @param s The STRING to split.
  * @param c The character which divides each word.
  * @return An ARRAY of STRINGS that includes every divided word and is 
@@ -69,6 +73,7 @@ char	**ft_split(char const *s, char c);
 
 /**
  * Splits a STRING into an ARRAY of STRINGS, using a divisor character.
+ * 
  * @param s The STRING to split.
  * @param c The character which divides each word.
  * @return An ARRAY of STRINGS that includes every divided word and is 
@@ -81,6 +86,7 @@ char	**ft_iq_split(char const *s, char c);
 /**
  * Creates and allocates a STRING writen with the UNSIGNED LONG INT 
  * passed as argument, following the specified base.
+ * 
  * @param n The number to write inside of the STRING.
  * @param base The base in which the number must be found
  * @return A pointer to the new allocated STRING; Or NULL in case of error.
@@ -90,6 +96,7 @@ char	*ft_utoa_base(size_t n, const char *base);
 /**
  * Searches for the first match of all of a CONST STRING little in a 
  * CONST STRING big for len bytes.
+ * 
  * @param big The large CONST STRING to find the match.
  * @param small The small CONST STRING to be matched on big.
  * @param len The amount of bytes to search on big.
@@ -103,6 +110,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len);
 /**
  * Creates and allocates a new STRING with len bytes copied from the 
  * CONST STRING starting on the start position.
+ * 
  * @param s The CONST STRING to copy from.
  * @param start The index of the CONST STRING to start copying from.
  * @param len The amount of bytes to be copied.
@@ -115,6 +123,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 /**
  * Creates and allocates a new STRING with the result of iterate a 
  * FUNCTION on every character of a CONST STRING.
+ * 
  * @param s The CONST STRING to be iterated.
  * @param f The FUNCTION to be iterated on every character of the
  * CONST STRING.
@@ -126,6 +135,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 /**
  * Creates and allocates a new STRING resultant of the trimming of a 
  * CONST STRING set in a CONST STRING s1.
+ * 
  * @param s1 The CONST STRING to be compared for trimming.
  * @param set The character base to be trimmed.
  * @return A pointer to the new STRING resultant of the trimming.
@@ -137,6 +147,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 /**
  * Creates and allocates a new STRING with the result of concatenate two
  * other STRINGS.
+ * 
  * @param s1 The first STRING to be concatenated.
  * @param s2 The second STRING ot be concatenated.
  * @return A pointer to the new allocated STRING, resulted from the 
@@ -149,6 +160,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 /**
  * Creates and allocates a pointer to a STRING that includes every character 
  * included in all STRINGS of ARGV.
+ * 
  * @param argv The main arguments.
  * @param c The character used to joined the STRINGS.
  * @return A pointer to the new joined STRING.
@@ -157,6 +169,7 @@ char	*ft_argjoin(char **argv, char c);
 
 /**
  * Searches for the last ocurrance of a character on a STRING.
+ * 
  * @param s The STRING where to find the ocurrance.
  * @param c The character to be found.
  * @return A pointer to a position of the STRING with the last 
@@ -166,6 +179,7 @@ char	*ft_strrchr(const char *s, int c);
 
 /**
  * Searches for the first ocurrance of a character on a STRING.
+ * 
  * @param s The STRING where to find the ocurrance.
  * @param c The character to be found.
  * @return A pointer to a position of the STRING with the first 
@@ -175,6 +189,7 @@ char	*ft_strchr(const char *s, int c);
 
 /**
  * Searches for the first ocurrance of a character on a STRING.
+ * 
  * @param s The STRING where to find the ocurrance.
  * @param c The character to be found.
  * @return A pointer to a position of the STRING with the first 
@@ -187,6 +202,7 @@ char	*ft_iq_strchr(char const *s, char c);
 /**
  * Creates and allocates a STRING that includes all the characters of a CONST
  * STRING.
+ * 
  * @param s The CONST STRING to allocate.
  * @return A pointer to the new allocated STRING.
  */
@@ -195,6 +211,7 @@ char	*ft_strdup(const char *s);
 /**
  * Creates and allocates a STRING writen with the INT passed as
  * argument.
+ * 
  * @param n The number to write inside of the STRING.
  * @return A pointer to the STRING.
  */
@@ -207,6 +224,7 @@ char	*get_next_line(int fd);
 
 /**
  * Iterates a FUNCTION on every character of a STRING.
+ * 
  * @param s The STRING to iterate into.
  * @param f The FUNCTION to iterate on every character of the STRING.
  * @note This function modifies the original STRING, doesn't 
@@ -216,6 +234,7 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 
 /**
  * Compares two CONST STRING for n bytes.
+ * 
  * @param s1 The first CONST STRING to be compared.
  * @param s2 The second CONST STRING to be compared.
  * @param n The amount of bytes to be compared,
@@ -228,6 +247,7 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 /**
  * Writes a STRING into a specific file descriptor.
+ * 
  * @param s The STRING to be printed.
  * @param fd The file descriptor to print into.
  * @return The amount of characters printed.
@@ -236,6 +256,7 @@ int		ft_putstr_fd(char *s, int fd);
 
 /**
  * Writes a STRING into a specific file descriptor.
+ * 
  * @param s The STRING to be printed.
  * @param fd The file descriptor to print into.
  * @return The amount of characters printed.
@@ -244,12 +265,15 @@ int		ft_putstr_fd(char *s, int fd);
  */
 int		ft_putendl_fd(char *s, int fd);
 
+char	**ft_strtarr(char **arr, char *str);
+
 /*--------------------------------------------------------------------------*/
 /*---------------------------------INTEGERS---------------------------------*/
 /*--------------------------------------------------------------------------*/
 
 /**
  * Finds the first number on a STRING with a decimal base.
+ * 
  * @param str The string where the base number is saved.
  * @param base The base in which the number must be found.
  * @return The decimal LONG found on STR.
@@ -261,6 +285,7 @@ long	ft_atol(const char *nptr);
 
 /**
  * Finds the first number on a STRING with a decimal base.
+ * 
  * @param str The string where the base number is saved.
  * @param base The base in which the number must be found.
  * @return The decimal INT found on STR.
@@ -272,6 +297,7 @@ int		ft_atoi(const char *nptr);
 
 /**
  * Finds the first number on a STRING following the specified base.
+ * 
  * @param str The string where the base number is saved.
  * @param base The base in which the number must be found.
  * @return The INT found on STR following the BASE.
@@ -282,11 +308,24 @@ int		ft_atoi_base(char *str, const char *base);
 
 /**
  * Writes an INT into a specific file descriptor.
+ * 
  * @param n The INT to be printed.
  * @param fd The file descriptor to print into.
  * @return The amount of characters printed.
  */
 int		ft_putnbr_fd(int n, int fd);
+
+/**
+ * Counts the amount of characters on a STRING until the CHAR.
+ * 
+ * @param str The STRING to count characters from.
+ * @param c the CHAR until gona count.
+ * @return An INT with the amount of characters counted.
+ * @note This function doesn't count the '\0' character.
+ */
+int		ft_strlenchr(char *str, char c);
+
+int		ft_arrlen(const void **arr);
 
 /*--------------------------------------------------------------------------*/
 /*--------------------------------CHARACTER---------------------------------*/
@@ -308,6 +347,7 @@ int		ft_tolower(int c);
 
 /**
  * Writes a character into a specific file descriptor.
+ * 
  * @param c The character to be printed.
  * @param fd The file descriptor to print into.
  * @return The amount of characters printed.
@@ -320,6 +360,7 @@ int		ft_putchar_fd(char c, int fd);
 
 /**
  * Moves n bytes from a src VOID pointer into a dest VOID pointer.
+ * 
  * @param dest The VOID pointer where to move bytes into.
  * @param src The VOID pointer where to move bytes from.
  * @param n The amount of bytes to be moved.
@@ -332,6 +373,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n);
 
 /**
  * Copies n bytes from a src VOID pointer into a dest VOID pointer.
+ * 
  * @param dest The VOID pointer where to copy bytes into.
  * @param src The VOID pointer where to copy bytes from.
  * @param n The amount of bytes to be copied.
@@ -342,6 +384,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 /**
  * Searches for an INT value inside of a VOID pointer for n bytes.
+ * 
  * @param s The VOID pointer where to search the INT.
  * @param int The int to be searched.
  * @param n The amount of bytes to search inside of the pointer.
@@ -352,6 +395,7 @@ void	*ft_memchr(const void *s, int c, size_t n);
 
 /**
  * Sets n bytes of a VOID pointer with a specified INT.
+ * 
  * @param s The VOID pointer to set bytes into.
  * @param c The INT value to be set on each byte.
  * @param n The amount of bytes to be set on the VOID pointer.
@@ -360,6 +404,7 @@ void	*ft_memset(void *s, int c, size_t n);
 
 /**
  * Allocates NMEMB * SIZE bytes of memory and sets them to '\0'.
+ * 
  * @param nmemb The amount of memory bytes to allocate.
  * @param size The size of each memory bytes.
  * @return The void pointer allocated.
@@ -369,6 +414,7 @@ void	*ft_calloc(size_t nmemb, size_t size);
 /**
  * Erases the data in the n bytes of the memory starting at the location
  * pointed to by s, by writing zeros (bytes containing '\0') to that area.
+ * 
  * @param s The pointer location where to rewrite.
  * @param n The amount of bytes to rewrite.
  */
@@ -376,6 +422,7 @@ void	ft_bzero(void *s, size_t n);
 
 /**
  * Compares two VOID pointers for n bytes.
+ * 
  * @param s1 The first VOID pointer to be compared.
  * @param s2 The second VOID pointer to be compared.
  * @param n The amount of bytes to be compared.
@@ -388,17 +435,12 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
 
 /**
  * Frees an ARRAY of STRINGS, usually allocated by ft_split().
+ * 
  * @param split The ARRAY of STRINGS to free.
  */
 void	*ft_split_free(char **split);
 
 void	*ft_realloc(void *ptr, size_t new_size, size_t old_size);
-
-int		ft_arrlen(const void **arr);
-
-int		ft_strlenchr(char *str, char c);
-
-char	**ft_strtarr(char **arr, char *str);
 
 /*--------------------------------------------------------------------------*/
 /*----------------------------------S_LIST----------------------------------*/

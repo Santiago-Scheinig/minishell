@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:51:52 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 20:36:13 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:00:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static	long	ft_issign(long c)
 
 /**
  * Finds the first number on a STRING with a decimal base.
+ * 
  * @param str The string where the base number is saved.
  * @param base The base in which the number must be found.
  * @return The decimal LONG found on STR.

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 17:36:37 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:02:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:00:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Adds a LIST node at the end of a LIST HEAD.
+ * 
  * @param lst The LIST HEAD where to add the new node.
  * @param new The new LIST node to add.
  * @note If the LIST HEAD is empty, sets the new LIST node at the start

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 17:16:10 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 22:00:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:18 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Concatenates size bytes from a CONST STRING src at the end of a STRING des.
+ * 
  * @param dst The STRING where to concatenate src.
  * @param src The CONST STRING to be concatenated into des.
  * @param size The amount of bytes to be concatenated from src into des.

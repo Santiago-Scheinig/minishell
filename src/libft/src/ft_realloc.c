@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 18:24:31 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 14:45:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:01:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 void	*ft_realloc(void *ptr, size_t new_size, size_t old_size)
 {

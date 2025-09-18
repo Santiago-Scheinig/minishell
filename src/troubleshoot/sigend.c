@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   siginit.c                                          :+:      :+:    :+:   */
+/*   sigend.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:54:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 16:31:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:45:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * Global flag use to track signals.
+ * 
+ * This flag is used to notify the shell that the signal was intercepted,
+ * allowing proper prompt refresh and cleanup.
+ * 
+ * @note Declared volatile because it is modified from within a signal handler.
+ */
 volatile sig_atomic_t	g_signal_received = 0;
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 static void	new_prompt(int signum)
 {
@@ -39,7 +47,7 @@ static void	new_prompt(int signum)
  * the handler's execution to prevent nested signals from interfering. Then
  * uses SA_RESTART to automatically restart interrupted syscalls.
  */
-static int	sigint(void)
+int	sigint(void)
 {
 	struct sigaction	sa_int;
 
@@ -67,7 +75,7 @@ static int	sigint(void)
  * or NULL if the interception failed.
  * @note SIGQUIT is typically used to quit a process and produce a core dump.
  */
-static int	sigquit(void)
+int	sigquit(void)
 {
 	struct sigaction	sa_quit;
 
@@ -80,11 +88,4 @@ static int	sigquit(void)
 		return (MSHELL_FAILURE);
 	}
 	return (MSHELL_SUCCESS);
-}
-
-int	siginit(void)
-{
-	if (sigquit() || sigint())
-		return (MSHELL_FAILURE);
-	return (MSHELL_SUCCESS)
 }

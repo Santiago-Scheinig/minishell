@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 17:24:31 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 21:51:50 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Creates and allocates a STRING that includes all the characters of a CONST
  * STRING.
+ * 
  * @param s The CONST STRING to allocate.
  * @return A pointer to the new allocated STRING.
  */

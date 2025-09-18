@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 13:48:27 by sscheini          #+#    #+#             */
-/*   Updated: 2025/06/03 18:40:07 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Searches for the first match of all of a CONST STRING little in a 
  * CONST STRING big for len bytes.
+ * 
  * @param big The large CONST STRING to find the match.
  * @param small The small CONST STRING to be matched on big.
  * @param len The amount of bytes to search on big.

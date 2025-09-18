@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:15:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/27 20:54:21 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:00:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Searches for the first ocurrance of a character on a STRING.
+ * 
  * @param s The STRING where to find the ocurrance.
  * @param c The character to be found.
  * @return A pointer to a position of the STRING with the first 

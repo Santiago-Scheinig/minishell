@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 11:58:18 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/14 15:00:04 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /**
  * Compares two CONST STRING for n bytes.
+ * 
  * @param s1 The first CONST STRING to be compared.
  * @param s2 The second CONST STRING to be compared.
  * @param n The amount of bytes to be compared,

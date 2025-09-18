@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 19:13:22 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:29:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:45:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 char	**shell_envpdup(const char **envp)
 {

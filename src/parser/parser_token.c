@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:27:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:58:33 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ static char	*maskstr(char *str)
 
 /**
  * Creates and allocates a new T_TOKEN node.
+ * 
  * @param str A pointer to the STRING to be tokenized.
  * @return A pointer to the new T_TOKEN allocation; or NULL in case of error.
  */

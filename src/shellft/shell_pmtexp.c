@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:46:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 static char	*pwd_name(char *user, char *path, t_body *minishell)
 {
@@ -37,7 +37,7 @@ static char	*pwd_name(char *user, char *path, t_body *minishell)
 }
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 static char	*short_home(char *home, char *path)
 {
@@ -64,7 +64,7 @@ static char	*short_home(char *home, char *path)
 }
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 static char	*short_path_name(t_list *envp, char *path)
 {
@@ -81,7 +81,7 @@ static char	*short_path_name(t_list *envp, char *path)
 }
 
 /**
- * COMMENT PENDING
+ * COMMENT PENDING ISMA
  */
 static char	*path_cwd(t_list *envp)
 {
@@ -104,8 +104,7 @@ static char	*path_cwd(t_list *envp)
 }
 
 /**
- * COMMENT PENDING
- * NO MINISHELL AS ARGUMENT BUT CHAR ** ENVP!!
+ * COMMENT PENDING ISMA
  */
 char	*shell_pmtexp(t_list *envp)
 {

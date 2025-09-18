@@ -6,12 +6,15 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:51:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 19:46:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
+/**
+ * COMMENT PENDING ISMA
+ */
 char	*shell_pmtstr(t_list *envp)
 {
 	t_var	*tmp;

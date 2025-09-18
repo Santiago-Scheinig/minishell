@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:43:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/06/03 21:10:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:38 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static int	ft_istrim(char c, char const *set)
 /**
  * Creates and allocates a new STRING resultant of the trimming of a 
  * CONST STRING set in a CONST STRING s1.
+ * 
  * @param s1 The CONST STRING to be compared for trimming.
  * @param set The character base to be trimmed.
  * @return A pointer to the new STRING resultant of the trimming.

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 17:53:07 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/04 21:17:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 20:02:44 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /**
  * Creates and allocates a new STRING with len bytes copied from the 
  * CONST STRING starting on the start position.
+ * 
  * @param s The CONST STRING to copy from.
  * @param start The index of the CONST STRING to start copying from.
  * @param len The amount of bytes to be copied.
