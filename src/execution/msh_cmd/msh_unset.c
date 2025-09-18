@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   msh_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 15:15:47 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:46:10 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_cmd.h"
 
 static t_list	*remove_lst(t_list *list)
 {
@@ -71,9 +71,32 @@ static int	check_name(char **envp, char *name, t_list **lst)
 	return (0);
 }
 
-char	**unset(char **envp, t_list *env_lst, char **arg)
+char	**ft_remove_arr(char **arr, int index)
 {
-	t_list	**current;
+	int		len;
+
+	if (!arr)
+		return (arr);
+	len = ft_arrlen((const void **)arr);
+	if (index >= len)
+		return (arr);
+	free(arr[index]);
+	while (index < len - 1)
+	{
+		if (arr[index + 1] != NULL)
+			arr[index] = arr[index + 1];
+		else
+			arr[index] = NULL;
+		index++;
+	}
+	arr[len - 1] = NULL;
+	//HAY UN PROBLEMA PORQUE TIENE QUE HABER UN REALLOC, PERO CUANDO HAY FALLA!
+	return (arr);
+}
+
+char	**msh_unset(char **envp, t_list *env_lst, char **arg)
+{
+	t_list	*current;
 	size_t	i;
 
 	i = 0;
@@ -84,12 +107,12 @@ char	**unset(char **envp, t_list *env_lst, char **arg)
 	}
 	while (arg && arg[i])
 	{
-		current = &env_lst;
-		while (*current)
+		current = env_lst;
+		while (current)
 		{
-			if (check_name(&envp[0], arg[i], current))
+			if (check_name(&envp[0], arg[i], &current))
 				continue ;
-			current = &((*current)->next);
+			current = current->next;
 		}
 		i++;
 	}

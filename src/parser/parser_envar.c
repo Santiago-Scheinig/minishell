@@ -6,11 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:55:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:27:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "msh_psr.h"
 
 /**
  * Splits the WORD string and adds the words in sequence after the current

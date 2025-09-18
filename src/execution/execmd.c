@@ -6,14 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:50:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:33:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "troubleshoot.h"
-#include "parser.h"
-#include "execmd.h"
+#include "msh_exe.h"
 
 // static void	exe_setup()
 

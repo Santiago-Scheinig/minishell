@@ -6,11 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:42:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:33:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "msh_exe.h"
 
 /**
  * Verifies the existence of path enviroment.

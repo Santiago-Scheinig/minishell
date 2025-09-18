@@ -6,11 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:55:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:27:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "msh_psr.h"
 
 /**
  * Calculates the length of the enviroment variable name.

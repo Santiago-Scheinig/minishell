@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   msh_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 19:24:43 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:45:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_cmd.h"
 
 int	is_valid_identifier(char *arg)
 {
@@ -101,7 +101,7 @@ t_list	*new_envp(char **new_env, t_list *head, int export)
 	return (head);
 }
 
-t_list	*b_export(char ***envp, t_list *head, char **args)
+t_list	*msh_export(char ***envp, t_list *head, char **args)
 {
 	t_list	*tmp;
 	t_var	*aux;

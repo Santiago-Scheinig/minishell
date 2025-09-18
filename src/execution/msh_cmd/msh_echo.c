@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   msh_echo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/08/31 17:58:29 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:45:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_cmd.h"
 
-void	echo(char **args)
+void	msh_echo(char **args)
 {
 	int	new_line;
 	int	i;

@@ -1,22 +1,97 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shellft.h                                          :+:      :+:    :+:   */
+/*   msh_std.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 14:43:57 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:58:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHELLFT_H
-# define SHELLFT_H
+#ifndef MSH_STD_H
+# define MSH_STD_H
 
 # include "libft.h"
-# include "bicmd.h"
-# include "parser.h"
+# include <sys/types.h>
+# include <termios.h>
 
+/*Id like to change this to a envp structure, inside a t_list structure.*/
+/*If the only functions that are able to edit this, are shell functions,*/
+/*Then we put this inside of shellft.h instead, more clean.				*/
+typedef struct s_var
+{
+	char				*value;
+	char				*name;
+	int					exported;
+}	t_var;
+
+typedef struct s_files
+{
+	int	oldin;
+	int	oldout;
+	int	exein;
+	int	exeout;
+}	t_files;
+
+typedef struct s_cmd
+{
+	int		built_in;
+	int		heredoc[2];
+	char	*limitator;
+	char	*pathname;
+	char	**argv;
+	t_files		fd;
+}	t_cmd;
+
+/**
+ * An enumeration list of token types.
+ */
+typedef enum e_token_type
+{
+	WORD,			//	Command or argument
+	PIPE,			//	|
+	REDIR_IN,		//	<
+	REDIR_OUT,		//	>
+	REDIR_APPEND,	//	>>
+	HEREDOC,		//	<<
+	END,			//	End of line
+}	t_token_type;
+
+/**
+ * A token structure where to save the value and it's type.
+ */
+typedef struct s_token
+{
+	char			*str;	//	The raw token string.
+	char			*mask;	//	The mask of each character inside the string.
+	t_token_type	type;	//	The type of token.
+}	t_token;
+
+/**
+ * Struct used to save the enviroment variables of the minishell.
+ * 
+ * @param term			Termios structure linked to the terminal initialization
+ * @param commands
+ * @param input
+ * @param childs_pid
+ * @param errno
+ */
+typedef struct s_body
+{
+	struct termios	orig_term;
+	int				exit_status;
+	int				interactive;
+	int				line;
+	char			**envp;//A copy of the original envp + post modifications
+	char			*home;
+	char			*input;//needed for history?
+	pid_t			*childs_pid;
+	t_list			*cmd_lst;
+	t_list			*envp_lst;
+	t_list			*token_lst;
+}	t_body;
 
 int	is_divisor(char *str);
 
@@ -144,6 +219,18 @@ int		shell_addlst_token(t_list *token_list, char *str, int start);
  */
 char	*shell_strtrim(char const *s1, char const *mask, char const *set);
 
+/**
+ * Moves n bytes from a src VOID pointer into a dest VOID pointer.
+ * @param dest The VOID pointer where to move bytes into.
+ * @param src The VOID pointer where to move bytes from.
+ * @param n The amount of bytes to be moved.
+ * @return The VOID pointer to dest.
+ * @note This function modifies the dest VOID pointer and, additionally,
+ * checks if the memory position of src is close to dest to avoid loosing
+ * information during the movement.
+ */
+void	*shell_memmove(void *dest, void *src, void *mask, size_t n);
+
 void	shell_lstdelvar(t_list *list, void (*del)(void *));
 
 char	**shell_envpdup(const char **envp);
@@ -156,5 +243,8 @@ size_t	prompt_len(char *ps1, char *user, char *path);
 
 char	*transform_format(char *tmp, char *ps1, char *user, char *path);
 
+char	*shell_pmtstr(t_list *envp);
+
+char	*shell_pmtexp(t_list *envp);
 
 #endif

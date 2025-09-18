@@ -6,11 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:42:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:33:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "msh_exe.h"
 
 /**
  * Reads from the STDIN until the specified LIMITATOR is written next to a

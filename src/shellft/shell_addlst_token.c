@@ -6,11 +6,86 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:29:19 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:56:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:29:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shellft.h"
+#include "lib/msh_std.h"
+
+/**
+ * COMMENT PENDING
+ */
+static int	maskstr_quoted(char *str, char *mask_str, char quote)
+{
+	int	i;
+
+	i = 0;
+	mask_str[i] = 'O';
+	while (str[++i] && str[i] != quote)
+	{
+		if (quote == '\'')
+			mask_str[i] = 'S';
+		else if (quote == '\"')
+			mask_str[i] = 'D';
+	}
+	mask_str[i] = 'O';
+	return (i);
+}
+
+/**
+ * COMMENT PENDING
+ */
+static char	*maskstr(char *str)
+{
+	int		i;
+	char	quote;
+	char	*mask_str;
+	
+	mask_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!mask_str)
+		return (NULL);
+	i = -1;
+	while (str[++i])
+	{
+		quote = 0;
+		if (str[i] == '\"' && str[i + 1] && ft_strchr(&str[i + 1], '\"'))
+			quote = '\"';
+		else if (str[i] == '\'' && str[i + 1] && ft_strchr(&str[i + 1], '\''))
+			quote = '\'';
+		if (quote)
+			i += maskstr_quoted(&str[i], &mask_str[i], quote);
+		else if (str[i] == ';' || str[i] == '\\'
+			|| str[i] == '\'' || str[i] == '\"')
+			mask_str[i] = 'O';
+		else
+			mask_str[i] = 'N';
+	}
+	return (mask_str);
+}
+
+/**
+ * Creates and allocates a new T_TOKEN node.
+ * @param str A pointer to the STRING to be tokenized.
+ * @return A pointer to the new T_TOKEN allocation; or NULL in case of error.
+ */
+static t_token	*token_dup(char *str)
+{
+	t_token	*new;
+
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return (NULL);
+	memset(new, 0, sizeof(t_token));
+	new->str = str;
+	new->type = get_token_type(str);
+	if (new->type == WORD)
+	{
+		new->mask = maskstr(str);
+		if (!new->mask)
+			return (NULL);
+	}
+	return (new);
+}
 
 static int replace_token(t_token *word, char *str)
 {

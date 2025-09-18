@@ -6,11 +6,17 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:11:35 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:59:09 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 15:21:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "troubleshoot.h"
+
+
+/**
+ * PENDING!
+ */
+
 /**
  * Waits for every child process executed to finish before exiting the
  * pipex program.

@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   troubleshoot.h                                     :+:      :+:    :+:   */
+/*   msh_tsh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/28 16:03:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 14:44:02 by sscheini         ###   ########.fr       */
+/*   Created: 2025/09/18 17:16:00 by sscheini          #+#    #+#             */
+/*   Updated: 2025/09/18 17:35:52 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TROUBLESHOOT_H
-# define TROUBLESHOOT_H
+#ifndef MSH_TSH_H
+# define MSH_TSH_H
 
-# include "minishell.h"
+# include <signal.h>
 # include <errno.h>
+
+extern volatile sig_atomic_t	g_signal_received;
+
+int	siginit(void);
+
+/**
+ * 
+ * 
+ */
 
 typedef enum e_error
 {

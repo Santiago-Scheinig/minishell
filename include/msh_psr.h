@@ -1,46 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   msh_psr.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 14:43:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:28:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef MSH_PSR_H
+# define MSH_PSR_H
 
-# include <unistd.h>
+# include "lib/msh_std.h"
+# include "lib/msh_tsh.h"
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <fcntl.h>
-# include "minishell.h"
-# include "execmd.h"
-
-/**
- * An enumeration list of token types.
- */
-typedef enum e_token_type
-{
-	WORD,			//	Command or argument
-	PIPE,			//	|
-	REDIR_IN,		//	<
-	REDIR_OUT,		//	>
-	REDIR_APPEND,	//	>>
-	HEREDOC,		//	<<
-	END,			//	End of line
-}	t_token_type;
-
-/**
- * A token structure where to save the value and it's type.
- */
-typedef struct s_token
-{
-	char			*str;	//	The raw token string.
-	char			*mask;	//	The mask of each character inside the string.
-	t_token_type	type;	//	The type of token.
-}	t_token;
 
 /**
  * Divides user input into tokens catalogated as the enum structure 
@@ -76,8 +53,6 @@ void	parser_envar(t_body *minishell);
 void	parser_cmds(t_body *minishell);
 
 t_list	*cmd_rerr(t_list *aux_lst, t_cmd **new_cmd);
-
-int	cmd_argc(t_list *token_lst);
 
 /**
  * Creates and allocates a new T_TOKEN node.
@@ -116,7 +91,6 @@ int	envar_len(char *env_var);
 int	edit_infile(t_token *next, t_cmd *new);
 int	edit_outfile(t_token *next, t_cmd *new, int open_flag);
 int	edit_infile_to_heredoc(t_token *next, t_cmd *new);
-void	*shell_memmove(void *dest, void *src, void *mask, size_t n);
 
 /**
  * Allocates and returns a clean STRING with only the enviromental variable
@@ -129,6 +103,14 @@ void	*shell_memmove(void *dest, void *src, void *mask, size_t n);
  */
 char	*envar_pathname(char *env_var);
 
-void	cmd_redirupd(t_token *aux, t_token *next, t_cmd *new);
+/**
+ * COMMENT PENDING
+ */
+t_list	*cmdupd_err(t_list *aux_lst, t_cmd **new_cmd);
+
+/**
+ * COMMENT PENDING
+ */
+int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new);
 
 #endif

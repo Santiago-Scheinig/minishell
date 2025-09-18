@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   msh_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/16 14:26:11 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:45:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_cmd.h"
 
 /**
  * No minishell structure, no error printing! 
@@ -19,7 +19,7 @@
  * the error. I Don't know the error number, we have to search for it in google
  * or the manual.
  */
-int	cd(char **args, t_list *envp)
+int	msh_cd(char **args, t_list *envp)
 {
 	char	*dir;
 

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   msh_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/07 19:24:29 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:46:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_cmd.h"
 
-int	pwd(char **args)
+int	msh_pwd(char **args)
 {
 	char	*path;
 

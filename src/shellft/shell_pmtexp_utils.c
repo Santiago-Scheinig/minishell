@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_prompt_utils.c                               :+:      :+:    :+:   */
+/*   shell_pmtexp_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 15:32:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 16:38:23 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:30:16 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "bicmd.h"
+#include "lib/msh_std.h"
 
 char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 {

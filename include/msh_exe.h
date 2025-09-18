@@ -1,39 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execmd.h                                           :+:      :+:    :+:   */
+/*   msh_exe.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 14:49:06 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:38:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECMD_H
-# define EXECMD_H
+#ifndef MSH_EXE_H
+# define MSH_EXE_H
+
+# include "lib/msh_std.h"
+# include "lib/msh_tsh.h"
 # include <sys/wait.h>
-# include <unistd.h>
 # include <fcntl.h>
-# include "libft.h"
-
-typedef struct s_files
-{
-	int	oldin;
-	int	oldout;
-	int	exein;
-	int	exeout;
-}	t_files;
-
-typedef struct s_cmd
-{
-	int		built_in;
-	int		heredoc[2];
-	char	*limitator;
-	char	*pathname;
-	char	**argv;
-	t_files		fd;
-}	t_cmd;
 
 // void	exe_getpath()
 // void exe_verify()

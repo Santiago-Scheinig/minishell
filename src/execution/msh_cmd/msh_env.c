@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   msh_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:50:11 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/16 15:33:29 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:45:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_cmd.h"
 
 void	print_export(t_list *env_lst)
 {
@@ -57,7 +57,7 @@ void	print_env(char **envp, t_list *env_lst)
 	}
 }
 
-int	env(char **args, char **envp, t_list *env_lst)
+int	msh_env(char **args, char **envp, t_list *env_lst)
 {
 	int	i;
 

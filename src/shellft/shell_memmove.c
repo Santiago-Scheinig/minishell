@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_substr.c                                     :+:      :+:    :+:   */
+/*   shell_memmove.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/02 18:53:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:30:09 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shellft.h"
+#include "lib/msh_std.h"
 
 /**
  * Moves n bytes from a src VOID pointer into a dest VOID pointer, specific
@@ -102,58 +102,4 @@ void	*shell_memmove(void *dest, void *src, void *mask, size_t n)
 	else
 		iq_moveup((char *) dst_tmp,(char *) src_tmp, (char *) mask, n);
 	return (dest);
-}
-
-/**
- * Copies size bytes from a CONST STRING src at the end of a STRING des.
- * @param dst The STRING where to copy src.
- * @param src The CONST STRING to copy from.
- * @param size The amount of bytes to be copied from src into des.
- * @return The total lenght of the STRING tried to copy, in this case,
- * the lenght of src.
- * @note - If size >= src_len + 1, it copies all of src into des.
- * @note - Else, it truncates the copy after size - 1 bytes.
- */
-static size_t	shell_strlcpy(char *dst, char *src, char *mask, size_t size)
-{
-	size_t	src_len;
-
-	src_len = ft_strlen(src);
-	if (size >= src_len + 1)
-		shell_memmove(dst, src, mask, src_len + 1);
-	else if (size != 0)
-	{
-		shell_memmove(dst, src, mask, size - 1);
-		dst[size - 1] = 0;
-	}
-	return (src_len);
-}
-
-/**
- * Creates and allocates a new STRING with len bytes copied from the 
- * CONST STRING starting on the start position.
- * @param s The CONST STRING to copy from.
- * @param start The index of the CONST STRING to start copying from.
- * @param len The amount of bytes to be copied.
- * @return A pointer to a new STRING resultant of the copy.
- * @note - If start > s_len, it returns a pointer to a new STRING 
- * with one '\0' byte allocated.
- * @note - If a single or double quote is found unclosed, it becomes
- * ignored and won't be copied into the new string.
- */
-char	*shell_substr(char *s, char *mask, unsigned int start, size_t len)
-{
-	char	*str;
-
-	if (!s)
-		return (NULL);
-	if (start > ft_strlen(s))
-		return (ft_strdup(""));
-	if (len > ft_strlen(&s[start]))
-		len = ft_strlen(&s[start]);
-	str = ft_calloc(len + 1, 1);
-	if (!str)
-		return (NULL);
-	shell_strlcpy(str, &s[start], mask, len + 1);
-	return (str);
 }

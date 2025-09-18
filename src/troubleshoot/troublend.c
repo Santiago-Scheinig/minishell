@@ -6,11 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 14:47:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:32:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "troubleshoot.h"
+#include "lib/msh_std.h"
+#include "lib/msh_tsh.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 void	cleanup(t_body *minishell)
 {
@@ -69,6 +72,9 @@ int	sigend(const char *next, t_error number, t_body *minishell)
 	return (number);
 }
 
+/**
+ * COMENT PENDING
+ */
 int	forcend(t_body *minishell, char *function, t_error number)
 {
 	cleanup(minishell);

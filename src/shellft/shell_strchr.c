@@ -6,11 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 19:08:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/08/08 15:04:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:31:18 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shellft.h"
+#include "lib/msh_std.h"
 
 /**
  * Searches for the first ocurrance of a space or an operator on a STRING.

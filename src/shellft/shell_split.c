@@ -6,11 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/03 21:57:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:31:15 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shellft.h"
+#include "lib/msh_std.h"
 
 /**
  * Initializes the ARRAY of STRINGS dividing WORDS and OPERATORS into 

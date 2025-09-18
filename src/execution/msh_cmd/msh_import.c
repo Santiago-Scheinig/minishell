@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   inport.c                                           :+:      :+:    :+:   */
+/*   msh_import.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:44:12 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 13:41:36 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:46:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_cmd.h"
 
 static int	check_args(char **args)
 {
@@ -36,7 +36,7 @@ static int	check_args(char **args)
 	return (1);
 }
 
-t_list	*inport(char ***envp, t_list *head, char **args)
+t_list	*msh_import(char ***envp, t_list *head, char **args)
 {
 	t_list	*tmp;
 	t_var	*aux;

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   bi_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 17:52:58 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 13:46:20 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:56:18 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_exe.h"
 
 /**
  * Handles error messages for built-in shell commands and print stderr.
@@ -73,26 +73,26 @@ int	built_end(char *name, char *type, char *flags, char error)
  * @note This function assumes commands are matched by name and delegates
  * execution accordingly.
  */
-char	*built_in(t_body *minishell, char *pathname, char **args, t_list *lst)
+char	*built_in(t_body *minishell, char **args, t_list *lst)
 {
 	t_var	*envp;
 
 	envp = (t_var *)lst->content;
-	if (!ft_strncmp(pathname, "export", 7))
+	if (!ft_strncmp(args[0], "export", 7))
 		b_export(&minishell->envp, lst, &args[1]);
-	else if (!ft_strncmp(pathname, "cd", 3))
+	else if (!ft_strncmp(args[0], "cd", 3))
 		cd(args, lst);
-	else if (!ft_strncmp(pathname, "env", 4))
+	else if (!ft_strncmp(args[0], "env", 4))
 		env(args, &minishell->envp[0], minishell->envp_lst);
-	else if (!ft_strncmp(pathname, "pwd", 4))
+	else if (!ft_strncmp(args[0], "pwd", 4))
 		pwd(args);
-	else if (!ft_strncmp(pathname, "echo", 5))
+	else if (!ft_strncmp(args[0], "echo", 5))
 		echo(args);
-	else if (!ft_strncmp(pathname, "exit", 5))
+	else if (!ft_strncmp(args[0], "exit", 5))
 		b_exit(args, minishell);
-	else if (!ft_strncmp(pathname, "unset", 6))
+	else if (!ft_strncmp(args[0], "unset", 6))
 		unset(minishell->envp, lst, &args[1]);
 	else
 		inport(&minishell->envp, lst, args);
-	return (pathname);
+	return (args[0]);
 }

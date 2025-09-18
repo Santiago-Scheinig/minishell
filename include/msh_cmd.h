@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bicmd.h                                            :+:      :+:    :+:   */
+/*   msh_cmd.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 14:48:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:39:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BICMD_H
-# define BICMD_H
-# include <unistd.h>
-# include <limits.h>
+#ifndef MSH_CMD_H
+# define MSH_CMD_H
 
-/*Id like to change this to a envp structure, inside a t_list structure.*/
-/*If the only functions that are able to edit this, are shell functions,*/
-/*Then we put this inside of shellft.h instead, more clean.				*/
-typedef struct s_var
-{
-	char				*value;
-	char				*name;
-	int					exported;
-}	t_var;
+# include "lib/msh_std.h"
+# include "lib/msh_tsh.h"
 
 void	free_env_list(t_var *env);
 
@@ -59,7 +50,7 @@ char	**unset(char **envp, t_list *env_lst, char **name);
 
 int		built_end(char *name, char *type, char *flags, char error);
 
-char	*built_in(t_body *minishell, char *pathname, char **args, t_list *lst);
+char	*built_in(t_body *minishell, char **args, t_list *lst);
 
 char	**ft_remove_arr(char **arr, int index);
 

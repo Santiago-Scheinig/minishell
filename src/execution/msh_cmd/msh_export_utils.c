@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 16:14:14 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:40:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bicmd.h"
+#include "msh_cmd.h"
 
 int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 {
@@ -33,28 +33,6 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 	if (!envp)
 		return (built_end("export", "System failed", NULL, '\0'));
 	return (0);
-}
-
-char	**ft_remove_arr(char **arr, int index)
-{
-	int		len;
-
-	if (!arr)
-		return (arr);
-	len = ft_arrlen((const void **)arr);
-	if (index >= len)
-		return (arr);
-	free(arr[index]);
-	while (index < len - 1)
-	{
-		if (arr[index + 1] != NULL)
-			arr[index] = arr[index + 1];
-		else
-			arr[index] = NULL;
-		index++;
-	}
-	arr[len - 1] = NULL;
-	return (arr);
 }
 
 char	**export_no_equal(char **args, t_list *lst)
@@ -114,7 +92,7 @@ char	**export_no_dup(char **args)
 	return (args);
 }
 
-char	**shell_realloc(char **args, char **envp, size_t size)
+char	**exp_resize(char **args, char **envp, size_t size)
 {
 	size_t	old_size;
 	size_t	new_size;

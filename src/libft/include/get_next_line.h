@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 05:11:26 by root              #+#    #+#             */
-/*   Updated: 2025/09/02 21:06:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:23:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #  define BUFFER_SIZE 1000
 # endif
 # include "libft.h"
-# include "errno.h"
+# include <errno.h>
 
 /**
  * COMMENT UPDATE PENDING
