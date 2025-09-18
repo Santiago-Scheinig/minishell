@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 17:52:58 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 17:48:24 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 13:46:20 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,19 @@ char	*built_in(t_body *minishell, char *pathname, char **args, t_list *lst)
 	t_var	*envp;
 
 	envp = (t_var *)lst->content;
-	if (ft_strlen(pathname) == 6 && ft_strnstr(pathname, "export", 6))
+	if (!ft_strncmp(pathname, "export", 7))
 		b_export(&minishell->envp, lst, &args[1]);
-	else if (ft_strnstr(pathname, "cd", 2))
+	else if (!ft_strncmp(pathname, "cd", 3))
 		cd(args, lst);
-	else if (ft_strnstr(pathname, "env", ft_strlen(pathname)))
+	else if (!ft_strncmp(pathname, "env", 4))
 		env(args, &minishell->envp[0], minishell->envp_lst);
-	else if (ft_strnstr(pathname, "pwd", 3))
+	else if (!ft_strncmp(pathname, "pwd", 4))
 		pwd(args);
-	else if (ft_strnstr(pathname, "echo", 4))
+	else if (!ft_strncmp(pathname, "echo", 5))
 		echo(args);
-	else if (ft_strnstr(pathname, "exit", ft_strlen(pathname)))
+	else if (!ft_strncmp(pathname, "exit", 5))
 		b_exit(args, minishell);
-	else if (ft_strnstr(pathname, "unset", 5))
+	else if (!ft_strncmp(pathname, "unset", 6))
 		unset(minishell->envp, lst, &args[1]);
 	else
 		inport(&minishell->envp, lst, args);

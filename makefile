@@ -35,6 +35,7 @@ SRC			=	$(SRC_DIR)/main.c							\
 				$(SRC_DIR)/shellft/shell_split_utils.c		\
 				$(SRC_DIR)/shellft/shell_addlst_token.c		\
 				$(SRC_DIR)/shellft/shell_prompt_utils.c		\
+				$(SRC_DIR)/shellft/shell_initialization.c	\
  				$(SRC_DIR)/execmd/bicmd/cd.c				\
  				$(SRC_DIR)/execmd/bicmd/env.c				\
  				$(SRC_DIR)/execmd/bicmd/pwd.c				\

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/17 16:05:19 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 13:59:38 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,5 +150,6 @@ void	sortenv(t_list **head);
 size_t	prompt_len(char *ps1, char *user, char *path);
 
 char	*transform_format(char *tmp, char *ps1, char *user, char *path);
+
 
 #endif

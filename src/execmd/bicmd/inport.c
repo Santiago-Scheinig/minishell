@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:44:12 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/17 19:49:23 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/18 13:41:36 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,25 @@
 
 static int	check_args(char **args)
 {
-	int	invalid;
-	int	i;
-	int	j;
+	size_t	invalid;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	invalid = 0;
-	while (ft_strchr(args[i], '=') && args[i][0] != '=')
-		i++;
-	if (i != ft_arrlen((const void **)args))
-		invalid = 1;
-	i = -1;
-	while (args[++i])
+	while (args[i] && ft_strchr(args[i], '='))
 	{
 		if (!ft_isalpha(args[i][0]) && args[i][0] != '_')
 			invalid = 1;
 		j = 1;
-		while (!ft_isalnum(args[i][j]) && args[i][j] != '_')
+		while ((ft_isalnum(args[i][j]) || args[i][j] == '_') && args[i][j] != '=')
 			j++;
-		if (args[i][j])
+		if (args[i][j] != '=')
 			invalid = 1;
+		i++;
 	}
 	if (invalid == 1)
-	{
-		//remove all envp
 		return (0);
-	}
 	return (1);
 }
 

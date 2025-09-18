@@ -69,4 +69,6 @@ char	*shell_getenv(t_list *lst_var, const char *name);
 
 t_var	*create_envp(const char *envp, int export);
 
+void	init_shell(t_body *minishell, const char **envp);
+
 #endif
