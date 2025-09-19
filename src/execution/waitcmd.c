@@ -6,16 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:11:35 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:47:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/19 21:34:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "troubleshoot.h"
-
-
-/**
- * PENDING!
- */
+#include "msh_exe.h"
 
 /**
  * Waits for every child process executed to finish before exiting the
@@ -27,24 +22,22 @@
  * @note If any waitpid fails to execute, the program will exit by
  * force and non waited childs will remain as zombie.
  */
-int	waitcmd(t_pipex *env, int exit_error)//error to waitpid (*int)
+int	waitcmd(t_body *minishell)
 {
 	int	i;
+	int	cmd_len;
 
 	i = -1;
-	while (++i < env->cmd_count)
+	cmd_len = ft_lstsize(minishell->cmd_lst);
+	while (++i < cmd_len)
 	{
-		if (env->waitpid_list[i] > 0)
+		if (minishell->childs_pid[i] > 0)
 		{
-			if (waitpid(env->waitpid_list[i], NULL, 0) == -1)
-			{
-				free(env->waitpid_list);
-				return (ft_forcend(env, NULL, "Waitpid"));
-			}
+			waitpid(minishell->childs_pid[i], NULL, 0);
+			// {
+				//print error based on &status like waitpid(minishell->childs_pid[i], &status, 0)
+			// }
 		}
 	}
-	free(env->waitpid_list);
-	if (exit_error == EXIT_FAILURE)
-		return (ft_forcend(env, NULL, "Pipe"));
-	return (ft_forcend(env, NULL, NULL));
+	return (MSHELL_SUCCESS);
 }

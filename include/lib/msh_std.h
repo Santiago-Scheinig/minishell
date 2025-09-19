@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:29:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/19 20:17:41 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ typedef struct s_body
  */
 typedef struct s_files
 {
-	int	oldin;
-	int	oldout;
 	int	exein;
 	int	exeout;
 }	t_files;

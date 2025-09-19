@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:54:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:30:50 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/19 20:57:10 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ volatile sig_atomic_t	g_signal_received = 0;
 /**
  * COMMENT PENDING ISMA
  */
-static void	new_prompt(int signum)
+void	new_prompt(int signum)
 {
 	(void)signum;
 	g_signal_received = 1;
@@ -36,16 +36,31 @@ static void	new_prompt(int signum)
 }
 
 /**
- * Interpects the SIGINT signal and executes a signal handler.
+ * Sets the SIGINT and SIGQUIT signal handler to default.
+ * 
+ * @return 0 on success, 1 if a sigaction() error occured.
+ */
+int	sigdfl(void)
+{
+	struct sigaction	sa_int;
+
+	sa_int.sa_handler = SIG_DFL;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = 0;
+	if (sigaction(SIGINT, &sa_int, NULL) || sigaction(SIGQUIT, &sa_int, NULL))
+		return (MSHELL_FAILURE);
+	return (MSHELL_SUCCESS);
+}
+
+/**
+ * Sets the SIGINT signal handler to execute new_prompt() on call.
  * 
  * The intercepted signal indicates the program to execute new_prompt().
  * 
- * @param minishell A pointer to the main enviroment structure of minishell.
- * @return A pointer to the main enviroment structure of minishell, 
- * or NULL if the interception failed.
- * @note Additionally, it blocks both SIGINT and SIGQUIT signals during
- * the handler's execution to prevent nested signals from interfering. Then
- * uses SA_RESTART to automatically restart interrupted syscalls.
+ * @return 0 on success, 1 if a sigaction() error occured.
+ * @note - It also blocks both SIGINT and SIGQUIT signals during the handler's
+ * execution preventing nested signals. 
+ * @note - The SA_RESTART flag automatically restart interrupted syscalls.
  */
 int	sigint(void)
 {
@@ -58,22 +73,18 @@ int	sigint(void)
 	sa_int.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
-		perror("Error setting SIGINT handler");
+		perror("Error setting SIGINT handler");//not sure this should print like this
 		return (MSHELL_FAILURE);
 	}
 	return (MSHELL_SUCCESS);
 }
 
 /**
- * Intercepts the SIGQUIT signal and executes a signal handler.
+ * Sets the SIGQUIT signal handler to SIG_IGN.
  * 
- * The intercepted signal is indicated to SIG_IGN, which tells the program 
- * to ignore it entirely.
+ * The intercepted signal becomes ignored entirely.
  * 
- * @param minishell A pointer to the main enviroment structure of minishell.
- * @return A pointer to the main enviroment structure of minishell, 
- * or NULL if the interception failed.
- * @note SIGQUIT is typically used to quit a process and produce a core dump.
+ * @return 0 on success, 1 if a sigaction() error occured.
  */
 int	sigquit(void)
 {
@@ -84,7 +95,7 @@ int	sigquit(void)
 	sa_quit.sa_flags = 0;
 	if (sigaction(SIGQUIT, &sa_quit, NULL) == -1)
 	{
-		perror("Error setting SIGQUIT handler");
+		perror("Error setting SIGQUIT handler");//not sure this should print like this
 		return (MSHELL_FAILURE);
 	}
 	return (MSHELL_SUCCESS);

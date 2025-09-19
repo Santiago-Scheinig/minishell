@@ -46,9 +46,9 @@ SRC			=	$(SRC_DIR)/main.c								\
  				$(SRC_DIR)/execution/msh_cmd/msh_export.c		\
  				$(SRC_DIR)/execution/msh_cmd/msh_import.c		\
  				$(SRC_DIR)/execution/msh_cmd/msh_export_utils.c	\
-# 				$(SRC_DIR)/execution/execmd.c					\
-# 				$(SRC_DIR)/execution/execmd_utils.c				\
-# 				$(SRC_DIR)/execution/execmd_path.c				\
+ 				$(SRC_DIR)/execution/waitcmd.c					\
+ 				$(SRC_DIR)/execution/execmd.c					\
+ 				$(SRC_DIR)/execution/execmd_utils.c				\
 
 
 

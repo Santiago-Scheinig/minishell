@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:27:27 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/19 18:21:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ t_list	*cmdupd_err(t_list *aux_lst, t_cmd **new_cmd)
 		free((*new_cmd)->limitator);
 	if ((*new_cmd)->pathname)
 		free((*new_cmd)->pathname);
-	if ((*new_cmd))
-		free((*new_cmd));
 	memset((*new_cmd), 0, sizeof(t_cmd));
 	while(aux_lst->next)
 	{

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 17:16:00 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:32:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/19 20:57:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,35 @@
  */
 extern volatile sig_atomic_t	g_signal_received;
 
+void	new_prompt(int signum);
+
 /**
- * Interpects the SIGINT signal and executes a signal handler.
+ * Sets the SIGINT signal handler to execute new_prompt() on call.
  * 
  * The intercepted signal indicates the program to execute new_prompt().
  * 
- * @param minishell A pointer to the main enviroment structure of minishell.
- * @return A pointer to the main enviroment structure of minishell, 
- * or NULL if the interception failed.
- * @note Additionally, it blocks both SIGINT and SIGQUIT signals during
- * the handler's execution to prevent nested signals from interfering. Then
- * uses SA_RESTART to automatically restart interrupted syscalls.
+ * @return 0 on success, 1 if a sigaction() error occured.
+ * @note - It also blocks both SIGINT and SIGQUIT signals during the handler's
+ * execution preventing nested signals. 
+ * @note - The SA_RESTART flag automatically restart interrupted syscalls.
  */
 int	sigint(void);
 
 /**
- * Intercepts the SIGQUIT signal and executes a signal handler.
+ * Sets the SIGQUIT signal handler to SIG_IGN.
  * 
- * The intercepted signal is indicated to SIG_IGN, which tells the program 
- * to ignore it entirely.
+ * The intercepted signal becomes ignored entirely.
  * 
- * @param minishell A pointer to the main enviroment structure of minishell.
- * @return A pointer to the main enviroment structure of minishell, 
- * or NULL if the interception failed.
- * @note SIGQUIT is typically used to quit a process and produce a core dump.
+ * @return 0 on success, 1 if a sigaction() error occured.
  */
 int	sigquit(void);
+
+/**
+ * Sets the SIGINT and SIGQUIT signal handler to default.
+ * 
+ * @return 0 on success, 1 if a sigaction() error occured.
+ */
+int	sigdfl(void);
 
 /*--------------------------------------------------------------------------*/
 /*-----------------------------SHELL TROUBLESHOOT---------------------------*/
