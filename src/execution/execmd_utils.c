@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/20 17:31:51 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/20 17:59:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ static int	fd_setexe(t_cmd *exe, t_cmd *exe_next)
 
 	if (exe->fd.exein == -2)
 	{
-			exe->fd.exein = fd_heredoc(exe->limitator, exe->heredoc);
-			exe->heredoc[0] = -1;
-			exe->heredoc[1] = -1;
+		exe->fd.exein = fd_heredoc(exe->limitator, exe->heredoc);
+		exe->heredoc[0] = -1;
+		exe->heredoc[1] = -1;
 	}
 	if (exe_next)
 	{

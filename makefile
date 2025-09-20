@@ -36,7 +36,6 @@ SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/shellft/shell_split_utils.c			\
 				$(SRC_DIR)/shellft/shell_addlst_token.c			\
 				$(SRC_DIR)/shellft/shell_pmtexp_utils.c			\
- 				$(SRC_DIR)/execution/bi_cmd.c					\
  				$(SRC_DIR)/execution/msh_cmd/msh_cd.c			\
  				$(SRC_DIR)/execution/msh_cmd/msh_env.c			\
  				$(SRC_DIR)/execution/msh_cmd/msh_pwd.c			\
