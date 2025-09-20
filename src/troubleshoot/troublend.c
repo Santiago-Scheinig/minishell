@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/19 20:50:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/20 17:44:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,50 @@ void	cleanup(t_body *minishell)
 	}
 }
 
-// int	childend()
+/**
+ * Handles error messages for built-in shell commands and print stderr.
+ * Depending on the error type and flags, it formats and outputs the
+ * appropriate message.
+ * 
+ * @param name The name of the command that caused the error.
+ * @param type A string indicating the type of error to handle.
+ * @param flags Additional flags or arguments related to the error.
+ * @param error A character representing a specific invalid flag option
+ * @return Returns 2 for invalid flag errors, otherwise returns 1.
+ * 
+ * @note Prints error messages prefixed with "minishell:".
+ * @note Supports various error types such as argument count, Invalid flags,
+ * missing HOME, System errors, Invalid identifiers, and Numeric argument
+ * errors.
+ */
+int	built_end(char *name, char *type, char *flags, char error)
+{
+	char	*shell;
+
+	shell = "minishell: ";
+	if (ft_strnstr(type, "Numbers of args", ft_strlen(type)))
+		ft_printfd(2, "%s%s: too many arguments\n", shell, name);
+	else if (ft_strnstr(type, "Invalid flags", ft_strlen(type)))
+	{
+		if (error)
+			ft_printfd(2, "%s%s: -%c: invalid option\n", shell, name, error);
+		else
+			ft_printfd(2, "%s%s: -: invalid option\n", shell, name);
+		ft_printfd(2, "%s: usage: %s %s\n", name, name, flags);
+		return (2);
+	}
+	else if (ft_strnstr(type, "HOME", ft_strlen(type)))
+		ft_printfd(2, "%s%s: HOME not set\n", shell, name);
+	else if (ft_strnstr(type, "System failed", ft_strlen(type)))
+		ft_printfd(2, "%s%s: %s\n", shell, name, strerror(errno));
+	else if (ft_strnstr(type, "Not valid identifier", ft_strlen(type)))
+		ft_printfd(2, "%s%s: `%s': not a valid identifier\n", shell, name,
+			flags);
+	else if (ft_strnstr(type, "Numeric arg required", ft_strlen(type)))
+		ft_printfd(2, "%s%s: %s: numeric argument required\n", shell, name,
+			flags);
+	return (1);
+}
 
 int	redirend(char *argv, t_error number)
 {

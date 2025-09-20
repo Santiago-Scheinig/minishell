@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/19 20:44:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/20 17:14:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,29 +38,9 @@ char	**setup_path(const char **envp);
  * @param exe A pointer to the cmd to be executed in this current iteration.
  * @param pipefd An array of INT which saves an already initialized pipe().
  */
-void	fd_endexe(t_cmd *exe, int pipefd[2]);
+void	fd_endexe(t_cmd *exe);
 
-/**
- * Connects all the file descriptors between the cmd to execute
- * and the following cmd.
- * 
- * @param exe A pointer to the cmd to be executed in this current iteration.
- * @param exe_next A pointer to the next cmd to be executed.
- * @param pipefd An array of INT which saves an already initialized pipe().
- * @note Also handles heredoc redirections, saving the reading end of that
- * pipe as the [exe] infile, and closing the previous one.
- */
-void	fd_setexe(t_cmd *exe, t_cmd *exe_next, int pipefd[2]);
-
-/**
- * Creates and allocates a STRING with the definitive path to a cmd binary.
- * 
- * @param cmd The name of the command binary to find.
- * @param path The enviroment path where to search the command binary.
- * @return A pointer to the new STRING or NULL if the allocation failed or
- * the cmd can't be access or found as binary on path.
- */
-char	*cmd_getpath(char *cmd, char **path);
+int	setup_pipeline(t_list *cmd_lst);
 
 int		waitcmd(t_body *minishell);
 #endif

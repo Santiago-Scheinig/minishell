@@ -80,6 +80,11 @@ int	main(int argc, char **argv, const char **envp)
 	{
 		if (parser(&minishell))
 			continue;
+		if (g_signal_received)//should this only be if the signal is ctrl+c?
+		{
+			g_signal_received = 0;
+			continue;
+		}
 		if (execmd(&minishell))
 			continue;
 		waitcmd(&minishell);

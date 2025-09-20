@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/19 21:24:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/20 17:31:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,52 +55,58 @@ static int	fd_heredoc(char *limitator, int heredoc[2])
  * @note Also handles heredoc redirections, saving the reading end of that
  * pipe as the [exe] infile, and closing the previous one.
  */
-void	fd_setexe(t_cmd *exe, t_cmd *exe_next, int pipefd[2])
+static int	fd_setexe(t_cmd *exe, t_cmd *exe_next)
 {
+	int pipefd[2];
+
 	if (exe->fd.exein == -2)
 	{
-		if (exe->heredoc[0] == -1 && exe->heredoc[1] == -1)
-			exe->fd.exein = STDIN_FILENO;
-		else
-		{
 			exe->fd.exein = fd_heredoc(exe->limitator, exe->heredoc);
 			exe->heredoc[0] = -1;
 			exe->heredoc[1] = -1;
-		}
 	}
-	if (exe->fd.exeout == STDOUT_FILENO)
+	if (exe_next)
 	{
-		exe->fd.exeout = pipefd[1];
-		pipefd[1] = 0;
+		if (pipe(pipefd))
+			return (MSHELL_FAILURE);
+		if (exe->fd.exeout == STDOUT_FILENO)
+			exe->fd.exeout = pipefd[1];
+		else
+			close(pipefd[1]);
+		if (exe_next->fd.exein == STDIN_FILENO)
+			exe_next->fd.exein = pipefd[0];
+		else
+			close(pipefd[0]);
 	}
-	if (exe_next && exe_next->fd.exein == STDIN_FILENO)
-	{
-		exe_next->fd.exein = pipefd[0];
-		pipefd[0] = 0;
-	}
+	return (MSHELL_SUCCESS);
 }
 
-/**
- * Closes all the file descriptors that where used to execute the
- * current pipe iteration.
- * 
- * @param exe A pointer to the cmd to be executed in this current iteration.
- * @param pipefd An array of INT which saves an already initialized pipe().
- */
-void	fd_endexe(t_cmd *exe, int pipefd[2])
+void	fd_endexe(t_cmd *exe)
 {
-	if (pipefd[0])
-		close(pipefd[0]);
-	if (pipefd[1])
-		close(pipefd[1]);
 	if (exe->fd.exein > 2)
 		close(exe->fd.exein);
 	if (exe->fd.exeout > 2)
 		close(exe->fd.exeout);
-	if (exe->heredoc[0] != -1)
-		close(exe->heredoc[0]);
-	if (exe->heredoc[1] != -1)
-		close(exe->heredoc[1]);
+}
+
+int		setup_pipeline(t_list *cmd_lst)
+{
+	t_cmd	*exe;
+	t_cmd	*exe_next;
+	int		i;
+
+	i = -1;
+	while (cmd_lst)
+	{
+		exe = cmd_lst->content;
+		exe_next = NULL;
+		if (cmd_lst->next)
+			exe_next = cmd_lst->next->content;
+		if (fd_setexe(exe, exe_next))
+			return(MSHELL_FAILURE);//print a broken pipeline, but do not end minishell. The function should also close all fds opened.
+		cmd_lst = cmd_lst->next;
+	}
+	return(MSHELL_SUCCESS);
 }
 
 /**
@@ -121,39 +127,3 @@ char	**setup_path(const char **envp)
 	return (NULL);
 }
 
-/**
- * Creates and allocates a STRING with the definitive path to a cmd binary.
- * 
- * @param cmd The name of the command binary to find.
- * @param path The enviroment path where to search the command binary.
- * @return A pointer to the new STRING or NULL if the allocation failed or
- * the cmd can't be access or found as binary on path.
- */
-char	*cmd_getpath(char *cmd, char **path)
-{
-	char	*cmd_pathname;
-	char	*tmp;
-	int		i;
-
-	i = -1;
-	if (ft_strchr(cmd, '/'))
-	{
-		if (!access(cmd, X_OK))
-			return (ft_strdup(cmd));
-		return (NULL);//print no access error!
-	}
-	while (path[++i] && cmd)
-	{
-		tmp = ft_strjoin(path[i], "/");
-		if (!tmp)
-			return (NULL);
-		cmd_pathname = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!cmd_pathname)
-			return (NULL);
-		if (!access(cmd_pathname, X_OK))
-			return (cmd_pathname);
-		free(cmd_pathname);
-	}
-	return (NULL);//print command not found
-}
