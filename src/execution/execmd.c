@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/20 17:43:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/20 19:10:34 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,16 @@ static int exe_getpath(char *cmd, char **path, char **pathname)
 	{
 		tmp = ft_strjoin(path[i], "/");
 		if (!tmp)
-			return (MSHELL_FAILURE);//this are malloc error... i need to end the program
+			return (MSHELL_FAILURE);//this are malloc error... i need to end the child setting errno! So the parent know what failed
 		(*pathname) = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!(*pathname))
-			return (MSHELL_FAILURE);//this are malloc error... i need to end the program
+			return (MSHELL_FAILURE);//this are malloc error... i need to end the child setting errno!
 		if (!access((*pathname), X_OK))
 			return (MSHELL_SUCCESS);
 		free((*pathname));
 	}
-	return (MSHELL_CMD_INVEXE);//print command not found
+	return (MSHELL_CMD_NOTEXE);//print command not found
 }
 
 static char	**exe_setup(t_body *minishell)
@@ -60,7 +60,12 @@ static char	**exe_setup(t_body *minishell)
 	if (!minishell->childs_pid)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	if (setup_pipeline(minishell->cmd_lst))
+	{
+		if (errno == ENOMEM)
+			forcend(minishell, "malloc", MSHELL_FAILURE);
+		minishell->exit_status = MSHELL_FAILURE;
 		return (NULL);
+	}
 	path = setup_path((const char **) minishell->envp);
 	if (!path)
 	{
@@ -79,16 +84,18 @@ static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 	(*child) = fork();
 	if (!(*child) && !(exe->fd.exein < 0))
 	{
-		if (sigdfl())
-			exit(MSHELL_FAILURE);//childend();
+		sigdfl();
 		if (!exe->argv || !exe->argv[0])
-			exit (MSHELL_FAILURE);//redir error
-		error = exe_getpath(exe->argv[0], path, &(exe->pathname));//should print all cmd related errors
+			exit (MSHELL_FAILURE);
+		error = exe_getpath(exe->argv[0], path, &(exe->pathname));
 		if (error)
-			exit (error);//should return the error number asosiated with cmd errors
+			exit (error);
 		if (dup2(exe->fd.exein, STDIN_FILENO) == -1
 			|| dup2(exe->fd.exeout, STDOUT_FILENO) == -1)
-			exit(MSHELL_FAILURE);//childend();
+		{
+			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
+			exit(MSHELL_FAILURE);
+		}
 		fd_endexe(exe);
 		//if (exe_built())
 		// {
@@ -152,7 +159,7 @@ int	execmd(t_body *minishell)
 	// 	exe_built((t_cmd *) minishell->cmd_lst->content, minishell);
 	path = exe_setup(minishell);
 	if (!path)
-		return (MSHELL_FAILURE);//set errno to 1 also!
+		return (MSHELL_FAILURE);
 	i = -1;
 	while (cmd_lst)
 	{

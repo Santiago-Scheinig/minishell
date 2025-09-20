@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 05:11:45 by root              #+#    #+#             */
-/*   Updated: 2025/06/02 10:44:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/20 19:03:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * - Frees every position of text, returning NULL to indicate an error
  *	 ocurred.
  */
-static	void	*ft_forcend(char **txt, char *ft_error)
+static	void	*ft_forcend(char **txt)
 {
 	int		i;
 
@@ -27,7 +27,9 @@ static	void	*ft_forcend(char **txt, char *ft_error)
 		free(txt[i]);
 		txt[i] = NULL;
 	}
-	perror(ft_error);
+	if (errno != EINTR && errno != EIO && errno != EBADF 
+		&& errno != EFAULT && errno != EINVAL && errno != ENXIO)
+		errno = ENOMEM;
 	return (NULL);
 }
 
@@ -77,7 +79,7 @@ static	char	*ft_read_text(char *txt, int fd)
 		txt = ft_new_text(txt);
 		if (!txt)
 			return (NULL);
-		r_ans = read(fd, &txt[ft_strlend(txt, 0)], BUFFER_SIZE);
+		r_ans = read(fd, &txt[ft_strlend(txt, 0)], BUFFER_SIZE);//i need to print an error for read failure
 		if (r_ans < 0)
 		{
 			free(txt);
@@ -130,11 +132,12 @@ char	*get_next_line(int fd)
 	static char	*txt[1000];
 	char		*line;
 
+	errno = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	txt[fd] = ft_read_text(txt[fd], fd);
 	if (!txt[fd])
-		return (ft_forcend(txt, "Ft_read_text"));
+		return (ft_forcend(txt));
 	if (!txt[fd][0])
 	{
 		free(txt[fd]);
@@ -144,9 +147,6 @@ char	*get_next_line(int fd)
 	else
 		line = ft_line_text(&txt[fd]);
 	if (!line && txt[fd])
-	{
-		errno = EIO;
-		return (ft_forcend(txt, "Ft_line_text"));
-	}
+		return (ft_forcend(txt));
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/20 17:59:50 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/20 19:06:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,21 +27,28 @@
 static int	fd_heredoc(char *limitator, int heredoc[2])
 {
 	char	*line;
+	const char	*errmsg = "here-document at line 1 delimited by end-of-file";
 
 	while (1)
 	{
+		write(1, "> ", 2);
 		line = get_next_line(0);
-		if (!line)//need to print an error of interruption
+		if (!line)
+		{
+			if (errno == ENOMEM)//forcend should check on errno instead of following msg to know what to print?
+				return (-1);//i also need to verify if read failed and print a message accordingly
+			ft_printfd(2, "\nmsh: warning: %s (wanted 'EOF')\n", errmsg);
 			break;
+		}
 		if (line && !ft_strncmp(line, limitator, ft_strlen(limitator)))
 		{
 			free(line);
-			break ;
+			break;
 		}
-		write(heredoc[1], line, ft_strlen(line));
+		write(heredoc[1], line, ft_strlen(line));//write can fail! line x where x is the line its writing of heredoc
 		free(line);
 	}
-	close(heredoc[1]);
+	close(heredoc[1]);//How could i add the heredoc to the history??
 	return (heredoc[0]);
 }
 
@@ -62,6 +69,8 @@ static int	fd_setexe(t_cmd *exe, t_cmd *exe_next)
 	if (exe->fd.exein == -2)
 	{
 		exe->fd.exein = fd_heredoc(exe->limitator, exe->heredoc);
+		if (exe->fd.exein == -1)
+			return (MSHELL_FAILURE);
 		exe->heredoc[0] = -1;
 		exe->heredoc[1] = -1;
 	}
