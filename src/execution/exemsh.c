@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/21 15:26:50 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/21 16:05:46 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	msh_cmd(t_cmd *exe, t_body *minishell)
 		msh_exit(exe->argv, minishell);
 		return (1);
 	}
-	else
+	else if (ft_strchr(exe->argv[0], '='))
 		return (msh_import(&minishell->envp, &minishell->envp_lst, exe->argv));
 	return (-1);
 }
@@ -62,7 +62,8 @@ int	exe_built(t_cmd *exe, t_body *minishell)
 	int	i;
 
 	i = 0;
-	if (exe->fd.exeout)
+	num = -1;
+	if (exe->argv && exe->fd.exeout > 2)
 	{
 		i = dup(STDOUT_FILENO);
 		if (dup2(exe->fd.exeout, STDOUT_FILENO) == -1)
@@ -78,7 +79,7 @@ int	exe_built(t_cmd *exe, t_body *minishell)
 			exit(MSHELL_FAILURE);
 		}
 	}
-	else
+	else if (exe->argv)
 		num = msh_cmd(exe, minishell);
 	return (num);
 }
