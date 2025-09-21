@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 18:45:53 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:08:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	parser_cmds(t_body *minishell)
 		if (aux_tkn->type && aux_tkn->type != PIPE && aux_tkn->type != END)
 		{
 			aux_lst = aux_lst->next;
-			if (cmdupd_redir(aux_tkn, (t_token *) aux_lst->content, new_cmd, &(minishell->input)))
+			if (cmdupd_redir(aux_tkn, (t_token *) aux_lst->content, new_cmd))
 				aux_lst = cmdupd_err(aux_lst, &new_cmd);
 		}
 		else if (aux_tkn->type == WORD)

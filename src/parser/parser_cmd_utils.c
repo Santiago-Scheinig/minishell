@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 19:04:06 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:27:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	fd_heredoc(char *limitator, int heredoc[2])
 	int		i;
 	char	*line;
 
-	i = 0;
+	i = 0;//If limitator is between "" or '' as usual, if not, variables with $ should expand
 	while (1)
 	{
 		i++;
@@ -128,7 +128,7 @@ static int	cmdupd_heredoc(t_token *next, t_cmd *new)
 		close(new->infd);
 	if (pipe(heredoc) < 0)
 		return(redirend(NULL, MSHELL_FAILURE));
-	new->infd = fd_heredoc(next->str, heredoc);
+	new->infd = fd_heredoc(next->str, heredoc);//next->str should go through memmove first so quotes are removed
 	next->str = NULL;
 	return (MSHELL_SUCCESS);
 }

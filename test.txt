@@ -1,0 +1,25 @@
+cat << "EOF" //no expandir si hay comillas simples o dobles
+$USER
+"EOF"
+
+cat << EOF //expandir si no hay comillas
+$USER
+EOF
+
+ls | wc -l //error, los argumentos de wc no estan llegando como deberian
+
+echo "$USER'$USER" //error, la expansion de variables se esta comiendo un byte
+
+echo "ls -l | wc -l" | ./minishell //error, los argumentos de wc no estan llegando como deberian
+
+echo "cat << EOF\nline1\nEOF" | ./minishell //error, non interactive shell no esta dividiendo por \n
+
+//error, no hay segpipe cuando deberia, fds no se estan cerrando correctamente.
+yes | ls 
+yes | cat | head -n 5
+yes | ./minishell
+cat | cat | cat | cat | cat | cat
+
+//Manejo de errores
+
+//Norminette pendiente

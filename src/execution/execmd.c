@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 19:07:00 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:09:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 		tmp = ft_strtrim(exe->argv[0], " \n\t");
 		error = exe_getpath(tmp, path, &(exe->pathname));
 		if (error)
-		{
-			printf("%s\n", exe->argv[0]);
 			exit (error);
 		if (dup2(exe->infd, STDIN_FILENO) == -1
 			|| dup2(exe->outfd, STDOUT_FILENO) == -1)

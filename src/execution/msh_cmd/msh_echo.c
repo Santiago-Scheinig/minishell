@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:23:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:17:21 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	msh_echo(char **args)
 	}
 	while (args[i])
 	{
-		ft_printf("%s", args[i]);
+		ft_printf("%s", args[i]);//usar write para saber si falla en escritura
 		if (args[i++ + 1])
 			ft_printf(" ");
 	}
