@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sigend.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:54:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/19 20:57:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 18:41:00 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,23 @@ void	new_prompt(int signum)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+}
+
+int	sigign(void)
+{
+	struct sigaction	sa_int;
+
+	sa_int.sa_handler = SIG_IGN;
+	sigemptyset(&sa_int.sa_mask);
+	sigaddset(&sa_int.sa_mask, SIGQUIT);
+	sigaddset(&sa_int.sa_mask, SIGINT);
+	sa_int.sa_flags = SA_RESTART;
+	if (sigaction(SIGINT, &sa_int, NULL) == -1)
+	{
+		perror("Error setting SIGINT handler");//not sure this should print like this
+		return (MSHELL_FAILURE);
+	}
+	return (MSHELL_SUCCESS);
 }
 
 /**

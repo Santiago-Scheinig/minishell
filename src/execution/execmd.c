@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 17:23:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:07:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,21 @@ static char	**exe_setup(t_body *minishell)
 
 static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 {
-	int error;
+	char	*tmp;
+	int 	error;
 
+	sigign();
 	(*child) = fork();
 	if (!(*child) && !(exe->infd < 0))
 	{
 		sigdfl();
 		if (!exe->argv || !exe->argv[0])
 			exit (MSHELL_FAILURE);
-		error = exe_getpath(exe->argv[0], path, &(exe->pathname));
+		tmp = ft_strtrim(exe->argv[0], " \n\t");
+		error = exe_getpath(tmp, path, &(exe->pathname));
 		if (error)
+		{
+			printf("%s\n", exe->argv[0]);
 			exit (error);
 		if (dup2(exe->infd, STDIN_FILENO) == -1
 			|| dup2(exe->outfd, STDOUT_FILENO) == -1)
@@ -126,7 +131,7 @@ int	execmd(t_body *minishell)
 			exe = (t_cmd *) cmd_lst->content;
 			exe_next = NULL;
 			if (cmd_lst->next)
-			exe_next = (t_cmd *) cmd_lst->next->content;
+				exe_next = (t_cmd *) cmd_lst->next->content;
 			exe_child(exe, path, &(minishell->childs_pid[++i]), minishell->envp);
 			cmd_lst = cmd_lst->next;
 		}

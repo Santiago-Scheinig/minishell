@@ -111,7 +111,10 @@ int	main(int argc, char **argv, const char **envp)
 		if (execmd(&minishell))
 			continue;
 		if (minishell.childs_pid)
+		{
 			waitcmd(&minishell);
+			sigint();
+		}
 	}
 	return (0);
 }
