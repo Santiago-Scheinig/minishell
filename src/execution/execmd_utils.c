@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/20 19:06:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 16:06:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	fd_heredoc(char *limitator, int heredoc[2])
 		{
 			if (errno == ENOMEM)//forcend should check on errno instead of following msg to know what to print?
 				return (-1);//i also need to verify if read failed and print a message accordingly
-			ft_printfd(2, "\nmsh: warning: %s (wanted 'EOF')\n", errmsg);
+			ft_printfd(2, "\nmsh: warning: %s (wanted '%s')\n", errmsg, limitator);
 			break;
 		}
 		if (line && !ft_strncmp(line, limitator, ft_strlen(limitator)))
