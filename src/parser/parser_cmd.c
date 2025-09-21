@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/19 18:22:33 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 18:45:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,8 @@ static t_cmd	*cmd_init(t_list *token_lst)
 	if (!new_cmd)
 		return (NULL);
 	memset(new_cmd, 0, sizeof(t_cmd));
-	new_cmd->fd.exein = STDIN_FILENO;
-	new_cmd->fd.exeout = STDOUT_FILENO;
-	new_cmd->heredoc[0] = -1;
-	new_cmd->heredoc[1] = -1;
+	new_cmd->infd = STDIN_FILENO;
+	new_cmd->outfd = STDOUT_FILENO;
 	argc = cmd_argc(token_lst) + 1;
 	new_cmd->argv = malloc((argc) * sizeof(char *));
 	if (!new_cmd->argv)
@@ -116,7 +114,7 @@ void	parser_cmds(t_body *minishell)
 		if (aux_tkn->type && aux_tkn->type != PIPE && aux_tkn->type != END)
 		{
 			aux_lst = aux_lst->next;
-			if (cmdupd_redir(aux_tkn, (t_token *) aux_lst->content, new_cmd))
+			if (cmdupd_redir(aux_tkn, (t_token *) aux_lst->content, new_cmd, &(minishell->input)))
 				aux_lst = cmdupd_err(aux_lst, &new_cmd);
 		}
 		else if (aux_tkn->type == WORD)

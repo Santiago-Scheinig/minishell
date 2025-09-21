@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:27:17 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 18:26:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,11 +153,9 @@ static void	envar_syntax(t_list *token_lst, t_body *minishell)
 	t_token	*word;
 	int		i;
 	int		quote;
-	char	*tmp;
 
 	i = -1;
 	quote = 0;
-	tmp = NULL;
 	word = (t_token *) token_lst->content;
 	while (word->str[++i])
 	{

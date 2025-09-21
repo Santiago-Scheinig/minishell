@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_std.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 15:14:16 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/21 17:05:38 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 typedef struct s_body
 {
 	struct termios	orig_term;
-	int				exit_status;
 	int				interactive;
 	int				line;
 	char			**envp;//A copy of the original envp + post modifications
@@ -42,23 +41,12 @@ typedef struct s_body
 /**
  * COMMENT PENDING
  */
-typedef struct s_files
-{
-	int	exein;
-	int	exeout;
-}	t_files;
-
-/**
- * COMMENT PENDING
- */
 typedef struct s_cmd
 {
-	int		built_in;
-	int		heredoc[2];
-	char	*limitator;
 	char	*pathname;
 	char	**argv;
-	t_files		fd;
+	int		infd;
+	int		outfd;
 }	t_cmd;
 
 /**

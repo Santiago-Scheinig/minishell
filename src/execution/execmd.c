@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 15:21:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/21 17:23:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static char	**exe_setup(t_body *minishell)
 	{
 		if (errno == ENOMEM)
 			forcend(minishell, "malloc", MSHELL_FAILURE);
-		minishell->exit_status = MSHELL_FAILURE;
 		return (NULL);
 	}
 	path = setup_path((const char **) minishell->envp);
@@ -81,7 +80,7 @@ static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 	int error;
 
 	(*child) = fork();
-	if (!(*child) && !(exe->fd.exein < 0))
+	if (!(*child) && !(exe->infd < 0))
 	{
 		sigdfl();
 		if (!exe->argv || !exe->argv[0])
@@ -89,8 +88,8 @@ static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 		error = exe_getpath(exe->argv[0], path, &(exe->pathname));
 		if (error)
 			exit (error);
-		if (dup2(exe->fd.exein, STDIN_FILENO) == -1
-			|| dup2(exe->fd.exeout, STDOUT_FILENO) == -1)
+		if (dup2(exe->infd, STDIN_FILENO) == -1
+			|| dup2(exe->outfd, STDOUT_FILENO) == -1)
 		{
 			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
 			exit(MSHELL_FAILURE);

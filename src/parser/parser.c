@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/20 19:07:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 18:48:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ static void	parser_input(t_body *minishell)
 		free(minishell->input);
 		parser_input(minishell);
 	}
-	else if (minishell->interactive && minishell->input[0] != '\0')
-		add_history(minishell->input);
 }
 
 /**

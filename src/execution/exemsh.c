@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exemsh.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/21 16:05:46 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/21 17:22:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,15 @@ int	exe_built(t_cmd *exe, t_body *minishell)
 
 	i = 0;
 	num = -1;
-	if (exe->argv && exe->fd.exeout > 2)
+	if (exe->argv && exe->outfd > 2)
 	{
 		i = dup(STDOUT_FILENO);
-		if (dup2(exe->fd.exeout, STDOUT_FILENO) == -1)
+		if (dup2(exe->outfd, STDOUT_FILENO) == -1)
 		{
 			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
 			exit(MSHELL_FAILURE);
 		}
-		close(exe->fd.exeout);
+		close(exe->outfd);
 		num = msh_cmd(exe, minishell);
 		if (dup2(i, STDOUT_FILENO) == -1)
 		{

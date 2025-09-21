@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 16:03:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 17:22:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,9 @@ void	shell_lstdelcmd(t_list *lst, void (*del)(void *))
 				del(cmd->argv[i]);
 			del(cmd->argv);
 		}
-		if (cmd->limitator)
-			del(cmd->limitator);
 		if (cmd->pathname)
 			del(cmd->pathname);
 		cmd->argv = NULL;
-		cmd->limitator = NULL;
 		cmd->pathname = NULL;
 		del(lst->content);
 	}

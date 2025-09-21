@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   troublend.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 13:15:24 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/21 17:31:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	built_end(char *name, char *type, char *flags, char error)
 {
 	char	*shell;
 
-	shell = "msh: ";
+	shell = "minishell: ";
 	if (ft_strnstr(type, "Numbers of args", ft_strlen(type)))
 		ft_printfd(2, "%s%s: too many arguments\n", shell, name);
 	else if (ft_strnstr(type, "Invalid flags", ft_strlen(type)))
@@ -132,7 +132,7 @@ int	forcend(t_body *minishell, char *function, t_error number)
 	if (number == MSHELL_FAILURE && function)
 		ft_printfd(2, "\n");
 	if (number == MSHELL_CMD_NOTEXE && function)
-		ft_printfd(2, "minishell: %s: No such file or directory\n", function);
+		ft_printfd(2, "msh: %s: No such file or directory\n", function);
 	if (number != MSHELL_FATAL 
 		&& tcsetattr(STDIN_FILENO, TCSANOW, &minishell->orig_term))
 		exit(MSHELL_FAILURE);

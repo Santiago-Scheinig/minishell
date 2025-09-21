@@ -12,10 +12,24 @@
 
 #include "msh.h"
 
-// Creates an array of signals so i can then set it with 
-// sigmask to ign on childs or non-interactive mode
-// static int	sigset(void)
-// static void	init_sigs(t_body *minishell);
+/**
+ * COMMENT PENDING ISMA
+ */
+t_var	*create_envp(const char *envp, int export);
+
+static void	init_exit_status(t_body *minishell)
+{
+	t_var	*exit_status;
+	t_list	*node;
+
+	exit_status = create_envp("?=0", 0);
+	if (!exit_status)
+		forcend(minishell, "malloc", MSHELL_FAILURE);
+	node = ft_lstnew(exit_status);
+	if (!node)
+		forcend(minishell, "malloc", MSHELL_FAILURE);
+	ft_lstadd_back(&(minishell->envp_lst), node);
+}
 
 /**
  * Initializes the enviromental variables needed to execute minishell.
@@ -25,7 +39,7 @@
  */
 static void	init_envp(t_body *minishell, const char **envp)
 {
-	char **ps1;
+	char 	**ps1;
 
 	minishell->envp = shell_envpdup(envp);
 	if (!minishell->envp)
@@ -37,6 +51,7 @@ static void	init_envp(t_body *minishell, const char **envp)
 	ps1 = shell_pmtstr(minishell->envp_lst);
 	if (!ps1)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
+	init_exit_status(minishell);
 	shell_sortenv(&minishell->envp_lst);
 	if (!shell_getenv(minishell->envp_lst, "PS1"))
 	{
@@ -86,6 +101,8 @@ int	main(int argc, char **argv, const char **envp)
 	{
 		if (parser(&minishell))
 			continue;
+		if (minishell.interactive && minishell.input[0] != '\0')
+			add_history(minishell.input);
 		if (g_signal_received)//should this only be if the signal is ctrl+c?
 		{
 			g_signal_received = 0;

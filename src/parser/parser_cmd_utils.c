@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/20 17:59:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:04:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ t_list	*cmdupd_err(t_list *aux_lst, t_cmd **new_cmd)
 
 	if ((*new_cmd)->argv)
 		ft_split_free((*new_cmd)->argv);
-	if ((*new_cmd)->limitator)
-		free((*new_cmd)->limitator);
 	if ((*new_cmd)->pathname)
 		free((*new_cmd)->pathname);
 	memset((*new_cmd), 0, sizeof(t_cmd));
@@ -41,24 +39,18 @@ t_list	*cmdupd_err(t_list *aux_lst, t_cmd **new_cmd)
  */
 static int	cmdupd_infile(t_token *next, t_cmd *new)
 {
-	if (new->fd.exein && new->fd.exein > 2)
-		close(new->fd.exein);
+	if (new->infd > 2)
+		close(new->infd);
 	if (access(next->str, R_OK | F_OK))
 	{
-		new->fd.exein = -1;
+		new->infd = -1;
 		return(redirend(next->str, MSHELL_FAILURE));
 	}
 	else
 	{
-		new->fd.exein = open(next->str, O_RDONLY);
-		if (new->fd.exein < 0)
+		new->infd = open(next->str, O_RDONLY);
+		if (new->infd < 0)
 			return(redirend(next->str, MSHELL_FAILURE));
-		if (new->heredoc[0] >= 0)
-			close(new->heredoc[0]);
-		if (new->heredoc[1] >= 0)
-			close(new->heredoc[1]);
-		new->heredoc[0] = -1;
-		new->heredoc[1] = -1;
 	}
 	free(next->str);
 	next->str = NULL;
@@ -70,13 +62,13 @@ static int	cmdupd_infile(t_token *next, t_cmd *new)
  */
 static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
 {
-	if (new->fd.exeout && new->fd.exeout > 2)
-		close(new->fd.exeout);
+	if (new->outfd > 2)
+		close(new->outfd);
 	if (!access(next->str, F_OK))
 		if (access(next->str, W_OK))
 			return(redirend(next->str, MSHELL_FAILURE));
-	new->fd.exeout = open(next->str, O_WRONLY | O_CREAT | open_flag, 0644);
-	if (new->fd.exeout < 0)
+	new->outfd = open(next->str, O_WRONLY | O_CREAT | open_flag, 0644);
+	if (new->outfd < 0)
 		return(redirend(next->str, MSHELL_FAILURE));
 	free(next->str);
 	next->str = NULL;
@@ -84,22 +76,59 @@ static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
 }
 
 /**
+ * Reads from the STDIN until the specified LIMITATOR is written next to a
+ * line jump '\n', writing everything that is sent into heredoc[1].
+ * 
+ * @param limitator The string that will work as LIMITATOR.
+ * @param heredoc An array of INT which saves an already initialized pipe()
+ * @return Returns heredoc[0] from where to read everything that was 
+ * written on heredoc[1];
+ * @note If the reading is interrupted before the LIMITATOR, the information
+ * written on heredoc[0] will be sent to the next cmd and an error msg is printed 
+ * on STDERR specifying the interruption issue.
+ */
+static int	fd_heredoc(char *limitator, int heredoc[2])
+{
+	int		i;
+	char	*line;
+
+	i = 0;
+	while (1)
+	{
+		i++;
+		write(1, "> ", 2);
+		line = get_next_line(0);
+		if (!line)
+		{
+			if (errno == ENOMEM)//forcend should check on errno instead of following msg to know what to print?
+				return (-1);//i also need to verify if read failed and print a message accordingly
+			ft_printfd(2, "\nmsh: warning: here-document at line %i delimited by end-of-file (wanted '%s')\n", i, limitator);
+			break;
+		}
+		if (line && !ft_strncmp(line, limitator, ft_strlen(limitator)))
+		{
+			free(line);
+			break;
+		}
+		write(heredoc[1], line, ft_strlen(line));//write can fail! line x where x is the line its writing of heredoc
+		free(line);
+	}
+	close(heredoc[1]);//How could i add the heredoc to the history??
+	return (heredoc[0]);
+}
+
+/**
  * COMMENT PENDING
  */
 static int	cmdupd_heredoc(t_token *next, t_cmd *new)
 {
-	if (new->fd.exein > 2)
-		close(new->fd.exein);
-	if (new->heredoc[0] >= 0)
-		close(new->heredoc[0]);
-	if (new->heredoc[1] >= 0)
-		close(new->heredoc[1]);
-	if (pipe(new->heredoc) < 0)
+	int	heredoc[2];
+
+	if (new->infd > 2)
+		close(new->infd);
+	if (pipe(heredoc) < 0)
 		return(redirend(NULL, MSHELL_FAILURE));
-	if (new->limitator)
-		free(new->limitator);
-	new->fd.exein = -2;
-	new->limitator = next->str;
+	new->infd = fd_heredoc(next->str, heredoc);
 	next->str = NULL;
 	return (MSHELL_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:27:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 18:16:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	envar_len(char *env_var)
 	int	i;
 
 	i = 1;
+	if (env_var[i] == '?')
+		return (++i);
 	while (ft_isalnum(env_var[i]) || env_var[i] == '_')
 		i++;
 	return (i);
@@ -63,7 +65,7 @@ char	*exp_mask(t_token *word, int start, int envar_len, int value_len)
 	new_mask = ft_calloc(aux_len + 1, sizeof(char));
 	if (!new_mask)
 		return (NULL);
-	ft_strlcpy(new_mask, word->mask, aux_len + 1);
+	ft_strlcpy(new_mask, word->mask, value_len + 1);
 	memset(&new_mask[start], word->mask[start], value_len);
 	aux_mask = &(word->mask[start + envar_len]);
 	aux_start = ft_strlen(new_mask);
