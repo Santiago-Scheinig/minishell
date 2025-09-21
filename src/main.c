@@ -37,9 +37,15 @@ static void	init_envp(t_body *minishell, const char **envp)
 	ps1 = shell_pmtstr(minishell->envp_lst);
 	if (!ps1)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
-	msh_import(&minishell->envp, &minishell->envp_lst, ps1);
-	ft_split_free(ps1);
 	shell_sortenv(&minishell->envp_lst);
+	if (!shell_getenv(minishell->envp_lst, "PS1"))
+	{
+		msh_import(&minishell->envp, &minishell->envp_lst, ps1);
+		shell_sortenv(&minishell->envp_lst);
+		ft_split_free(ps1);
+	}
+	else
+		free(ps1);
 }
 
 /**
@@ -87,7 +93,8 @@ int	main(int argc, char **argv, const char **envp)
 		}
 		if (execmd(&minishell))
 			continue;
-		waitcmd(&minishell);
+		if (minishell.childs_pid)
+			waitcmd(&minishell);
 	}
 	return (0);
 }

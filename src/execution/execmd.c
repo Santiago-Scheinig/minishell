@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/20 19:10:34 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 15:21:32 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
-#include "msh_cmd.h"
 
 /**
  * Creates and allocates a STRING with the definitive path to a cmd binary.
@@ -106,70 +105,33 @@ static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 	fd_endexe(exe);
 }
 
-/**
- * Executes the appropriate built-in shell command based on the
- * command name.
- * Calls the corresponding function for commands like export, cd, env, pwd,
- * echo, exit, unset, and unexport(envp not exported).
- *
- * @param minishell Pointer to the main shell structure containing environment
- * variables.
- * @param pathname The name of the built-in command to execute.
- * @param args The arguments passed to the command.
- * @param lst A linked list node containing environment variable data.
- * @return Returns the pathname of the executed built-in command.
- *
- * @note This function assumes commands are matched by name and delegates
- * execution accordingly.
- */
-/* static int	exe_built(t_cmd *exe, t_body *minishell)//No minishell sadly
-{
-	if (!ft_strncmp(exe->argv[0], "export", 7))
-		return (msh_export(&minishell->envp, &minishell->envp_lst, &exe->argv[1]));
-	else if (!ft_strncmp(exe->argv[0], "cd", 3))
-		return (msh_cd(exe->argv, minishell->envp_lst));
-	else if (!ft_strncmp(exe->argv[0], "env", 4))
-		return (msh_env(exe->argv, minishell->envp, minishell->envp_lst));
-	else if (!ft_strncmp(exe->argv[0], "pwd", 4))
-		return (msh_pwd(exe->argv));
-	else if (!ft_strncmp(exe->argv[0], "echo", 5))
-		msh_echo(exe->argv);
-	else if (!ft_strncmp(exe->argv[0], "unset", 6))
-		return (msh_unset(minishell->envp, minishell->envp_lst, &exe->argv[1]));
-	else if (!ft_strncmp(exe->argv[0], "exit", 5))
-	{
-		msh_exit(exe->argv, minishell);
-		return (1);
-	}
-	else
-		return (msh_import(&minishell->envp, &minishell->envp_lst, exe->argv));
-	return (0);
-} */
-
 int	execmd(t_body *minishell)
 {
 	t_list	*cmd_lst;
 	t_cmd	*exe;
 	t_cmd	*exe_next;
 	char	**path;
-	int	i;
+	int		i;
 
 	cmd_lst = minishell->cmd_lst;
-	// if (!cmd_lst->next)
-	// 	exe_built((t_cmd *) minishell->cmd_lst->content, minishell);
-	path = exe_setup(minishell);
-	if (!path)
-		return (MSHELL_FAILURE);
 	i = -1;
-	while (cmd_lst)
+	if (!cmd_lst->next)
+		i = exe_built((t_cmd *) minishell->cmd_lst->content, minishell);
+	if (i == -1)
 	{
-		exe = (t_cmd *) cmd_lst->content;
-		exe_next = NULL;
-		if (cmd_lst->next)
+		path = exe_setup(minishell);
+		if (!path)
+			return (MSHELL_FAILURE);
+		while (cmd_lst)
+		{
+			exe = (t_cmd *) cmd_lst->content;
+			exe_next = NULL;
+			if (cmd_lst->next)
 			exe_next = (t_cmd *) cmd_lst->next->content;
-		exe_child(exe, path, &(minishell->childs_pid[++i]), minishell->envp);
-		cmd_lst = cmd_lst->next;
+			exe_child(exe, path, &(minishell->childs_pid[++i]), minishell->envp);
+			cmd_lst = cmd_lst->next;
+		}
+		ft_split_free(path);
 	}
-	ft_split_free(path);
 	return (MSHELL_SUCCESS);
 }

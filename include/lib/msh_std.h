@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_std.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/19 20:17:41 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 15:14:16 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,11 +287,6 @@ int			is_divisor(char *str);
  * @param str A string in which to verify the token type.
  */
 int			get_token_type(char *str);
-
-/**
- * COMMENT PENDING ISMA
- */
-void		sortenv(t_list **head);
 
 /**
  * COMMENT PENDING ISMA

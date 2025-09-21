@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_exe.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/20 17:14:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 15:20:50 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ char	**setup_path(const char **envp);
  */
 void	fd_endexe(t_cmd *exe);
 
-int	setup_pipeline(t_list *cmd_lst);
+int		exe_built(t_cmd *exe, t_body *minishell);
+
+int		setup_pipeline(t_list *cmd_lst);
 
 int		waitcmd(t_body *minishell);
 #endif
