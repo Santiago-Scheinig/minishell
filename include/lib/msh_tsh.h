@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_tsh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 17:16:00 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/19 20:57:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/21 18:26:54 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ int	sigquit(void);
  * @return 0 on success, 1 if a sigaction() error occured.
  */
 int	sigdfl(void);
+
+int	sigign(void);
+
 
 /*--------------------------------------------------------------------------*/
 /*-----------------------------SHELL TROUBLESHOOT---------------------------*/

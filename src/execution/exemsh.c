@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/21 16:05:46 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/21 16:29:52 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@
  * @note This function assumes commands are matched by name and delegates
  * execution accordingly.
  */
-int	msh_cmd(t_cmd *exe, t_body *minishell)
+int	msh_cmd(t_cmd *exe, t_body *msh)
 {
 	if (!ft_strncmp(exe->argv[0], "export", 7))
-		return (msh_export(&minishell->envp, &minishell->envp_lst, &exe->argv[1]));
+		return (msh_export(&msh->envp, &msh->envp_lst, &exe->argv[1]));
 	else if (!ft_strncmp(exe->argv[0], "cd", 3))
-		return (msh_cd(exe->argv, minishell->envp_lst));
+		return (msh_cd(exe->argv, msh->envp_lst));
 	else if (!ft_strncmp(exe->argv[0], "env", 4))
-		return (msh_env(exe->argv, minishell->envp, minishell->envp_lst));
+		return (msh_env(exe->argv, msh->envp, msh->envp_lst));
 	else if (!ft_strncmp(exe->argv[0], "pwd", 4))
 		return (msh_pwd(exe->argv));
 	else if (!ft_strncmp(exe->argv[0], "echo", 5))
@@ -45,14 +45,14 @@ int	msh_cmd(t_cmd *exe, t_body *minishell)
 		return (0);
 	}
 	else if (!ft_strncmp(exe->argv[0], "unset", 6))
-		return (msh_unset(minishell->envp, minishell->envp_lst, &exe->argv[1]));
+		return (msh_unset(msh->envp, msh->envp_lst, &exe->argv[1]));
 	else if (!ft_strncmp(exe->argv[0], "exit", 5))
 	{
-		msh_exit(exe->argv, minishell);
+		msh_exit(exe->argv, msh);
 		return (1);
 	}
 	else if (ft_strchr(exe->argv[0], '='))
-		return (msh_import(&minishell->envp, &minishell->envp_lst, exe->argv));
+		return (msh_import(&msh->envp, &msh->envp_lst, exe->argv));
 	return (-1);
 }
 
