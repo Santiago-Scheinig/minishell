@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 19:27:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/22 18:23:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,51 +76,9 @@ static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
 }
 
 /**
- * Reads from the STDIN until the specified LIMITATOR is written next to a
- * line jump '\n', writing everything that is sent into heredoc[1].
- * 
- * @param limitator The string that will work as LIMITATOR.
- * @param heredoc An array of INT which saves an already initialized pipe()
- * @return Returns heredoc[0] from where to read everything that was 
- * written on heredoc[1];
- * @note If the reading is interrupted before the LIMITATOR, the information
- * written on heredoc[0] will be sent to the next cmd and an error msg is printed 
- * on STDERR specifying the interruption issue.
- */
-static int	fd_heredoc(char *limitator, int heredoc[2])
-{
-	int		i;
-	char	*line;
-
-	i = 0;//If limitator is between "" or '' as usual, if not, variables with $ should expand
-	while (1)
-	{
-		i++;
-		write(1, "> ", 2);
-		line = get_next_line(0);
-		if (!line)
-		{
-			if (errno == ENOMEM)//forcend should check on errno instead of following msg to know what to print?
-				return (-1);//i also need to verify if read failed and print a message accordingly
-			ft_printfd(2, "\nmsh: warning: here-document at line %i delimited by end-of-file (wanted '%s')\n", i, limitator);
-			break;
-		}
-		if (line && !ft_strncmp(line, limitator, ft_strlen(limitator)))
-		{
-			free(line);
-			break;
-		}
-		write(heredoc[1], line, ft_strlen(line));//write can fail! line x where x is the line its writing of heredoc
-		free(line);
-	}
-	close(heredoc[1]);//How could i add the heredoc to the history??
-	return (heredoc[0]);
-}
-
-/**
  * COMMENT PENDING
  */
-static int	cmdupd_heredoc(t_token *next, t_cmd *new)
+static int	cmdupd_heredoc(t_token *aux, t_token *next, t_cmd *new)
 {
 	int	heredoc[2];
 
@@ -128,7 +86,7 @@ static int	cmdupd_heredoc(t_token *next, t_cmd *new)
 		close(new->infd);
 	if (pipe(heredoc) < 0)
 		return(redirend(NULL, MSHELL_FAILURE));
-	new->infd = fd_heredoc(next->str, heredoc);//next->str should go through memmove first so quotes are removed
+	new->infd = aux->heredoc;
 	next->str = NULL;
 	return (MSHELL_SUCCESS);
 }
@@ -145,6 +103,6 @@ int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
 	if (aux->type == REDIR_APPEND)
 		return (cmdupd_outfile(aux_next, new, O_APPEND));
 	if (aux->type == HEREDOC)
-		return (cmdupd_heredoc(aux_next, new));
+		return (cmdupd_heredoc(aux, aux_next, new));
 	return (MSHELL_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 18:26:53 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/22 22:47:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,30 @@ static void	envar_tokenization(t_list *token_lst, t_body *minishell)
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
-static int	envar_mask(t_token *word, char *value, int start, t_body *minishell)
+int	envar_mask(char *str, char *value, char **mask, int start)
 {
 	char	*ret;
-	int		var_len;
-	int		value_len;
+	t_pair 	len;
 
-	var_len = envar_len(&(word->str[start]));
+	if (!mask)
+		return (MSHELL_SUCCESS);
+	len.var = envar_len(&(str[start]));
 	if (!value)
-		ret = exp_mask(word, start, var_len, 0);
+	{
+		len.value = 0;
+		ret = exp_mask(str, (*mask), start, len);
+	}
 	else
 	{
-		value_len = ft_strlen(value);
-		ret = exp_mask(word, start, var_len, value_len);
+		len.value = ft_strlen(value);
+		ret = exp_mask(str, (*mask), start, len);
 		if (!ret)
-			forcend(minishell, "malloc", MSHELL_FAILURE);
-		if (word->mask)
-			free(word->mask);
-		word->mask = ret;
+			return (MSHELL_FAILURE);
+		if ((*mask))
+			free((*mask));
+		(*mask) = ret;
 	}
-	return(start);
+	return(MSHELL_SUCCESS);
 }
 
 /**
@@ -109,33 +113,33 @@ static int	envar_mask(t_token *word, char *value, int start, t_body *minishell)
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
-static int	envar_expansion(t_token *word, int start, t_body *minishell)
+static int	envar_init(char **str, char **mask, int start, t_list *envp)
 {
 	char	*env_pathname;
 	char	*env_value;
 	char	*ret;
 
-	env_pathname = envar_pathname(&(word->str[start + 1]));
+	env_pathname = envar_pathname(&((*str)[start + 1]));
 	if (!env_pathname)
-		forcend(minishell, "malloc", MSHELL_FAILURE);
-	env_value = shell_getenv(minishell->envp_lst, env_pathname);
+		return (MSHELL_FAILURE);
+	env_value = shell_getenv(envp, env_pathname);
 	free(env_pathname);
 	if (!env_value)
 	{
-		envar_mask(word, env_value, start, minishell);
-		ret = exp_value(word->str, env_value, start);
+		if (envar_mask((*str), env_value, mask, start))
+			return (MSHELL_FAILURE);
+		ret = exp_value((*str), env_value, start);
 	}
 	else
 	{
-		ret = exp_value(word->str, env_value, start);
-		if (!ret)
-			forcend(minishell, "malloc", MSHELL_FAILURE);
-		envar_mask(word, env_value, start, minishell);
-		if (word->str)
-			free(word->str);
-		word->str = ret;
+		ret = exp_value((*str), env_value, start);
+		if (!ret || envar_mask((*str), env_value, mask, start))
+			return (MSHELL_FAILURE);
+		if ((*str))
+			free((*str));
+		(*str) = ret;
 	}
-	return(start);
+	return(MSHELL_SUCCESS);
 }
 
 /**
@@ -148,30 +152,35 @@ static int	envar_expansion(t_token *word, int start, t_body *minishell)
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
-static void	envar_syntax(t_list *token_lst, t_body *minishell)
+int	envar_syntax(char **str, char **mask, t_list *envp, int exit_no)
 {
-	t_token	*word;
 	int		i;
 	int		quote;
 
 	i = -1;
 	quote = 0;
-	word = (t_token *) token_lst->content;
-	while (word->str[++i])
+	while ((*str)[++i])
 	{
-		while (word->str[i] == '$' && word->mask[i] != 'S')
+		while ((*str)[i] == '$')
 		{
-			if (!word->str[i + 1] || (!ft_isalpha(word->str[i + 1])
-			&& word->str[i + 1] != '_' && word->str[i + 1] != '?'))
+			if (mask && (*mask)[i] == 'S')
+				break;
+			if (!(*str)[i + 1] || (!ft_isalpha((*str)[i + 1])
+				&& (*str)[i + 1] != '_' && (*str)[i + 1] != '?'))
 			{
 				i++;
 				continue;
 			}
-			i = envar_expansion(word, i, minishell);
-			if (word->mask[i] == 'N')
-				envar_tokenization(token_lst, minishell);
+			if ((*str)[i + 1] == '?')
+			{
+				if (exp_exitno(str, mask, i, exit_no))
+					return (MSHELL_FAILURE);
+			}
+			else if (envar_init(str, mask, i, envp))
+				return (MSHELL_FAILURE);
 		}
 	}
+	return (MSHELL_SUCCESS);
 }
 
 /**
@@ -194,15 +203,22 @@ static void	envar_syntax(t_list *token_lst, t_body *minishell)
  */
 void	parser_envar(t_body *minishell)
 {
+	t_list	*envp;
 	t_list	*token_lst;
-	t_token *content;
+	t_token *tkn;
 
+	envp = minishell->envp_lst;
 	token_lst = minishell->token_lst;
 	while(token_lst)
 	{
-		content = (t_token *) token_lst->content;
-		if (content->str && content->type == WORD)
-			envar_syntax(token_lst, minishell);
+		tkn = (t_token *) token_lst->content;
+		if (tkn->str && tkn->type == WORD)
+		{
+			if (envar_syntax(&(tkn->str), &(tkn->mask), envp, minishell->exit_no))
+				forcend(minishell, "malloc", MSHELL_FAILURE);
+			if (tkn->mask[0] == 'N')
+				envar_tokenization(minishell->token_lst, minishell);
+		}
 		token_lst = token_lst->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 19:07:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/22 21:23:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static void	parser_input(t_body *minishell)
 		free(tmp);
 	}
 	else
-		minishell->input = get_next_line(STDIN_FILENO);//if gnl fails via malloc or read, it must terminate the shell!
+		minishell->input = get_next_line(STDIN_FILENO);
 	if (minishell->input == NULL)
-		msh_exit(NULL, minishell);
+		msh_exit(NULL, minishell);//should print errors on malloc or read fail from gnl if any!
 	else if (!minishell->input[0])
 	{
 		free(minishell->input);
@@ -70,6 +70,7 @@ int	parser(t_body *minishell)
 	if (!split)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	parser_token(minishell, split);
+	add_history(minishell->input);
 	if (g_signal_received)
 	{
 		g_signal_received = 0;

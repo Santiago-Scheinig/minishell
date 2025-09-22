@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 18:16:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/22 22:45:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,27 +47,27 @@ int	envar_len(char *env_var)
  * Otherwise, it reallocates the new expanded string and returns
  * it.
  */
-char	*exp_mask(t_token *word, int start, int envar_len, int value_len)
+char	*exp_mask(char *str, char *mask, int start, t_pair len)
 {
 	int 	aux_len;
 	int		aux_start;
 	char	*aux_mask;
 	char	*new_mask;
 
-	if (!value_len)
+	if (!len.value)
 	{
-		aux_start = start + envar_len;
-		aux_len = ft_strlen(&(word->str[aux_start])) + 1;
-		ft_memmove(&(word->mask[start]), &(word->mask[aux_start]), aux_len);
-		return (word->mask);
+		aux_start = start + len.var;
+		aux_len = ft_strlen(&(str[aux_start])) + 1;
+		ft_memmove(&(mask[start]), &(mask[aux_start]), aux_len);
+		return (mask);
 	}
-	aux_len = ft_strlen(word->str) + value_len;
+	aux_len = ft_strlen(str) + len.value;
 	new_mask = ft_calloc(aux_len + 1, sizeof(char));
 	if (!new_mask)
 		return (NULL);
-	ft_strlcpy(new_mask, word->mask, value_len + 1);
-	memset(&new_mask[start], word->mask[start], value_len);
-	aux_mask = &(word->mask[start + envar_len]);
+	ft_strlcpy(new_mask, mask, len.value + 1);
+	memset(&new_mask[start], mask[start], len.value);
+	aux_mask = &(mask[start + len.var]);
 	aux_start = ft_strlen(new_mask);
 	ft_strlcpy(&new_mask[aux_start], aux_mask, aux_len + 1);
 	return (new_mask);
@@ -113,6 +113,21 @@ char	*exp_value(char *str, char *value, int start)
 	return (exp_str);
 }
 
+int	exp_exitno(char **str, char **mask, int start, int exit_no)
+{
+	char	*env_value;
+	char	*ret;
+	
+	env_value = ft_itoa(exit_no);
+	ret = exp_value((*str), env_value, start);
+	if (!ret || envar_mask((*str), env_value, mask, start))
+		return (MSHELL_FAILURE);
+	free(env_value);
+	if ((*str))
+		free((*str));
+	(*str) = ret;
+	return(MSHELL_SUCCESS);
+}
 /**
  * Allocates and returns a clean STRING with only the enviromental variable
  * name, to search into getenv().
