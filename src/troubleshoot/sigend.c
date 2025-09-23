@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:54:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 18:41:00 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/22 15:18:32 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	sigign(void)
 	sa_int.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
-		perror("Error setting SIGINT handler");//not sure this should print like this
+		perror("Error setting SIGINT handler");
 		return (MSHELL_FAILURE);
 	}
 	return (MSHELL_SUCCESS);
@@ -64,7 +64,8 @@ int	sigdfl(void)
 	sa_int.sa_handler = SIG_DFL;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
-	if (sigaction(SIGINT, &sa_int, NULL) || sigaction(SIGQUIT, &sa_int, NULL))
+	if (sigaction(SIGINT, &sa_int, NULL) || sigaction(SIGQUIT, &sa_int, NULL)
+		|| sigaction(SIGPIPE, &sa_int, NULL))
 		return (MSHELL_FAILURE);
 	return (MSHELL_SUCCESS);
 }
