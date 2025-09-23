@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_std.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 21:51:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 13:38:48 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_cmd
 	char	**argv;
 	int		infd;
 	int		outfd;
+	int		pipefd;
 }	t_cmd;
 
 /**

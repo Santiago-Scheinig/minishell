@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 19:07:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:51:01 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,24 @@ static int	fd_setexe(t_cmd *exe, t_cmd *exe_next)
 		else
 			close(pipefd[1]);
 		if (exe_next->infd == STDIN_FILENO)
+		{
+			exe->pipefd = pipefd[0];
 			exe_next->infd = pipefd[0];
+		}
 		else
 			close(pipefd[0]);
 	}
 	return (MSHELL_SUCCESS);
 }
 
-void	fd_endexe(t_cmd *exe)
+void	fd_endexe(t_cmd *exe, pid_t child)
 {
 	if (exe->infd > 2)
 		close(exe->infd);
 	if (exe->outfd > 2)
 		close(exe->outfd);
+	if (!child && exe->pipefd > 2)
+		close(exe->pipefd);
 }
 
 int		setup_pipeline(t_list *cmd_lst)

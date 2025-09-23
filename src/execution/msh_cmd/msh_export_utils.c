@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:24:12 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:32:22 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,23 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 	if (aux->value)
 		free(aux->value);
 	free(envp[i]);
-	aux->value = ft_strdup(sign + 1);
-	if (!aux->value)
-		return (built_end("export", "System failed", NULL, '\0'));
-	envp[i] = ft_strdup(new_env);
-	if (!envp)
-		return (built_end("export", "System failed", NULL, '\0'));
+	if (sign)
+	{
+		aux->value = ft_strdup(sign + 1);
+		if (!aux->value)
+			return (built_end("export", "System failed", NULL, '\0'));
+		envp[i] = ft_strdup(new_env);
+		if (!envp)
+			return (built_end("export", "System failed", NULL, '\0'));
+	}
 	return (0);
 }
 
-char	**export_no_equal(char **args, t_list *lst)
+char	**export_no_equal(char **args, char ***envp, t_list *lst)
 {
 	t_list	*current;
 	t_var	*var;
-	int		k;
+	char	*tmp;
 	int		i;
 
 	i = -1;
@@ -49,13 +52,15 @@ char	**export_no_equal(char **args, t_list *lst)
 		while (current)
 		{
 			var = (t_var *)current->content;
-			k = 0;
-			while (args[i][k] && args[i][k] != '=')
-				k++;
 			if (!ft_strncmp(args[i], var->name, ft_strlen(var->name)))
 				if (!ft_strchr(args[i], '='))
 				{
 					var->exported = 1;
+					tmp = ft_strjoin(args[i], "=");
+					if(!tmp)
+						return (NULL);
+					exp_resize(&tmp, envp);
+					free(tmp);
 					args = ft_remove_arr(args, i--);
 				}
 			current = current->next;
@@ -92,7 +97,7 @@ char	**export_no_dup(char **args)
 	return (args);
 }
 
-char	**exp_resize(char **args, char **envp, size_t size)
+int	exp_resize(char **args, char ***envp)
 {
 	size_t	old_size;
 	size_t	new_size;
@@ -100,17 +105,19 @@ char	**exp_resize(char **args, char **envp, size_t size)
 	size_t	envp_len;
 	char	**tmp;
 
-	args_len = size;
-	envp_len = ft_arrlen((const void **)envp);
+	args_len = 1;
+	envp_len = ft_arrlen((const void **)(*envp));
 	new_size = (args_len + envp_len + 1) * sizeof(char *);
-	old_size = (ft_arrlen((const void **)envp) + 1) * sizeof(char *);
-	tmp = ft_realloc(envp, new_size, old_size);
+	old_size = (envp_len + 1) * sizeof(char *);
+	tmp = (char **)ft_realloc((void *)(*envp), new_size, old_size);
 	if (!tmp)
-		return (NULL);
+		return (built_end("export", "System failed", NULL, '\0'));
 	old_size = envp_len;
 	envp_len = -1;
 	while (++envp_len < args_len)
 		tmp[envp_len + old_size] = ft_strdup(args[envp_len]);
 	tmp[envp_len + old_size] = NULL;
-	return (tmp);
+	*envp = tmp;
+	export_no_dup(*envp);
+	return (0);
 }

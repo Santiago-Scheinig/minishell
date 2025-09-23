@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 19:49:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:51:15 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,28 +81,37 @@ static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 
 	sigign();
 	(*child) = fork();
-	if (!(*child) && !(exe->infd < 0))
+	if (!(*child))
 	{
 		sigdfl();
 		if (!exe->argv || !exe->argv[0])
+		{
+			fd_endexe(exe, (*child));
 			exit (MSHELL_FAILURE);
 		error = exe_getpath(exe->argv[0], path, &(exe->pathname));
 		if (error)
 			exit (error);
 		if (dup2(exe->infd, STDIN_FILENO) == -1
-			|| dup2(exe->outfd, STDOUT_FILENO) == -1)
+		|| dup2(exe->outfd, STDOUT_FILENO) == -1)
 		{
 			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
+			fd_endexe(exe, (*child));
 			exit(MSHELL_FAILURE);
 		}
-		fd_endexe(exe);
-		//if (exe_built())
-		// {
-		if (execve(exe->pathname, exe->argv, envp))
-			exit(MSHELL_FAILURE);//childend();
-		// }
+		fd_endexe(exe, (*child));
+		if (!exe_child_built(exe->argv, envp))
+		{
+			error = exe_getpath(exe->argv[0], path, &(exe->pathname));
+			if (error)
+			{
+				fd_endexe(exe, (*child));
+				exit (error);
+			}
+			if (execve(exe->pathname, exe->argv, envp))
+				exit(MSHELL_FAILURE);
+		}
 	}
-	fd_endexe(exe);
+	fd_endexe(exe, (*child));
 }
 
 int	execmd(t_body *minishell)
@@ -116,7 +125,8 @@ int	execmd(t_body *minishell)
 	cmd_lst = minishell->cmd_lst;
 	i = -1;
 	if (!cmd_lst->next)
-		i = exe_built((t_cmd *) minishell->cmd_lst->content, minishell);
+		i = exe_built((t_cmd *)minishell->cmd_lst->content, minishell,
+		minishell->envp_lst, &minishell->envp);
 	if (i == -1)
 	{
 		path = exe_setup(minishell);

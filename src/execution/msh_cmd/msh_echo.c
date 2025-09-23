@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_echo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/21 19:17:21 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 13:11:41 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,18 @@ void	msh_echo(char **args)
 
 	i = 1;
 	new_line = 1;
-	if (args[1] && !ft_strncmp(args[1], "-n", 3))
+	while (args[i] && !ft_strncmp(args[i], "-n", 3))
 	{
 		i++;
 		new_line = 0;
 	}
 	while (args[i])
 	{
-		ft_printf("%s", args[i]);//usar write para saber si falla en escritura
-		if (args[i++ + 1])
-			ft_printf(" ");
+		write(1, args[i], ft_strlen(args[i]));
+		if (args[i + 1])
+			write(1, " ", 1);
+		i++;
 	}
 	if (new_line)
-		ft_printf("\n");
+		write(1, "\n", 1);
 }

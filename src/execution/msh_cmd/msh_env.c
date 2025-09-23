@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:50:11 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:45:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:00:00 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,41 +23,34 @@ void	print_export(t_list *env_lst)
 		tmp = (t_var *)current->content;
 		if (tmp->name && tmp->exported)
 		{
-			ft_printf("declare -x %s", tmp->name);
+			write(1, "declare -x ", 11);
+			write(1, tmp->name, ft_strlen(tmp->name));
 			if (tmp->value)
-				ft_printf("=\"%s\"", tmp->value);
-			ft_printf("\n");
+			{
+				write(1, "=\"", 2);
+				write(1, tmp->value, ft_strlen(tmp->value));
+				write(1, "\"", 1);
+			}
+			write(1, "\n", 1);
 		}
 		current = current->next;
 	}
 }
 
-void	print_env(char **envp, t_list *env_lst)
+void	print_env(char **envp)
 {
-	t_list	*current;
-	t_var	*tmp;
 	int		i;
 
 	i = 0;
 	while (envp[i])
 	{
-		current = env_lst;
-		while (current)
-		{
-			tmp = (t_var *)current->content;
-			if (!ft_strncmp(tmp->name, envp[i], ft_strlen(tmp->name)))
-			{
-				if (tmp->exported)
-					ft_printf("%s\n", envp[i]);
-				break ;
-			}
-			current = current->next;
-		}
+		write(1, envp[i], ft_strlen(envp[i]));
+		write(1, "\n", 1);
 		i++;
 	}
 }
 
-int	msh_env(char **args, char **envp, t_list *env_lst)
+int	msh_env(char **args, char **envp)
 {
 	int	i;
 
@@ -66,6 +59,6 @@ int	msh_env(char **args, char **envp, t_list *env_lst)
 		return (built_end(args[0], "Invalid flags", "[]", args[1][1]));
 	else if (args[1])
 		return (built_end(args[0], "Numbers of args", NULL, '\0'));
-	print_env(envp, env_lst);
+	print_env(envp);
 	return (0);
 }

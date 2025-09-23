@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:04:16 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 16:57:16 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 void	free_env_list(t_var *env);
 
-char	**export_no_equal(char **args, t_list *lst);
+char	**export_no_equal(char **args, char ***envp, t_list *lst);
 
 char	**export_no_dup(char **args);
 
@@ -28,15 +28,15 @@ t_var	*add_env(t_var *head, char *new_env);
 
 int		set_equal(t_var *aux, char **envp, char *sign, char *new_env);
 
-int		msh_env(char **args, char **envp, t_list *env_lst);
+int		msh_env(char **args, char **envp);
 
 void	print_export(t_list *env_lst);
 
 void	msh_exit(char **args, t_body *minishell);
 
-void	print_env(char **envp, t_list *env_lst);
+void	print_env(char **envp);
 
-char	**exp_resize(char **args, char **envp, size_t size);
+int		exp_resize(char **args, char ***envp);
 
 void	msh_echo(char **args);
 
@@ -56,12 +56,12 @@ char	**ft_remove_arr(char **arr, int index);
 
 int		is_valid_identifier(char *arg);
 
-char	**ft_isal_num(char **args, t_list *head);
+char	**ft_isal_num(char **args, t_list *head, char ***envp);
 
 int		msh_import(char ***envp, t_list **head, char **args);
 
-int		change_value_env(t_var *aux, char ***envp, char *new_env, int export);
+int		change_value_env(t_var *aux, char ***envp, char **new_env, int export);
 
-t_list	*new_envp(char **new_env, t_list *head, int export);
+int		new_envp(char **new_env, t_list *head, int export);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_pmtexp.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:27:15 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 16:30:11 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,16 @@ char	*shell_pmtexp(t_list *envp)
 	path = path_cwd(envp);
 	if (!path)
 		return (NULL);
-	prompt = pwd_name(ps1, path, envp);
+	if (!ps1)
+	{
+		ps1 = ft_strdup("");
+		if (!ps1)
+			return (NULL);
+		prompt = pwd_name(ps1, path, envp);
+		free(ps1);
+	}
+	else
+		prompt = pwd_name(ps1, path, envp);
 	if (!prompt)
 	{
 		free(path);
