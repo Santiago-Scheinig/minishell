@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 18:06:13 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 22:46:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:00:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ static int	hdoc_mask(char *limit_mask, char **line, t_list *envp, t_pair aux)
 	if (exp)
 		if (envar_syntax(line, NULL, envp, aux.value))
 			return (MSHELL_FAILURE);
-	//printf("%s", (*line));
 	if (write(aux.var, (*line), ft_strlen((*line))) == -1)
 		return(MSHELL_FAILURE);
 	return (MSHELL_SUCCESS);

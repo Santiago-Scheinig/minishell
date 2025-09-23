@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 22:47:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:39:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ int	envar_mask(char *str, char *value, char **mask, int start)
 	if (!value)
 	{
 		len.value = 0;
-		ret = exp_mask(str, (*mask), start, len);
+		ret = exp_mask(value, (*mask), start, len);
 	}
 	else
 	{
-		len.value = ft_strlen(value);
-		ret = exp_mask(str, (*mask), start, len);
+		len.value = ft_strlen(str);
+		ret = exp_mask(value, (*mask), start, len);
 		if (!ret)
 			return (MSHELL_FAILURE);
 		if ((*mask))

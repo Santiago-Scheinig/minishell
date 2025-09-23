@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 18:37:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:00:09 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 16:39:15 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@
 void	ft_bzero(void *s, size_t n)
 {
 	if (n != 0)
-		ft_memset(s, '\0', n);
+		ft_memset(s, 0, n);
 }
