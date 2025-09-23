@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:46:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 15:08:13 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	msh_pwd(char **args)
 		built_end("pwd", "System failed", NULL, '\0');
 		return (0);
 	}
-	ft_printf("%s\n", path);
+	write(1, path, ft_strlen(path));
 	free(path);
 	return (1);
 }

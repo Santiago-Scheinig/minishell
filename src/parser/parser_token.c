@@ -6,11 +6,25 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:58:33 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/22 22:31:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
+
+static int	token_heredoc(t_token *aux, t_token *next, t_body *minishell)
+{
+	int	fd[2];
+
+	if (next->type != WORD)
+		return (sigend(next->str, MSHELL_MISSUSE, minishell));
+	if (pipe(fd) == -1)
+		return (sigend(next->str, MSHELL_FAILURE, minishell));
+	aux->heredoc = heredoc_dup(next, fd, minishell->envp_lst, minishell->exit_no);
+	if (aux->heredoc == -1)
+		return (sigend(next->str, MSHELL_FAILURE, minishell));
+	return (MSHELL_SUCCESS);
+}
 
 /**
  * COMMENT UPDATE
@@ -27,84 +41,33 @@
  * 
  * @param minishell A pointer to the main enviroment structure of minishell.
  */
-static int	verify_syntax(t_body *minishell)
+static int	token_syntax(t_body *minishell)
 {
-	t_list	*lst_aux;
-	t_token	*token_aux;
-	t_token	*token_next;
+	t_list	*token_lst;
+	t_token	*aux;
+	t_token	*next;
 	int		i;
 
 	i = 0;
-	lst_aux = minishell->token_lst;
-	while (lst_aux->next)
+	token_lst = minishell->token_lst;
+	while (token_lst->next)
 	{
-		token_aux = (t_token *) lst_aux->content;
-		token_next = (t_token *) lst_aux->next->content;
-		if (token_aux->type == REDIR_IN || token_aux->type == REDIR_OUT
-			|| token_aux->type == REDIR_APPEND || token_aux->type == HEREDOC)
-			if (token_next->type != WORD)
-				return (sigend(token_next->str, MSHELL_MISSUSE, minishell));
-		if (token_aux->type == PIPE && token_next->type == PIPE)
-			return (sigend(token_next->str, MSHELL_MISSUSE, minishell));
-		if (!i && token_aux->type == PIPE)
-			return (sigend(token_aux->str, MSHELL_MISSUSE, minishell));
-		lst_aux = lst_aux->next;
+		aux = (t_token *) token_lst->content;
+		next = (t_token *) token_lst->next->content;
+		if (aux->type == REDIR_IN || aux->type == REDIR_OUT
+			|| aux->type == REDIR_APPEND || aux->type == HEREDOC)
+			if (token_heredoc(aux, next, minishell))
+				return (MSHELL_FAILURE);
+		if (aux->type == PIPE && next->type == PIPE)
+			return (sigend(next->str, MSHELL_MISSUSE, minishell));
+		if (!i && aux->type == PIPE)
+			return (sigend(aux->str, MSHELL_MISSUSE, minishell));
+		token_lst = token_lst->next;
 		i++;
 	}
-	if (((t_token *) lst_aux->content)->type != WORD)
+	if (((t_token *) token_lst->content)->type != WORD)
 		return (sigend(NULL, MSHELL_MISSUSE, minishell));
 	return (0);
-}
-
-/**
- * COMMENT PENDING
- */
-static int	maskstr_quoted(char *str, char *mask_str, char quote)
-{
-	int	i;
-
-	i = 0;
-	mask_str[i] = 'O';
-	while (str[++i] && str[i] != quote)
-	{
-		if (quote == '\'')
-			mask_str[i] = 'S';
-		else if (quote == '\"')
-			mask_str[i] = 'D';
-	}
-	mask_str[i] = 'O';
-	return (i);
-}
-
-/**
- * COMMENT PENDING
- */
-static char	*maskstr(char *str)
-{
-	int		i;
-	char	quote;
-	char	*mask_str;
-	
-	mask_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
-	if (!mask_str)
-		return (NULL);
-	i = -1;
-	while (str[++i])
-	{
-		quote = 0;
-		if (str[i] == '\"' && str[i + 1] && ft_strchr(&str[i + 1], '\"'))
-			quote = '\"';
-		else if (str[i] == '\'' && str[i + 1] && ft_strchr(&str[i + 1], '\''))
-			quote = '\'';
-		if (quote)
-			i += maskstr_quoted(&str[i], &mask_str[i], quote);
-		else if (str[i] == ';' || str[i] == '\\'
-			|| str[i] == '\'' || str[i] == '\"')
-			mask_str[i] = 'O';
-		else
-			mask_str[i] = 'N';
-	}
-	return (mask_str);
 }
 
 /**
@@ -125,7 +88,7 @@ t_token	*token_dup(char *str)
 	new->type = get_token_type(str);
 	if (new->type == WORD)
 	{
-		new->mask = maskstr(str);
+		new->mask = mask_dup(str);
 		if (!new->mask)
 			return (NULL);
 	}
@@ -166,5 +129,5 @@ void	parser_token(t_body *minishell, char **split)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	}
 	free(split);
-	verify_syntax(minishell);
+	token_syntax(minishell);
 }

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 13:24:54 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 14:46:44 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int	execmd(t_body *minishell)
 	i = -1;
 	if (!cmd_lst->next)
 		i = exe_built((t_cmd *)minishell->cmd_lst->content, minishell,
-		minishell->envp_lst, minishell->envp);
+		minishell->envp_lst, &minishell->envp);
 	if (i == -1)
 	{
 		path = exe_setup(minishell);

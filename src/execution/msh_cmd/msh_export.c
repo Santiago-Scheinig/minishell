@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 13:31:02 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 15:06:27 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,13 @@ int	change_value_env(t_var *aux, char ***envp, char *new_env, int export)
 		set_equal(aux, envp[0], sign, new_env);
 	if (export == 1 && aux->exported == 0)
 	{
-		envp[0] = exp_resize(&new_env, envp[0], 1);
-		if (!envp[0])
-			return (1);
 		aux->exported = export;
+		return (exp_resize(&new_env, envp));
 	}
 	return (0);
 }
 
-t_list	*new_envp(char **new_env, t_list *head, int export)
+int	new_envp(char **new_env, t_list *head, int export)
 {
 	t_list	*current;
 	t_list	*next;
@@ -97,7 +95,7 @@ t_list	*new_envp(char **new_env, t_list *head, int export)
 	{
 		new_node = create_envp(new_env[i], export);
 		if (!new_node)
-			return (NULL);
+			return (built_end("export", "System failed", NULL, '\0'));
 		next = ft_lstnew(new_node);
 		current = head;
 		while (current->next)
@@ -105,7 +103,7 @@ t_list	*new_envp(char **new_env, t_list *head, int export)
 		current->next = next;
 		i++;
 	}
-	return (head);
+	return (0);
 }
 
 int	msh_export(char ***envp, t_list **head, char **args)
@@ -126,12 +124,11 @@ int	msh_export(char ***envp, t_list **head, char **args)
 		aux = (t_var *)tmp->content;
 		while (args[++i])
 			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
-				if (!change_value_env(aux, &envp[0], args[i], 1))
+				if (!change_value_env(aux, envp, args[i], 1))
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}
-	envp[0] = exp_resize(args, envp[0], ft_arrlen((const void **)args));
-	if (!envp[0] || !new_envp(args, *head, 1))
+	if (exp_resize(args, envp) || new_envp(args, *head, 1))
 		return (1);
 	return (0);
 }

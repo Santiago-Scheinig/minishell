@@ -6,21 +6,21 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 13:23:13 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 14:59:18 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
 #include "msh_cmd.h"
 
-static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char **envp)
+static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char ***envp)
 {
 	if (!ft_strncmp(exe->argv[0], "export", 7))
-		return (msh_export(&envp, &envp_lst, &exe->argv[1]));
+		return (msh_export(envp, &envp_lst, &exe->argv[1]));
 	else if (!ft_strncmp(exe->argv[0], "cd", 3))
 		return (msh_cd(exe->argv, envp_lst));
 	else if (!ft_strncmp(exe->argv[0], "env", 4))
-		return (msh_env(exe->argv, envp, envp_lst));
+		return (msh_env(exe->argv, *envp));
 	else if (!ft_strncmp(exe->argv[0], "pwd", 4))
 		return (msh_pwd(exe->argv));
 	else if (!ft_strncmp(exe->argv[0], "echo", 5))
@@ -29,14 +29,14 @@ static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char **envp)
 		return (0);
 	}
 	else if (!ft_strncmp(exe->argv[0], "unset", 6))
-		return (msh_unset(envp, envp_lst, &exe->argv[1]));
+		return (msh_unset(*envp, envp_lst, &exe->argv[1]));
 	else if (!ft_strncmp(exe->argv[0], "exit", 5))
 	{
 		msh_exit(exe->argv, msh);
 		return (1);
 	}
 	else if (ft_strchr(exe->argv[0], '='))
-		return (msh_import(&envp, &envp_lst, exe->argv));
+		return (msh_import(envp, &envp_lst, exe->argv));
 	return (-1);
 }
 
@@ -59,7 +59,7 @@ static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char **envp)
  * @note This function assumes commands are matched by name and delegates
  * execution accordingly.
  */
-int	exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char **envp)
+int	exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp)
 {
 	int	num;
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 15:56:48 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 13:38:48 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_body
 	struct termios	orig_term;
 	int				interactive;
 	int				line;
+	int				exit_no;
 	char			**envp;//A copy of the original envp + post modifications
 	char			*home;
 	char			*input;//needed for history?
@@ -71,6 +72,7 @@ typedef struct s_token
 {
 	char			*str;	//	The raw token string.
 	char			*mask;	//	The mask of each character inside the string.
+	int				heredoc;
 	t_token_type	type;	//	The type of token.
 }	t_token;
 
