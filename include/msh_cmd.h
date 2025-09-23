@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 14:59:39 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 16:57:16 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 void	free_env_list(t_var *env);
 
-char	**export_no_equal(char **args, t_list *lst);
+char	**export_no_equal(char **args, char ***envp, t_list *lst);
 
 char	**export_no_dup(char **args);
 
@@ -56,12 +56,12 @@ char	**ft_remove_arr(char **arr, int index);
 
 int		is_valid_identifier(char *arg);
 
-char	**ft_isal_num(char **args, t_list *head);
+char	**ft_isal_num(char **args, t_list *head, char ***envp);
 
 int		msh_import(char ***envp, t_list **head, char **args);
 
-int		change_value_env(t_var *aux, char ***envp, char *new_env, int export);
+int		change_value_env(t_var *aux, char ***envp, char **new_env, int export);
 
-t_list	*new_envp(char **new_env, t_list *head, int export);
+int		new_envp(char **new_env, t_list *head, int export);
 
 #endif

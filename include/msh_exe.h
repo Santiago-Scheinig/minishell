@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 14:47:52 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:46:45 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char	**setup_path(const char **envp);
 void	fd_endexe(t_cmd *exe, pid_t child);
 
 int		exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp);
+
+int		exe_child_built(char **args, char **envp);
 
 int		setup_pipeline(t_list *cmd_lst);
 

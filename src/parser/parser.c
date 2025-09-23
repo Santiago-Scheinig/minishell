@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 21:23:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:44:26 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,11 @@ static void	parser_input(t_body *minishell)
 		free(tmp);
 	}
 	else
-		minishell->input = get_next_line(STDIN_FILENO);
+	{
+		tmp = get_next_line(STDIN_FILENO);
+		minishell->input = ft_strtrim(tmp, "\n");
+		free(tmp);
+	}
 	if (minishell->input == NULL)
 		msh_exit(NULL, minishell);//should print errors on malloc or read fail from gnl if any!
 	else if (!minishell->input[0])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   troublend.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 19:07:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:56:42 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	built_end(char *name, char *type, char *flags, char error)
 {
 	char	*shell;
 
-	shell = "minishell: ";
+	shell = "msh: ";
 	if (ft_strnstr(type, "Numbers of args", ft_strlen(type)))
 		ft_printfd(2, "%s%s: too many arguments\n", shell, name);
 	else if (ft_strnstr(type, "Invalid flags", ft_strlen(type)))

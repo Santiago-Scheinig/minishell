@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:50:11 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 15:13:25 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:00:00 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	print_export(t_list *env_lst)
 			{
 				write(1, "=\"", 2);
 				write(1, tmp->value, ft_strlen(tmp->value));
-				ft_printf("=\"%s\"", tmp->value);
 				write(1, "\"", 1);
 			}
 			write(1, "\n", 1);

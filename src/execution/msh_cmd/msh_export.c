@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 15:06:27 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:31:41 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_valid_identifier(char *arg)
 	return (1);
 }
 
-char	**ft_isal_num(char **args, t_list *head)
+char	**ft_isal_num(char **args, t_list *head, char ***envp)
 {
 	int	i;
 	int	j;
@@ -56,31 +56,33 @@ char	**ft_isal_num(char **args, t_list *head)
 			args = ft_remove_arr(&args[0], j);
 	}
 	args = export_no_dup(args);
-	args = export_no_equal(args, head);
+	args = export_no_equal(args, envp, head);
 	return (args);
 }
 
-int	change_value_env(t_var *aux, char ***envp, char *new_env, int export)
+int	change_value_env(t_var *aux, char ***envp, char **new_env, int export)
 {
 	size_t	i;
 	size_t	j;
 	char	*sign;
+	int		nbr;
 
 	i = ft_strlen(aux->name);
 	j = 0;
-	while (new_env[j] && new_env[j] != '=')
+	nbr = 0;
+	while (new_env[0][j] && new_env[0][j] != '=')
 		j++;
 	if (j != i)
 		return (1);
-	sign = ft_strchr(new_env, '=');
-	if (sign)
-		set_equal(aux, envp[0], sign, new_env);
 	if (export == 1 && aux->exported == 0)
 	{
 		aux->exported = export;
-		return (exp_resize(&new_env, envp));
+		exp_resize(new_env, envp);
+		return (0);
 	}
-	return (0);
+	sign = ft_strchr(new_env[0], '=');
+	nbr = set_equal(aux, envp[0], sign, new_env[0]);
+	return (nbr);
 }
 
 int	new_envp(char **new_env, t_list *head, int export)
@@ -115,7 +117,7 @@ int	msh_export(char ***envp, t_list **head, char **args)
 
 	tmp = *head;
 	j = 0;
-	args = ft_isal_num(args, *head);
+	args = ft_isal_num(args, *head, envp);
 	if (!args)
 		return (0);
 	while (tmp)
@@ -124,7 +126,7 @@ int	msh_export(char ***envp, t_list **head, char **args)
 		aux = (t_var *)tmp->content;
 		while (args[++i])
 			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
-				if (!change_value_env(aux, envp, args[i], 1))
+				if (!change_value_env(aux, envp, &args[i], 1))
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}

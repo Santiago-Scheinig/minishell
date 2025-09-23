@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 14:46:44 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:45:19 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ static char	**exe_setup(t_body *minishell)
 
 static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 {
-	char	*tmp;
 	int 	error;
 
 	sigign();
@@ -90,24 +89,25 @@ static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 			fd_endexe(exe, (*child));
 			exit (MSHELL_FAILURE);
 		}
-		tmp = ft_strtrim(exe->argv[0], " \n\t");
-		error = exe_getpath(tmp, path, &(exe->pathname));
-		if (error)
-		{
-			fd_endexe(exe, (*child));
-			exit (error);
-		}
 		if (dup2(exe->infd, STDIN_FILENO) == -1
-			|| dup2(exe->outfd, STDOUT_FILENO) == -1)
+		|| dup2(exe->outfd, STDOUT_FILENO) == -1)
 		{
 			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
 			fd_endexe(exe, (*child));
 			exit(MSHELL_FAILURE);
 		}
 		fd_endexe(exe, (*child));
-		//if (exe_built())
-		if (execve(exe->pathname, exe->argv, envp))
-			exit(MSHELL_FAILURE);//childend();
+		if (!exe_child_built(exe->argv, envp))
+		{
+			error = exe_getpath(exe->argv[0], path, &(exe->pathname));
+			if (error)
+			{
+				fd_endexe(exe, (*child));
+				exit (error);
+			}
+			if (execve(exe->pathname, exe->argv, envp))
+				exit(MSHELL_FAILURE);
+		}
 	}
 	fd_endexe(exe, (*child));
 }
