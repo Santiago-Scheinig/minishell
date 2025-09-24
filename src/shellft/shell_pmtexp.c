@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 14:14:10 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 18:35:29 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static char	*path_cwd(t_list *envp)
 
 	path = getcwd(NULL, 0);
 	if (!path)
-		return (NULL);
+		path = ft_strdup(shell_getenv(envp, "PWD"));
 	prompt = short_path_name(envp, path);
 	if (!shell_getenv(envp, "HOME"))
 	{

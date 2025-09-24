@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 13:40:05 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 18:29:02 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char ***envp)
 	if (!ft_strncmp(exe->argv[0], "export", 7))
 		return (msh_export(envp, &envp_lst, &exe->argv[1]));
 	else if (!ft_strncmp(exe->argv[0], "cd", 3))
-		return (msh_cd(exe->argv, envp_lst));
+		return (msh_cd(exe->argv, &envp_lst));
 	else if (!ft_strncmp(exe->argv[0], "env", 4))
 		return (msh_env(exe->argv, *envp));
 	else if (!ft_strncmp(exe->argv[0], "pwd", 4))
-		return (msh_pwd(exe->argv));
+		return (msh_pwd(exe->argv, envp_lst));
 	else if (!ft_strncmp(exe->argv[0], "echo", 5))
 	{
 		msh_echo(exe->argv);
@@ -45,11 +45,11 @@ static int	child_cmd(t_list *envp_lst, char **argv, char **envp)
 	if (!ft_strncmp(argv[0], "export", 7))
 		return (msh_export(&envp, &envp_lst, &argv[1]));
 	else if (!ft_strncmp(argv[0], "cd", 3))
-		return (msh_cd(argv, envp_lst));
+		return (msh_cd(argv, &envp_lst));
 	else if (!ft_strncmp(argv[0], "env", 4))
 		return (msh_env(argv, envp));
 	else if (!ft_strncmp(argv[0], "pwd", 4))
-		return (msh_pwd(argv));
+		return (msh_pwd(argv, envp_lst));
 	else if (!ft_strncmp(argv[0], "echo", 5))
 	{
 		msh_echo(argv);
