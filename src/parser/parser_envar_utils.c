@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 17:42:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 17:25:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,21 @@ int	envar_len(char *env_var)
  * Otherwise, it reallocates the new expanded string and returns
  * it.
  */
-char	*exp_mask(char *str, char *mask, int start, t_pair len)
+char	*exp_mask(char *str, char *mask, int start, t_envar_pair len)
 {
 	int 	aux_len;
 	int		aux_start;
 	char	*aux_mask;
 	char	*new_mask;
 
-	if (!len.value)
+	if (!len.val)
 	{
 		aux_start = start + len.var;
 		aux_len = ft_strlen(&(str[aux_start])) + 1;
 		ft_memmove(&(mask[start]), &(mask[aux_start]), aux_len);
 		return (mask);
 	}
-	aux_len = len.value - len.var + ft_strlen(str);
+	aux_len = len.val - len.var + ft_strlen(str);
 	new_mask = ft_calloc(aux_len + 1, sizeof(char));
 	if (!new_mask)
 		return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   troublend.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 18:56:42 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 18:57:10 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	redirend(char *argv, t_error number)
 	return (number);
 }
 
-int	sigend(const char *next, t_error number, t_body *minishell)
+int	parsend(const char *next, t_error number, t_body *minishell)
 {
 	const char	*msg = "syntax error near unexpected token";
 	int			line;
@@ -111,30 +111,29 @@ int	sigend(const char *next, t_error number, t_body *minishell)
 		else
 			ft_printfd(2, "msh: line %i: %s \'%s\'\n", line, msg, next);
 	}
-	g_signal_received = SIGUSR1;
+	minishell->exit_no = (int) number;
 	return (number);
 }
 
 /**
  * COMENT PENDING
  */
-int	forcend(t_body *minishell, char *function, t_error number)
+int	forcend(t_body *msh, const char *argv, int exit_no)
 {
-	cleanup(minishell);
-	if (minishell->envp_lst)
-		shell_lstclear(&minishell->envp_lst, shell_lstdelvar);
-	if (minishell->envp)
-		ft_split_free(minishell->envp);
-	if (minishell->interactive)
+	cleanup(msh);
+	if (msh->envp_lst)
+		shell_lstclear(&msh->envp_lst, shell_lstdelvar);
+	if (msh->envp)
+		ft_split_free(msh->envp);
+	if (msh->interactive)
 		rl_clear_history();
-	if (number == MSHELL_SUCCESS && minishell->interactive)
-		exit(MSHELL_SUCCESS);
-	if (number == MSHELL_FAILURE && function)
-		ft_printfd(2, "\n");
-	if (number == MSHELL_CMD_NOTEXE && function)
-		ft_printfd(2, "msh: %s: No such file or directory\n", function);
-	if (number != MSHELL_FATAL 
-		&& tcsetattr(STDIN_FILENO, TCSANOW, &minishell->orig_term))
-		exit(MSHELL_FAILURE);
-	exit(number);
+	if (errno)
+	{
+		ft_printfd(2, "msh:");
+		perror(argv);
+		if (exit_no != MSHELL_FATAL 
+			&& tcsetattr(STDIN_FILENO, TCSANOW, &msh->orig_term))
+			exit(exit_no);
+	}
+	exit(exit_no);
 }

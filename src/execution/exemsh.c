@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exemsh.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 19:39:25 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 18:01:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	child_cmd(t_list *envp_lst, char **argv, char **envp)
 	}
 	else if (ft_strchr(argv[0], '='))
 		return (msh_import(&envp, &envp_lst, argv));
-	return (0);
+	return (-1);
 }
 
 int	exe_child_built(char **args, char **envp)
@@ -77,7 +77,7 @@ int	exe_child_built(char **args, char **envp)
 	{
 		envp_lst = shell_newlst_var(envp);
 		num = child_cmd(envp_lst, args, envp);
-		if (num)
+		if (num != -1)
 			exit(num);
 	}
 	return (MSHELL_SUCCESS);

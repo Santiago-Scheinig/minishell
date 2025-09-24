@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 17:39:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 19:20:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,20 @@ static void	envar_tokenization(t_list *token_lst, t_body *minishell)
  */
 int	envar_mask(char *str, char *value, char **mask, int start)
 {
-	char	*ret;
-	t_pair 	len;
+	char			*ret;
+	t_envar_pair 	len;
 
 	if (!mask)
 		return (MSHELL_SUCCESS);
 	len.var = envar_len(&(str[start]));
 	if (!value)
 	{
-		len.value = 0;
+		len.val = 0;
 		ret = exp_mask(value, (*mask), start, len);
 	}
 	else
 	{
-		len.value = ft_strlen(str);
+		len.val = ft_strlen(str);
 		ret = exp_mask(value, (*mask), start, len);
 		if (!ret)
 			return (MSHELL_FAILURE);
@@ -159,7 +159,7 @@ int	envar_syntax(char **str, char **mask, t_list *envp, int exit_no)
 
 	i = -1;
 	quote = 0;
-	while ((*str)[++i])
+	while ((*str) && (*str)[++i])
 	{
 		while ((*str)[i] == '$')
 		{

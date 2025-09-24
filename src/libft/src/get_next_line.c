@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 05:11:45 by root              #+#    #+#             */
-/*   Updated: 2025/09/20 19:03:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:56:15 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ static	void	*ft_forcend(char **txt)
 		free(txt[i]);
 		txt[i] = NULL;
 	}
-	if (errno != EINTR && errno != EIO && errno != EBADF 
-		&& errno != EFAULT && errno != EINVAL && errno != ENXIO)
-		errno = ENOMEM;
 	return (NULL);
 }
 

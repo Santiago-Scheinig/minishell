@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_pmtexp.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 16:30:11 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/23 21:17:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,6 @@ char	*shell_pmtexp(t_list *envp)
 
 	ps1 = shell_getenv(envp, "PS1");
 	path = path_cwd(envp);
-	if (!path)
-		return (NULL);
 	if (!ps1)
 	{
 		ps1 = ft_strdup("");

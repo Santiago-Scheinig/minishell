@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_std.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 13:38:48 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 19:03:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ typedef struct s_body
 	struct termios	orig_term;
 	int				interactive;
 	int				line;
+	int				err_fd;
 	int				exit_no;
+	const char		*exit_ft;
 	char			**envp;//A copy of the original envp + post modifications
-	char			*home;
-	char			*input;//needed for history?
+	char			*input;
 	pid_t			*childs_pid;
 	t_list			*cmd_lst;
 	t_list			*envp_lst;

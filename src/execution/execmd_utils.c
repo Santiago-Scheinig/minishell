@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 19:51:01 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 19:15:15 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,36 @@ static int	fd_setexe(t_cmd *exe, t_cmd *exe_next)
 	return (MSHELL_SUCCESS);
 }
 
-void	fd_endexe(t_cmd *exe, pid_t child)
+void	fd_endexe(t_list *cmd_lst, pid_t child)
 {
+	t_cmd *exe;
+
+	exe = (t_cmd *) cmd_lst->content;
 	if (exe->infd > 2)
 		close(exe->infd);
 	if (exe->outfd > 2)
 		close(exe->outfd);
-	if (!child && exe->pipefd > 2)
-		close(exe->pipefd);
+	if (!child)
+	{
+		while (cmd_lst)
+		{
+			exe = (t_cmd *) cmd_lst->content;
+			if (exe->pipefd > 2)
+				close(exe->pipefd);
+			cmd_lst = cmd_lst->next;
+		}
+	}
 }
 
 int		setup_pipeline(t_list *cmd_lst)
 {
+	t_list	*aux;
 	t_cmd	*exe;
 	t_cmd	*exe_next;
 	int		i;
 
 	i = -1;
+	aux = cmd_lst;
 	while (cmd_lst)
 	{
 		exe = cmd_lst->content;
@@ -69,7 +82,10 @@ int		setup_pipeline(t_list *cmd_lst)
 		if (cmd_lst->next)
 			exe_next = cmd_lst->next->content;
 		if (fd_setexe(exe, exe_next))
-			return(MSHELL_FAILURE);//print a broken pipeline, but do not end minishell. The function should also close all fds opened.
+		{
+			fd_endexe(aux, 1);
+			return(redirend(NULL, MSHELL_FAILURE));
+		}
 		cmd_lst = cmd_lst->next;
 	}
 	return(MSHELL_SUCCESS);
@@ -92,4 +108,3 @@ char	**setup_path(const char **envp)
 			return (ft_split(&envp[i][5], ':'));
 	return (NULL);
 }
-

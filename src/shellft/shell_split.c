@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:47:45 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:36:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ static char	***create_split(char ***wrdstr, const char *s, int word_amount)
 	i = -1;
 	while (++i < word_amount)
 	{
+		while((*s) == ' ')
+			s++;
 		type = get_token_type((char *)&s[0]);
 		if (!type)
 			token_len = word_len((char *) s);
@@ -46,8 +48,6 @@ static char	***create_split(char ***wrdstr, const char *s, int word_amount)
 			token_len--;
 			s++;
 		}
-		while((*s) == ' ')
-			s++;
 	}
 	(*wrdstr)[i] = (void *)(0);
 	return (wrdstr);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 14:51:38 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 18:29:29 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:54:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	msh_exit(char **args, t_body *minishell)
 	if (args && args[1])
 	{
 		while (ft_isdigit(args[1][i]))
-		i++;
+			i++;
 		if (minishell)
 			forcend(minishell, "malloc", MSHELL_SUCCESS);
 		if (!args[1][i])

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 18:23:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 19:00:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,10 @@ static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
  */
 static int	cmdupd_heredoc(t_token *aux, t_token *next, t_cmd *new)
 {
-	int	heredoc[2];
-
 	if (new->infd > 2)
 		close(new->infd);
-	if (pipe(heredoc) < 0)
-		return(redirend(NULL, MSHELL_FAILURE));
+	if (aux->heredoc == -1)
+		return(MSHELL_FAILURE);
 	new->infd = aux->heredoc;
 	next->str = NULL;
 	return (MSHELL_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 19:51:18 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 19:53:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,32 @@
 /**
  * COMMENT PENDING
  */
-static void	parser_input(t_body *minishell)
+static void	parser_input(t_body *msh)
 {
 	char	*tmp;
 
-	if (minishell->interactive)
+	if (msh->interactive)
 	{
-		tmp = shell_pmtexp(minishell->envp_lst);
+		tmp = shell_pmtexp(msh->envp_lst);
 		if (!tmp)
-			forcend(minishell, "malloc", MSHELL_FAILURE);
-		minishell->input = readline(tmp);
+			forcend(msh, "malloc", MSHELL_FAILURE);
+		msh->input = readline(tmp);
 		free(tmp);
+		if (errno)
+			forcend(msh, "readline", MSHELL_FAILURE);
 	}
 	else
 	{
-		tmp = get_next_line(STDIN_FILENO);
-		minishell->input = ft_strtrim(tmp, "\n");
-		free(tmp);
+		msh->input = ft_strtrim(get_next_line(STDIN_FILENO), "\n");
+		if (errno == ENOMEM)
+			forcend(msh, "malloc", MSHELL_FAILURE);
+		else if (errno)
+			forcend(msh, "read", MSHELL_FAILURE);
 	}
-	if (minishell->input == NULL)
-		msh_exit(NULL, minishell);//should print errors on malloc or read fail from gnl if any!
-	else if (!minishell->input[0])
+	if (msh->input && !msh->input[0])
 	{
-		free(minishell->input);
-		parser_input(minishell);
+		free(msh->input);
+		parser_input(msh);
 	}
 }
 
@@ -64,25 +66,30 @@ static void	parser_input(t_body *minishell)
  * @note If any error occurs during the parsing, the function will end with
  * a forcend([errno]) call.
  */
-int	parser(t_body *minishell)
+int	parser(t_body *msh)
 {
 	char	**split;
 
-	cleanup(minishell);
-	parser_input(minishell);
-	split = shell_split(minishell->input);
+	cleanup(msh);
+	parser_input(msh);
+	if (msh->input == NULL)
+		msh_exit(NULL, msh);
+	if (msh->interactive && msh->input[0] != '\0')
+		add_history(msh->input);
+	split = shell_split(msh->input);
 	if (!split)
-		forcend(minishell, "malloc", MSHELL_FAILURE);
-	parser_token(minishell, split);
-	add_history(minishell->input);
-	if (g_signal_received)
+		forcend(msh, "malloc", MSHELL_FAILURE);
+	if (parser_token(msh, split))
 	{
-		g_signal_received = 0;
-		return (MSHELL_MISSUSE);
+		if (msh->exit_no == MSHELL_FAILURE)
+			forcend(msh, msh->exit_ft, msh->exit_no);
+		else
+			return (msh->exit_no);
 	}
-	parser_envar(minishell);
-	parser_cmds(minishell);
-	shell_lstclear(&(minishell->token_lst), shell_lstdeltkn);
-	minishell->token_lst = NULL;
+	msh->exit_no = MSHELL_SUCCESS;
+	parser_envar(msh);
+	shell_lstclear(&(msh->token_lst), shell_lstdeltkn);
+	msh->token_lst = NULL;
+	parser_cmds(msh);
 	return (MSHELL_SUCCESS);
 }

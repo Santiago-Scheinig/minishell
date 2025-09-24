@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:11:35 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/19 21:34:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 19:12:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ int	waitcmd(t_body *minishell)
 		if (minishell->childs_pid[i] > 0)
 		{
 			waitpid(minishell->childs_pid[i], NULL, 0);
+			if (minishell->interactive)
+				sigint();
+			close(minishell->err_fd);
 			// {
 				//print error based on &status like waitpid(minishell->childs_pid[i], &status, 0)
 			// }
