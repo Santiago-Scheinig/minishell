@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 22:45:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/23 17:42:44 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,16 @@ char	*exp_mask(char *str, char *mask, int start, t_pair len)
 		ft_memmove(&(mask[start]), &(mask[aux_start]), aux_len);
 		return (mask);
 	}
-	aux_len = ft_strlen(str) + len.value;
+	aux_len = len.value - len.var + ft_strlen(str);
 	new_mask = ft_calloc(aux_len + 1, sizeof(char));
 	if (!new_mask)
 		return (NULL);
-	ft_strlcpy(new_mask, mask, len.value + 1);
-	memset(&new_mask[start], mask[start], len.value);
+	aux_len = ft_strlen(str);
+	ft_strlcpy(new_mask, mask, ft_strlen(mask) + 1);
+	memset(&new_mask[start], mask[start], aux_len);
+	aux_start = start + aux_len;
 	aux_mask = &(mask[start + len.var]);
-	aux_start = ft_strlen(new_mask);
-	ft_strlcpy(&new_mask[aux_start], aux_mask, aux_len + 1);
+	ft_strlcpy(&new_mask[aux_start], aux_mask, ft_strlen(aux_mask) + 1);
 	return (new_mask);
 }
 

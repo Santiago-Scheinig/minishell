@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 20:51:41 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:11:55 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,6 @@ static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
 			exit(MSHELL_FAILURE);
 		}
 		fd_endexe(exe, (*child));
-		fprintf(stderr, "fd1 : %i infd closed\n", exe->infd);
-		fprintf(stderr, "fd2 : %i outfd closed\n", exe->outfd);
-		fprintf(stderr, "fd3 : %i pipefd closed\n", exe->pipefd);
 		if (!exe_child_built(exe->argv, envp))
 		{
 			error = exe_getpath(exe->argv[0], path, &(exe->pathname));
