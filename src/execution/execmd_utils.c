@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/24 19:15:15 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 20:02:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ static int	fd_setexe(t_cmd *exe, t_cmd *exe_next)
 			close(pipefd[1]);
 		if (exe_next->infd == STDIN_FILENO)
 		{
-			exe->pipefd = pipefd[0];
 			exe_next->infd = pipefd[0];
+			exe->pipefd = pipefd[0];
 		}
 		else
 			close(pipefd[0]);

@@ -3,14 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:45:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 18:32:28 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
+
+static int	change_pwd(t_list **envp)
+{
+	t_list	*current;
+	t_var	*tmp;
+	char	*pwd;
+	char	*aux;
+
+	aux = getcwd(NULL, 0);
+	if (!aux)
+		return (0);
+	pwd = ft_strdup(aux);
+	free(aux);
+	if (!pwd)
+		return( built_end("cd", "System failed", NULL, '\0'));
+	current = *envp;
+	while (current)
+	{
+		tmp = (t_var *)current->content;
+		if (!ft_strncmp(tmp->name, "PWD", 3))
+		{
+			free(tmp->value);
+			tmp->value = pwd;
+		}
+		current = current->next;
+	}
+	return (0);
+}
 
 /**
  * No minishell structure, no error printing! 
@@ -19,14 +47,13 @@
  * the error. I Don't know the error number, we have to search for it in google
  * or the manual.
  */
-int	msh_cd(char **args, t_list *envp)
+int	msh_cd(char **args, t_list **envp)
 {
 	char	*dir;
 
-	dir = NULL;
 	if (!args[1])
 	{
-		dir = shell_getenv(envp, "HOME");
+		dir = shell_getenv(*envp, "HOME");
 		if (!dir)
 			return (built_end(args[0], "HOME", NULL, '\0'));
 	}
@@ -40,5 +67,5 @@ int	msh_cd(char **args, t_list *envp)
 		return (built_end(args[0], "Numbers of args", NULL, '\0'));
 	if (chdir(dir) != 0)
 		return (built_end(args[0], "System failed", NULL, '\0'));
-	return (0);
+	return (change_pwd(envp));
 }

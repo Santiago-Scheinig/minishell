@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 16:57:16 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 18:29:36 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ int		exp_resize(char **args, char ***envp);
 
 void	msh_echo(char **args);
 
-int		msh_cd(char **args, t_list *envp);
+int		msh_cd(char **args, t_list **envp);
 
 void	end_minishell(t_body *minishell);
 
-int		msh_pwd(char **args);
+int		msh_pwd(char **args, t_list *envp);
 
-int		msh_unset(char **envp, t_list *env_lst, char **name);
+int		msh_unset(char ***envp, t_list **env_lst, char **name);
 
 int		built_end(char *name, char *type, char *flags, char error);
 

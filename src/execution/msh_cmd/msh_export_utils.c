@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 17:32:22 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 16:47:50 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ char	**export_no_equal(char **args, char ***envp, t_list *lst)
 			if (!ft_strncmp(args[i], var->name, ft_strlen(var->name)))
 				if (!ft_strchr(args[i], '='))
 				{
-					var->exported = 1;
 					tmp = ft_strjoin(args[i], "=");
 					if(!tmp)
 						return (NULL);
@@ -118,6 +117,8 @@ int	exp_resize(char **args, char ***envp)
 		tmp[envp_len + old_size] = ft_strdup(args[envp_len]);
 	tmp[envp_len + old_size] = NULL;
 	*envp = tmp;
+	print_env(*envp);
 	export_no_dup(*envp);
+	print_env(*envp);
 	return (0);
 }
