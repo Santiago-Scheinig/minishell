@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 16:57:16 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:38:40 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	end_minishell(t_body *minishell);
 
 int		msh_pwd(char **args);
 
-int		msh_unset(char **envp, t_list *env_lst, char **name);
+int		msh_unset(char ***envp, t_list **env_lst, char **name);
 
 int		built_end(char *name, char *type, char *flags, char error);
 

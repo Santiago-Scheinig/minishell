@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_newlst_var.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:27:09 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:17:59 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_var	*init_envp(t_var *new, const char *envp, char *sign, int i)
 	if (!new->name)
 	{
 		free(new);
-		return (NULL);
+		return (NULL);//forcend
 	}
 	if (!sign)
 	{
@@ -33,7 +33,7 @@ static t_var	*init_envp(t_var *new, const char *envp, char *sign, int i)
 	{
 		free(new->name);
 		free(new);
-		return (NULL);
+		return (NULL);//forcend
 	}
 	return (new);
 }

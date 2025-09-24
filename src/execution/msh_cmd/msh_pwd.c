@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 15:08:13 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 15:15:18 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	msh_pwd(char **args)
 		return (0);
 	}
 	write(1, path, ft_strlen(path));
+	write(1, "\n", 1);
 	free(path);
 	return (1);
 }

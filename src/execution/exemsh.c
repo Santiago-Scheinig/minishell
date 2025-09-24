@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 19:39:25 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:40:05 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char ***envp)
 		return (0);
 	}
 	else if (!ft_strncmp(exe->argv[0], "unset", 6))
-		return (msh_unset(*envp, envp_lst, &exe->argv[1]));
+		return (msh_unset(envp, &envp_lst, &exe->argv[1]));
 	else if (!ft_strncmp(exe->argv[0], "exit", 5))
 	{
 		msh_exit(exe->argv, msh);
@@ -56,7 +56,7 @@ static int	child_cmd(t_list *envp_lst, char **argv, char **envp)
 		return (0);
 	}
 	else if (!ft_strncmp(argv[0], "unset", 6))
-		return (msh_unset(envp, envp_lst, &argv[1]));
+		return (msh_unset(&envp, &envp_lst, &argv[1]));
 	else if (!ft_strncmp(argv[0], "exit", 5))
 	{
 		msh_exit(argv, NULL);

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 13:38:48 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:26:13 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_body
 	char			**envp;//A copy of the original envp + post modifications
 	char			*home;
 	char			*input;//needed for history?
+	char			*prompt;
 	pid_t			*childs_pid;
 	t_list			*cmd_lst;
 	t_list			*envp_lst;

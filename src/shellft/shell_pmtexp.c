@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 16:30:11 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 14:14:10 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*pwd_name(char *ps1, char *path, t_list *envp_lst)
 
 	user = shell_getenv(envp_lst, "USER");
 	if (!user)
-		user = "";
+		user = ft_strdup("");
 	len = prompt_len(ps1, user, path);
 	tmp = malloc((len + 1) * sizeof(char));
 	if (!tmp)
@@ -111,8 +111,6 @@ char	*shell_pmtexp(t_list *envp)
 
 	ps1 = shell_getenv(envp, "PS1");
 	path = path_cwd(envp);
-	if (!path)
-		return (NULL);
 	if (!ps1)
 	{
 		ps1 = ft_strdup("");
