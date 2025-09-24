@@ -6,12 +6,24 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 16:47:50 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 20:21:17 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
 
+/**
+ * Sets variable value in env array and in var struct when '=' present.
+ * 
+ * @param aux Pointer to t_var representing the variable in list.
+ * @param envp Environment array.
+ * @param sign Pointer to '=' character inside new_env string (or NULL).
+ * @param new_env New environment string "NAME=VALUE".
+ * 
+ * Replaces envp entry and updates aux->value when appropriate.
+ * 
+ * @return 0 on success, non-zero if a system error was reported.
+ */
 int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 {
 	size_t	len;
@@ -38,6 +50,19 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 	return (0);
 }
 
+/**
+ * Ensures exported names without '=' exist in envp by adding a trailing '=\0'.
+ * 
+ * @param args Array of argument strings to process.
+ * @param envp Pointer to environment array (address).
+ * @param lst Linked list of existing variables.
+ * 
+ * For each matching variable name without '=', appends "=" to envp via
+ * exp_resize.
+ * Returns modified args array (some entries may be removed).
+ * 
+ * @return Modified args pointer, or NULL on allocation failure.
+ */
 char	**export_no_equal(char **args, char ***envp, t_list *lst)
 {
 	t_list	*current;
@@ -68,6 +93,15 @@ char	**export_no_equal(char **args, char ***envp, t_list *lst)
 	return (args);
 }
 
+/**
+ * Removes duplicate/newer entries among the given args list.
+ * 
+ * @param args Array of argument strings.
+ * 
+ * Compares names up to '=' and removes duplicates preferring entries with '='.
+ * 
+ * @return Modified args array.
+ */
 char	**export_no_dup(char **args)
 {
 	size_t	k;
@@ -96,6 +130,17 @@ char	**export_no_dup(char **args)
 	return (args);
 }
 
+/**
+ * Resizes the environment array to append new entries.
+ * 
+ * @param args Array of new strings to append (args_len treated inside).
+ * @param envp Pointer to environment array to resize (address).
+ * 
+ * Reallocates envp to fit extra entries, copies them and updates pointer.
+ * Prints and deduplicates resulting envp.
+ * 
+ * @return 0 on success, non-zero on error.
+ */
 int	exp_resize(char **args, char ***envp)
 {
 	size_t	old_size;
@@ -117,8 +162,6 @@ int	exp_resize(char **args, char ***envp)
 		tmp[envp_len + old_size] = ft_strdup(args[envp_len]);
 	tmp[envp_len + old_size] = NULL;
 	*envp = tmp;
-	print_env(*envp);
 	export_no_dup(*envp);
-	print_env(*envp);
 	return (0);
 }

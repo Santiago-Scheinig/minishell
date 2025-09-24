@@ -103,6 +103,17 @@ static char	**check_args(char **args)
 	return (args);
 }
 
+/**
+ * Imports variables into envp/list from argument list (used for PS1/initial import).
+ * 
+ * @param envp Pointer-to-pointer to environment array.
+ * @param head Pointer-to-list head of current variables.
+ * @param args Array of argument strings to import ("NAME" or "NAME=VALUE").
+ * 
+ * Validates identifiers, updates existing entries, and appends new ones.
+ * 
+ * @return 0 on success, non-zero on failure.
+ */
 int	msh_import(char ***envp, t_list **head, char **args)
 {
 	t_list	*tmp;

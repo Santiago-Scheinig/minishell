@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 14:12:57 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 20:27:36 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,17 @@ static int	check_name(char ***envp, char *name, t_list **lst)
 	return (0);
 }
 
+/**
+ * Removes an element from a NULL-terminated array of strings.
+ * 
+ * @param arr Array of strings to modify.
+ * @param index Index of the element to remove.
+ * 
+ * Frees the removed element and shifts remaining pointers down; sets final
+ * slot to NULL.
+ * 
+ * @return The modified array pointer.
+ */
 char	**ft_remove_arr(char **arr, int index)
 {
 	int		len;
@@ -94,6 +105,18 @@ char	**ft_remove_arr(char **arr, int index)
 	return (arr);
 }
 
+/**
+ * Built-in 'unset' command implementation for msh.
+ * 
+ * @param envp Pointer-to-pointer to environment array.
+ * @param env_lst Pointer-to-list head of environment variables.
+ * @param arg Array of variable names to unset.
+ * 
+ * Validates flags, then removes each matching variable from both envp and the
+ * list.
+ * 
+ * @return 0 on success, non-zero on error.
+ */
 int msh_unset(char ***envp, t_list **env_lst, char **arg)
 {
 	t_list	*current;

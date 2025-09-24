@@ -6,12 +6,24 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 14:51:38 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 18:29:29 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 20:13:04 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
 
+/**
+ * Exits the shell process with an optional numeric status.
+ * 
+ * @param args Array of arguments passed to exit (args[0] is "exit").
+ * @param minishell Pointer to the shell context; used for interactive behavior and cleanup.
+ * 
+ * If running interactively prints "exit". Validates argument count and numeric argument.
+ * 
+ * @return void (function exits the process on success or error cases).
+ * @note - If more than one numeric argument is provided, prints error and does not exit.
+ * - Performs cleanup/forced end via forcend() when needed.
+ */
 void	msh_exit(char **args, t_body *minishell)
 {
 	int	i;

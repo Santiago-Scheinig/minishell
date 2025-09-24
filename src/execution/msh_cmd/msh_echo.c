@@ -6,12 +6,20 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 13:11:41 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 20:14:30 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
 
+/**
+ * Prints arguments to standard output, separated by spaces.
+ * 
+ * @param args Array of arguments passed to the echo command
+ * (args[0] is "echo").
+ * 
+ * @note - If any leading argument(s) are "-n", no trailing newline is printed.
+ */
 void	msh_echo(char **args)
 {
 	int	new_line;
