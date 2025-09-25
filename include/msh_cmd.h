@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:47:02 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 17:12:06 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	**export_no_equal(char **args, char ***envp, t_list *lst);
  * 
  * @return Adjusted args array or NULL.
  */
-char	**ft_isal_num(char **args, t_list *head, char ***envp)
+char	**ft_isal_num(char **args, t_list *head, char ***envp);
 
 /**
  * Removes an element from a NULL-terminated array of strings.
@@ -67,7 +67,7 @@ char	**ft_isal_num(char **args, t_list *head, char ***envp)
  * 
  * @return The modified array pointer.
  */
-char	**ft_remove_arr(char **arr, int index)
+char	**ft_remove_arr(char **arr, int index);
 
 /**
  * Removes duplicate/newer entries among the given args list.
@@ -78,7 +78,7 @@ char	**ft_remove_arr(char **arr, int index)
  * 
  * @return Modified args array.
  */
-char	**export_no_dup(char **args)
+char	**export_no_dup(char **args);
 
 /**
  * @param env_lst Linked list of t_var nodes containing name, value and
@@ -97,7 +97,7 @@ void	print_export(t_list *env_lst);
  * 
  * Writes each env string followed by a newline.
  */
-void	print_env(char **envp)
+void	print_env(char **envp);
 
 /**
  * Attempts to change the stored value of an existing variable.
@@ -125,7 +125,7 @@ int		change_value_env(t_var *aux, char ***envp, char **new_env, int export);
  * 
  * @return 0 on success, non-zero if a system error was reported.
  */
-int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
+int		set_equal(t_var *aux, char **envp, char *sign, char *new_env);
 
 /**
  * Appends new variables (not previously in list) to the variable list.
@@ -138,7 +138,7 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
  * 
  * @return 0 on success, non-zero on failure.
  */
-int		new_envp(char **new_env, t_list *head, int export);
+int		new_envp(char **new_env, t_list **head, int export);
 
 /**
  * Resizes the environment array to append new entries.

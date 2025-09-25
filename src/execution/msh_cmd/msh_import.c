@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:44:12 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 17:15:56 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:27:41 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ static char	*change_list(char *args, t_list *head)
 			{
 				free(tmp->value);
 				tmp->value = ft_strdup(aux + 1);
+				if (!tmp->name)
+				{
+					built_end("export", "System failed", NULL, '\0');
+					return (NULL);
+				}
+					
 			}
 		}
 		current = current->next;
@@ -60,9 +66,9 @@ static char	**check_argv(char ***envp, char **args, t_list *head)
 	int		j;
 
 	i = -1;
-	while (args && args[++i])
+	while (args && args[++i] && envp[0])
 	{
-		j = i;
+		j = -1;
 		while (envp[0][++j])
 		{
 			if (args[i] != NULL && args[i][0] != '\0')
@@ -86,7 +92,7 @@ static char	**check_args(char **args)
 
 	i = 0;
 	invalid = 0;
-	while (args[i] && ft_strchr(args[i], '='))
+	while (args && args[i] && ft_strchr(args[i], '='))
 	{
 		if (!ft_isalpha(args[i][0]) && args[i][0] != '_')
 			invalid = 1;
@@ -99,7 +105,8 @@ static char	**check_args(char **args)
 	}
 	if (invalid == 1)
 		return (NULL);
-	args = export_no_dup(args);
+	if (args)
+		args = export_no_dup(args);
 	return (args);
 }
 
@@ -127,7 +134,7 @@ int	msh_import(char ***envp, t_list **head, char **args)
 	args = check_argv(envp, args, *head);
 	if (!args)
 		return (1);
-	while (tmp)
+	while (tmp && tmp->content)
 	{
 		i = -1;
 		aux = (t_var *)tmp->content;
@@ -137,7 +144,7 @@ int	msh_import(char ***envp, t_list **head, char **args)
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}
-	if (!new_envp(args, *head, 0))
+	if (new_envp(args, head, 0))
 		return (1);
 	return (0);
 }

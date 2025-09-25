@@ -1,7 +1,29 @@
-ls | wc -l //error, los argumentos de wc no estan llegando como deberian
-
-echo "ls -l | wc -l" | ./minishell //error, los argumentos de wc no estan llegando como deberian
-
-//Manejo de errores
-
-//Norminette pendiente
+cat < /dev/null
+cat < nofile
+echo hi > file1 > file2
+echo hi >> file1 >> file2
+> onlyfile
+<
+echo test > /dev/full
+ls | wc -l
+echo a | cat | cat | cat
+| ls
+ls |
+echo hello | > file
+echo $USER
+echo "$USER"
+echo '$USER'
+echo $?
+echo "$?"
+echo '$?'
+echo "unclosed
+echo 'unclosed
+echo "hello'world"
+echo 'hello"world'
+echo "'$USER'"
+echo "$USER'$USER"
+echo "echo hello" | ./minishell
+echo "ls -l | wc -l" | ./minishell
+echo "echo $USER" | ./minishell
+yes | ls
+yes | cat | head -n 5

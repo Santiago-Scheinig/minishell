@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:14:39 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:27:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	change_pwd(t_list **envp)
 	if (!pwd)
 		return( built_end("cd", "System failed", NULL, '\0'));
 	current = *envp;
-	while (current)
+	while (current && current->content)
 	{
 		tmp = (t_var *)current->content;
 		if (!ft_strncmp(tmp->name, "PWD", 3))

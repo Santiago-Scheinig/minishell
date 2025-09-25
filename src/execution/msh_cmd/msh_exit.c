@@ -6,11 +6,20 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 14:51:38 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:13:04 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 18:36:15 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
+
+static void	clear_msh(t_body *minishell)
+{
+	if (minishell->interactive)
+		rl_clear_history();
+	shell_lstclear(&(minishell->envp_lst), shell_lstdelvar);
+	ft_split_free(minishell->envp);
+	cleanup(minishell);
+}
 
 /**
  * Exits the shell process with an optional numeric status.
@@ -36,12 +45,12 @@ void	msh_exit(char **args, t_body *minishell)
 		built_end(args[0], "Numbers of args", NULL, '\0');
 		return ;
 	}
+	if (minishell)
+		clear_msh(minishell);
 	if (args && args[1])
 	{
 		while (ft_isdigit(args[1][i]))
-		i++;
-		if (minishell)
-			forcend(minishell, "malloc", MSHELL_SUCCESS);
+			i++;
 		if (!args[1][i])
 			exit(ft_atoi(args[1]));
 		built_end(args[0], "Numeric arg required", args[1], '\0');

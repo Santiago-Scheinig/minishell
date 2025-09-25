@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:50:11 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:15:05 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:26:55 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	print_export(t_list *env_lst)
 	t_var	*tmp;
 
 	current = env_lst;
-	while (current)
+	while (current && current->content)
 	{
 		tmp = (t_var *)current->content;
 		if (tmp->name && tmp->exported)

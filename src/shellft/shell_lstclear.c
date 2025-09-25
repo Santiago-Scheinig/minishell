@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_lstclear.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/21 17:22:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/25 15:41:53 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

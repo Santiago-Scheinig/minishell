@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:27:36 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:28:12 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int msh_unset(char ***envp, t_list **env_lst, char **arg)
 	{
 		prev = NULL;
 		current = *env_lst;
-		while (current)
+		while (current && current->content)
 		{
 			next = current->next;
 			if (check_name(envp, arg[i], &current))

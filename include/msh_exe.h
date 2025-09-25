@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_exe.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 18:46:45 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:26:16 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,7 @@
  */
 char	**setup_path(const char **envp);
 
-/**
- * Closes all the file descriptors that where used to execute the
- * current pipe iteration.
- * 
- * @param exe A pointer to the cmd to be executed in this current iteration.
- * @param pipefd An array of INT which saves an already initialized pipe().
- */
-void	fd_endexe(t_cmd *exe, pid_t child);
+void	fd_endexe(t_list *cmd_lst, pid_t child);
 
 int		exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp);
 

@@ -22,6 +22,7 @@ SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/parser/parser_envar.c				\
 				$(SRC_DIR)/parser/parser_token.c				\
 				$(SRC_DIR)/parser/parser_token_utils.c			\
+				$(SRC_DIR)/parser/parser_token_hdoc.c			\
 				$(SRC_DIR)/parser/parser_cmd_utils.c			\
 				$(SRC_DIR)/parser/parser_envar_utils.c			\
 				$(SRC_DIR)/shellft/shell_split.c				\

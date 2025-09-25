@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 22:31:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/24 18:59:39 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,24 @@
 # include <readline/history.h>
 # include <fcntl.h>
 
-typedef struct s_pair
+typedef struct s_envar_pair
 {
 	int	var;
-	int	value;
-}	t_pair;
+	int	val;
+}	t_envar_pair;
+
+typedef struct s_hdoc_pair
+{
+	int fd;
+	int	exit_no;
+}	t_hdoc_pair;
+
+typedef struct s_hdoc_tsh
+{
+	char	*limitator;
+	int		line;
+	int		heredoc[2];
+}	t_hdoc_tsh;
 
 /**
  * Divides user input into tokens catalogated as the enum structure 
@@ -32,9 +45,9 @@ typedef struct s_pair
  * @param minishell A pointer to the main enviroment structure of minishell.
  * @param split The user input already divided with shell_split() parameters.
  * @note If any error occurs during the tokenization step, the function will
- * end with a sigend([errno]) call,
+ * end with a sigend([errno]) call.
  */
-void	parser_token(t_body *minishell, char **split);
+int	parser_token(t_body *msh, char **split);
 
 /**
  * Verifies if any WORD token includes a valid '$' OPERATOR. If it does, 
@@ -96,7 +109,7 @@ char	*exp_value(char *str, char *value, int start);
  * Otherwise, it reallocates the new expanded string and returns
  * it.
  */
-char	*exp_mask(char *str, char *mask, int start, t_pair len);
+char	*exp_mask(char *str, char *mask, int start, t_envar_pair len);
 
 /**
  * Calculates the length of the enviroment variable name.
@@ -175,8 +188,7 @@ char	*mask_dup(char *str);
  * written on heredoc[0] will be sent to the next cmd and an error msg is printed 
  * on STDERR specifying the interruption issue.
  */
-//if i set errno to 0 at the begging, then the verification is only if errno exists?
-int	heredoc_dup(t_token *limit, int heredoc[2], t_list *envp, int exit_no);
+int	heredoc_dup(t_token *limit, int heredoc[2], t_body *msh);
 
 /**
  * COMMENT PENDING

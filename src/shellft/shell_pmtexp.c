@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 18:35:29 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:10:50 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*pwd_name(char *ps1, char *path, t_list *envp_lst)
 
 	user = shell_getenv(envp_lst, "USER");
 	if (!user)
-		user = ft_strdup("");
+		user = NULL;
 	len = prompt_len(ps1, user, path);
 	tmp = malloc((len + 1) * sizeof(char));
 	if (!tmp)
@@ -51,9 +51,9 @@ static char	*short_home(char *home, char *path)
 		short_path = malloc(2 + rest + 1);
 		if (!short_path)
 		{
-		    perror("malloc");
-		    free(path);
-		    return (NULL);
+			perror("malloc");
+			free(path);
+			return (NULL);
 		}
 		short_path[0] = '~';
 		ft_strlcpy(short_path + 1, path + ft_strlen(home), rest + 1);
@@ -72,6 +72,8 @@ static char	*short_path_name(t_list *envp, char *path)
 	int		i;
 
 	home = shell_getenv(envp, "HOME");
+	if (!home)
+		return (path);
 	i = ft_strlen(home);
 	if (home && home[i - 1] && home[i - 1] != '/' && !access(home, X_OK))
 		path = short_home(home, path);
@@ -91,12 +93,11 @@ static char	*path_cwd(t_list *envp)
 	path = getcwd(NULL, 0);
 	if (!path)
 		path = ft_strdup(shell_getenv(envp, "PWD"));
+	if (!path)
+		return (NULL);
 	prompt = short_path_name(envp, path);
-	if (!shell_getenv(envp, "HOME"))
-	{
-		free(path);
-		prompt = getcwd(NULL, 0);
-	}
+	if (!prompt)
+		return (NULL);
 	return (prompt);
 }
 

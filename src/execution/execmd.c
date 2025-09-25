@@ -6,11 +6,13 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/24 18:52:47 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:01:39 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
+
+int	change_value_env(t_var *aux, char ***envp, char **new_env, int export);
 
 /**
  * Creates and allocates a STRING with the definitive path to a cmd binary.
@@ -62,6 +64,7 @@ static char	**exe_setup(t_body *minishell)
 	{
 		if (errno == ENOMEM)
 			forcend(minishell, "malloc", MSHELL_FAILURE);
+		minishell->exit_no = MSHELL_FAILURE;
 		return (NULL);
 	}
 	path = setup_path((const char **) minishell->envp);
@@ -72,47 +75,69 @@ static char	**exe_setup(t_body *minishell)
 			forcend(minishell, "malloc", MSHELL_FAILURE);
 		return (path);
 	}
+	if (minishell->interactive)
+		sigign();
 	return (path);
 }
 
-static void	exe_child(t_cmd *exe, char **path, pid_t *child, char **envp)
+static int	exe_child(t_list *cmd_lst, char **path, pid_t *child, char **envp)
 {
-	int 	error;
+	t_cmd	*exe;
+	int		exit_no;
+	int		errfd[2];
 
-	sigign();
+	if (pipe(errfd) == -1)
+		redirend(NULL, MSHELL_FAILURE);
 	(*child) = fork();
 	if (!(*child))
 	{
+		close(errfd[0]);
 		sigdfl();
+		exe = (t_cmd *) cmd_lst->content;
 		if (!exe->argv || !exe->argv[0])
 		{
-			fd_endexe(exe, (*child));
+			close(errfd[1]);
+			fd_endexe(cmd_lst, (*child));
 			exit (MSHELL_FAILURE);
 		}
 		if (dup2(exe->infd, STDIN_FILENO) == -1
 		|| dup2(exe->outfd, STDOUT_FILENO) == -1)
 		{
-			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
-			fd_endexe(exe, (*child));
+			exit_no = 1;
+			write(errfd[1], &exit_no, sizeof(exit_no));
+			close(errfd[1]);
+			fd_endexe(cmd_lst, (*child));
 			exit(MSHELL_FAILURE);
 		}
-		fd_endexe(exe, (*child));
-		if (!exe_child_built(exe->argv, envp))
+		fd_endexe(cmd_lst, (*child));
+		if (!exe_child_built(exe->argv, envp))//i need to close errfd[1] inside of exe_child_built after using it to print errors
 		{
-			error = exe_getpath(exe->argv[0], path, &(exe->pathname));
-			if (error)
+			exit_no = exe_getpath(exe->argv[0], path, &(exe->pathname)); 
+			if (exit_no)
 			{
-				fd_endexe(exe, (*child));
-				exit (error);
+				if (exit_no != MSHELL_FAILURE)
+				{
+					exit_no = 3;
+					write(errfd[1], &exit_no, sizeof(exit_no));
+				}
+				close(errfd[1]);
+				exit(exit_no);
 			}
 			if (execve(exe->pathname, exe->argv, envp))
+			{
+				exit_no = 2;
+				write(errfd[1], &exit_no, sizeof(exit_no));
+				close(errfd[1]);
 				exit(MSHELL_FAILURE);
+			}
 		}
 	}
-	fd_endexe(exe, (*child));
+	close(errfd[1]);
+	fd_endexe(cmd_lst, (*child));
+	return (errfd[0]);
 }
 
-int	execmd(t_body *minishell)
+int	execmd(t_body *msh)
 {
 	t_list	*cmd_lst;
 	t_cmd	*exe;
@@ -120,14 +145,13 @@ int	execmd(t_body *minishell)
 	char	**path;
 	int		i;
 
-	cmd_lst = minishell->cmd_lst;
+	cmd_lst = msh->cmd_lst;
 	i = -1;
 	if (!cmd_lst->next)
-		i = exe_built((t_cmd *)minishell->cmd_lst->content, minishell,
-		minishell->envp_lst, &minishell->envp);
+		i = exe_built((t_cmd *)cmd_lst->content, msh, msh->envp_lst, &msh->envp);
 	if (i == -1)
 	{
-		path = exe_setup(minishell);
+		path = exe_setup(msh);
 		if (!path)
 			return (MSHELL_FAILURE);
 		while (cmd_lst)
@@ -136,7 +160,8 @@ int	execmd(t_body *minishell)
 			exe_next = NULL;
 			if (cmd_lst->next)
 				exe_next = (t_cmd *) cmd_lst->next->content;
-			exe_child(exe, path, &(minishell->childs_pid[++i]), minishell->envp);
+			//save last cmd;
+			msh->err_fd = exe_child(cmd_lst, path, &(msh->childs_pid[++i]), msh->envp);
 			cmd_lst = cmd_lst->next;
 		}
 		ft_split_free(path);

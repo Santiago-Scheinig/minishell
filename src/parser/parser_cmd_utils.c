@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_cmd_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 18:23:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:11:50 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,13 @@ static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
 /**
  * COMMENT PENDING
  */
-static int	cmdupd_heredoc(t_token *aux, t_token *next, t_cmd *new)
+static int	cmdupd_heredoc(t_token *aux, t_cmd *new)
 {
-	int	heredoc[2];
-
 	if (new->infd > 2)
 		close(new->infd);
-	if (pipe(heredoc) < 0)
-		return(redirend(NULL, MSHELL_FAILURE));
+	if (aux->heredoc == -1)
+		return(MSHELL_FAILURE);
 	new->infd = aux->heredoc;
-	next->str = NULL;
 	return (MSHELL_SUCCESS);
 }
 
@@ -103,6 +100,6 @@ int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
 	if (aux->type == REDIR_APPEND)
 		return (cmdupd_outfile(aux_next, new, O_APPEND));
 	if (aux->type == HEREDOC)
-		return (cmdupd_heredoc(aux, aux_next, new));
+		return (cmdupd_heredoc(aux, new));
 	return (MSHELL_FAILURE);
 }

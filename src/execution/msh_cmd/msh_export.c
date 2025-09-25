@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:25:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:06:45 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**ft_isal_num(char **args, t_list *head, char ***envp)
 	j = -1;
 	while (args[++j])
 	{
-		if (!is_valid_identifier(args[j]) && args[j][i] != '_')
+		if (is_valid_identifier(args[j]) && args[j][i] != '_')
 			args = ft_remove_arr(&args[0], j);
 	}
 	args = export_no_dup(args);
@@ -130,25 +130,22 @@ int	change_value_env(t_var *aux, char ***envp, char **new_env, int export)
  * 
  * @return 0 on success, non-zero on failure.
  */
-int	new_envp(char **new_env, t_list *head, int export)
+int	new_envp(char **new_env, t_list **head, int export)
 {
-	t_list	*current;
-	t_list	*next;
-	t_var	*new_node;
+	t_list	*node;
+	t_var	*content;
 	int		i;
 
-	i = 0;
-	while (new_env[i])
+	i = -1;
+	while (new_env[++i])
 	{
-		new_node = create_envp(new_env[i], export);
-		if (!new_node)
+		content = create_envp(new_env[i], export);
+		if (!content)
 			return (built_end("export", "System failed", NULL, '\0'));
-		next = ft_lstnew(new_node);
-		current = head;
-		while (current->next)
-			current = current->next;
-		current->next = next;
-		i++;
+		node = ft_lstnew(content); 
+		if (!node)
+			return (built_end("export", "System failed", NULL, '\0'));//falta liberar 1
+		ft_lstadd_back(head, node);
 	}
 	return (0);
 }
@@ -175,8 +172,8 @@ int	msh_export(char ***envp, t_list **head, char **args)
 	j = 0;
 	args = ft_isal_num(args, *head, envp);
 	if (!args)
-		return (0);
-	while (tmp)
+		return (1);
+	while (tmp && tmp->content)
 	{
 		i = -1;
 		aux = (t_var *)tmp->content;
@@ -186,7 +183,7 @@ int	msh_export(char ***envp, t_list **head, char **args)
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}
-	if (exp_resize(args, envp) || new_envp(args, *head, 1))
+	if (exp_resize(args, envp) || new_envp(args, head, 1))
 		return (1);
 	return (0);
 }
