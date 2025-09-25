@@ -26,16 +26,19 @@ static void	init_envp(t_body *msh, const char **envp)
 	if (!msh->envp)
 		forcend(msh, "malloc", MSHELL_FAILURE);
 	msh->envp_lst = shell_newlst_var(msh->envp);
-	shell_sortenv(&msh->envp_lst);
-	if (!msh->envp_lst)
+	if (!msh->envp_lst && errno)
 		forcend(msh, "malloc", MSHELL_FAILURE);
+	shell_sortenv(&(msh->envp_lst));
 	ps1 = shell_pmtstr(msh->envp_lst);
 	if (!ps1)
 		forcend(msh, "malloc", MSHELL_FAILURE);
-	shell_sortenv(&msh->envp_lst);
+	shell_sortenv(&(msh->envp_lst));
 	if (!shell_getenv(msh->envp_lst, "PS1"))
 	{
-		msh_import(&msh->envp, &msh->envp_lst, ps1);
+		if (msh_export(&msh->envp, &msh->envp_lst, &ps1[1]))
+			forcend(msh, "malloc", 	MSHELL_FAILURE);
+		if (msh_import(&msh->envp, &msh->envp_lst, ps1))
+			forcend(msh, "malloc", 	MSHELL_FAILURE);
 		shell_sortenv(&msh->envp_lst);
 		ft_split_free(ps1);
 	}
@@ -56,7 +59,7 @@ static void	init_term(t_body *msh)
 
 	ft_memset(msh, 0, sizeof(t_body));
 	msh->interactive = isatty(STDIN_FILENO);
-	if (msh->interactive && isatty(STDOUT_FILENO))
+	if (msh->interactive)
 	{
 		if (tcgetattr(STDIN_FILENO, &(msh->orig_term)))
 			forcend(msh, "tcgetattr", MSHELL_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 18:32:28 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:27:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	change_pwd(t_list **envp)
 	if (!pwd)
 		return( built_end("cd", "System failed", NULL, '\0'));
 	current = *envp;
-	while (current)
+	while (current && current->content)
 	{
 		tmp = (t_var *)current->content;
 		if (!ft_strncmp(tmp->name, "PWD", 3))
@@ -41,11 +41,18 @@ static int	change_pwd(t_list **envp)
 }
 
 /**
- * No minishell structure, no error printing! 
- * CD has to return the errno 
- * equivalent to that specific error. Then the CHILDEND inside of pipex prints
- * the error. I Don't know the error number, we have to search for it in google
- * or the manual.
+ * Built-in 'cd' command for msh.
+ * 
+ * @param args Argument array for cd (args[0] is "cd").
+ * @param envp Pointer-to-list head of environment variables
+ * (used to update PWD).
+ * 
+ * Changes the working directory to the specified path or HOME if no arg
+ * provided.
+ * Reports errors and returns corresponding error.
+ * 
+ * @return 0 on success, non-zero on error.
+ * @note - Print errors directly.
  */
 int	msh_cd(char **args, t_list **envp)
 {

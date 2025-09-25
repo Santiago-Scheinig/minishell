@@ -6,11 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:02:45 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:52:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
+
+int	change_value_env(t_var *aux, char ***envp, char **new_env, int export);
 
 /**
  * Creates and allocates a STRING with the definitive path to a cmd binary.
@@ -135,7 +137,7 @@ static int	exe_child(t_list *cmd_lst, char **path, pid_t *child, char **envp)
 	return (errfd[0]);
 }
 
-int	execmd(t_body *minishell)
+int	execmd(t_body *msh)
 {
 	t_list	*cmd_lst;
 	t_cmd	*exe;
@@ -143,13 +145,13 @@ int	execmd(t_body *minishell)
 	char	**path;
 	int		i;
 
-	cmd_lst = minishell->cmd_lst;
+	cmd_lst = msh->cmd_lst;
 	i = -1;
 	if (!cmd_lst->next)
-		i = exe_built((t_cmd *)minishell->cmd_lst->content, minishell, minishell->envp_lst, &minishell->envp);
+		i = exe_built((t_cmd *)cmd_lst->content, msh, msh->envp_lst, &msh->envp);
 	if (i == -1)
 	{
-		path = exe_setup(minishell);
+		path = exe_setup(msh);
 		if (!path)
 			return (MSHELL_FAILURE);
 		while (cmd_lst)
@@ -158,7 +160,8 @@ int	execmd(t_body *minishell)
 			exe_next = NULL;
 			if (cmd_lst->next)
 				exe_next = (t_cmd *) cmd_lst->next->content;
-			minishell->err_fd = exe_child(cmd_lst, path, &(minishell->childs_pid[++i]), minishell->envp);
+			//save last cmd;
+			msh->err_fd = exe_child(cmd_lst, path, &(msh->childs_pid[++i]), msh->envp);
 			cmd_lst = cmd_lst->next;
 		}
 		ft_split_free(path);

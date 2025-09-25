@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:01:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:52:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
 /**
  * COMMENT PENDING
  */
-static int	cmdupd_heredoc(t_token *aux, t_token *next, t_cmd *new)
+static int	cmdupd_heredoc(t_token *aux, t_cmd *new)
 {
 	if (new->infd > 2)
 		close(new->infd);
@@ -100,6 +100,6 @@ int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
 	if (aux->type == REDIR_APPEND)
 		return (cmdupd_outfile(aux_next, new, O_APPEND));
 	if (aux->type == HEREDOC)
-		return (cmdupd_heredoc(aux, aux_next, new));
+		return (cmdupd_heredoc(aux, new));
 	return (MSHELL_FAILURE);
 }

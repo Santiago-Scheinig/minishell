@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 15:17:59 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 18:31:13 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_list	*shell_newlst_var(char **envp)
 	new_node = NULL;
 	head = NULL;
 	i = -1;
-	while (envp[++i])
+	while (envp && envp[++i])
 	{
 		content = create_envp(envp[i], 1);
 		if (!content)
@@ -82,7 +82,7 @@ t_list	*shell_newlst_var(char **envp)
 			shell_lstclear(&head, shell_lstdelvar);
 			return (NULL);
 		}
-		new_node = ft_lstnew(content);
+		new_node = ft_lstnew(content);//falta liberar
 		if (!new_node)
 		{
 			shell_lstclear(&head, shell_lstdelvar);

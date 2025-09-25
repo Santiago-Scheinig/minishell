@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:02:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:52:18 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char ***envp)
 {
 	if (!ft_strncmp(exe->argv[0], "export", 7))
-		return (msh_export(envp, &envp_lst, &exe->argv[1]));
+		return (msh_export(envp, &envp_lst, &(exe->argv[1])));
 	else if (!ft_strncmp(exe->argv[0], "cd", 3))
 		return (msh_cd(exe->argv, &envp_lst));
 	else if (!ft_strncmp(exe->argv[0], "env", 4))
@@ -29,7 +29,7 @@ static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char ***envp)
 		return (0);
 	}
 	else if (!ft_strncmp(exe->argv[0], "unset", 6))
-		return (msh_unset(envp, &envp_lst, &exe->argv[1]));
+		return (msh_unset(envp, &envp_lst, &(exe->argv[1])));
 	else if (!ft_strncmp(exe->argv[0], "exit", 5))
 	{
 		msh_exit(exe->argv, msh);

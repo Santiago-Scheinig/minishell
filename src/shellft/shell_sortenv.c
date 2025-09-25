@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_sortenv.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:46:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/25 18:26:03 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	shell_sortenv(t_list **head)
 		prev = NULL;
 		sorted = 1;
 		current = *head;
-		while (current && current->next)
+		while (current && current->content && current->next &&current->next->content)
 		{
 			tmp = (t_var *)current->content;
 			nxt = (t_var *)current->next->content;

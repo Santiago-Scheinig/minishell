@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 17:36:37 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:00:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/25 18:17:55 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../../include/lib/msh_std.h"
 #include "libft.h"
 
 /**

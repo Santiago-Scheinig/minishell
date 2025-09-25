@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:03:15 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/25 20:52:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_body
 	int				err_fd;
 	int				exit_no;
 	const char		*exit_ft;
-	char			**envp;//A copy of the original envp + post modifications
+	char			**envp;
 	char			*input;
 	pid_t			*childs_pid;
 	t_list			*cmd_lst;

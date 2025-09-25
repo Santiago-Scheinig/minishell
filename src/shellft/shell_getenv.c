@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/23 16:13:39 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/25 18:15:07 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*shell_getenv(t_list *lst_var, const char *name)
 		
 	tmp = lst_var;
 	shell_sortenv(&tmp);
-	while (tmp)
+	while (tmp && tmp->content)
 	{
 		aux = (t_var *)tmp->content;
 		if (!ft_strncmp(aux->name, name, (ft_strlen(name))))

@@ -6,12 +6,23 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 18:55:11 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/24 20:26:21 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
 
+/**
+ * Built-in 'pwd' command handler.
+ * 
+ * @param args Argument array for pwd (args[0] is "pwd").
+ * @param envp Linked list or array representing environment variables.
+ * 
+ * Prints the current working directory. If getcwd fails, attempts to read
+ * PWD from env.
+ * 
+ * @return 0 on success, non-zero on error.
+ */
 int	msh_pwd(char **args, t_list *envp)
 {
 	char	*path;
