@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 13:46:53 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:42:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void parser_prompt(t_body *msh)
 		forcend(msh, "malloc", MSHELL_FAILURE);
 	msh->input = readline(tmp);
 	free(tmp);
-	if (errno)
+	if (!msh.input && errno)
 		forcend(msh, "readline", MSHELL_FAILURE);
 }
 
