@@ -3,17 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   shell_pmtexp_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 15:32:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:45:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 12:19:42 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING ISMA
+ * Transforms a PS1-style format string into a concrete prompt string.
+ * 
+ * @param tmp  Buffer where the transformed prompt will be written.
+ * @param ps1  Format string using backslash escapes.
+ * @param user Username string to substitute for "\u".
+ * @param path Current working directory string to substitute for "\w".
+ * 
+ * Iterates ps1 and copies characters into tmp. Recognizes backslash escapes:
+ *  - "\u" -> inserts the user string
+ *  - "\w" -> inserts the path string
+ *  - any other backslash escape inserts the next character verbatim
+ * Consecutive backslashes ("\\") are treated as literal backslashes.
+ * 
+ * @return Pointer to tmp.
+ * @note tmp must be large enough to hold the resulting string.
  */
 char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 {
@@ -48,7 +62,14 @@ char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 }
 
 /**
- * COMMENT PENDING ISMA
+ * Calculates the length of the prompt that will be produced from a PS1 format.
+ * 
+ * @param ps1  Format string using backslash escapes.
+ * @param user Username string to substitute for "\u".
+ * @param path Current working directory string to substitute for "\w".
+ * 
+ * @return The number of characters required for the transformed prompt.
+ * @note Use this value to allocate a buffer for transform_format.
  */
 size_t	prompt_len(char *ps1, char *user, char *path)
 {

@@ -6,15 +6,12 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 18:26:03 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 12:25:09 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
-/**
- * COMMENT PENDING ISMA
- */
 static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next)
 {
 	crnt->next = next->next;
@@ -31,7 +28,17 @@ static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next
 }
 
 /**
- * COMMENT PENDING ISMA
+ * Sorts a linked list of environment variables by name.
+ * 
+ * @param head Pointer to the pointer to the head of the list to sort.
+ * 
+ * Performs an in-place bubble sort over the singly-linked list by swapping
+ * nodes (adjusting next pointers) to order entries ascending by name.
+ * The function updates the head pointer when the first element moves.
+ * 
+ * @note - Modifies list links in place; it does not allocate or free nodes.
+ * @note - Comparison uses ft_strncmp and assumes node content and names are
+ * 		valid.
  */
 void	shell_sortenv(t_list **head)
 {

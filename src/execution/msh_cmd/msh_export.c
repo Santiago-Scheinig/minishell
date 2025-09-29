@@ -6,23 +6,19 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:06:45 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:12:14 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
 
 /**
- * COMMENT PENDING ISMA
- */
-t_var	*create_envp(const char *envp, int export);
-
-/**
  * Validates that the provided identifier is suitable for export.
  * 
  * @param arg Candidate string like "NAME" or "NAME=VALUE".
  * 
- * Ensures first char is alphabetic or '_' and subsequent chars are alphanumeric or '_'.
+ * Ensures first char is alphabetic or '_' and subsequent chars are
+ * alphanumeric or '_'.
  * Prints an error via built_end on invalid identifiers.
  * 
  * @return 0 if valid, non-zero error code otherwise.
@@ -50,7 +46,7 @@ int	is_valid_identifier(char *arg)
  * @param head Linked list head of current variables.
  * @param envp Pointer to environment array pointer (used by helpers).
  * 
- * Returns a possibly modified args array (duplicates removed, errors reported).
+ * Returns a possibly modified args array (duplicates removed, errors reported)
  * If no args provided, prints export list and returns NULL.
  * 
  * @return Adjusted args array or NULL.
@@ -144,7 +140,7 @@ int	new_envp(char **new_env, t_list **head, int export)
 			return (built_end("export", "System failed", NULL, '\0'));
 		node = ft_lstnew(content); 
 		if (!node)
-			return (built_end("export", "System failed", NULL, '\0'));//falta liberar 1
+			return (built_end("export", "System failed", NULL, '\0'));
 		ft_lstadd_back(head, node);
 	}
 	return (0);

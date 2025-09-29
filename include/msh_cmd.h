@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 17:12:06 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:05:27 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,6 @@
 
 # include "lib/msh_std.h"
 # include "lib/msh_tsh.h"
-
-/**
- * COMMENT PENDING ISMA
- */
-t_var	*create_envp(const char *envp, int export);
 
 t_var	*add_env(t_var *head, char *new_env);
 

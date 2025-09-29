@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:51:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:13:23 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 12:23:04 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,20 @@ static char	*shell_ps1(t_list *envp)
 	return (ps1);
 }
 
+/**
+ * Builds an array of strings used to initialize environment-related defaults.
+ * 
+ * @param envp Linked list of environment variables (t_var nodes).
+ * 
+ * Constructs and returns a newly allocated NULL-terminated array of strings
+ * containing default or updated entries for PS1, PWD, _ and SHLVL.
+ * 
+ * @return Pointer to a newly allocated array of strings (terminated by NULL),
+ *         or NULL on allocation failure.
+ * @note - Caller is responsible for freeing each string and the array.
+ * @note - On allocation failure this function returns NULL and may leave
+ *         partial state in envp's list (PS1 may have been modified).
+ */
 char	**shell_pmtstr(t_list *envp)
 {
 	char	**ps;

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:44:12 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:27:41 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:12:36 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ static char	**check_args(char **args)
 }
 
 /**
- * Imports variables into envp/list from argument list (used for PS1/initial import).
+ * Imports variables into envp/list from argument list.
  * 
  * @param envp Pointer-to-pointer to environment array.
  * @param head Pointer-to-list head of current variables.

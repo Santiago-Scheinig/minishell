@@ -6,15 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 14:09:17 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:51:48 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:42:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
-/**
- * COMMENT PENDING ISMA
- */
 static char	*pwd_name(char *ps1, char *path, t_list *envp_lst)
 {
 	size_t	len;
@@ -36,9 +33,6 @@ static char	*pwd_name(char *ps1, char *path, t_list *envp_lst)
 	return (tmp);
 }
 
-/**
- * COMMENT PENDING ISMA
- */
 static char	*short_home(char *home, char *path)
 {
 	size_t	rest;
@@ -63,9 +57,6 @@ static char	*short_home(char *home, char *path)
 	return (path);
 }
 
-/**
- * COMMENT PENDING ISMA
- */
 static char	*short_path_name(t_list *envp, char *path)
 {
 	char	*home;
@@ -82,9 +73,6 @@ static char	*short_path_name(t_list *envp, char *path)
 	return (path);
 }
 
-/**
- * COMMENT PENDING ISMA
- */
 static char	*path_cwd(t_list *envp)
 {
 	char	*prompt;
@@ -102,7 +90,20 @@ static char	*path_cwd(t_list *envp)
 }
 
 /**
- * COMMENT PENDING ISMA
+ * Builds and returns the expanded shell prompt string.
+ * 
+ * @param envp Linked list of environment variables (t_var nodes).
+ * 
+ * Reads the PS1 format from the environment, determines the current working
+ * directory (falls back to PWD when getcwd fails), shortens the home path to
+ * '~'
+ * when applicable, and expands PS1 escapes into a newly allocated prompt
+ * string.
+ * 
+ * @return Newly allocated prompt string on success, or NULL on failure.
+ * @note Caller is responsible for freeing the returned string.
+ * @note If PS1 is not defined an empty format is used. On allocation failure
+ *       the function returns NULL and partial allocations are freed internally
  */
 char	*shell_pmtexp(t_list *envp)
 {

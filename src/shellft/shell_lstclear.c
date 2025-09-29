@@ -6,14 +6,27 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 15:41:53 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:02:35 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * COMMENT PENDING ISMA
+ * Frees the t_var content stored in a list node and then frees the node.
+ * 
+ * @param list Pointer to the list node containing a t_var structure as
+ *		content.
+ * @param del  Function used to free allocated memory for each member and
+ * 		structures.
+ * 
+ * This function extracts the t_var structure from the provided list node,
+ * frees the name and value strings if present, frees the t_var structure
+ * itself, and finally frees the list node using the provided del function.
+ * 
+ * @note - The del function is expected to behave like free(void *).
+ * @note - After calling this function the provided node and its content must
+ * 		not be accessed.
  */
 void	shell_lstdelvar(t_list *list, void (*del)(void *))
 {

@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:54:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/22 15:18:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 12:28:51 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,16 @@
 volatile sig_atomic_t	g_signal_received = 0;
 
 /**
- * COMMENT PENDING ISMA
+ * Signal handler to refresh the interactive prompt after an interrupt (SIGINT)
+ * 
+ * @param signum The received signal number (typically SIGINT).
+ * 
+ * Sets the global signal flag to indicate an interrupt was received, writes a
+ * newline to keep the prompt on a new line, clears the current readline buffer
+ * and forces readline to redisplay a fresh prompt.
+ * 
+ * @note - This handler is intended for interactive prompt context only.
+ * - Uses async-signal-safe functions where applicable.
  */
 void	new_prompt(int signum)
 {
@@ -35,6 +44,19 @@ void	new_prompt(int signum)
 	rl_redisplay();
 }
 
+/**
+ * Installs signal handlers that ignore SIGINT and SIGQUIT.
+ * 
+ * @return MSHELL_SUCCESS on success, MSHELL_FAILURE if sigaction() fails.
+ * 
+ * Configures SIGINT and SIGQUIT to be ignored by setting their handler to
+ * SIG_IGN. The function initializes an empty mask, adds SIGINT and SIGQUIT
+ * to the mask, and uses SA_RESTART so interrupted system calls will be
+ * automatically restarted where supported.
+ * 
+ * @note - Intended for phases where the shell should ignore user-generated
+ *         interrupt/quit signals.
+ */
 int	sigign(void)
 {
 	struct sigaction	sa_int;
