@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:52:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 13:46:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ static void	parser_input(t_body *msh)
 			forcend(msh, "malloc", MSHELL_FAILURE);
 		else if (errno)
 			forcend(msh, "read", MSHELL_FAILURE);
+		msh->line++;
 	}
 	if (msh->input && !msh->input[0])
 	{
@@ -94,9 +95,11 @@ static void	parser_input(t_body *msh)
 
 /**
  * Analizes user input, validates it's syntax and saves a list of commands
- * to execute on the minishell. The parsing is divided in different steps.
+ * to execute. The parsing is divided in different steps.
  * 
  * - READ_INPUT: Reads user input stopping at a newline.
+ * 
+ * - HERE_DOCUMENT: Asks the user to fill all the specified here_doc.
  * 
  * - TOKENIZATION: Breaks the input line into tokens (words, operators).
  * 
@@ -104,14 +107,12 @@ static void	parser_input(t_body *msh)
  * 
  * - COMAND_CASTING: Creats a list of commands by analizing the token list.
  * 
- * - REDIRECTIONS: Opens and close all redirections made with respective operators 
- * within each individual command on the list.
+ * - REDIRECTIONS: Opens and closes all redirections made with respective 
+ * operators within each individual command on the list.
  * 
  * - OPERATOR_REMOVAL: Removes syntax quotes, \\ and ;.
  * 
- * @param minishell A pointer to the minishell enviroment structure.
- * @note If any error occurs during the parsing, the function will end with
- * a forcend([errno]) call.
+ * @param msh A pointer to the minishell enviroment structure.
  */
 int	parser(t_body *msh)
 {
@@ -128,12 +129,13 @@ int	parser(t_body *msh)
 		forcend(msh, "malloc", MSHELL_FAILURE);
 	if (parser_token(msh, split))
 	{
+		if (msh->exit_no == MSHELL_MISSUSE && !msh->interactive)
+			forcend(msh, NULL, msh->exit_no);
 		if (msh->exit_no == MSHELL_FAILURE)
 			forcend(msh, msh->exit_ft, msh->exit_no);
 		else
 			return (msh->exit_no);
 	}
-	msh->exit_no = MSHELL_SUCCESS;
 	parser_envar(msh);
 	parser_cmds(msh);
 	shell_lstclear(&(msh->token_lst), shell_lstdeltkn);

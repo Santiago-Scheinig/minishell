@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/24 19:46:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:13:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static int	token_heredoc(t_token *aux, t_token *next, t_body *msh)
 }
 
 /**
- * COMMENT UPDATE
  * Verifies the correct syntax of the user input inside a T_TOKEN list
  * by following the bash-shell rules:
  * 
@@ -50,17 +49,15 @@ static int	token_heredoc(t_token *aux, t_token *next, t_body *msh)
  * 
  * - The list must allways end with a WORD.
  * 
- * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param msh A pointer to the main enviroment structure of minishell.
  */
-static int	token_syntax(t_body *msh)
+static int	token_syntax(t_list *token_lst, t_body *msh)
 {
-	t_list	*token_lst;
 	t_token	*aux;
 	t_token	*next;
 	int		i;
 
 	i = 0;
-	token_lst = msh->token_lst;
 	while (token_lst->next)
 	{
 		aux = (t_token *) token_lst->content;
@@ -69,9 +66,10 @@ static int	token_syntax(t_body *msh)
 			|| aux->type == REDIR_APPEND || aux->type == HEREDOC)
 			if (token_heredoc(aux, next, msh))
 				return (msh->exit_no);
-		if ((aux->type == PIPE && next->type == PIPE) 
-			|| (!i++ && aux->type == PIPE))
+		if ((aux->type == PIPE && next->type == PIPE))
 			return (parsend(next->str, MSHELL_MISSUSE, msh));
+		if 	((!i++ && aux->type == PIPE))
+			return (parsend(aux->str, MSHELL_MISSUSE, msh));
 		else if (aux->type == PIPE)
 			msh->exit_no = MSHELL_SUCCESS;
 		token_lst = token_lst->next;
@@ -110,10 +108,8 @@ t_token	*token_dup(char *str)
  * Divides user input into tokens catalogated as the enum structure 
  * T_TOKEN_TYPE indicates.
  * 
- * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param msh A pointer to the main enviroment structure of minishell.
  * @param split The user input already divided with shell_split() parameters.
- * @note If any error occurs during the tokenization step, the function will
- * end with a sigend([errno]) call.
  */
 int	parser_token(t_body *msh, char **split)
 {
@@ -139,5 +135,5 @@ int	parser_token(t_body *msh, char **split)
 		forcend(msh, "malloc", MSHELL_FAILURE);
 	}
 	free(split);
-	return (token_syntax(msh));
+	return (token_syntax(msh->token_lst, msh));
 }

@@ -11,12 +11,14 @@
 /* ************************************************************************** */
 
 #include "msh.h"
+#include <sys/stat.h>
+#include <unistd.h>
 
 /**
  * Initializes the enviromental variables needed to execute minishell.
  * 
- * @param minishell A pointer to the minishell enviroment structure.
- * @param envp The array of strings of the main envp.
+ * @param msh A pointer to the minishell enviroment structure.
+ * @param envp The main envp.
  */
 static void	init_envp(t_body *msh, const char **envp)
 {
@@ -47,17 +49,19 @@ static void	init_envp(t_body *msh, const char **envp)
 }
 
 /**
- * Initializes the setting of the terminal needed to execute minishell.
+ * Initializes the terminal settings needed to execute minishell.
  * 
- * @param minishell A pointer to the minishell enviroment structure.
+ * @param msh A pointer to the minishell enviroment structure.
  * @note This allows msh to have two different modes, interactive and
- * automatic.
+ * non-interactive.
  */
 static void	init_term(t_body *msh)
 {
 	struct termios	new_term;
-
+	struct stat		st;
+	
 	ft_memset(msh, 0, sizeof(t_body));
+	fstat(STDIN_FILENO, &st);
 	msh->interactive = isatty(STDIN_FILENO);
 	if (msh->interactive)
 	{

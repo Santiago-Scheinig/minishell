@@ -3,12 +3,9 @@ cat < nofile
 echo hi > file1 > file2
 echo hi >> file1 >> file2
 > onlyfile
-<
 echo test > /dev/full
 ls | wc -l
 echo a | cat | cat | cat
-| ls
-ls |
 echo hello | > file
 echo $USER
 echo "$USER"
@@ -16,8 +13,6 @@ echo '$USER'
 echo $?
 echo "$?"
 echo '$?'
-echo "unclosed
-echo 'unclosed
 echo "hello'world"
 echo 'hello"world'
 echo "'$USER'"

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/24 19:20:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:20:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,10 +167,7 @@ int	envar_syntax(char **str, char **mask, t_list *envp, int exit_no)
 				break;
 			if (!(*str)[i + 1] || (!ft_isalpha((*str)[i + 1])
 				&& (*str)[i + 1] != '_' && (*str)[i + 1] != '?'))
-			{
-				i++;
-				continue;
-			}
+				break;
 			if ((*str)[i + 1] == '?')
 			{
 				if (exp_exitno(str, mask, i, exit_no))

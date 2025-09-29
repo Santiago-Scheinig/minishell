@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 19:23:15 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:31:39 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,30 +98,31 @@ static void	cmdupd_save( t_list *token_lst, t_cmd **new_cmd, t_body *minishell)
 /**
  * COMMENT PENDING
  */
-void	parser_cmds(t_body *minishell)
+void	parser_cmds(t_body *msh)
 {
 	t_cmd	*new_cmd;
 	t_list	*aux_lst;
 	t_token	*aux_tkn;
 
-	aux_lst = minishell->token_lst;
-	new_cmd = cmd_init(minishell->token_lst);
+	aux_lst = msh->token_lst;
+	new_cmd = cmd_init(msh->token_lst);
 	if (!new_cmd)
-		forcend(minishell, "malloc", MSHELL_FAILURE);
+		forcend(msh, "malloc", MSHELL_FAILURE);
 	while (aux_lst)
 	{
 		aux_tkn = (t_token *) aux_lst->content;
 		if (aux_tkn->type && aux_tkn->type != PIPE && aux_tkn->type != END)
 		{
 			aux_lst = aux_lst->next;
-			if (cmdupd_redir(aux_tkn, (t_token *) aux_lst->content, new_cmd))
+			msh->exit_no = cmdupd_redir(aux_tkn, (t_token *) aux_lst->content, new_cmd); 
+			if (msh->exit_no)
 				aux_lst = cmdupd_err(aux_lst, &new_cmd);
 		}
 		else if (aux_tkn->type == WORD)
 			cmdupd_argv(aux_tkn, new_cmd);
 		else if (aux_tkn->type == PIPE)
-			cmdupd_save(aux_lst, &new_cmd, minishell);
+			cmdupd_save(aux_lst, &new_cmd, msh);
 		aux_lst = aux_lst->next;
 	}
-	cmdupd_save(NULL, &new_cmd, minishell);
+	cmdupd_save(NULL, &new_cmd, msh);
 }
