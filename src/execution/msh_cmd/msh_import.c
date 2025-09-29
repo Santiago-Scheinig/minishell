@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_import.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:44:12 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/27 15:12:36 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:37:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static char	*change_list(char *args, t_list *head)
 					built_end("export", "System failed", NULL, '\0');
 					return (NULL);
 				}
-					
 			}
 		}
 		current = current->next;
@@ -97,7 +96,8 @@ static char	**check_args(char **args)
 		if (!ft_isalpha(args[i][0]) && args[i][0] != '_')
 			invalid = 1;
 		j = 1;
-		while ((ft_isalnum(args[i][j]) || args[i][j] == '_') && args[i][j] != '=')
+		while ((ft_isalnum(args[i][j]) || args[i][j] == '_')
+			&& args[i][j] != '=')
 			j++;
 		if (args[i][j] != '=')
 			invalid = 1;

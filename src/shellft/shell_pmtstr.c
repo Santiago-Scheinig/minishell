@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_pmtstr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:51:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 12:23:04 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:32:07 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static char	*shell_ps1(t_list *envp)
 char	**shell_pmtstr(t_list *envp)
 {
 	char	**ps;
-	
+
 	ps = malloc(5 * sizeof(char *));
 	if (!ps)
 		return (NULL);

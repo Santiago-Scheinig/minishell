@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 14:42:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:35:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,17 @@ static int	child_cmd(t_list *envp_lst, char **argv, char **envp)
  * the executed comand works, and 1 or 2 in case an error inside of the
  * commands.
  */
-int	exe_child_built(char **args, char **envp)
+int	exe_child_built(char **args, char **envp, int errfd)
 {
 	t_list	*envp_lst;
 	int		num;
-	
+
 	num = 0;
 	if (args)
 	{
 		envp_lst = shell_newlst_var(envp);
+		if (!envp_lst)
+			exend(3, errfd, NULL);
 		num = child_cmd(envp_lst, args, envp);
 		if (num != -1)
 			exit(num);
@@ -122,14 +124,14 @@ int	exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp)
 		if (dup2(exe->outfd, STDOUT_FILENO) == -1)
 		{
 			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
-			return(MSHELL_FAILURE);
+			return (MSHELL_FAILURE);
 		}
 		close(exe->outfd);
 		num = msh_cmd(exe, minishell, envp_lst, envp);
 		if (dup2(i, STDOUT_FILENO) == -1)
 		{
 			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
-			return(MSHELL_FAILURE);
+			return (MSHELL_FAILURE);
 		}
 	}
 	else if (exe->argv)

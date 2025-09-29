@@ -6,13 +6,11 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:52:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:33:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
-
-int	change_value_env(t_var *aux, char ***envp, char **new_env, int export);
 
 /**
  * Creates and allocates a STRING with the definitive path to a cmd binary.
@@ -22,7 +20,7 @@ int	change_value_env(t_var *aux, char ***envp, char **new_env, int export);
  * @return A pointer to the new STRING or NULL if the allocation failed or
  * the cmd can't be access or found as binary on path.
  */
-static int exe_getpath(char *cmd, char **path, char **pathname)
+static int	exe_getpath(char *cmd, char **path, char **pathname)
 {
 	char	*tmp;
 	int		i;
@@ -33,29 +31,29 @@ static int exe_getpath(char *cmd, char **path, char **pathname)
 		(*pathname) = cmd;
 		if (!access(cmd, X_OK))
 			return (MSHELL_SUCCESS);
-		return (MSHELL_CMD_INVEXE);//print no access error!
+		return (MSHELL_CMD_INVEXE);
 	}
 	while (path[++i] && cmd)
 	{
 		tmp = ft_strjoin(path[i], "/");
 		if (!tmp)
-			return (MSHELL_FAILURE);//this are malloc error... i need to end the child setting errno! So the parent know what failed
+			return (MSHELL_FAILURE);
 		(*pathname) = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!(*pathname))
-			return (MSHELL_FAILURE);//this are malloc error... i need to end the child setting errno!
+			return (MSHELL_FAILURE);
 		if (!access((*pathname), X_OK))
 			return (MSHELL_SUCCESS);
 		free((*pathname));
 	}
-	return (MSHELL_CMD_NOTEXE);//print command not found
+	return (MSHELL_CMD_NOTEXE);
 }
 
 static char	**exe_setup(t_body *minishell)
 {
 	char	**path;
 	int		cmd_len;
-	
+
 	cmd_len = ft_lstsize(minishell->cmd_lst);
 	minishell->childs_pid = calloc(cmd_len, sizeof(pid_t));
 	if (!minishell->childs_pid)
@@ -80,6 +78,28 @@ static char	**exe_setup(t_body *minishell)
 	return (path);
 }
 
+int	exend(int exit_no, int errfd, t_list *cmd_lst)
+{
+	if (exit_no)
+		write(errfd, &exit_no, sizeof(exit_no));
+	if (cmd_lst)
+		fd_endexe(cmd_lst, 0);
+	close(errfd);
+	exit(exit_no);
+}
+
+static void	exe_init(int errfd[2], t_cmd *exe, t_list *cmd_lst)
+{
+	close(errfd[0]);
+	sigdfl();
+	if (!exe->argv || !exe->argv[0])
+		exend(0, errfd[1], cmd_lst);
+	if (dup2(exe->infd, STDIN_FILENO) == -1
+		|| dup2(exe->outfd, STDOUT_FILENO) == -1)
+		exend(1, errfd[1], cmd_lst);
+	fd_endexe(cmd_lst, 0);
+}
+
 static int	exe_child(t_list *cmd_lst, char **path, pid_t *child, char **envp)
 {
 	t_cmd	*exe;
@@ -91,49 +111,21 @@ static int	exe_child(t_list *cmd_lst, char **path, pid_t *child, char **envp)
 	(*child) = fork();
 	if (!(*child))
 	{
-		close(errfd[0]);
-		sigdfl();
 		exe = (t_cmd *) cmd_lst->content;
-		if (!exe->argv || !exe->argv[0])
+		exe_init(errfd, exe, cmd_lst);
+		if (!exe_child_built(exe->argv, envp, errfd[1]))
 		{
-			close(errfd[1]);
-			fd_endexe(cmd_lst, (*child));
-			exit (MSHELL_FAILURE);
-		}
-		if (dup2(exe->infd, STDIN_FILENO) == -1
-		|| dup2(exe->outfd, STDOUT_FILENO) == -1)
-		{
-			exit_no = 1;
-			write(errfd[1], &exit_no, sizeof(exit_no));
-			close(errfd[1]);
-			fd_endexe(cmd_lst, (*child));
-			exit(MSHELL_FAILURE);
-		}
-		fd_endexe(cmd_lst, (*child));
-		if (!exe_child_built(exe->argv, envp))//i need to close errfd[1] inside of exe_child_built after using it to print errors
-		{
-			exit_no = exe_getpath(exe->argv[0], path, &(exe->pathname)); 
-			if (exit_no)
-			{
-				if (exit_no != MSHELL_FAILURE)
-				{
-					exit_no = 3;
-					write(errfd[1], &exit_no, sizeof(exit_no));
-				}
-				close(errfd[1]);
-				exit(exit_no);
-			}
+			exit_no = exe_getpath(exe->argv[0], path, &(exe->pathname));
+			if (exit_no == MSHELL_FAILURE)
+				exend(3, errfd[1], NULL);
+			else if (exit_no)
+				exend(exit_no, errfd[1], NULL);
 			if (execve(exe->pathname, exe->argv, envp))
-			{
-				exit_no = 2;
-				write(errfd[1], &exit_no, sizeof(exit_no));
-				close(errfd[1]);
-				exit(MSHELL_FAILURE);
-			}
+				exend(2, errfd[1], NULL);
 		}
 	}
 	close(errfd[1]);
-	fd_endexe(cmd_lst, (*child));
+	fd_endexe(cmd_lst, 1);
 	return (errfd[0]);
 }
 

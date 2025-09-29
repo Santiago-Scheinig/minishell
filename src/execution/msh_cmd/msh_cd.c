@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 16:27:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:35:15 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	change_pwd(t_list **envp)
 	pwd = ft_strdup(aux);
 	free(aux);
 	if (!pwd)
-		return( built_end("cd", "System failed", NULL, '\0'));
+		return (built_end("cd", "System failed", NULL, '\0'));
 	current = *envp;
 	while (current && current->content)
 	{

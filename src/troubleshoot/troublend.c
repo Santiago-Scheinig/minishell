@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   troublend.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 19:49:46 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:28:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int	forcend(t_body *msh, const char *argv, int exit_no)
 	{
 		ft_printfd(2, "msh:");
 		perror(argv);
-		if (exit_no != MSHELL_FATAL 
+		if (exit_no != MSHELL_FATAL
 			&& tcsetattr(STDIN_FILENO, TCSANOW, &msh->orig_term))
 			exit(exit_no);
 	}

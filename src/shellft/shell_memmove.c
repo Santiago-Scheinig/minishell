@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 17:30:09 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:31:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	iq_moveup(char *dst_tmp, char *src_tmp, char *src_mask, size_t n)
 		if (src_mask[i] == 'O')
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		if (i < n)
 			dst_tmp[j] = src_tmp[i];
@@ -51,7 +51,7 @@ static void	iq_moveup(char *dst_tmp, char *src_tmp, char *src_mask, size_t n)
  * @note Operators such as '\'' and '\"' are ignored, and as such, aren't
  * moved to dst. This mimics the quote removal behaivor from bash-shell.
  */
-static void	iq_movedown(char *dst_tmp, char *src_tmp, char *src_mask, size_t len)
+static void	iq_movedn(char *dst_tmp, char *src_tmp, char *src_mask, size_t len)
 {
 	size_t	i;
 	size_t	dst_len;
@@ -98,8 +98,8 @@ void	*shell_memmove(void *dest, void *src, void *mask, size_t n)
 	src_tmp = (unsigned char *) src;
 	dst_tmp = (unsigned char *) dest;
 	if (dst_tmp > src_tmp)
-		iq_movedown((char *) dst_tmp,(char *) src_tmp, (char *) mask, n);
+		iq_movedown((char *) dst_tmp, (char *) src_tmp, (char *) mask, n);
 	else
-		iq_moveup((char *) dst_tmp,(char *) src_tmp, (char *) mask, n);
+		iq_moveup((char *) dst_tmp, (char *) src_tmp, (char *) mask, n);
 	return (dest);
 }

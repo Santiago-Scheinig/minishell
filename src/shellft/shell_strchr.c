@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 19:08:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:47:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:30:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 const char	*shell_word_strchr(const char *s)
 {
 	const char	*tmp;
-	int		i;
+	int			i;
 
 	i = 0;
 	tmp = NULL;
@@ -59,7 +59,7 @@ const char	*shell_word_strchr(const char *s)
 const char	*shell_operator_strchr(const char *s)
 {
 	const char	*tmp;
-	int		i;
+	int			i;
 
 	i = 0;
 	tmp = NULL;

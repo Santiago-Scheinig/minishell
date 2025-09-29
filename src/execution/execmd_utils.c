@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:52:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:34:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
  */
 static int	fd_setexe(t_cmd *exe, t_cmd *exe_next)
 {
-	int pipefd[2];
+	int	pipefd[2];
 
 	if (exe_next)
 	{
@@ -47,7 +47,7 @@ static int	fd_setexe(t_cmd *exe, t_cmd *exe_next)
 
 void	fd_endexe(t_list *cmd_lst, pid_t child)
 {
-	t_cmd *exe;
+	t_cmd	*exe;
 
 	exe = (t_cmd *) cmd_lst->content;
 	if (exe->infd > 2)
@@ -66,7 +66,7 @@ void	fd_endexe(t_list *cmd_lst, pid_t child)
 	}
 }
 
-int		setup_pipeline(t_list *cmd_lst)
+int	setup_pipeline(t_list *cmd_lst)
 {
 	t_list	*aux;
 	t_cmd	*exe;
@@ -84,11 +84,11 @@ int		setup_pipeline(t_list *cmd_lst)
 		if (fd_setexe(exe, exe_next))
 		{
 			fd_endexe(aux, 1);
-			return(redirend(NULL, MSHELL_FAILURE));
+			return (redirend(NULL, MSHELL_FAILURE));
 		}
 		cmd_lst = cmd_lst->next;
 	}
-	return(MSHELL_SUCCESS);
+	return (MSHELL_SUCCESS);
 }
 
 /**

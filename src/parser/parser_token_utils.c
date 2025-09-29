@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 18:06:13 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 13:57:21 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:25:59 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*mask_dup(char *str)
 	int		i;
 	char	quote;
 	char	*mask_str;
-	
+
 	mask_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!mask_str)
 		return (NULL);

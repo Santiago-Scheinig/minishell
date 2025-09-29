@@ -6,15 +6,15 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 19:13:22 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 14:42:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:31:35 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
-static int	change_value(char *envp)
+static int	change_value(const char *envp)
 {
-	char	*value;
+	int		value;
 	char	*tmp;
 
 	tmp = ft_strdup(&envp[6]);
@@ -39,7 +39,7 @@ static size_t	is_valid(const char *str)
 
 static char	*check_value(const char *envp)
 {
-	size_t	value;
+	int		value;
 	char	*numb;
 	char	*aux;
 	char	*tmp;
@@ -67,17 +67,17 @@ static char	*check_value(const char *envp)
 }
 
 /**
- * Duplicates the process environment array and adjusts SHLVL if present.
+ * Duplicates the process environment array and adjusts SHLVL.
  * 
  * @param envp Null-terminated array of environment strings from the parent
- * 		process.
+ * process.
  * 
  * Creates and returns a newly allocated copy of envp. If a "SHLVL=" entry is
  * found the function attempts to increment its numeric value; if the existing
  * value is invalid it sets SHLVL to 1 in the duplicated array.
  * 
- * @return Newly allocated null-terminated array of strings, or NULL on
- * 		allocation failure.
+ * @return Newly allocated null-terminated array of strings, or NULL on 
+ * allocation failure.
  * @note - Caller is responsible for freeing the returned array
  * 		(each string and the array).
  * @note - On allocation failure any partial allocations are freed before

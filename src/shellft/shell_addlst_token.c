@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:29:19 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:57:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:30:09 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*maskstr(char *str)
 	int		i;
 	char	quote;
 	char	*mask_str;
-	
+
 	mask_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!mask_str)
 		return (NULL);
@@ -97,7 +97,7 @@ static t_token	*token_dup(char *str)
  * @note The previous mask is also replaced to match the string
  * characters with the flag for each set as N (None).
  */
-static int replace_token(t_token *word, char *str)
+static int	replace_token(t_token *word, char *str)
 {
 	if (word->str)
 		free(word->str);
@@ -119,9 +119,9 @@ static int replace_token(t_token *word, char *str)
  */
 int	shell_addlst_token(t_list *token_list, char *str, int start)
 {
-	t_token *aux;
+	t_token	*aux;
 	t_list	*new_node;
-	
+
 	if (!start)
 		return (replace_token(((t_token *) token_list->content), str));
 	aux = token_dup(str);

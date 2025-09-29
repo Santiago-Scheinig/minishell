@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 05:11:45 by root              #+#    #+#             */
-/*   Updated: 2025/09/24 15:56:15 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:22:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static	char	*ft_read_text(char *txt, int fd)
 		txt = ft_new_text(txt);
 		if (!txt)
 			return (NULL);
-		r_ans = read(fd, &txt[ft_strlend(txt, 0)], BUFFER_SIZE);//i need to print an error for read failure
+		r_ans = read(fd, &txt[ft_strlend(txt, 0)], BUFFER_SIZE);
 		if (r_ans < 0)
 		{
 			free(txt);

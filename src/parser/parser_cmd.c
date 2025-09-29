@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 14:31:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:27:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	cmd_argc(t_list *token_lst)
 	{
 		aux = (t_token *) token_lst->content;
 		if (aux->type == PIPE)
-			break;
+			break ;
 		if (aux->type == WORD && prev_type == WORD)
 			count++;
 		prev_type = aux->type;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/27 15:12:14 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:36:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int	new_envp(char **new_env, t_list **head, int export)
 		content = create_envp(new_env[i], export);
 		if (!content)
 			return (built_end("export", "System failed", NULL, '\0'));
-		node = ft_lstnew(content); 
+		node = ft_lstnew(content);
 		if (!node)
 			return (built_end("export", "System failed", NULL, '\0'));
 		ft_lstadd_back(head, node);

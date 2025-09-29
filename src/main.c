@@ -22,7 +22,7 @@
  */
 static void	init_envp(t_body *msh, const char **envp)
 {
-	char 	**ps1;
+	char	**ps1;
 
 	msh->envp = shell_envpdup(envp);
 	if (!msh->envp)
@@ -38,9 +38,9 @@ static void	init_envp(t_body *msh, const char **envp)
 	if (!shell_getenv(msh->envp_lst, "PS1"))
 	{
 		if (msh_export(&msh->envp, &msh->envp_lst, &ps1[1]))
-			forcend(msh, "malloc", 	MSHELL_FAILURE);
+			forcend(msh, "malloc", MSHELL_FAILURE);
 		if (msh_import(&msh->envp, &msh->envp_lst, ps1))
-			forcend(msh, "malloc", 	MSHELL_FAILURE);
+			forcend(msh, "malloc", MSHELL_FAILURE);
 		shell_sortenv(&msh->envp_lst);
 		ft_split_free(ps1);
 	}
@@ -59,7 +59,7 @@ static void	init_term(t_body *msh)
 {
 	struct termios	new_term;
 	struct stat		st;
-	
+
 	ft_memset(msh, 0, sizeof(t_body));
 	fstat(STDIN_FILENO, &st);
 	msh->interactive = isatty(STDIN_FILENO);
@@ -91,9 +91,10 @@ int	main(int argc, char **argv, const char **envp)
 	while (1)
 	{
 		if (parser(&msh))
-			continue;
+			continue ;
+		errno = 0;
 		if (execmd(&msh))
-			continue;
+			continue ;
 		if (msh.childs_pid)
 			waitcmd(&msh);
 	}

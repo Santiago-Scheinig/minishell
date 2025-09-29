@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_getenv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:43:45 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/27 15:14:54 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:31:48 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*shell_getenv(t_list *lst_var, const char *name)
 {
 	t_list	*tmp;
 	t_var	*aux;
-		
+	
 	tmp = lst_var;
 	shell_sortenv(&tmp);
 	while (tmp && tmp->content)

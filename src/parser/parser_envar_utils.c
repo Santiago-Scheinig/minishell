@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/24 17:25:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:23:43 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	envar_len(char *env_var)
  */
 char	*exp_mask(char *str, char *mask, int start, t_envar_pair len)
 {
-	int 	aux_len;
+	int		aux_len;
 	int		aux_start;
 	char	*aux_mask;
 	char	*new_mask;
@@ -89,7 +89,7 @@ char	*exp_mask(char *str, char *mask, int start, t_envar_pair len)
  */
 char	*exp_value(char *str, char *value, int start)
 {
-	int 	aux_len;
+	int		aux_len;
 	int		aux_start;
 	char	*exp_str;
 	char	*aux_str;
@@ -118,7 +118,7 @@ int	exp_exitno(char **str, char **mask, int start, int exit_no)
 {
 	char	*env_value;
 	char	*ret;
-	
+
 	env_value = ft_itoa(exit_no);
 	ret = exp_value((*str), env_value, start);
 	if (!ret || envar_mask((*str), env_value, mask, start))
@@ -127,8 +127,9 @@ int	exp_exitno(char **str, char **mask, int start, int exit_no)
 	if ((*str))
 		free((*str));
 	(*str) = ret;
-	return(MSHELL_SUCCESS);
+	return (MSHELL_SUCCESS);
 }
+
 /**
  * Allocates and returns a clean STRING with only the enviromental variable
  * name, to search into getenv().
@@ -149,7 +150,7 @@ char	*envar_pathname(char *env_var)
 	new_path = ft_calloc((env_var_len + 1), sizeof(char));
 	if (!new_path)
 		return (NULL);
-	while(++i < env_var_len)
+	while (++i < env_var_len)
 		new_path[i] = env_var[i];
 	return (new_path);
 }

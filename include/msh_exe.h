@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/24 13:26:16 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:17:59 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ void	fd_endexe(t_list *cmd_lst, pid_t child);
 
 int		exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp);
 
-int		exe_child_built(char **args, char **envp);
+int		exe_child_built(char **args, char **envp, int errfd);
 
 int		setup_pipeline(t_list *cmd_lst);
+
+int	exend(int exit_no, int errfd, t_list *cmd_lst);
 
 int		waitcmd(t_body *minishell);
 #endif

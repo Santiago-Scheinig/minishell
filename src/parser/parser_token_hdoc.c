@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 18:35:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 14:21:17 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:26:41 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,25 @@ static int	heredoc_mask(char *mask, char **line, t_list *envp, t_hdoc_pair hd)
 
 	i = -1;
 	exp = 1;
-	while(mask[++i])
+	while (mask[++i])
 		if (mask[i] == 'S' || mask[i] == 'D')
 			exp = 0;
 	if (exp)
 		if (envar_syntax(line, NULL, envp, hd.exit_no))
 			return (MSHELL_FAILURE);
 	if (write(hd.fd, (*line), ft_strlen((*line))) == -1)
-		return(MSHELL_FAILURE);
+		return (MSHELL_FAILURE);
 	return (MSHELL_SUCCESS);
 }
 
-static int hdoc_end(char *limit, char *err_ft, int heredoc_fd[2], t_body *msh)
+static int	hdoc_end(char *limit, char *err_ft, int heredoc_fd[2], t_body *msh)
 {
-	const char *msg[3] = {
+	const char	*msg[3] = {
 		"msh: warning:",
 		"here-document at line",
 		"delimited by end-of-file",
 	};
-	
+
 	if (errno == ENOMEM)
 		msh->exit_ft = "malloc";
 	else if (errno)
@@ -85,7 +85,7 @@ int	heredoc_dup(t_token *limit, int heredoc_fd[2], t_body *msh)
 		if (!line)
 			return (hdoc_end(limit->str, "read", heredoc_fd, msh));
 		if (line && !ft_strncmp(line, limit->str, ft_strlen(line) - 1))
-			break;
+			break ;
 		if (heredoc_mask(limit->mask, &line, msh->envp_lst, hd_utils))
 			return (hdoc_end(limit->str, "read", heredoc_fd, msh));
 		free(line);

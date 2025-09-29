@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 14:13:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:25:43 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	token_syntax(t_list *token_lst, t_body *msh)
 				return (msh->exit_no);
 		if ((aux->type == PIPE && next->type == PIPE))
 			return (parsend(next->str, MSHELL_MISSUSE, msh));
-		if 	((!i++ && aux->type == PIPE))
+		if ((!i++ && aux->type == PIPE))
 			return (parsend(aux->str, MSHELL_MISSUSE, msh));
 		else if (aux->type == PIPE)
 			msh->exit_no = MSHELL_SUCCESS;
@@ -119,14 +119,14 @@ int	parser_token(t_body *msh, char **split)
 
 	i = -1;
 	msh->token_lst = NULL;
-	while(split[++i])
+	while (split[++i])
 	{
 		new_token = token_dup(split[i]);
 		if (!new_token)
-			break;
+			break ;
 		new_node = ft_lstnew(new_token);
 		if (!new_node)
-			break;
+			break ;
 		ft_lstadd_back(&(msh->token_lst), new_node);
 	}
 	if (!new_node || !new_token)

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 14:42:34 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:11:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ void		*shell_memmove(void *dest, void *src, void *mask, size_t n);
  * @note - After calling this function the provided node and its content must
  * 		not be accessed.
  */
-void	shell_lstdelvar(t_list *list, void (*del)(void *))
+void	shell_lstdelvar(t_list *list, void (*del)(void *));
 
 /**
  * Duplicates the process environment array and adjusts SHLVL if present.
@@ -238,7 +238,7 @@ void	shell_lstdelvar(t_list *list, void (*del)(void *))
  * @note - On allocation failure any partial allocations are freed before
  * 		returning NULL.
  */
-char	**shell_envpdup(const char **envp)
+char	**shell_envpdup(const char **envp);
 
 /**
  * Builds a linked list of t_var nodes from a null-terminated envp array.
@@ -253,7 +253,7 @@ char	**shell_envpdup(const char **envp)
  * 		failure.
  * @note Caller owns the returned list and must free it with shell_lstdelvar.
  */
-t_list	*shell_newlst_var(char **envp)
+t_list	*shell_newlst_var(char **envp);
 
 /**
  * COMMENT PENDING ISMA
@@ -283,7 +283,7 @@ char		*shell_pmtexp(t_list *envp);
  * 			searching.
  * @note - Caller must not modify or free the returned pointer.
  */
-char	*shell_getenv(t_list *lst_var, const char *name)
+char	*shell_getenv(t_list *lst_var, const char *name);
 
 /*--------------------------------------------------------------------------*/
 /*--------------------------------SHELL UTILS-------------------------------*/
@@ -304,7 +304,7 @@ char	*shell_getenv(t_list *lst_var, const char *name)
  * @note Returned structure must be freed by the caller
  * 		(use shell_lstdelvar or equivalent).
  */
-t_var	*create_envp(const char *envp, int export)
+t_var	*create_envp(const char *envp, int export);
 
 /**
  * Frees every pointer on an ARRAY of STRINGS and the ARRAY pointer, even

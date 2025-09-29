@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_export_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/27 15:08:55 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:36:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,17 @@ char	**export_no_equal(char **args, char ***envp, t_list *lst)
 		{
 			var = (t_var *)current->content;
 			if (!ft_strncmp(args[i], var->name, ft_strlen(var->name)))
+			{
 				if (!ft_strchr(args[i], '='))
 				{
 					tmp = ft_strjoin(args[i], "=");
-					if(!tmp)
+					if (!tmp)
 						return (NULL);
 					exp_resize(&tmp, envp);
 					free(tmp);
 					args = ft_remove_arr(args, i--);
 				}
+			}
 			current = current->next;
 		}
 	}

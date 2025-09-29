@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 16:28:12 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:35:46 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char	**ft_remove_arr(char **arr, int index)
  * 
  * @return 0 on success, non-zero on error.
  */
-int msh_unset(char ***envp, t_list **env_lst, char **arg)
+int	msh_unset(char ***envp, t_list **env_lst, char **arg)
 {
 	t_list	*current;
 	t_list	*prev;
