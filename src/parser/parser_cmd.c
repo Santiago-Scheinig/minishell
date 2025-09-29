@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:27:51 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 20:56:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,13 @@ static void	cmdupd_argv(t_token *aux, t_cmd *new_cmd)
 	while (new_cmd->argv[i])
 		i++;
 	shell_memmove(aux->str, aux->str, aux->mask, ft_strlen(aux->str) + 1);
-	new_cmd->argv[i] = aux->str;
+	if (!aux->str[0] && !i)
+	{
+		free(aux->str);
+		new_cmd->argv[0] = NULL;
+	}
+	else
+		new_cmd->argv[i] = aux->str;
 	aux->str = NULL;
 }
 

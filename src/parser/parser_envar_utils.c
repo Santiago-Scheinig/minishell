@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:23:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 20:02:33 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*exp_mask(char *str, char *mask, int start, t_envar_pair len)
 	if (!len.val)
 	{
 		aux_start = start + len.var;
-		aux_len = ft_strlen(&(str[aux_start])) + 1;
+		aux_len = ft_strlen(&(mask[start])) + 1;
 		ft_memmove(&(mask[start]), &(mask[aux_start]), aux_len);
 		return (mask);
 	}

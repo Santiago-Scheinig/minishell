@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:35:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 20:33:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	exe_child_built(char **args, char **envp, int errfd)
 	{
 		envp_lst = shell_newlst_var(envp);
 		if (!envp_lst)
-			exend(3, errfd, NULL);
+			exend(MSHELL_FAILURE, errfd, "msh: malloc: ", NULL);
 		num = child_cmd(envp_lst, args, envp);
 		if (num != -1)
 			exit(num);

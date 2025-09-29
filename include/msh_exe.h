@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:17:59 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 20:22:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
 /*--------------------------------------------------------------------------*/
 /*-----------------------------EXECUTION CHECK------------------------------*/
 /*--------------------------------------------------------------------------*/
+
+typedef struct s_sig_msg
+{
+	int		sig;
+	char	*msg;
+}	t_sig_msg;
 
 /**
  * Verifies the existence of path enviroment.
@@ -39,7 +45,7 @@ int		exe_child_built(char **args, char **envp, int errfd);
 
 int		setup_pipeline(t_list *cmd_lst);
 
-int	exend(int exit_no, int errfd, t_list *cmd_lst);
+int	exend(int exit_no, int errfd, char *err_msg, t_list *cmd_lst);
 
 int		waitcmd(t_body *minishell);
 #endif

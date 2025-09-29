@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:28:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 20:45:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void	cleanup(t_body *minishell)
 	{
 		shell_lstclear(&(minishell->cmd_lst), shell_lstdelcmd);
 		minishell->cmd_lst = NULL;
+	}
+	if (minishell->err_fd)
+	{
+		free(minishell->err_fd);
+		minishell->err_fd = NULL;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:31:17 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 16:29:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	*shell_memmove(void *dest, void *src, void *mask, size_t n)
 	src_tmp = (unsigned char *) src;
 	dst_tmp = (unsigned char *) dest;
 	if (dst_tmp > src_tmp)
-		iq_movedown((char *) dst_tmp, (char *) src_tmp, (char *) mask, n);
+		iq_movedn((char *) dst_tmp, (char *) src_tmp, (char *) mask, n);
 	else
 		iq_moveup((char *) dst_tmp, (char *) src_tmp, (char *) mask, n);
 	return (dest);

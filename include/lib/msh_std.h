@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:11:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 20:24:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_body
 	struct termios	orig_term;
 	int				interactive;
 	int				line;
-	int				err_fd;
+	int				*err_fd;
 	int				exit_no;
 	const char		*exit_ft;
 	char			**envp;

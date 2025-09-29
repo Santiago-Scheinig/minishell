@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:25:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/29 20:37:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ static int	token_heredoc(t_token *aux, t_token *next, t_body *msh)
 			redirend(NULL, msh->exit_no);
 			return (MSHELL_SUCCESS);
 		}
+		sigign();
 		aux->heredoc = heredoc_dup(next, fd, msh);
+		sigint();//forcend
+		sigquit();//forcend
 		if (aux->heredoc == -1)
 		{
 			msh->exit_no = MSHELL_FAILURE;
@@ -119,6 +122,8 @@ int	parser_token(t_body *msh, char **split)
 
 	i = -1;
 	msh->token_lst = NULL;
+	if (!split[0])
+		return (MSHELL_SUCCESS);
 	while (split[++i])
 	{
 		new_token = token_dup(split[i]);
