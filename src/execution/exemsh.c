@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 20:03:45 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/27 14:42:24 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,18 @@ static int	child_cmd(t_list *envp_lst, char **argv, char **envp)
 	return (-1);
 }
 
+/**
+ * Executes the appropriate built-in shell command based on the
+ * command name.
+ * Calls the corresponding function for commands like export, cd, env, pwd,
+ * echo, exit, unset, and unexport(envp not exported).
+ *
+ * @param cmds An array of the comands to execute.
+ * @param envp A linked list node containing environment variable data.
+ * @return Returns a -1 if there is not execution inside, else exit with 0 if
+ * the executed comand works, and 1 or 2 in case an error inside of the
+ * commands.
+ */
 int	exe_child_built(char **args, char **envp)
 {
 	t_list	*envp_lst;
@@ -89,18 +101,13 @@ int	exe_child_built(char **args, char **envp)
  * Calls the corresponding function for commands like export, cd, env, pwd,
  * echo, exit, unset, and unexport(envp not exported).
  *
+ * @param exe Pointer to the struct of commands.
  * @param minishell Pointer to the main shell structure containing environment
  * variables.
- * @param exe Pointer to the struct of commands.
  * @param envp_lst pointer to the struct of exported enviroments.
  * @param envp A linked list node containing environment variable data.
  * @return Returns a -1 if there is not execution inside, 0 if the executed
  * comand works, and 1 or 2 in case an error inside of the commands.
- * @exception if the command its executed bi a child not the father, the
- * return change for an exit finishing the child.
- *
- * @note This function assumes commands are matched by name and delegates
- * execution accordingly.
  */
 int	exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp)
 {

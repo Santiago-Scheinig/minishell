@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 19:01:38 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:05:11 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,19 +204,56 @@ char		*shell_strtrim(char const *s1, char const *mask, char const *set);
 void		*shell_memmove(void *dest, void *src, void *mask, size_t n);
 
 /**
- * COMMENT PENDING ISMA
+ * Frees the t_var content stored in a list node and then frees the node.
+ * 
+ * @param list Pointer to the list node containing a t_var structure as
+ *		content.
+ * @param del  Function used to free allocated memory for each member and
+ * 		structures.
+ * 
+ * This function extracts the t_var structure from the provided list node,
+ * frees the name and value strings if present, frees the t_var structure
+ * itself, and finally frees the list node using the provided del function.
+ * 
+ * @note - The del function is expected to behave like free(void *).
+ * @note - After calling this function the provided node and its content must
+ * 		not be accessed.
  */
-void		shell_lstdelvar(t_list *list, void (*del)(void *));
+void	shell_lstdelvar(t_list *list, void (*del)(void *))
 
 /**
- * COMMENT PENDING ISMA
+ * Duplicates the process environment array and adjusts SHLVL if present.
+ * 
+ * @param envp Null-terminated array of environment strings from the parent
+ * 		process.
+ * 
+ * Creates and returns a newly allocated copy of envp. If a "SHLVL=" entry is
+ * found the function attempts to increment its numeric value; if the existing
+ * value is invalid it sets SHLVL to 1 in the duplicated array.
+ * 
+ * @return Newly allocated null-terminated array of strings, or NULL on
+ * 		allocation failure.
+ * @note - Caller is responsible for freeing the returned array
+ * 		(each string and the array).
+ * @note - On allocation failure any partial allocations are freed before
+ * 		returning NULL.
  */
-char		**shell_envpdup(const char **envp);
+char	**shell_envpdup(const char **envp)
 
 /**
- * COMMENT PENDING ISMA
+ * Builds a linked list of t_var nodes from a null-terminated envp array.
+ *
+ * @param envp Null-terminated array of environment strings.
+ *
+ * Iterates envp, creates a t_var for each entry and appends it to a new list.
+ * On allocation failure the function frees any previously allocated nodes and
+ * returns NULL.
+ *
+ * @return Pointer to the head of the newly created list on success, or NULL on
+ * 		failure.
+ * @note Caller owns the returned list and must free it with shell_lstdelvar.
  */
-t_list		*shell_newlst_var(char **envp);
+t_list	*shell_newlst_var(char **envp)
 
 /**
  * COMMENT PENDING ISMA
@@ -229,13 +266,45 @@ char		**shell_pmtstr(t_list *envp);
 char		*shell_pmtexp(t_list *envp);
 
 /**
- * COMMENT PENDING ISMA
+ * Retrieves the value of an environment variable from the variable list.
+ * 
+ * @param lst_var Pointer to the linked list of environment variables
+ * 		(t_var nodes).
+ * @param name Name of the environment variable to find
+ * 		(null-terminated string).
+ * 
+ * Searches the sorted variable list for a node whose name matches [name].
+ * If found and the variable has a non-empty value, returns a pointer to that value.
+ * The returned pointer refers to the string owned by the list node (do not free).
+ * 
+ * @return Pointer to the value string, or NULL if the variable is not found
+ *         or its value is empty.
+ * @note - The function sorts a temporary copy of the list pointer before
+ * 			searching.
+ * @note - Caller must not modify or free the returned pointer.
  */
-char		*shell_getenv(t_list *lst_var, const char *name);
+char	*shell_getenv(t_list *lst_var, const char *name)
 
 /*--------------------------------------------------------------------------*/
 /*--------------------------------SHELL UTILS-------------------------------*/
 /*--------------------------------------------------------------------------*/
+
+/**
+ * Creates a new t_var node from an environment string.
+ *
+ * @param envp Environment string in the form "NAME" or "NAME=VALUE".
+ * @param export Integer flag indicating whether the variable is exported (1)
+ * 		or not (0).
+ *
+ * Allocates a t_var structure and fills its name and value by parsing envp.
+ * Sets the exported flag according to the provided parameter.
+ *
+ * @return Pointer to the newly created t_var on success, or NULL on allocation
+ * 		failure.
+ * @note Returned structure must be freed by the caller
+ * 		(use shell_lstdelvar or equivalent).
+ */
+t_var	*create_envp(const char *envp, int export)
 
 /**
  * Frees every pointer on an ARRAY of STRINGS and the ARRAY pointer, even

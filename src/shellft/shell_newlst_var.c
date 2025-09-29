@@ -6,22 +6,19 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 14:48:40 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 18:31:13 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:07:14 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
-/**
- * COMMENT PENDING ISMA
- */
 static t_var	*init_envp(t_var *new, const char *envp, char *sign, int i)
 {
 	new->name = ft_substr(envp, 0, i);
 	if (!new->name)
 	{
 		free(new);
-		return (NULL);//forcend
+		return (NULL);
 	}
 	if (!sign)
 	{
@@ -33,13 +30,25 @@ static t_var	*init_envp(t_var *new, const char *envp, char *sign, int i)
 	{
 		free(new->name);
 		free(new);
-		return (NULL);//forcend
+		return (NULL);
 	}
 	return (new);
 }
 
 /**
- * COMMENT PENDING ISMA
+ * Creates a new t_var node from an environment string.
+ *
+ * @param envp Environment string in the form "NAME" or "NAME=VALUE".
+ * @param export Integer flag indicating whether the variable is exported (1)
+ * 		or not (0).
+ *
+ * Allocates a t_var structure and fills its name and value by parsing envp.
+ * Sets the exported flag according to the provided parameter.
+ *
+ * @return Pointer to the newly created t_var on success, or NULL on allocation
+ * 		failure.
+ * @note Returned structure must be freed by the caller
+ * 		(use shell_lstdelvar or equivalent).
  */
 t_var	*create_envp(const char *envp, int export)
 {
@@ -62,7 +71,17 @@ t_var	*create_envp(const char *envp, int export)
 }
 
 /**
- * COMMENT PENDING ISMA
+ * Builds a linked list of t_var nodes from a null-terminated envp array.
+ *
+ * @param envp Null-terminated array of environment strings.
+ *
+ * Iterates envp, creates a t_var for each entry and appends it to a new list.
+ * On allocation failure the function frees any previously allocated nodes and
+ * returns NULL.
+ *
+ * @return Pointer to the head of the newly created list on success, or NULL on
+ * 		failure.
+ * @note Caller owns the returned list and must free it with shell_lstdelvar.
  */
 t_list	*shell_newlst_var(char **envp)
 {
@@ -82,7 +101,7 @@ t_list	*shell_newlst_var(char **envp)
 			shell_lstclear(&head, shell_lstdelvar);
 			return (NULL);
 		}
-		new_node = ft_lstnew(content);//falta liberar
+		new_node = ft_lstnew(content);
 		if (!new_node)
 		{
 			shell_lstclear(&head, shell_lstdelvar);
