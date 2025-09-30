@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 20:48:13 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 21:28:07 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,6 @@ int	execmd(t_body *msh)
 		path = exe_setup(msh);
 		if (!path)
 			return (MSHELL_FAILURE);
-		i = -1;
 		while (cmd_lst)
 		{
 			++i;
@@ -150,11 +149,13 @@ int	execmd(t_body *msh)
 			exe_next = NULL;
 			if (cmd_lst->next)
 				exe_next = (t_cmd *) cmd_lst->next->content;
-			//save last cmd;
+			//save last cmd
 			msh->err_fd[i] = exe_child(cmd_lst, path, &(msh->childs_pid[i]), msh->envp);
 			cmd_lst = cmd_lst->next;
 		}
 		ft_split_free(path);
 	}
+	else
+		msh->exit_no = i;
 	return (MSHELL_SUCCESS);
 }

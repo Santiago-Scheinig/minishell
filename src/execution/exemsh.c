@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 20:33:27 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 21:38:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	exe_child_built(char **args, char **envp, int errfd)
 	num = 0;
 	if (args)
 	{
-		envp_lst = shell_newlst_var(envp);
+		envp_lst = shell_newlst_var(envp);///this is generating leaks, cuz u are allocating on a child, but never freeing it
 		if (!envp_lst)
 			exend(MSHELL_FAILURE, errfd, "msh: malloc: ", NULL);
 		num = child_cmd(envp_lst, args, envp);
@@ -118,7 +118,7 @@ int	exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp)
 
 	i = 0;
 	num = -1;
-	if (exe->argv && exe->outfd > 2)
+	if (exe->outfd > 2)
 	{
 		i = dup(STDOUT_FILENO);
 		if (dup2(exe->outfd, STDOUT_FILENO) == -1)

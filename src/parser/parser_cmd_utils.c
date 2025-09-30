@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:28:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 21:20:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,6 @@ static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
 {
 	if (new->outfd > 2)
 		close(new->outfd);
-	if (!access(next->str, F_OK))
-		if (access(next->str, W_OK))
-			return (redirend(next->str, MSHELL_FAILURE));
 	new->outfd = open(next->str, O_WRONLY | O_CREAT | open_flag, 0644);
 	if (new->outfd < 0)
 		return (redirend(next->str, MSHELL_FAILURE));

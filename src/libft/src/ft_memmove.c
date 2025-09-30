@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 19:32:51 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 18:31:44 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 			n--;
 			dst_tmp[n] = src_tmp[n];
 		}
+		return (dest);
 	}
 	while (i < n)
 	{

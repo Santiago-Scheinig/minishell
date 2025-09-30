@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 18:35:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 18:53:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 20:41:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	heredoc_dup(t_token *limit, int heredoc_fd[2], t_body *msh)
 	shell_memmove(limit->str, limit->str, limit->mask, strlen);
 	while (1 && ++msh->line)
 	{
-		if (write(1, "> ", 2) == -1)
+		if (msh->interactive && write(1, "> ", 2) == -1)
 			return (hdoc_end(limit->str, "write", heredoc_fd, msh));
 		line = get_next_line(STDIN_FILENO);
 		if (!line)

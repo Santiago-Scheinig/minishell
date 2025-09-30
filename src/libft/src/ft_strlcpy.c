@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 19:26:08 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:02:20 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 19:06:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	src_len;
 
+	if (!dst || !src)
+		return (0);
 	src_len = ft_strlen(src);
 	if (size >= src_len + 1)
 		ft_memmove(dst, src, src_len + 1);
-	else if (size != 0)
+	else if (dst && size != 0)
 	{
 		ft_memmove(dst, src, size - 1);
 		dst[size - 1] = 0;

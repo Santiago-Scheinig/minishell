@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 17:08:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 21:30:35 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	parser_prompt(t_body *msh)
  */
 static void	parser_input(t_body *msh)
 {
+	char	*tmp;
 	int		save_out;
 
 	if (msh->interactive && isatty(STDOUT_FILENO))
@@ -79,16 +80,20 @@ static void	parser_input(t_body *msh)
 	}
 	else
 	{
-		msh->input = ft_strtrim(get_next_line(STDIN_FILENO), "\n");
-		if (errno == ENOMEM)
+		tmp = get_next_line(STDIN_FILENO);
+		if (!tmp && errno == ENOMEM)
 			forcend(msh, "malloc", MSHELL_FAILURE);
-		else if (errno)
+		else if (!tmp && errno)
 			forcend(msh, "read", MSHELL_FAILURE);
+		msh->input = ft_strtrim(tmp, "\n");
+		if (tmp)
+			free(tmp);
 		msh->line++;
 	}
 	if (msh->input && !msh->input[0])
 	{
 		free(msh->input);
+		msh->input = NULL;
 		parser_input(msh);
 	}
 }
@@ -120,7 +125,7 @@ int	parser(t_body *msh)
 
 	cleanup(msh);
 	parser_input(msh);
-	if (msh->input == NULL)
+	if (!msh->input)
 		msh_exit(NULL, msh);
 	if (msh->interactive && msh->input[0] != '\0')
 		add_history(msh->input);

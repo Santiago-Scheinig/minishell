@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 20:02:33 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 20:50:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,18 @@ char	*exp_mask(char *str, char *mask, int start, t_envar_pair len)
 	if (!len.val)
 	{
 		aux_start = start + len.var;
-		aux_len = ft_strlen(&(mask[start])) + 1;
-		ft_memmove(&(mask[start]), &(mask[aux_start]), aux_len);
+		aux_len = ft_strlen(&(mask[aux_start]));
+		ft_memmove(&(mask[start]), &(mask[aux_start]), aux_len + 1);
 		return (mask);
 	}
 	aux_len = len.val - len.var + ft_strlen(str);
+	if (len.val < len.var)
+		aux_len = len.var - len.val + ft_strlen(str);
 	new_mask = ft_calloc(aux_len + 1, sizeof(char));
 	if (!new_mask)
 		return (NULL);
+	ft_strlcpy(new_mask, mask, aux_len);
 	aux_len = ft_strlen(str);
-	ft_strlcpy(new_mask, mask, ft_strlen(mask) + 1);
 	memset(&new_mask[start], mask[start], aux_len);
 	aux_start = start + aux_len;
 	aux_mask = &(mask[start + len.var]);

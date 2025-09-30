@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:43:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:02:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 18:40:03 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ static int	ft_istrim(char c, char const *set)
 {
 	int	i;
 
-	i = 0;
-	while (set[i])
-		if (set[i++] == c)
+	i = -1;
+	while (set[++i])
+		if (set[i] == c)
 			return (1);
 	return (0);
 }
@@ -49,7 +49,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		return (ft_strdup(""));
 	while (ft_istrim(s1[s1_len + i - 1], set))
 		s1_len--;
-	tmp = ft_calloc(s1_len + 1, 1);
+	tmp = ft_calloc(s1_len + 1, sizeof(char));
 	if (!tmp)
 		return (NULL);
 	ft_strlcat(tmp, &s1[i], s1_len + 1);

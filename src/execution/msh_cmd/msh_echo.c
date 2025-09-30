@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 21:41:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/09/30 21:26:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,16 @@ void	msh_echo(char **args)
 	}
 	while (args[i])
 	{
-		if (write(1, args[i], ft_strlen(args[i])) == -1)
+		if (write(STDOUT_FILENO, args[i], ft_strlen(args[i])) == -1)
 		{
 			return (perror("msh: write error"));
 		}
 		if (args[i + 1])
-			if (write(1, " ", 1) == -1)
+			if (write(STDOUT_FILENO, " ", 1) == -1)
 				return (perror("msh: write error"));
 		i++;
 	}
 	if (new_line)
-		if (write(1, "\n", 1) == -1)
+		if (write(STDOUT_FILENO, "\n", 1) == -1)
 			return (perror("msh: write error"));
 }
