@@ -6,65 +6,61 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/30 21:38:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/03 21:25:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
 #include "msh_cmd.h"
 
-static int	msh_cmd(t_cmd *exe, t_body *msh, t_list *envp_lst, char ***envp)
+static int	get_bicmd(char *cmd)
 {
-	if (!ft_strncmp(exe->argv[0], "export", 7))
-		return (msh_export(envp, &envp_lst, &(exe->argv[1])));
-	else if (!ft_strncmp(exe->argv[0], "cd", 3))
-		return (msh_cd(exe->argv, &envp_lst));
-	else if (!ft_strncmp(exe->argv[0], "env", 4))
-		return (msh_env(exe->argv, *envp));
-	else if (!ft_strncmp(exe->argv[0], "pwd", 4))
-		return (msh_pwd(exe->argv, envp_lst));
-	else if (!ft_strncmp(exe->argv[0], "echo", 5))
-	{
-		msh_echo(exe->argv);
-		return (0);
-	}
-	else if (!ft_strncmp(exe->argv[0], "unset", 6))
-		return (msh_unset(envp, &envp_lst, &(exe->argv[1])));
-	else if (!ft_strncmp(exe->argv[0], "exit", 5))
-	{
-		msh_exit(exe->argv, msh);
-		return (1);
-	}
-	else if (ft_strchr(exe->argv[0], '='))
-		return (msh_import(envp, &envp_lst, exe->argv));
-	return (-1);
+	if (!cmd)
+		return (BICMD_NOEXE);
+	if (!ft_strncmp(cmd, "export", 7))
+		return (BICMD_EXPORT);
+	else if (!ft_strncmp(cmd, "cd", 3))
+		return (BICMD_CD);
+	else if (!ft_strncmp(cmd, "env", 4))
+		return (BICMD_ENV);
+	else if (!ft_strncmp(cmd, "pwd", 4))
+		return (BICMD_PWD);
+	else if (!ft_strncmp(cmd, "echo", 5))
+		return (BICMD_ECHO);
+	else if (!ft_strncmp(cmd, "unset", 6))
+		return (BICMD_UNSET);
+	else if (!ft_strncmp(cmd, "exit", 5))
+		return (BICMD_EXIT);
+	else if (ft_strchr(cmd, '='))
+		return (BICMD_IMPORT);
+	return (BICMD_NOEXE);
 }
 
-static int	child_cmd(t_list *envp_lst, char **argv, char **envp)
+static int	bicmd(t_bicmd name, t_cmd *exe, t_body *msh)
 {
-	if (!ft_strncmp(argv[0], "export", 7))
-		return (msh_export(&envp, &envp_lst, &argv[1]));
-	else if (!ft_strncmp(argv[0], "cd", 3))
-		return (msh_cd(argv, &envp_lst));
-	else if (!ft_strncmp(argv[0], "env", 4))
-		return (msh_env(argv, envp));
-	else if (!ft_strncmp(argv[0], "pwd", 4))
-		return (msh_pwd(argv, envp_lst));
-	else if (!ft_strncmp(argv[0], "echo", 5))
+	if (name == BICMD_EXPORT)
+		return (msh_export(&(msh->envp), &(msh->envp_lst), &(exe->argv[1])));
+	else if (name == BICMD_CD)
+		return (msh_cd(exe->argv, &(msh->envp_lst)));
+	else if (name == BICMD_ENV)
+		return (msh_env(exe->argv, msh->envp));
+	else if (name == BICMD_PWD)
+		return (msh_pwd(exe->argv, msh->envp_lst));
+	else if (name == BICMD_ECHO)
 	{
-		msh_echo(argv);
-		return (0);
+		msh_echo(exe->argv);//Hay que cambiar esto porque echo puede fallar
+		return (MSHELL_SUCCESS);
 	}
-	else if (!ft_strncmp(argv[0], "unset", 6))
-		return (msh_unset(&envp, &envp_lst, &argv[1]));
-	else if (!ft_strncmp(argv[0], "exit", 5))
+	else if (name == BICMD_UNSET)
+		return (msh_unset(&(msh->envp), &(msh->envp_lst), &(exe->argv[1])));
+	else if (name == BICMD_EXIT)
 	{
-		msh_exit(argv, NULL);
-		return (1);
+		msh_exit(exe->argv, msh);//Hay que cambiar esto para que devuelva -1 si falla
+		return (MSHELL_FAILURE);
 	}
-	else if (ft_strchr(argv[0], '='))
-		return (msh_import(&envp, &envp_lst, argv));
-	return (-1);
+	else if (name == BICMD_IMPORT)
+		return (msh_import(&(msh->envp), &(msh->envp_lst), exe->argv));
+	return (MSHELL_FAILURE);
 }
 
 /**
@@ -79,22 +75,28 @@ static int	child_cmd(t_list *envp_lst, char **argv, char **envp)
  * the executed comand works, and 1 or 2 in case an error inside of the
  * commands.
  */
-int	exe_child_built(char **args, char **envp, int errfd)
+int	child_bicmd(t_cmd *exe, char **envp)
 {
-	t_list	*envp_lst;
+	t_body	msh;
 	int		num;
 
-	num = 0;
-	if (args)
+	num = get_bicmd(exe->argv[0]);
+	if (num)
 	{
-		envp_lst = shell_newlst_var(envp);///this is generating leaks, cuz u are allocating on a child, but never freeing it
-		if (!envp_lst)
-			exend(MSHELL_FAILURE, errfd, "msh: malloc: ", NULL);
-		num = child_cmd(envp_lst, args, envp);
-		if (num != -1)
-			exit(num);
+		ft_memset(&msh, 0, sizeof(t_body));
+		msh.envp = envp;
+		if (num == BICMD_CD || num == BICMD_EXPORT || num == BICMD_PWD
+			|| num == BICMD_UNSET || num == BICMD_IMPORT)
+		{
+			msh.envp_lst = shell_newlst_var(envp);
+			if (!msh.envp_lst)
+				exend(MSHELL_FAILURE, "msh: malloc: ", NULL);
+		}
+		num = bicmd(num, exe, &msh);
+		cleanup(&msh);
+		exit(num);
 	}
-	return (MSHELL_SUCCESS);
+	return (MSHELL_FAILURE);
 }
 
 /**
@@ -111,13 +113,17 @@ int	exe_child_built(char **args, char **envp, int errfd)
  * @return Returns a -1 if there is not execution inside, 0 if the executed
  * comand works, and 1 or 2 in case an error inside of the commands.
  */
-int	exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp)
+int	father_bicmd(t_cmd *exe, t_body *minishell)
 {
 	int	num;
 	int	i;
 
 	i = 0;
 	num = -1;
+	if (exe->argv)
+		num = get_bicmd(exe->argv[0]);
+	if (!num)
+		return (MSHELL_FAILURE);
 	if (exe->outfd > 2)
 	{
 		i = dup(STDOUT_FILENO);
@@ -127,14 +133,14 @@ int	exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp)
 			return (MSHELL_FAILURE);
 		}
 		close(exe->outfd);
-		num = msh_cmd(exe, minishell, envp_lst, envp);
+		num = bicmd(num, exe, minishell);
 		if (dup2(i, STDOUT_FILENO) == -1)
 		{
 			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
 			return (MSHELL_FAILURE);
 		}
 	}
-	else if (exe->argv)
-		num = msh_cmd(exe, minishell, envp_lst, envp);
+	else
+		num = bicmd(num, exe, minishell);
 	return (num);
 }

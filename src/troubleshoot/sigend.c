@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:54:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 18:48:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/03 21:31:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ void	new_prompt(int signum)
 	rl_redisplay();
 }
 
+void	set_flag(int signum)
+{
+	(void)signum;
+	g_signal_received = 1;
+}
+
 /**
  * Installs signal handlers that ignore SIGINT and SIGQUIT.
  * 
@@ -69,6 +75,23 @@ int	sigign(void)
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
 		perror("Error setting SIGINT handler");
+		return (MSHELL_FAILURE);
+	}
+	return (MSHELL_SUCCESS);
+}
+
+int signint(void)
+{
+	struct sigaction	sa_int;
+
+	sa_int.sa_handler = set_flag;
+	sigemptyset(&sa_int.sa_mask);
+	sigaddset(&sa_int.sa_mask, SIGQUIT);
+	sigaddset(&sa_int.sa_mask, SIGINT);
+	sa_int.sa_flags = SA_RESTART;
+	if (sigaction(SIGINT, &sa_int, NULL) == -1)
+	{
+		perror("Error setting SIGINT handler");//not sure this should print like this
 		return (MSHELL_FAILURE);
 	}
 	return (MSHELL_SUCCESS);

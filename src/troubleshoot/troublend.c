@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/30 21:29:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/03 21:33:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 
 void	cleanup(t_body *minishell)
 {
+	if (!minishell->interactive && g_signal_received)
+	{
+		g_signal_received = 0;
+		forcend(minishell, NULL, MSHELL_SUCCESS);
+	}
 	if (minishell->childs_pid)
 	{
 		free(minishell->childs_pid);

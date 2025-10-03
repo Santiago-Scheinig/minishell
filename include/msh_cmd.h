@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/27 15:05:27 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/03 19:24:48 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,19 @@
 
 # include "lib/msh_std.h"
 # include "lib/msh_tsh.h"
+
+typedef enum e_bicmd
+{
+	BICMD_NOEXE,
+	BICMD_CD,
+	BICMD_PWD,
+	BICMD_ENV,
+	BICMD_ECHO,
+	BICMD_IMPORT,
+	BICMD_EXPORT,
+	BICMD_UNSET,
+	BICMD_EXIT,
+}	t_bicmd;
 
 t_var	*add_env(t_var *head, char *new_env);
 

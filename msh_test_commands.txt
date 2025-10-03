@@ -95,7 +95,6 @@ echo $TEST_VAR
 export TEMPX=to_be_unset
 unset TEMPX
 echo "after_unset_TEMPX:$TEMPX"
-for i in 1 2 3 4 5 6 7 8 9 10; do printf "%s\n" "line-$i"; done > large_test.txt
 cat large_test.txt | wc -l
 ls -l msh_test_out.txt fruits.txt apples_count.txt numbers.txt append_test.txt combo.txt heredoc_out.txt heredoc_wc.txt alphabets.txt pipeline_msg.txt chaining_out.txt large_test.txt
 cat <<H1 | grep line > heredoc_pipe_out.txt

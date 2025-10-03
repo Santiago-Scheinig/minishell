@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 20:22:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/03 20:10:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,39 @@ char	**setup_path(const char **envp);
 
 void	fd_endexe(t_list *cmd_lst, pid_t child);
 
-int		exe_built(t_cmd *exe, t_body *minishell, t_list *envp_lst, char ***envp);
+/**
+ * Executes the appropriate built-in shell command based on the
+ * command name.
+ * Calls the corresponding function for commands like export, cd, env, pwd,
+ * echo, exit, unset, and unexport(envp not exported).
+ *
+ * @param exe Pointer to the struct of commands.
+ * @param minishell Pointer to the main shell structure containing environment
+ * variables.
+ * @param envp_lst pointer to the struct of exported enviroments.
+ * @param envp A linked list node containing environment variable data.
+ * @return Returns a -1 if there is not execution inside, 0 if the executed
+ * comand works, and 1 or 2 in case an error inside of the commands.
+ */
+int		father_bicmd(t_cmd *exe, t_body *minishell);
 
-int		exe_child_built(char **args, char **envp, int errfd);
+/**
+ * Executes the appropriate built-in shell command based on the
+ * command name.
+ * Calls the corresponding function for commands like export, cd, env, pwd,
+ * echo, exit, unset, and unexport(envp not exported).
+ *
+ * @param cmds An array of the comands to execute.
+ * @param envp A linked list node containing environment variable data.
+ * @return Returns a -1 if there is not execution inside, else exit with 0 if
+ * the executed comand works, and 1 or 2 in case an error inside of the
+ * commands.
+ */
+int		child_bicmd(t_cmd *exe, char **envp);
 
 int		setup_pipeline(t_list *cmd_lst);
 
-int	exend(int exit_no, int errfd, char *err_msg, t_list *cmd_lst);
+int		exend(int exit_no, char *err_msg, t_list *cmd_lst);
 
 int		waitcmd(t_body *minishell);
 #endif

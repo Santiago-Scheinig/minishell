@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 14:51:38 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:35:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/03 19:35:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	msh_exit(char **args, t_body *minishell)
 	int	i;
 
 	i = 0;
-	if (minishell->interactive)
+	if (minishell && minishell->interactive)
 		write(1, "exit\n", 5);
 	if ((args && args[1] && args[2]))
 	{

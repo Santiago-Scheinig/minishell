@@ -6,13 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/30 21:28:07 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/03 20:51:09 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
 
-static void	exe_child_binary(char **argv, char **envp, char **path, int errfd)
+static void	child_cmd(char **argv, char **envp, char **path)
 {
 	char	*tmp;
 	char	*pathname;
@@ -21,24 +21,24 @@ static void	exe_child_binary(char **argv, char **envp, char **path, int errfd)
 	i = -1;
 	if (ft_strchr(argv[0], '/'))
 		if (execve(argv[0], argv, envp))
-			exend(MSHELL_FAILURE, errfd, "msh: execve: ", NULL);
+			exend(MSHELL_FAILURE, "msh: execve: ", NULL);
 	while (path[++i])
 	{
 		tmp = ft_strjoin(path[i], "/");
 		if (!tmp)
-			exend(MSHELL_FAILURE, errfd, "msh: malloc: ", NULL);
+			exend(MSHELL_FAILURE, "msh: malloc: ", NULL);
 		pathname = ft_strjoin(tmp, argv[0]);
 		free(tmp);
 		if (!pathname)
-			exend(MSHELL_FAILURE, errfd, "msh: malloc: ", NULL);
+			exend(MSHELL_FAILURE, "msh: malloc: ", NULL);
 		if (execve(pathname, argv, envp))
 		{
 			free(pathname);
 			if (errno == EACCES)
-				exend(MSHELL_CMD_INVEXE, errfd, NULL, NULL);
+				exend(MSHELL_CMD_INVEXE, NULL, NULL);
 		}
 	}
-	exend(MSHELL_CMD_NOTEXE, errfd, NULL, NULL);
+	exend(MSHELL_CMD_NOTEXE, NULL, NULL);
 }
 
 static char	**exe_setup(t_body *minishell)
@@ -73,17 +73,13 @@ static char	**exe_setup(t_body *minishell)
 	return (path);
 }
 
-int	exend(int exit_no, int errfd, char *err_msg, t_list *cmd_lst)
+int	exend(int exit_no, char *err_msg, t_list *cmd_lst)
 {
-	if (err_msg)
-	{
-		write(errfd, err_msg, ft_strlen(err_msg));
-		err_msg = strerror(errno);
-		write(errfd, err_msg, ft_strlen(err_msg));
-	}
+	write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
+	err_msg = strerror(errno);
+	write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
 	if (cmd_lst)
 		fd_endexe(cmd_lst, 0);
-	close(errfd);
 	if (errno == ENOENT)
 		exit(MSHELL_CMD_NOTEXE);
 	else if (errno == EACCES || errno == EPERM || errno == ENOEXEC)
@@ -97,11 +93,13 @@ static void	exe_init(int errfd[2], t_cmd *exe, t_list *cmd_lst)
 {
 	close(errfd[0]);
 	sigdfl();
+	dup2(errfd[1], STDERR_FILENO);
 	if (!exe->argv || !exe->argv[0])
-		exend(MSHELL_SUCCESS, errfd[1], NULL, cmd_lst);
+		exend(MSHELL_SUCCESS, NULL, cmd_lst);
 	if (dup2(exe->infd, STDIN_FILENO) == -1
 		|| dup2(exe->outfd, STDOUT_FILENO) == -1)
-		exend(MSHELL_FAILURE, errfd[1], "msh: dup2: ", cmd_lst);
+		exend(MSHELL_FAILURE, "msh: dup2: ", cmd_lst);
+	close(errfd[1]);
 	fd_endexe(cmd_lst, 0);
 }
 
@@ -117,8 +115,8 @@ static int	exe_child(t_list *cmd_lst, char **path, pid_t *child, char **envp)
 	{
 		exe = (t_cmd *) cmd_lst->content;
 		exe_init(errfd, exe, cmd_lst);
-		if (!exe_child_built(exe->argv, envp, errfd[1]))
-			exe_child_binary(exe->argv, envp, path, errfd[1]);
+		if (child_bicmd(exe, envp))
+			child_cmd(exe->argv, envp, path);
 	}
 	close(errfd[1]);
 	fd_endexe(cmd_lst, 1);
@@ -136,9 +134,10 @@ int	execmd(t_body *msh)
 	i = -1;
 	cmd_lst = msh->cmd_lst;
 	if (!cmd_lst->next)
-		i = exe_built((t_cmd *)cmd_lst->content, msh, msh->envp_lst, &msh->envp);
-	if (i == -1)
+		i = father_bicmd((t_cmd *) cmd_lst->content, msh);
+	if (i)
 	{
+		i = -1;
 		path = exe_setup(msh);
 		if (!path)
 			return (MSHELL_FAILURE);

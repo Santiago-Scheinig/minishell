@@ -74,6 +74,8 @@ static void	init_term(t_body *msh)
 		if (sigquit() || sigint())
 			forcend(msh, "sigaction", MSHELL_FAILURE);
 	}
+	else if (signint())
+		forcend(msh, "sigaction", MSHELL_FAILURE);
 }
 
 int	main(int argc, char **argv, const char **envp)
