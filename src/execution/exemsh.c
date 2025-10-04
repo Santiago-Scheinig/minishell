@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exemsh.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 16:31:20 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:21:47 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,23 @@ static int	bicmd(t_bicmd name, t_cmd *exe, t_body *msh)
 {
 	if (name == BICMD_EXPORT)
 	{
-		return (msh_export(&(msh->envp), &(msh->envp_lst), &(exe->argv[1])));
+		return (msh_export(&(msh->envp), &(msh->lst_t_var), &(exe->argv[1])));
 		
 	}
 	else if (name == BICMD_CD)
-		return (msh_cd(exe->argv, &(msh->envp_lst)));
+		return (msh_cd(exe->argv, &(msh->lst_t_var)));
 	else if (name == BICMD_ENV)
 		return (msh_env(exe->argv, msh->envp));
 	else if (name == BICMD_PWD)
-		return (msh_pwd(exe->argv, msh->envp_lst));
+		return (msh_pwd(exe->argv, msh->lst_t_var));
 	else if (name == BICMD_ECHO)
 		return (msh_echo(exe->argv));
 	else if (name == BICMD_UNSET)
-		return (msh_unset(&(msh->envp), &(msh->envp_lst), &(exe->argv[1])));
+		return (msh_unset(&(msh->envp), &(msh->lst_t_var), &(exe->argv[1])));
 	else if (name == BICMD_EXIT)
 		return (msh_exit(exe->argv, msh));
 	else if (name == BICMD_IMPORT)
-		return (msh_import(&(msh->envp), &(msh->envp_lst), exe->argv));
+		return (msh_import(&(msh->envp), &(msh->lst_t_var), exe->argv));
 	return (MSHELL_FAILURE);
 }
 
@@ -95,8 +95,8 @@ int	child_bicmd(t_cmd *exe, char **envp)
 		if (num == BICMD_CD || num == BICMD_EXPORT || num == BICMD_PWD
 			|| num == BICMD_UNSET || num == BICMD_IMPORT)
 		{
-			msh.envp_lst = shell_newlst_var(envp);
-			if (!msh.envp_lst)
+			msh.lst_t_var = shell_newlst_var(envp);
+			if (!msh.lst_t_var)
 				exend(MSHELL_FAILURE, "msh: malloc: ", NULL);
 		}
 		num = bicmd(num, exe, &msh);
@@ -115,7 +115,7 @@ int	child_bicmd(t_cmd *exe, char **envp)
  * @param exe Pointer to the struct of commands.
  * @param minishell Pointer to the main shell structure containing environment
  * variables.
- * @param envp_lst pointer to the struct of exported enviroments.
+ * @param lst_t_var pointer to the struct of exported enviroments.
  * @param envp A linked list node containing environment variable data.
  * @return Returns a -1 if there is not execution inside, 0 if the executed
  * comand works, and 1 or 2 in case an error inside of the commands.

@@ -6,78 +6,84 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 19:08:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:30:27 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:18:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib/msh_std.h"
+#include "lib/msh_std_utils.h"
 
 /**
- * Searches for the first ocurrance of a space or an operator on a STRING.
- * 
- * @param s The STRING where to find the ocurrance.
- * @return A pointer to a position of the STRING with the first 
- * character ocurrance. If no ocurrance is found, returns NULL. 
- * @note This function will ignore any character coincidences that happen 
- * to be inside of single and double quotes (as long they open and close).
+ * @brief	Finds the next word delimiter or operator in a string.
+ *
+ * Scans the input string until a divisor token (space, pipe, or redirection)
+ * is found outside of quotes. Quoted substrings are skipped to ensure that
+ * delimiters within quotes are ignored.
+ *
+ * @param str	Input string to scan for the next word boundary.
+ *
+ * @return	Pointer to the first divisor character found, or NULL if none
+ *			exist outside quotes.
  */
-const char	*shell_word_strchr(const char *s)
+const char	*word_strchr(const char *str)
 {
 	const char	*tmp;
 	int			i;
 
 	i = 0;
 	tmp = NULL;
-	while (s[i] && !is_divisor((char *) &s[i]))
+	while (str[i] && !is_divisor((char *) &str[i]))
 	{
-		if (s[i] == '\'' && s[i + 1])
-			tmp = ft_strchr(&s[i + 1], '\'');
-		if (s[i] == '\"' && s[i + 1])
-			tmp = ft_strchr(&s[i + 1], '\"');
+		if (str[i] == '\'' && str[i + 1])
+			tmp = ft_strchr(&str[i + 1], '\'');
+		if (str[i] == '\"' && str[i + 1])
+			tmp = ft_strchr(&str[i + 1], '\"');
 		if (tmp)
 		{
-			s = tmp;
+			str = tmp;
 			i = 0;
 			tmp = NULL;
 		}
 		i++;
 	}
-	if (!s[i])
+	if (!str[i])
 		return (NULL);
-	return (&s[i]);
+	return (&str[i]);
 }
 
 /**
- * Searches for the first ocurrance of an operator on a STRING.
- * 
- * @param s The STRING where to find the ocurrance.
- * @return A pointer to a position of the STRING with the first 
- * character ocurrance. If no ocurrance is found, returns NULL. 
- * @note This function will ignore any character coincidences that happen
- * to be inside of single and double quotes (as long they open and close).
+ * @brief	Finds the next operator token in a string, skipping quoted text.
+ *
+ * Iterates through the given string until a shell operator (e.g. |, <, >, <<,
+ * >>) is found outside any quotes. Quoted substrings are fully skipped to
+ * avoid false positives.
+ *
+ * @param str	Input string to search for the next operator.
+ *
+ * @return	Pointer to the first operator character found, or NULL if no
+ *			operator exists outside quotes.
  */
-const char	*shell_operator_strchr(const char *s)
+const char	*operator_strchr(const char *str)
 {
 	const char	*tmp;
 	int			i;
 
 	i = 0;
 	tmp = NULL;
-	while (s[i] && !get_token_type((char *) &s[i]))
+	while (str[i] && !get_token_type((char *) &str[i]))
 	{
-		if (s[i] == '\'' && s[i + 1])
-			tmp = ft_strchr(&s[i + 1], '\'');
-		if (s[i] == '\"' && s[i + 1])
-			tmp = ft_strchr(&s[i + 1], '\"');
+		if (str[i] == '\'' && str[i + 1])
+			tmp = ft_strchr(&str[i + 1], '\'');
+		if (str[i] == '\"' && str[i + 1])
+			tmp = ft_strchr(&str[i + 1], '\"');
 		if (tmp)
 		{
-			s = tmp;
+			str = tmp;
 			i = 0;
 			tmp = NULL;
 		}
 		i++;
 	}
-	if (!s[i])
+	if (!str[i])
 		return (NULL);
-	return (&s[i]);
+	return (&str[i]);
 }

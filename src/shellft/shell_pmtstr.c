@@ -3,16 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   shell_pmtstr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:51:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 16:47:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 20:58:33 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
-static char	*shell_pwd(void)
+/**
+ * @brief Initializes the PWD environment variable with the current working
+ *        directory.
+ *
+ * Uses getcwd() to retrieve the current directory and creates a new string
+ * "PWD=<current_directory>".
+ *
+ * @note    Memory is allocated for the new string. Caller is responsible for
+ *          freeing it.
+ * @note    Frees the temporary getcwd() result after use.
+ *
+ * @return  Pointer to the newly allocated PWD string, or NULL on allocation
+ *          failure.
+ */
+static char	*pwd_init(void)
 {
 	char	*pwd;
 	char	*aux;
@@ -23,29 +37,59 @@ static char	*shell_pwd(void)
 	return (pwd);
 }
 
-
-
-static char	*shell_lastcmd(t_list *envp)
+/**
+ * @brief Initializes the last executed command environment variable (_).
+ *
+ * Retrieves the value of the "_" environment variable from lst_t_var.
+ * If it exists, creates a new string "_=<value>". Otherwise, sets it to
+ * the default "_=/minishell".
+ *
+ * @param lst_t_var	Pointer to the environment variable linked list
+ * 					(t_list of t_var).
+ *
+ * @note	Memory is allocated for the new string. Caller is responsible
+ *			for freeing it.
+ *
+ * @return	Pointer to the newly allocated last command string, or NULL
+ *			on allocation failure.
+ */
+static char	*lastcmd_init(t_list *lst_t_var)
 {
 	char	*last_cmd;
 	char	*aux;
 
-	aux = shell_getenv(envp, "_");
+	aux = shell_getenv(lst_t_var, "_");
 	if (!aux)
-		last_cmd = ft_strjoin("_=", "./minishell");
+		last_cmd = ft_strjoin("_=", "/minishell");
 	else
 		last_cmd = ft_strjoin("_=", aux);
 	return (last_cmd);
 }
 
-static char	*shell_ps1(t_list *envp)
+/**
+ * @brief Initializes or resets the PS1 environment variable.
+ *
+ * Searches the linked list of environment variables (lst_t_var) for "PS1".
+ * If found, frees its current value and sets it to the default prompt string
+ * "\\u:\\w\\$ ". If not found, returns a new string "PS1=\\u:\\w\\$ ".
+ *
+ * @param lst_t_var	Pointer to the environment variable linked list
+ * 					(t_list of t_var).
+ *
+ * @note	Memory is allocated for the new prompt string. Caller is responsible
+ *			for freeing it if needed.
+ * @note	Updates the existing t_var->value if PS1 exists.
+ *
+ * @return	Pointer to the new PS1 string, or NULL on allocation failure.
+ */
+static char	*ps1_init(t_list *lst_t_var)
 {
 	t_var	*tmp;
 	char	*ps1;
 
-	while (envp && envp->content)
+	while (lst_t_var && lst_t_var->content)
 	{
-		tmp = (t_var *)envp->content;
+		tmp = (t_var *)lst_t_var->content;
 		if (!ft_strncmp(tmp->name, "PS1", 3))
 		{
 			free(tmp->value);
@@ -55,40 +99,46 @@ static char	*shell_ps1(t_list *envp)
 			tmp->value = ps1;
 			return (ps1);
 		}
-		envp = envp->next;
+		lst_t_var = lst_t_var->next;
 	}
 	ps1 = ft_strjoin("PS1=", "\\u:\\w\\$ ");
 	return (ps1);
 }
 
 /**
- * Builds an array of strings used to initialize environment-related defaults.
- * 
- * @param envp Linked list of environment variables (t_var nodes).
- * 
- * Constructs and returns a newly allocated NULL-terminated array of strings
- * containing default or updated entries for PS1, PWD, _ and SHLVL.
- * 
- * @return Pointer to a newly allocated array of strings (terminated by NULL),
- *         or NULL on allocation failure.
- * @note - Caller is responsible for freeing each string and the array.
- * @note - On allocation failure this function returns NULL and may leave
- *         partial state in envp's list (PS1 may have been modified).
+ * @brief Creates an array of strings representing key shell prompt variables.
+ *
+ * Allocates an array of 5 strings and populates it with:
+ *   0: PS1 prompt string (from ps1_init)
+ *   1: Current working directory (from pwd_init)
+ *   2: Last executed command (from lastcmd_init)
+ *   3: SHLVL=1 string
+ *   4: NULL terminator
+ *
+ * @param lst_t_var	Pointer to the environment variable linked list
+ * 					(t_list of t_var).
+ *
+ * @note	Memory is allocated for both the array and each string. Caller
+ *			is responsible for freeing them.
+ * @note	Returns NULL if any allocation fails.
+ *
+ * @return Pointer to the dynamically allocated array of prompt-related strings,
+ *			or NULL on failure.
  */
-char	**shell_pmtstr(t_list *envp)
+char	**shell_pmtstr(t_list *lst_t_var)
 {
 	char	**ps;
 
 	ps = malloc(5 * sizeof(char *));
 	if (!ps)
 		return (NULL);
-	ps[0] = shell_ps1(envp);
+	ps[0] = ps1_init(lst_t_var);
 	if (!ps[0])
 		return (NULL);
-	ps[1] = shell_pwd();
+	ps[1] = pwd_init();
 	if (!ps[1])
 		return (NULL);
-	ps[2] = shell_lastcmd(envp);
+	ps[2] = lastcmd_init(lst_t_var);
 	if (!ps[2])
 		return (NULL);
 	ps[3] = ft_strjoin("SHLVL=", "1");

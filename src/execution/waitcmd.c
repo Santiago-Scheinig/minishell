@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   waitcmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:11:35 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:39:22 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:21:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,25 +107,24 @@ int	waitcmd(t_body *minishell)
 {
 	int		i;
 	int 	status;
-	t_list	*cmd_lst;
+	t_list	*lst_t_cmd;
 
 	i = -1;
-	cmd_lst = minishell->cmd_lst;
-	while (cmd_lst)
+	lst_t_cmd = minishell->lst_t_cmd;
+	while (lst_t_cmd)
 	{
 		if (minishell->childs_pid[++i] > 0)
 		{
 			if (waitpid(minishell->childs_pid[i], &status, 0) == -1)
 				perror("msh: waitpid");
-			//if (cmd isnt a shell)
-			minishell->exit_no = check_status(status, minishell->err_fd[i]);
+			minishell->exit_no = check_status(status, minishell->err_fd[i]);//no check status, only errpipe writing
 			if (minishell->exit_no == MSHELL_CMD_INVEXE
 				|| minishell->exit_no == MSHELL_CMD_NOTEXE)
-				print_status((t_cmd *) cmd_lst->content, minishell->exit_no);
+				print_status((t_cmd *) lst_t_cmd->content, minishell->exit_no);
 		}
-		cmd_lst = cmd_lst->next;
+		lst_t_cmd = lst_t_cmd->next;
 	}
 	if (minishell->interactive)
-		sigint();
+		shell_sigint();
 	return (MSHELL_SUCCESS);
 }

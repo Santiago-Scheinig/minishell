@@ -6,20 +6,28 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 16:29:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 20:46:38 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * Moves n bytes from a src VOID pointer into a dest VOID pointer, specific
- * when dst_tmp pointer is in a lower memory possition than src_tmp.
- * @param dst_tmp The VOID pointer where to move bytes into.
- * @param src_tmp The VOID pointer where to move bytes from.
- * @param len The amount of bytes to be moved.
- * @note Operators such as '\'' and '\"' are ignored, and as such, aren't
- * moved to dst. This mimics the quote removal behaivor from bash-shell.
+ * @brief Copies memory from src to dst upward, respecting a mask.
+ *
+ * Moves bytes from src_tmp to dst_tmp in forward order (from start to end)
+ * to handle overlapping memory regions safely. The src_mask array is used
+ * to skip or handle certain bytes marked as 'O'.
+ *
+ * @param dst_tmp	Pointer to the destination memory.
+ * @param src_tmp	Pointer to the source memory.
+ * @param src_mask	Pointer to a mask array indicating special bytes.
+ * @param n			Number of bytes to copy.
+ *
+ * @note	This function is called internally by shell_memmove when 
+ * 			dest <= src.
+ * @note	Memory is assumed to be allocated and valid; no bounds checking
+ *			is performed beyond n.
  */
 static void	iq_moveup(char *dst_tmp, char *src_tmp, char *src_mask, size_t n)
 {
@@ -43,13 +51,21 @@ static void	iq_moveup(char *dst_tmp, char *src_tmp, char *src_mask, size_t n)
 }
 
 /**
- * Moves n bytes from a src VOID pointer into a dest VOID pointer, specific
- * when dst_tmp pointer is in a higher memory possition than src_tmp.
- * @param dst_tmp The VOID pointer where to move bytes into.
- * @param src_tmp The VOID pointer where to move bytes from.
- * @param len The amount of bytes to be moved.
- * @note Operators such as '\'' and '\"' are ignored, and as such, aren't
- * moved to dst. This mimics the quote removal behaivor from bash-shell.
+ * @brief Copies memory from src to dst downward, respecting a mask.
+ *
+ * Moves bytes from src_tmp to dst_tmp in reverse order (from end to start)
+ * to handle overlapping memory regions safely. The src_mask array is used
+ * to skip or handle certain bytes marked as 'O'.
+ *
+ * @param dst_tmp	Pointer to the destination memory.
+ * @param src_tmp	Pointer to the source memory.
+ * @param src_mask	Pointer to a mask array indicating special bytes.
+ * @param len		Number of bytes to copy.
+ *
+ * @note	This function is called internally by shell_memmove when 
+ * 			dest > src.
+ * @note	Memory is assumed to be allocated and valid; no bounds checking
+ *			is performed beyond len.
  */
 static void	iq_movedn(char *dst_tmp, char *src_tmp, char *src_mask, size_t len)
 {
@@ -79,14 +95,22 @@ static void	iq_movedn(char *dst_tmp, char *src_tmp, char *src_mask, size_t len)
 }
 
 /**
- * Moves n bytes from a src VOID pointer into a dest VOID pointer.
- * @param dest The VOID pointer where to move bytes into.
- * @param src The VOID pointer where to move bytes from.
- * @param n The amount of bytes to be moved.
- * @return The VOID pointer to dest.
- * @note This function modifies the dest VOID pointer and, additionally,
- * checks if the memory position of src is close to dest to avoid loosing
- * information during the movement.
+ * @brief Copies memory from src to dest using a mask.
+ *
+ * Moves n bytes from src to dest. If dest > src, copies bytes
+ * downward to avoid overlap; otherwise, copies upward. The mask
+ * array controls special handling of specific bytes 
+ * (implementation-dependent).
+ *
+ * @param dest	Pointer to the destination memory.
+ * @param src	Pointer to the source memory.
+ * @param mask	Pointer to a mask array affecting how bytes are moved.
+ * @param n		Number of bytes to copy.
+ *
+ * @note	Returns dest even if dest and src are NULL.
+ * @note	Uses iq_movedn and iq_moveup internally for handling overlap.
+ *
+ * @return	Pointer to the destination memory.
  */
 void	*shell_memmove(void *dest, void *src, void *mask, size_t n)
 {

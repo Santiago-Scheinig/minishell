@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 21:07:46 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:15:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MSH_PSR_H
 
 # include "lib/msh_std.h"
-# include "lib/msh_tsh.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
@@ -72,13 +71,6 @@ void	parser_envar(t_body *minishell);
 void	parser_cmds(t_body *minishell);
 
 t_list	*cmd_rerr(t_list *aux_lst, t_cmd **new_cmd);
-
-/**
- * Creates and allocates a new T_TOKEN node.
- * @param str A pointer to the STRING to be tokenized.
- * @return A pointer to the new T_TOKEN allocation; or NULL in case of error.
- */
-t_token	*token_dup(char *str);
 
 /**
  * Expands an enviromental variable and returs the modified value.

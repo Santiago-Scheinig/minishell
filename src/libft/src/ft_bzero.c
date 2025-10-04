@@ -6,18 +6,19 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 18:37:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/23 16:39:15 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:30:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Erases the data in the n bytes of the memory starting at the location
- * pointed to by s, by writing zeros (bytes containing '\0') to that area.
- * 
- * @param s The pointer location where to rewrite.
- * @param n The amount of bytes to rewrite.
+ * @brief   Sets a memory block to zero.
+ *
+ * @param   s   Pointer to the memory block to zero out.
+ * @param   n   Number of bytes to set to zero.
+ *
+ * @note    This is a wrapper around ft_memset. If n is 0, nothing is done.
  */
 void	ft_bzero(void *s, size_t n)
 {

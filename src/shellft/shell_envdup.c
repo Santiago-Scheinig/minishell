@@ -3,15 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   shell_envdup.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 19:13:22 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 16:41:02 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 20:36:21 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
+/**
+ * @brief Increments a numeric value stored in an environment string.
+ *
+ * Assumes envp points to a string of the form "NAME=value" where the
+ * numeric value starts at index 6. Duplicates the substring, converts
+ * it to an integer, increments it by 1, and returns the result.
+ *
+ * @param envp	Pointer to the environment string to process.
+ *
+ * @note	Memory is allocated for a temporary copy of the value; it is
+ *			freed before returning.
+ * @note	Returns -1 if memory allocation fails.
+ *
+ * @return	The incremented integer value on success, -1 on allocation failure.
+ */
 static int	change_value(const char *envp)
 {
 	int		value;
@@ -25,6 +40,19 @@ static int	change_value(const char *envp)
 	return (value);
 }
 
+/**
+ * @brief Checks if an environment string contains a valid numeric value.
+ *
+ * Assumes the string starts with a prefix of 6 characters (e.g., "NAME=")
+ * and checks that all subsequent characters are digits. Ensures that
+ * the string does not end with '=' alone.
+ *
+ * @param str	Pointer to the string to validate.
+ *
+ * @note	Used to validate numeric environment variables like SHLVL.
+ *
+ * @return	1 if the string is a valid numeric value, 0 otherwise.
+ */
 static size_t	is_valid(const char *str)
 {
 	size_t	i;
@@ -37,6 +65,25 @@ static size_t	is_valid(const char *str)
 	return (0);
 }
 
+/**
+ * @brief Checks and updates the SHLVL environment variable.
+ *
+ * If envp starts with "SHLVL=", verifies whether its value is a valid
+ * number. If valid, increments the value by 1 using change_value().
+ * If invalid, sets the value to 1. Constructs a new string "SHLVL=value"
+ * and returns it.
+ *
+ * @param envp	Pointer to the environment string to check.
+ *
+ * @note	Memory is allocated for the returned string; caller is
+ *			responsible for freeing it.
+ * @note	Returns NULL on memory allocation failure.
+ * @note	Only processes strings starting with "SHLVL="; other strings
+ *			return NULL.
+ *
+ * @return	Pointer to the new SHLVL string on success, NULL on error
+ *			or if not "SHLVL=".
+ */
 static char	*check_value(const char *envp)
 {
 	int		value;
@@ -67,21 +114,21 @@ static char	*check_value(const char *envp)
 }
 
 /**
- * Duplicates the process environment array and adjusts SHLVL.
- * 
- * @param envp Null-terminated array of environment strings from the parent
- * process.
- * 
- * Creates and returns a newly allocated copy of envp. If a "SHLVL=" entry is
- * found the function attempts to increment its numeric value; if the existing
- * value is invalid it sets SHLVL to 1 in the duplicated array.
- * 
- * @return Newly allocated null-terminated array of strings, or NULL on 
- * allocation failure.
- * @note - Caller is responsible for freeing the returned array
- * 		(each string and the array).
- * @note - On allocation failure any partial allocations are freed before
- * 		returning NULL.
+ * @brief Duplicates the environment variable array with SHLVL adjustment.
+ *
+ * Allocates a new array of strings, duplicating each entry from envp.
+ * If an entry starts with "SHLVL=", it is processed by check_value()
+ * to increment or reset the shell level. Other entries are duplicated
+ * normally.
+ *
+ * @param envp	Pointer to the original environment array.
+ *
+ * @note	Memory is allocated for the array and each string; the caller
+ *			is responsible for freeing all of it.
+ * @note	Returns NULL if memory allocation fails at any point.
+ *
+ * @return	Pointer to the newly allocated environment array, or NULL
+ *			on allocation failure.
  */
 char	**shell_envpdup(const char **envp)
 {

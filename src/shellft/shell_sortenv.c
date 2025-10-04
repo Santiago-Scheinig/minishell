@@ -3,47 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   shell_sortenv.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 14:09:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:18:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
-static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next)
+/**
+ * @brief	Swaps two consecutive nodes in a linked list of 
+ * 			environment variables.
+ *
+ * Adjusts pointers to swap the middle node (mid) with its next node (nxt).
+ * Updates the previous node (prv) or the list head (*var) as needed.
+ *
+ * @param var  Pointer to the head of the linked list.
+ * @param prv  Previous node before mid, or NULL if mid is the first node.
+ * @param mid  The node to swap with its next node.
+ * @param nxt  The node following mid to be swapped.
+ *
+ * @note  	Returns the head pointer of the updated list. Useful for sorting.
+ *
+ * @return 	Pointer to the (possibly new) head of the list.
+ */
+static t_list	**swap_env(t_list **var, t_list *prv, t_list *mid, t_list *nxt)
 {
-	crnt->next = next->next;
-	next->next = crnt;
-	if (prev)
-		prev->next = next;
+	mid->next = nxt->next;
+	nxt->next = mid;
+	if (prv)
+		prv->next = nxt;
 	else
-		*head = next;
-	if (!prev)
-		prev = *head;
+		*var = nxt;
+	if (!prv)
+		prv = *var;
 	else
-		prev = prev->next;
-	return (head);
+		prv = prv->next;
+	return (var);
 }
 
 /**
- * Sorts a linked list of environment variables by name.
- * 
- * @param head Pointer to the pointer to the head of the list to sort.
- * 
- * Performs an in-place bubble sort over the singly-linked list by swapping
- * nodes (adjusting next pointers) to order entries ascending by name.
- * The function updates the head pointer when the first element moves.
- * 
- * @note - Modifies list links in place; it does not allocate or free nodes.
- * @note - Comparison uses ft_strncmp and assumes node content and names are
- * 		valid.
+ * @brief Sorts a linked list of environment variables alphabetically by name.
+ *
+ * Performs a simple bubble sort on the linked list of t_var structures
+ * pointed to by head. Uses swap_env() to reorder adjacent nodes when needed.
+ *
+ * @param var 	Pointer to the head of the linked list of 
+ * 				environment variables.
+ *
+ * @note  Sorting is done in-place; no new nodes are allocated.
+ * @note  Each node's content must be cast to t_var to access name strings.
  */
-void	shell_sortenv(t_list **head)
+void	shell_sortenv(t_list **var)
 {
-	t_list	*crrnt;
-	t_list	*prev;
+	t_list	*mid;
+	t_list	*prv;
 	t_var	*nxt;
 	t_var	*tmp;
 	int		sorted;
@@ -51,20 +66,20 @@ void	shell_sortenv(t_list **head)
 	sorted = 0;
 	while (!sorted)
 	{
-		prev = NULL;
+		prv = NULL;
 		sorted = 1;
-		crrnt = *head;
-		while (crrnt && crrnt->content && crrnt->next && crrnt->next->content)
+		mid = *var;
+		while (mid && mid->content && mid->next && mid->next->content)
 		{
-			tmp = (t_var *)crrnt->content;
-			nxt = (t_var *)crrnt->next->content;
+			tmp = (t_var *)mid->content;
+			nxt = (t_var *)mid->next->content;
 			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name)) > 0)
 			{
-				head = swap_env(head, prev, crrnt, crrnt->next);
+				var = swap_env(var, prv, mid, mid->next);
 				sorted = 0;
 			}
-			prev = crrnt;
-			crrnt = crrnt->next;
+			prv = mid;
+			mid = mid->next;
 		}
 	}
 }

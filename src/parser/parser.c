@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:07:34 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:12:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	parser_prompt(t_body *msh)
 {
 	char	*tmp;
 
-	tmp = shell_pmtexp(msh->envp_lst);
+	tmp = shell_pmtexp(msh->lst_t_var);
 	if (!tmp)
 		forcend(msh, "malloc", MSHELL_FAILURE);
 	msh->input = readline(tmp);
@@ -143,7 +143,7 @@ int	parser(t_body *msh)
 	}
 	parser_envar(msh);
 	parser_cmds(msh);
-	shell_lstclear(&(msh->token_lst), shell_lstdeltkn);
-	msh->token_lst = NULL;
+	shell_lstclear(&(msh->lst_t_token), shell_lstdel_tkn);
+	msh->lst_t_token = NULL;
 	return (MSHELL_SUCCESS);
 }

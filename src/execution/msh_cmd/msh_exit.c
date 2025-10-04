@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 14:51:38 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:51:05 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:20:40 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	clear_msh(t_body *minishell)
 {
 	if (minishell->interactive)
 		rl_clear_history();
-	shell_lstclear(&(minishell->envp_lst), shell_lstdelvar);
+	shell_lstclear(&(minishell->lst_t_var), shell_lstdel_var);
 	ft_split_free(minishell->envp);
 	cleanup(minishell);
 }

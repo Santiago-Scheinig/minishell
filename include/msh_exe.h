@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/03 20:10:24 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:09:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MSH_EXE_H
 
 # include "lib/msh_std.h"
-# include "lib/msh_tsh.h"
 # include <sys/wait.h>
 # include <fcntl.h>
 

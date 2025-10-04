@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 18:35:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/30 20:41:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:16:38 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	heredoc_dup(t_token *limit, int heredoc_fd[2], t_body *msh)
 		if (line && ft_strlen(line) != 1 
 			&& !ft_strncmp(line, limit->str, ft_strlen(line) - 1))
 			break ;
-		if (heredoc_mask(limit->mask, &line, msh->envp_lst, hd_utils))
+		if (heredoc_mask(limit->mask, &line, msh->lst_t_var, hd_utils))
 			return (hdoc_end(limit->str, "read", heredoc_fd, msh));
 		free(line);
 	}

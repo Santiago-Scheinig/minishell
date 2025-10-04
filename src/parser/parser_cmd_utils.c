@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/03 21:16:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:16:56 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ static int	cmdupd_heredoc(t_token *aux, t_cmd *new)
 {
 	if (new->infd > 2)
 		close(new->infd);
-	if (aux->heredoc == -1)
+	if (aux->heredoc_fd == -1)
 		return (MSHELL_FAILURE);
-	new->infd = aux->heredoc;
+	new->infd = aux->heredoc_fd;
 	return (MSHELL_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/30 20:48:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:13:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 /**
  * Splits the WORD string and adds the words in sequence after the current
- * position of token_lst, expanding the tokens using 'space' as the divisor
+ * position of lst_t_token, expanding the tokens using 'space' as the divisor
  * operator, which aren't protected by quotes.
  * 
- * @param token_lst A pointer to the current position on the token list.
+ * @param lst_t_token A pointer to the current position on the token list.
  * @param minishell A pointer to the main enviroment structure of minishell.
  * @note If the ARRAY of STRINGS is just one word, this step is skipped.
  */
-static void	envar_tokenization(t_list *token_lst, t_body *minishell)
+static void	envar_tokenization(t_list *lst_t_token, t_body *minishell)
 {
 	char	**split;
 	int		i;
 
 	i = 0;
-	split = ft_iq_split(((t_token *) token_lst->content)->str, ' ');
+	split = ft_iq_split(((t_token *) lst_t_token->content)->str, ' ');
 	if (!split)
 		forcend(minishell, "malloc", MSHELL_FAILURE);
 	while (split[i])
@@ -40,7 +40,7 @@ static void	envar_tokenization(t_list *token_lst, t_body *minishell)
 			split = NULL;
 			break ;
 		}
-		if (shell_addlst_token(token_lst, split[i], i))
+		if (shell_addlst_token(split[i], i, lst_t_token))
 		{
 			ft_split_free(split);
 			forcend(minishell, "malloc", MSHELL_FAILURE);
@@ -147,7 +147,7 @@ static int	envar_init(char **str, char **mask, int start, t_list *envp)
  * inside of it following the quoting rules for expansion of enviromental
  * variables.
  * 
- * @param token_lst A pointer with the current position on the token_lst.
+ * @param lst_t_token A pointer with the current position on the lst_t_token.
  * @param minishell A pointer to the main enviroment structure of minishell.
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
@@ -201,21 +201,21 @@ int	envar_syntax(char **str, char **mask, t_list *envp, int exit_no)
 void	parser_envar(t_body *msh)
 {
 	t_list	*envp;
-	t_list	*token_lst;
+	t_list	*lst_t_token;
 	t_token	*tkn;
 
-	envp = msh->envp_lst;
-	token_lst = msh->token_lst;
-	while (token_lst)
+	envp = msh->lst_t_var;
+	lst_t_token = msh->lst_t_token;
+	while (lst_t_token)
 	{
-		tkn = (t_token *) token_lst->content;
+		tkn = (t_token *) lst_t_token->content;
 		if (tkn->str && tkn->type == WORD)
 		{
 			if (envar_syntax(&(tkn->str), &(tkn->mask), envp, msh->exit_no))
 				forcend(msh, "malloc", MSHELL_FAILURE);
 			if (tkn->mask[0] == 'N')
-				envar_tokenization(msh->token_lst, msh);
+				envar_tokenization(msh->lst_t_token, msh);
 		}
-		token_lst = token_lst->next;
+		lst_t_token = lst_t_token->next;
 	}
 }

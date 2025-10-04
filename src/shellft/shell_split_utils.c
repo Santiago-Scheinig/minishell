@@ -6,17 +6,23 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:22:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 19:52:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 21:30:34 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * Verifies and returns if the string is a divisor operator.
- * 
- * @param str A string in which to verify the token type.
- * @note Returns 0 if it's not a divisor operator and  >0 if it is.
+ * @brief Checks if the string represents a shell token divisor.
+ *
+ * Evaluates the input string to determine if it matches known shell
+ * operators or a space. Returns the corresponding token type. If no
+ * match is found, returns WORD.
+ *
+ * @param str  The string to check for being a divisor/operator.
+ *
+ * @return  The t_token_type representing the divisor (PIPE, REDIR_IN, etc.)
+ *          or WORD if the string is not a divisor.
  */
 int	is_divisor(char *str)
 {
@@ -36,10 +42,15 @@ int	is_divisor(char *str)
 }
 
 /**
- * Returns a correspondent number to the token type following the 
- * [enum t_token_type] definition.
- * 
- * @param str A string in which to verify the token type.
+ * @brief Determines the type of a shell token from its string value.
+ *
+ * Compares the input string to known shell operators and returns the
+ * corresponding token type. If no operator matches, the token is
+ * classified as a WORD. Empty or NULL strings return END.
+ *
+ * @param str  The token string to evaluate.
+ *
+ * @return  The t_token_type of the string (WORD, PIPE, REDIR_IN, etc.).
  */
 int	get_token_type(char *str)
 {
@@ -59,11 +70,15 @@ int	get_token_type(char *str)
 }
 
 /**
- * Frees every pointer on an ARRAY of STRINGS and the ARRAY pointer, even
- * if it's not NULL terminated.
- * 
- * @param wrdstr The ARRAY of STRINGS to free.
- * @param index The amount of STRINGS to free inside of the array.
+ * @brief Frees a partially allocated array of strings.
+ *
+ * Frees each string in wrdstr up to the specified index, then frees
+ * the array itself.
+ *
+ * @param wrdstr  Array of strings to free.
+ * @param index   Number of elements to free from the array.
+ *
+ * @return Always returns NULL to simplify error handling in callers.
  */
 void	*memfree(char **wrdstr, int index)
 {
@@ -80,11 +95,15 @@ void	*memfree(char **wrdstr, int index)
 }
 
 /**
- * Returns the proper length of the operator type sent as argument.
- * 
- * @param type The T_TOKEN_TYPE that describers the operator type.
- * @return The lenght of the operator type.
- * @note If the operator isn't valid, returns 0.
+ * @brief Returns the character length of a shell operator token.
+ *
+ * Determines the length of a token based on its type. Single-character
+ * operators (|, <, >) return 1, double-character operators (>>, <<) return 2.
+ *
+ * @param type 	The token type (t_token_type) to evaluate.
+ *
+ * @return  Number of characters representing the operator.
+ *          Returns 0 if type is not a recognized operator.
  */
 int	operator_len(int type)
 {
@@ -96,15 +115,21 @@ int	operator_len(int type)
 }
 
 /**
- * Counts the lenght of the first word on a STRING, until it reaches a
- * space, shell operator or '\0'
- * 
- * @param s The STRING where to count the lenght of the first word.
- * @return An INT with the lenght of the word.
- * @note This function will ignore any divisor coincidences that happen 
- * to be inside of single and double quotes (as long they open and close).
+ * @brief Computes the length of the next word in a string.
+ *
+ * Scans the input string s until it reaches a divisor character or the end
+ * of the string. Handles quoted sections (single or double quotes) as a
+ * single word, skipping over internal characters until the closing quote.
+ *
+ * @param str Input string to measure the word length from.
+ *
+ * @note  Uses is_divisor() to identify word boundaries.
+ * @note  Quotes are handled properly; the length includes all characters
+ *        inside the quotes.
+ *
+ * @return Length of the next word in characters.
  */
-int	word_len(const char *s)
+int	word_len(const char *str)
 {
 	char	*tmp;
 	char	quote;
@@ -112,20 +137,20 @@ int	word_len(const char *s)
 
 	i = -1;
 	tmp = NULL;
-	while (s[++i] && !is_divisor((char *) &s[i]))
+	while (str[++i] && !is_divisor((char *) &str[i]))
 	{
-		if (s[i] == '\'')
+		if (str[i] == '\'')
 		{
-			tmp = ft_strchr(&s[i + 1], '\'');
+			tmp = ft_strchr(&str[i + 1], '\'');
 			quote = '\'';
 		}
-		else if (s[i] == '\"')
+		else if (str[i] == '\"')
 		{
-			tmp = ft_strchr(&s[i + 1], '\"');
+			tmp = ft_strchr(&str[i + 1], '\"');
 			quote = '\"';
 		}
-		if (tmp && s[++i])
-			while (s[i] && s[i] != quote)
+		if (tmp && str[++i])
+			while (str[i] && str[i] != quote)
 				i++;
 		tmp = NULL;
 	}

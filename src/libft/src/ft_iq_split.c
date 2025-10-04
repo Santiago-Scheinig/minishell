@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:00:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:31:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,18 @@ static	int	ft_wrdcount(char const *s, char c)
 }
 
 /**
- * Splits a STRING into an ARRAY of STRINGS, using a divisor character.
- * 
- * @param s The STRING to split.
- * @param c The character which divides each word.
- * @return An ARRAY of STRINGS that includes every divided word and is 
- * NULL terminated.
- * @note This function will ignore any C coincidences that happen to be inside
- * of single and double quotes (as long they open and close).
+ * @brief   Splits a string into an array of strings using a delimiter.
+ *
+ * @param   s   The input string to split.
+ * @param   c   The delimiter character.
+ * @return  NULL if allocation fails or s is NULL.
+ *          Otherwise, returns a NULL-terminated array of strings.
+ *
+ * @note    Skips consecutive delimiters.
+ * @note    Uses ft_wrdcount to determine the number of resulting strings.
+ * @note    Uses ft_iq_strchr to find the next delimiter.
+ * @note    Memory cleanup is performed on failure using ft_memfree.
+ * @warning Behavior is ambiguous if s starts or ends with multiple delimiters.
  */
 char	**ft_iq_split(char const *s, char c)
 {

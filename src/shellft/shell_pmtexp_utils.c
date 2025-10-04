@@ -3,31 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   shell_pmtexp_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 15:32:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 12:19:42 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 20:46:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
 
 /**
- * Transforms a PS1-style format string into a concrete prompt string.
- * 
- * @param tmp  Buffer where the transformed prompt will be written.
- * @param ps1  Format string using backslash escapes.
- * @param user Username string to substitute for "\u".
- * @param path Current working directory string to substitute for "\w".
- * 
- * Iterates ps1 and copies characters into tmp. Recognizes backslash escapes:
- *  - "\u" -> inserts the user string
- *  - "\w" -> inserts the path string
- *  - any other backslash escape inserts the next character verbatim
- * Consecutive backslashes ("\\") are treated as literal backslashes.
- * 
- * @return Pointer to tmp.
- * @note tmp must be large enough to hold the resulting string.
+ * @brief Expands escape sequences in a shell prompt string.
+ *
+ * Parses the ps1 string and replaces recognized escape sequences:
+ *   - \u : replaced with the username string
+ *   - \w : replaced with the current path string
+ * Other characters, including non-special backslashes, are copied as-is.
+ * The result is written into the pre-allocated tmp buffer.
+ *
+ * @param tmp 	Pointer to the buffer where the transformed string 
+ * 				will be stored.
+ * @param ps1 	Pointer to the original prompt string with escape sequences.
+ * @param user 	Pointer to the username string.
+ * @param path 	Pointer to the current working directory string.
+ *
+ * @note	The tmp buffer must be large enough to hold the expanded string.
+ *
+ * @return Pointer to the transformed string stored in tmp.
  */
 char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 {
@@ -62,14 +64,20 @@ char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 }
 
 /**
- * Calculates the length of the prompt that will be produced from a PS1 format.
- * 
- * @param ps1  Format string using backslash escapes.
- * @param user Username string to substitute for "\u".
- * @param path Current working directory string to substitute for "\w".
- * 
- * @return The number of characters required for the transformed prompt.
- * @note Use this value to allocate a buffer for transform_format.
+ * @brief Calculates the visual length of a shell prompt string.
+ *
+ * Parses the ps1 prompt string and counts the number of characters that
+ * will be displayed. Recognizes escape sequences:
+ *   - \u : replaced by the username string
+ *   - \w : replaced by the current path string
+ * Other characters count as one. Backslashes before non-special characters
+ * are counted as a single character.
+ *
+ * @param ps1	Pointer to the prompt string with possible escape sequences.
+ * @param user	Pointer to the username string.
+ * @param path	Pointer to the current working directory string.
+ *
+ * @return The total number of characters that will be displayed for prompt.
  */
 size_t	prompt_len(char *ps1, char *user, char *path)
 {

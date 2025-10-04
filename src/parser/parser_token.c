@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/29 20:37:00 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:16:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ static int	token_heredoc(t_token *aux, t_token *next, t_body *msh)
 	{
 		if (pipe(fd) == -1)
 		{
-			aux->heredoc = -1;
+			aux->heredoc_fd = -1;
 			msh->exit_no = MSHELL_FAILURE;
 			redirend(NULL, msh->exit_no);
 			return (MSHELL_SUCCESS);
 		}
-		sigign();
-		aux->heredoc = heredoc_dup(next, fd, msh);
-		sigint();//forcend
-		sigquit();//forcend
-		if (aux->heredoc == -1)
+		shell_sigign();
+		aux->heredoc_fd = heredoc_dup(next, fd, msh);
+		shell_sigint();//forcend
+		shell_sigquit();//forcend
+		if (aux->heredoc_fd == -1)
 		{
 			msh->exit_no = MSHELL_FAILURE;
 			return (MSHELL_FAILURE);
@@ -54,17 +54,17 @@ static int	token_heredoc(t_token *aux, t_token *next, t_body *msh)
  * 
  * @param msh A pointer to the main enviroment structure of minishell.
  */
-static int	token_syntax(t_list *token_lst, t_body *msh)
+static int	token_syntax(t_list *lst_t_token, t_body *msh)
 {
 	t_token	*aux;
 	t_token	*next;
 	int		i;
 
 	i = 0;
-	while (token_lst->next)
+	while (lst_t_token->next)
 	{
-		aux = (t_token *) token_lst->content;
-		next = (t_token *) token_lst->next->content;
+		aux = (t_token *) lst_t_token->content;
+		next = (t_token *) lst_t_token->next->content;
 		if (aux->type == REDIR_IN || aux->type == REDIR_OUT
 			|| aux->type == REDIR_APPEND || aux->type == HEREDOC)
 			if (token_heredoc(aux, next, msh))
@@ -75,20 +75,58 @@ static int	token_syntax(t_list *token_lst, t_body *msh)
 			return (parsend(aux->str, MSHELL_MISSUSE, msh));
 		else if (aux->type == PIPE)
 			msh->exit_no = MSHELL_SUCCESS;
-		token_lst = token_lst->next;
+		lst_t_token = lst_t_token->next;
 	}
-	if (((t_token *) token_lst->content)->type != WORD)
+	if (((t_token *) lst_t_token->content)->type != WORD)
 		return (parsend(NULL, MSHELL_MISSUSE, msh));
 	return (0);
 }
 
 /**
- * Creates and allocates a new T_TOKEN node.
- * 
- * @param str A pointer to the STRING to be tokenized.
- * @return A pointer to the new T_TOKEN allocation; or NULL in case of error.
+ * @brief Determines the type of a shell token from its string value.
+ *
+ * Compares the input string to known shell operators and returns the
+ * corresponding token type. If no operator matches, the token is
+ * classified as a WORD. Empty or NULL strings return END.
+ *
+ * @param str  The token string to evaluate.
+ *
+ * @return  The t_token_type of the string (WORD, PIPE, REDIR_IN, etc.).
  */
-t_token	*token_dup(char *str)
+static int	get_token_type(char *str)
+{
+	if (!str || !str[0])
+		return (END);
+	if (!ft_strncmp(str, "|", 1))
+		return (PIPE);
+	if (!ft_strncmp(str, ">>", 2))
+		return (REDIR_APPEND);
+	if (!ft_strncmp(str, "<<", 2))
+		return (HEREDOC);
+	if (!ft_strncmp(str, "<", 1))
+		return (REDIR_IN);
+	if (!ft_strncmp(str, ">", 1))
+		return (REDIR_OUT);
+	return (WORD);
+}
+
+/**
+ * @brief Duplicates a string into a new t_token structure.
+ *
+ * Allocates a new t_token, sets its string to the provided str, and
+ * determines its token type. If the type is WORD, also creates a mask
+ * of the string using maskstr().
+ *
+ * @param str	Pointer to the string to store in the token.
+ *
+ * @note	Memory for t_token and mask (if applicable) is allocated;
+ *			caller is responsible for freeing them.
+ * @note	Returns NULL if allocation fails for t_token or mask.
+ *
+ * @return	Pointer to the newly allocated t_token on success, NULL on
+ *			allocation failure.
+ */
+static t_token	*token_dup(char *str)
 {
 	t_token	*new;
 
@@ -121,7 +159,7 @@ int	parser_token(t_body *msh, char **split)
 	int		i;
 
 	i = -1;
-	msh->token_lst = NULL;
+	msh->lst_t_token = NULL;
 	if (!split[0])
 		return (MSHELL_SUCCESS);
 	while (split[++i])
@@ -132,7 +170,7 @@ int	parser_token(t_body *msh, char **split)
 		new_node = ft_lstnew(new_token);
 		if (!new_node)
 			break ;
-		ft_lstadd_back(&(msh->token_lst), new_node);
+		ft_lstadd_back(&(msh->lst_t_token), new_node);
 	}
 	if (!new_node || !new_token)
 	{
@@ -140,5 +178,5 @@ int	parser_token(t_body *msh, char **split)
 		forcend(msh, "malloc", MSHELL_FAILURE);
 	}
 	free(split);
-	return (token_syntax(msh->token_lst, msh));
+	return (token_syntax(msh->lst_t_token, msh));
 }

@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   troublend.c                                        :+:      :+:    :+:   */
+/*   shell_troubleshoot.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 14:35:25 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:20:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib/msh_std.h"
-#include "lib/msh_tsh.h"
-#include <readline/readline.h>
-#include <readline/history.h>
 
 void	cleanup(t_body *minishell)
 {
@@ -32,15 +29,15 @@ void	cleanup(t_body *minishell)
 		free(minishell->input);
 		minishell->input = NULL;
 	}
-	if (minishell->token_lst)
+	if (minishell->lst_t_token)
 	{
-		shell_lstclear(&(minishell->token_lst), shell_lstdeltkn);
-		minishell->token_lst = NULL;
+		shell_lstclear(&(minishell->lst_t_token), shell_lstdel_tkn);
+		minishell->lst_t_token = NULL;
 	}
-	if (minishell->cmd_lst)
+	if (minishell->lst_t_cmd)
 	{
-		shell_lstclear(&(minishell->cmd_lst), shell_lstdelcmd);
-		minishell->cmd_lst = NULL;
+		shell_lstclear(&(minishell->lst_t_cmd), shell_lstdel_cmd);
+		minishell->lst_t_cmd = NULL;
 	}
 	if (minishell->err_fd)
 	{
@@ -131,8 +128,8 @@ int	parsend(const char *next, t_error number, t_body *minishell)
 int	forcend(t_body *msh, const char *argv, int exit_no)
 {
 	cleanup(msh);
-	if (msh->envp_lst)
-		shell_lstclear(&msh->envp_lst, shell_lstdelvar);
+	if (msh->lst_t_var)
+		shell_lstclear(&msh->lst_t_var, shell_lstdel_var);
 	if (msh->envp)
 		ft_split_free(msh->envp);
 	if (msh->interactive)

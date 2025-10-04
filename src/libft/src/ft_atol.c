@@ -6,12 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:51:52 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:00:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:29:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+ * @brief   Checks if a character is a whitespace character.
+ *
+ * @param   c   The character to check.
+ *
+ * @return  1 if the character is a space, tab, newline, vertical tab,
+ *          form feed, or carriage return; 0 otherwise.
+ *
+ * @note    Used by parsing functions like ft_atol to skip leading whitespace.
+ */
 static	long	ft_isspace(long c)
 {
 	if (c == ' ' || c == '\f' || c == '\n'
@@ -20,6 +30,15 @@ static	long	ft_isspace(long c)
 	return (0);
 }
 
+/**
+ * @brief   Checks if a character is a sign indicator ('+' or '-').
+ *
+ * @param   c   The character to check.
+ *
+ * @return  -1 if c is '-', 1 if c is '+', 0 otherwise.
+ *
+ * @note    Used by ft_atol to determine the number's sign.
+ */
 static	long	ft_issign(long c)
 {
 	if (c == '-')
@@ -30,14 +49,17 @@ static	long	ft_issign(long c)
 }
 
 /**
- * Finds the first number on a STRING with a decimal base.
- * 
- * @param str The string where the base number is saved.
- * @param base The base in which the number must be found.
- * @return The decimal LONG found on STR.
- * @note A number can, but is not forced to, start with any
- * amount of spaces and one sign; but the next character must 
- * be a digit, if not or str doesn't exists, returns 0.
+ * @brief   Converts a string to a long integer.
+ *
+ * @param   nptr    The string containing the number.
+ *
+ * @return  The converted long integer. Returns 0 if nptr is NULL
+ *          or if the first non-whitespace, optional-sign character
+ *          is not a digit.
+ *
+ * @note    Skips leading whitespace, handles an optional single
+ *          '+' or '-' sign, and parses consecutive digits until
+ *          a non-digit is found.
  */
 long	ft_atol(const char *nptr)
 {
