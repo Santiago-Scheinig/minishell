@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_sortenv.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:32:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 14:09:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static t_list	**swap_env(t_list **head, t_list *prev, t_list *crnt, t_list *next
  */
 void	shell_sortenv(t_list **head)
 {
-	t_list	*current;
+	t_list	*crrnt;
 	t_list	*prev;
 	t_var	*nxt;
 	t_var	*tmp;
@@ -53,18 +53,18 @@ void	shell_sortenv(t_list **head)
 	{
 		prev = NULL;
 		sorted = 1;
-		current = *head;
-		while (current && current->content && current->next &&current->next->content)
+		crrnt = *head;
+		while (crrnt && crrnt->content && crrnt->next && crrnt->next->content)
 		{
-			tmp = (t_var *)current->content;
-			nxt = (t_var *)current->next->content;
+			tmp = (t_var *)crrnt->content;
+			nxt = (t_var *)crrnt->next->content;
 			if (ft_strncmp(tmp->name, nxt->name, ft_strlen(tmp->name)) > 0)
 			{
-				head = swap_env(head, prev, current, current->next);
+				head = swap_env(head, prev, crrnt, crrnt->next);
 				sorted = 0;
 			}
-			prev = current;
-			current = current->next;
+			prev = crrnt;
+			crrnt = crrnt->next;
 		}
 	}
 }

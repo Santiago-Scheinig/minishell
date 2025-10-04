@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   troublend.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/03 21:33:27 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 14:35:25 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	built_end(char *name, char *type, char *flags, char error)
 	else if (ft_strnstr(type, "Numeric arg required", ft_strlen(type)))
 		ft_printfd(2, "%s%s: %s: numeric argument required\n", shell, name,
 			flags);
-	return (1);
+	return (MSHELL_FAILURE);
 }
 
 int	redirend(char *argv, t_error number)

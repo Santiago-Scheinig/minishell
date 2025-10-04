@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_echo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/30 21:26:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 15:51:39 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * 
  * @note - If any leading argument(s) are "-n", no trailing newline is printed.
  */
-void	msh_echo(char **args)
+int	msh_echo(char **args)
 {
 	int	new_line;
 	int	i;
@@ -35,15 +35,14 @@ void	msh_echo(char **args)
 	while (args[i])
 	{
 		if (write(STDOUT_FILENO, args[i], ft_strlen(args[i])) == -1)
-		{
-			return (perror("msh: write error"));
-		}
+			return (built_end(args[0], "System failed", NULL, '\0'));
 		if (args[i + 1])
 			if (write(STDOUT_FILENO, " ", 1) == -1)
-				return (perror("msh: write error"));
+				return (built_end(args[0], "System failed", NULL, '\0'));
 		i++;
 	}
 	if (new_line)
 		if (write(STDOUT_FILENO, "\n", 1) == -1)
-			return (perror("msh: write error"));
+			return (built_end(args[0], "System failed", NULL, '\0'));
+	return (MSHELL_SUCCESS);
 }

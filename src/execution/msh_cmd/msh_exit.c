@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 14:51:38 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/03 19:35:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 15:51:05 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,18 @@ static void	clear_msh(t_body *minishell)
  * and does not exit.
  * - Performs cleanup/forced end via forcend() when needed.
  */
-void	msh_exit(char **args, t_body *minishell)
+int	msh_exit(char **args, t_body *minishell)
 {
 	int	i;
 
 	i = 0;
 	if (minishell && minishell->interactive)
-		write(1, "exit\n", 5);
+		if (write(1, "exit\n", 5) == -1)
+			return (MSHELL_FAILURE);
 	if ((args && args[1] && args[2]))
 	{
 		built_end(args[0], "Numbers of args", NULL, '\0');
-		return ;
+		return (MSHELL_FAILURE);
 	}
 	if (minishell)
 		clear_msh(minishell);
@@ -57,7 +58,8 @@ void	msh_exit(char **args, t_body *minishell)
 		if (!args[1][i])
 			exit(ft_atoi(args[1]));
 		built_end(args[0], "Numeric arg required", args[1], '\0');
-		exit(2);
+		exit(MSHELL_MISSUSE);
 	}
-	exit(0);
+	exit(MSHELL_SUCCESS);
+	return (MSHELL_FAILURE);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_pmtstr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:51:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:32:07 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 16:47:32 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,19 @@ static char	*shell_pwd(void)
 	return (pwd);
 }
 
-static char	*shell_lastcmd(void)
+
+
+static char	*shell_lastcmd(t_list *envp)
 {
 	char	*last_cmd;
+	char	*aux;
 
-	last_cmd = ft_strjoin("_=", "./minishell");
+	aux = shell_getenv(envp, "_");
+	if (!aux)
+		last_cmd = ft_strjoin("_=", "./minishell");
+	else
+		last_cmd = ft_strjoin("_=", aux);
 	return (last_cmd);
-}
-
-static char	*shell_shlvl(void)
-{
-	char	*ps1;
-
-	ps1 = ft_strjoin("SHLVL=", "1");
-	return (ps1);
 }
 
 static char	*shell_ps1(t_list *envp)
@@ -89,10 +88,10 @@ char	**shell_pmtstr(t_list *envp)
 	ps[1] = shell_pwd();
 	if (!ps[1])
 		return (NULL);
-	ps[2] = shell_lastcmd();
+	ps[2] = shell_lastcmd(envp);
 	if (!ps[2])
 		return (NULL);
-	ps[3] = shell_shlvl();
+	ps[3] = ft_strjoin("SHLVL=", "1");
 	if (!ps[3])
 		return (NULL);
 	ps[4] = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:35:15 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 15:07:08 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,7 @@ int	msh_cd(char **args, t_list **envp)
 			return (built_end(args[0], "HOME", NULL, '\0'));
 	}
 	else if (args[1] && args[1][0] == '-')
-	{
 		return (built_end(args[0], "Invalid flags", "[dir]", args[1][1]));
-	}
 	else if (!args[2])
 		dir = args[1];
 	else

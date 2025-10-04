@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:15:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/03 19:24:48 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 15:51:54 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	end_minishell(t_body *minishell);
  * 
  * @return Modified args pointer, or NULL on allocation failure.
  */
-char	**export_no_equal(char **args, char ***envp, t_list *lst);
+char	**export_no_equal(char ***envp, char **args, t_list *lst);
 
 /**
  * Processes and validates export arguments; returns normalized args.
@@ -62,7 +62,7 @@ char	**export_no_equal(char **args, char ***envp, t_list *lst);
  * 
  * @return Adjusted args array or NULL.
  */
-char	**ft_isal_num(char **args, t_list *head, char ***envp);
+char	**ft_isal_num(char ***envp, char **args, t_list *head);
 
 /**
  * Removes an element from a NULL-terminated array of strings.
@@ -96,7 +96,7 @@ char	**export_no_dup(char **args);
  *   declare -x NAME="VALUE"
  * or just "declare -x NAME" if no value.
  */
-void	print_export(t_list *env_lst);
+int		print_export(t_list *env_lst);
 
 /**
  * Prints the environment array (envp) to stdout, one per line.
@@ -105,7 +105,7 @@ void	print_export(t_list *env_lst);
  * 
  * Writes each env string followed by a newline.
  */
-void	print_env(char **envp);
+int		print_env(char **envp);
 
 /**
  * Attempts to change the stored value of an existing variable.
@@ -119,7 +119,7 @@ void	print_env(char **envp);
  * 
  * @return 0 on handled change, 1 if sizes differ, or non-zero on error.
  */
-int		change_value_env(t_var *aux, char ***envp, char **new_env, int export);
+int		change_value_env(char ***envp, char **new_env, t_var *aux, int export);
 
 /**
  * Sets variable value in env array and in var struct when '=' present.
@@ -133,7 +133,7 @@ int		change_value_env(t_var *aux, char ***envp, char **new_env, int export);
  * 
  * @return 0 on success, non-zero if a system error was reported.
  */
-int		set_equal(t_var *aux, char **envp, char *sign, char *new_env);
+int		set_equal(char **envp, t_var *aux, char *sign, char *new_env);
 
 /**
  * Appends new variables (not previously in list) to the variable list.
@@ -159,7 +159,7 @@ int		new_envp(char **new_env, t_list **head, int export);
  * 
  * @return 0 on success, non-zero on error.
  */
-int		exp_resize(char **args, char ***envp);
+int		exp_resize(char ***envp, char **args);
 
 /**
  * Validates that the provided identifier is suitable for export.
@@ -173,6 +173,16 @@ int		exp_resize(char **args, char ***envp);
  * @return 0 if valid, non-zero error code otherwise.
  */
 int		is_valid_identifier(char *arg);
+
+/**
+ * @param head Pointer to t_list that have the enviroments "NAME=VALUE".
+ * 
+ * try to print the export list and check if there was an error in a write
+ * fuction
+ * 
+ * @return 0 on success, non-zero if a write fail.
+ */
+int		export(t_list **head);
 
 /*************************************************************************** */
 /**
@@ -209,7 +219,7 @@ int		built_end(char *name, char *type, char *flags, char error);
  * @note - If more than one numeric argument is provided, prints error and does not exit.
  * - Performs cleanup/forced end via forcend() when needed.
  */
-void	msh_exit(char **args, t_body *minishell);
+int	msh_exit(char **args, t_body *minishell);
 
 /**
  * Prints arguments to standard output, separated by spaces.
@@ -219,7 +229,7 @@ void	msh_exit(char **args, t_body *minishell);
  * 
  * @note - If any leading argument(s) are "-n", no trailing newline is printed.
  */
-void	msh_echo(char **args);
+int	msh_echo(char **args);
 
 /**
  * Built-in 'unset' command implementation for msh.

@@ -6,11 +6,25 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:50:11 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/25 16:26:55 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 15:51:16 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_cmd.h"
+
+static int	print_value(char *value)
+{
+	if (value)
+	{
+		if (write(STDOUT_FILENO, "=\"", 2) == -1)
+		return (MSHELL_FAILURE);
+		if (write(STDOUT_FILENO, value, ft_strlen(value)) == -1)
+		return (MSHELL_FAILURE);
+		if (write(STDOUT_FILENO, "\"", 1) == -1)
+		return (MSHELL_FAILURE);
+	}
+	return (MSHELL_SUCCESS);
+}
 
 /**
  * @param env_lst Linked list of t_var nodes containing name, value and
@@ -20,29 +34,44 @@
  *   declare -x NAME="VALUE"
  * or just "declare -x NAME" if no value.
  */
-void	print_export(t_list *env_lst)
+int	print_export(t_list *env_lst)
 {
 	t_list	*current;
 	t_var	*tmp;
-
+	
 	current = env_lst;
 	while (current && current->content)
 	{
 		tmp = (t_var *)current->content;
 		if (tmp->name && tmp->exported)
 		{
-			write(1, "declare -x ", 11);
-			write(1, tmp->name, ft_strlen(tmp->name));
-			if (tmp->value)
-			{
-				write(1, "=\"", 2);
-				write(1, tmp->value, ft_strlen(tmp->value));
-				write(1, "\"", 1);
-			}
-			write(1, "\n", 1);
+			if (write(STDOUT_FILENO, "declare -x ", 11) == -1)
+			return (MSHELL_FAILURE);
+			if (write(STDOUT_FILENO, tmp->name, ft_strlen(tmp->name)) == -1)
+			return (MSHELL_FAILURE);
+			if (print_value(tmp->value))
+			return (MSHELL_FAILURE);
+			if (write(STDOUT_FILENO, "\n", 1) == -1)
+			return (MSHELL_FAILURE);
 		}
 		current = current->next;
 	}
+	return (MSHELL_SUCCESS);
+}
+
+/**
+ * @param head Pointer to t_list that have the enviroments "NAME=VALUE".
+ * 
+ * try to print the export list and check if there was an error in a write
+ * fuction
+ * 
+ * @return 0 on success, non-zero if a write fail.
+ */
+int	export(t_list **head)
+{
+	if (print_export(*head))
+		return (built_end("export", "System failed", NULL, '\0'));
+	return (MSHELL_SUCCESS);
 }
 
 /**
@@ -52,17 +81,20 @@ void	print_export(t_list *env_lst)
  * 
  * Writes each env string followed by a newline.
  */
-void	print_env(char **envp)
+int	print_env(char **envp)
 {
 	int		i;
 
 	i = 0;
 	while (envp[i])
 	{
-		write(1, envp[i], ft_strlen(envp[i]));
-		write(1, "\n", 1);
+		if (write(STDOUT_FILENO, envp[i], ft_strlen(envp[i])) == -1)
+			return (MSHELL_FAILURE);
+		if (write(STDOUT_FILENO, "\n", 1) == -1)
+			return (MSHELL_FAILURE);
 		i++;
 	}
+	return (MSHELL_SUCCESS);
 }
 
 /**
@@ -84,6 +116,7 @@ int	msh_env(char **args, char **envp)
 		return (built_end(args[0], "Invalid flags", "[]", args[1][1]));
 	else if (args[1])
 		return (built_end(args[0], "Numbers of args", NULL, '\0'));
-	print_env(envp);
-	return (0);
+	if (print_env(envp))
+		return (built_end(args[0], "System failed", NULL, '\0'));
+	return (MSHELL_SUCCESS);
 }

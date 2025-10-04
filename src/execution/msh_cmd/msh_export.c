@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:36:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 17:09:47 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,12 @@ int	is_valid_identifier(char *arg)
  * 
  * @return Adjusted args array or NULL.
  */
-char	**ft_isal_num(char **args, t_list *head, char ***envp)
+char	**ft_isal_num( char ***envp, char **args, t_list *head)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	if (!args[0])
-	{
-		print_export(head);
-		return (NULL);
-	}
 	if (args[0][0] == '-')
 	{
 		built_end("export", "Invalid flags", "[name[=value] ...]", args[0][1]);
@@ -74,7 +69,7 @@ char	**ft_isal_num(char **args, t_list *head, char ***envp)
 			args = ft_remove_arr(&args[0], j);
 	}
 	args = export_no_dup(args);
-	args = export_no_equal(args, envp, head);
+	args = export_no_equal(envp, args, head);
 	return (args);
 }
 
@@ -90,7 +85,7 @@ char	**ft_isal_num(char **args, t_list *head, char ***envp)
  * 
  * @return 0 on handled change, 1 if sizes differ, or non-zero on error.
  */
-int	change_value_env(t_var *aux, char ***envp, char **new_env, int export)
+int	change_value_env(char ***envp, char **new_env, t_var *aux, int export)
 {
 	size_t	i;
 	size_t	j;
@@ -107,11 +102,11 @@ int	change_value_env(t_var *aux, char ***envp, char **new_env, int export)
 	if (export == 1 && aux->exported == 0)
 	{
 		aux->exported = export;
-		exp_resize(new_env, envp);
+		exp_resize(envp, new_env);
 		return (0);
 	}
 	sign = ft_strchr(new_env[0], '=');
-	nbr = set_equal(aux, envp[0], sign, new_env[0]);
+	nbr = set_equal(envp[0], aux, sign, new_env[0]);
 	return (nbr);
 }
 
@@ -146,6 +141,19 @@ int	new_envp(char **new_env, t_list **head, int export)
 	return (0);
 }
 
+/*static int shell_lastcmd(char *cmd, char ***envp, t_list **envp_lst)
+{
+	const char **last_cmd;
+	
+	last_cmd = ft_calloc(sizeof(char *), 2);
+	if (last_cmd)
+		return (MSHELL_FAILURE);
+	last_cmd[0] = ft_strjoin("_=", cmd);
+	if (last_cmd[0])
+		return (MSHELL_FAILURE);
+	return (msh_export(envp, envp_lst, last_cmd));
+}*/
+
 /**
  * Built-in 'export' command handler.
  * 
@@ -166,20 +174,22 @@ int	msh_export(char ***envp, t_list **head, char **args)
 
 	tmp = *head;
 	j = 0;
-	args = ft_isal_num(args, *head, envp);
+	if (!args[0])
+		return (export(head));
+	args = ft_isal_num(envp, args, *head);
 	if (!args)
-		return (1);
+		return (MSHELL_FAILURE);
 	while (tmp && tmp->content)
 	{
 		i = -1;
 		aux = (t_var *)tmp->content;
 		while (args[++i])
 			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
-				if (!change_value_env(aux, envp, &args[i], 1))
+				if (!change_value_env(envp, &args[i], aux, 1))
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}
-	if (exp_resize(args, envp) || new_envp(args, head, 1))
-		return (1);
+	if (exp_resize(envp, args) || new_envp(args, head, 1))
+		return (MSHELL_FAILURE);
 	return (0);
 }

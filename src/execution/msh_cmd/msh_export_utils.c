@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_export_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/31 13:38:52 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:36:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 16:29:23 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
  * 
  * @return 0 on success, non-zero if a system error was reported.
  */
-int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
+int	set_equal(char **envp, t_var *aux, char *sign, char *new_env)
 {
 	size_t	len;
 	int		i;
@@ -50,6 +50,20 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
 	return (0);
 }
 
+static char	**equal_join(char ***envp, char **args, t_var *var, int *i)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(args[*i], "=");
+	if (!tmp)
+		return (NULL);
+	exp_resize(envp, &tmp);
+	free(tmp);
+	var->exported = 1;
+	args = ft_remove_arr(args, *i--);
+	return (args);
+}
+
 /**
  * Ensures exported names without '=' exist in envp by adding a trailing '=\0'.
  * 
@@ -63,11 +77,10 @@ int	set_equal(t_var *aux, char **envp, char *sign, char *new_env)
  * 
  * @return Modified args pointer, or NULL on allocation failure.
  */
-char	**export_no_equal(char **args, char ***envp, t_list *lst)
+char	**export_no_equal(char ***envp, char **args, t_list *lst)
 {
 	t_list	*current;
 	t_var	*var;
-	char	*tmp;
 	int		i;
 
 	i = -1;
@@ -81,12 +94,9 @@ char	**export_no_equal(char **args, char ***envp, t_list *lst)
 			{
 				if (!ft_strchr(args[i], '='))
 				{
-					tmp = ft_strjoin(args[i], "=");
-					if (!tmp)
+					args = equal_join(envp, args, var, &i);
+					if (!args)
 						return (NULL);
-					exp_resize(&tmp, envp);
-					free(tmp);
-					args = ft_remove_arr(args, i--);
 				}
 			}
 			current = current->next;
@@ -143,7 +153,7 @@ char	**export_no_dup(char **args)
  * 
  * @return 0 on success, non-zero on error.
  */
-int	exp_resize(char **args, char ***envp)
+int	exp_resize(char ***envp, char **args)
 {
 	size_t	old_size;
 	size_t	new_size;
@@ -165,5 +175,5 @@ int	exp_resize(char **args, char ***envp)
 	tmp[envp_len + old_size] = NULL;
 	*envp = tmp;
 	export_no_dup(*envp);
-	return (0);
+	return (MSHELL_SUCCESS);
 }

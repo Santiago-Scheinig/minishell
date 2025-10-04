@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_import.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:44:12 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:37:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 15:02:09 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	msh_import(char ***envp, t_list **head, char **args)
 		aux = (t_var *)tmp->content;
 		while (args[++i])
 			if (!ft_strncmp(aux->name, args[i], ft_strlen(aux->name)))
-				if (!change_value_env(aux, &envp[0], &args[i], 0))
+				if (!change_value_env(&envp[0], &args[i], aux, 0))
 					args = ft_remove_arr(&args[0], i);
 		tmp = tmp->next;
 	}

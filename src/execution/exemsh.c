@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exemsh.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/03 21:25:53 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 16:31:20 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ static int	get_bicmd(char *cmd)
 static int	bicmd(t_bicmd name, t_cmd *exe, t_body *msh)
 {
 	if (name == BICMD_EXPORT)
+	{
 		return (msh_export(&(msh->envp), &(msh->envp_lst), &(exe->argv[1])));
+		
+	}
 	else if (name == BICMD_CD)
 		return (msh_cd(exe->argv, &(msh->envp_lst)));
 	else if (name == BICMD_ENV)
@@ -47,20 +50,24 @@ static int	bicmd(t_bicmd name, t_cmd *exe, t_body *msh)
 	else if (name == BICMD_PWD)
 		return (msh_pwd(exe->argv, msh->envp_lst));
 	else if (name == BICMD_ECHO)
-	{
-		msh_echo(exe->argv);//Hay que cambiar esto porque echo puede fallar
-		return (MSHELL_SUCCESS);
-	}
+		return (msh_echo(exe->argv));
 	else if (name == BICMD_UNSET)
 		return (msh_unset(&(msh->envp), &(msh->envp_lst), &(exe->argv[1])));
 	else if (name == BICMD_EXIT)
-	{
-		msh_exit(exe->argv, msh);//Hay que cambiar esto para que devuelva -1 si falla
-		return (MSHELL_FAILURE);
-	}
+		return (msh_exit(exe->argv, msh));
 	else if (name == BICMD_IMPORT)
 		return (msh_import(&(msh->envp), &(msh->envp_lst), exe->argv));
 	return (MSHELL_FAILURE);
+}
+
+static int	open_pipe(char *name, int fd, int fileno)
+{
+	if (dup2(fd, fileno) == -1)
+	{
+		ft_printfd(2, "msh: %s: Bad file descriptor", name);
+		return (MSHELL_FAILURE);
+	}
+	return (MSHELL_SUCCESS);
 }
 
 /**
@@ -119,7 +126,7 @@ int	father_bicmd(t_cmd *exe, t_body *minishell)
 	int	i;
 
 	i = 0;
-	num = -1;
+	num = 0;
 	if (exe->argv)
 		num = get_bicmd(exe->argv[0]);
 	if (!num)
@@ -127,18 +134,12 @@ int	father_bicmd(t_cmd *exe, t_body *minishell)
 	if (exe->outfd > 2)
 	{
 		i = dup(STDOUT_FILENO);
-		if (dup2(exe->outfd, STDOUT_FILENO) == -1)
-		{
-			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
+		if (open_pipe(exe->argv[0], exe->outfd, STDOUT_FILENO))
 			return (MSHELL_FAILURE);
-		}
 		close(exe->outfd);
 		num = bicmd(num, exe, minishell);
-		if (dup2(i, STDOUT_FILENO) == -1)
-		{
-			ft_printfd(2, "msh: %s: Bad file descriptor", exe->argv[0]);
+		if (open_pipe(exe->argv[0], i, STDOUT_FILENO))
 			return (MSHELL_FAILURE);
-		}
 	}
 	else
 		num = bicmd(num, exe, minishell);

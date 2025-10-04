@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/03 20:51:09 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 16:17:25 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,12 @@ static char	**exe_setup(t_body *minishell)
 
 int	exend(int exit_no, char *err_msg, t_list *cmd_lst)
 {
-	write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
-	err_msg = strerror(errno);
-	write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
+	if (err_msg)
+	{
+		write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
+		err_msg = strerror(errno);
+		write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
+	}
 	if (cmd_lst)
 		fd_endexe(cmd_lst, 0);
 	if (errno == ENOENT)
@@ -93,7 +96,7 @@ static void	exe_init(int errfd[2], t_cmd *exe, t_list *cmd_lst)
 {
 	close(errfd[0]);
 	sigdfl();
-	dup2(errfd[1], STDERR_FILENO);
+	//dup2(errfd[1], STDERR_FILENO);
 	if (!exe->argv || !exe->argv[0])
 		exend(MSHELL_SUCCESS, NULL, cmd_lst);
 	if (dup2(exe->infd, STDIN_FILENO) == -1
