@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:07:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 20:08:41 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,6 @@ int	msh_cd(char **args, t_list **envp)
 	else
 		return (built_end(args[0], "Numbers of args", NULL, '\0'));
 	if (chdir(dir) != 0)
-		return (built_end(args[0], "System failed", NULL, '\0'));
+		return (built_end(args[0], "System failed", dir, '\0'));
 	return (change_pwd(envp));
 }

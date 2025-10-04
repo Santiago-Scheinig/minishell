@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 14:35:25 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/04 20:10:32 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,13 @@ int	built_end(char *name, char *type, char *flags, char error)
 	else if (ft_strnstr(type, "HOME", ft_strlen(type)))
 		ft_printfd(2, "%s%s: HOME not set\n", shell, name);
 	else if (ft_strnstr(type, "System failed", ft_strlen(type)))
-		ft_printfd(2, "%s%s: %s\n", shell, name, strerror(errno));
+	{
+		if (!flags)
+			ft_printfd(2, "%s%s: %s\n", shell, name, strerror(errno));
+		else
+			ft_printfd(2, "%s%s: %s: %s\n", shell, name, flags, strerror(errno));
+			
+	}
 	else if (ft_strnstr(type, "Not valid identifier", ft_strlen(type)))
 		ft_printfd(2, "%s%s: `%s': not a valid identifier\n", shell, name,
 			flags);
