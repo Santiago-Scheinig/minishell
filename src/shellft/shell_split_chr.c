@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_strchr.c                                     :+:      :+:    :+:   */
+/*   shell_split_chr.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 19:08:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:18:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/09 03:05:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib/msh_std_utils.h"
+#include "shell_std_utils.h"
 
 /**
- * @brief	Finds the next word delimiter or operator in a string.
+ * @brief	Finds the next word delimiter in a string, ignoring quoted parts.
  *
- * Scans the input string until a divisor token (space, pipe, or redirection)
- * is found outside of quotes. Quoted substrings are skipped to ensure that
- * delimiters within quotes are ignored.
+ *			Iterates through the string until a divisor character is found,
+ *			using is_divisor() to detect delimiters. Skips over characters
+ *			enclosed in single or double quotes. Returns a pointer to the
+ *			first delimiter found, or NULL if none exist.
  *
- * @param str	Input string to scan for the next word boundary.
+ * @param	str	Pointer to the input string to search for word delimiters.
  *
- * @return	Pointer to the first divisor character found, or NULL if none
- *			exist outside quotes.
+ * @note	Quotes must be properly closed; otherwise, behavior may be undefined.
+ * @note	Returns NULL if no delimiter is found in the string.
+ *
+ * @return	Pointer to the first delimiter character in str, or NULL if none.
  */
 const char	*word_strchr(const char *str)
 {
@@ -51,16 +54,19 @@ const char	*word_strchr(const char *str)
 }
 
 /**
- * @brief	Finds the next operator token in a string, skipping quoted text.
+ * @brief	Finds the next operator in a string, ignoring quoted sections.
  *
- * Iterates through the given string until a shell operator (e.g. |, <, >, <<,
- * >>) is found outside any quotes. Quoted substrings are fully skipped to
- * avoid false positives.
+ *			Iterates through the string, skipping characters inside single
+ *			or double quotes. Uses get_token_type() to detect operator
+ *			characters. Returns a pointer to the first operator found, or
+ *			NULL if none exist.
  *
- * @param str	Input string to search for the next operator.
+ * @param	str	Pointer to the input string to search for operators.
  *
- * @return	Pointer to the first operator character found, or NULL if no
- *			operator exists outside quotes.
+ * @note	Quotes must be properly closed; otherwise, behavior may be undefined.
+ * @note	Returns NULL if no operator is found in the string.
+ *
+ * @return	Pointer to the first operator character in str, or NULL if none.
  */
 const char	*operator_strchr(const char *str)
 {

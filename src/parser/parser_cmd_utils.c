@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:16:56 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/08 21:39:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * COMMENT PENDING
  */
-t_list	*cmdupd_err(t_list *aux_lst, t_cmd **new_cmd)
+t_list	*cmdupd_err(t_list *lst_t_token, t_cmd **new_cmd)
 {
 	t_token	*aux_tkn;
 
@@ -24,14 +24,14 @@ t_list	*cmdupd_err(t_list *aux_lst, t_cmd **new_cmd)
 	if ((*new_cmd)->pathname)
 		free((*new_cmd)->pathname);
 	memset((*new_cmd), 0, sizeof(t_cmd));
-	while (aux_lst->next)
+	while (lst_t_token->next)
 	{
-		aux_tkn = (t_token *) aux_lst->next->content;
+		aux_tkn = (t_token *) lst_t_token->next->content;
 		if (aux_tkn->type == PIPE)
-			return (aux_lst);
-		aux_lst = aux_lst->next;
+			return (lst_t_token);
+		lst_t_token = lst_t_token->next;
 	}
-	return (aux_lst);
+	return (lst_t_token);
 }
 
 /**
@@ -44,7 +44,7 @@ static int	cmdupd_infile(t_token *next, t_cmd *new)
 	if (access(next->str, R_OK | F_OK))
 	{
 		new->infd = -1;
-		return (redirend(next->str, MSHELL_FAILURE));
+		return (shell_redirerr(next->str, MSHELL_FAILURE));
 	}
 	else
 	{
@@ -60,7 +60,7 @@ static int	cmdupd_infile(t_token *next, t_cmd *new)
 /**
  * COMMENT PENDING
  */
-static int	cmdupd_outfile(t_token *next, t_cmd *new, int open_flag)
+static int	cmdupd_outfile(int open_flag, t_token *next, t_cmd *new)
 {
 	if (new->outfd > 2)
 		close(new->outfd);
@@ -93,9 +93,9 @@ int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
 	if (aux->type == REDIR_IN)
 		return (cmdupd_infile(aux_next, new));
 	if (aux->type == REDIR_OUT)
-		return (cmdupd_outfile(aux_next, new, O_TRUNC));
+		return (cmdupd_outfile(O_TRUNC, aux_next, new));
 	if (aux->type == REDIR_APPEND)
-		return (cmdupd_outfile(aux_next, new, O_APPEND));
+		return (cmdupd_outfile(O_APPEND, aux_next, new));
 	if (aux->type == HEREDOC)
 		return (cmdupd_heredoc(aux, new));
 	return (MSHELL_FAILURE);

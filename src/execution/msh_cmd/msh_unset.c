@@ -6,26 +6,26 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/29 15:35:46 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/09 05:53:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "msh_cmd.h"
+#include "msh_bin.h"
 
-static t_list	*remove_lst(t_list *list)
+static t_list	*remove_lst(t_list *lst_t_var)
 {
-	t_list	*current;
+	t_list	*aux_t_var;
 	t_var	*var;
 
-	var = (t_var *)list->content;
-	current = list;
+	var = (t_var *)lst_t_var->content;
+	aux_t_var = lst_t_var;
 	free(var->name);
 	if (var->value)
 		free(var->value);
 	free(var);
-	list = current->next;
-	free(current);
-	return (list);
+	aux_t_var = lst_t_var->next;
+	free(aux_t_var);
+	return (lst_t_var);
 }
 
 static int	same_name_env(const char *env, const char *name)
@@ -44,17 +44,17 @@ static int	same_name_env(const char *env, const char *name)
 	return (0);
 }
 
-static int	check_name(char ***envp, char *name, t_list **lst)
+static int	check_name(char *name, char ***envp, t_list **head_t_var)
 {
 	size_t	lst_len;
 	size_t	i;
 	size_t	j;
-	t_var	*tmp;
+	t_var	*var;
 
 	i = 0;
-	tmp = (t_var *)(*lst)->content;
-	lst_len = ft_strlen(tmp->name);
-	if (!ft_strncmp(tmp->name, name, lst_len))
+	var = (t_var *)(*head_t_var)->content;
+	lst_len = ft_strlen(var->name);
+	if (!ft_strncmp(var->name, name, lst_len))
 	{
 		j = 0;
 		while (envp[0][j])
@@ -66,62 +66,20 @@ static int	check_name(char ***envp, char *name, t_list **lst)
 			}
 			j++;
 		}
-		lst[0] = remove_lst(lst[0]);
+		head_t_var[0] = remove_lst(head_t_var[0]);
 		return (1);
 	}
 	return (0);
 }
 
 /**
- * Removes an element from a NULL-terminated array of strings.
- * 
- * @param arr Array of strings to modify.
- * @param index Index of the element to remove.
- * 
- * Frees the removed element and shifts remaining pointers down; sets final
- * slot to NULL.
- * 
- * @return The modified array pointer.
+ * Need fix
  */
-char	**ft_remove_arr(char **arr, int index)
+int	msh_unset(char **arg, char ***envp, t_list **head_t_var)
 {
-	int		len;
-
-	if (!arr)
-		return (arr);
-	len = ft_arrlen((const void **)arr);
-	if (index >= len)
-		return (arr);
-	free(arr[index]);
-	while (index < len - 1)
-	{
-		if (arr[index + 1] != NULL)
-			arr[index] = arr[index + 1];
-		else
-			arr[index] = NULL;
-		index++;
-	}
-	arr[len - 1] = NULL;
-	return (arr);
-}
-
-/**
- * Built-in 'unset' command implementation for msh.
- * 
- * @param envp Pointer-to-pointer to environment array.
- * @param env_lst Pointer-to-list head of environment variables.
- * @param arg Array of variable names to unset.
- * 
- * Validates flags, then removes each matching variable from both envp and the
- * list.
- * 
- * @return 0 on success, non-zero on error.
- */
-int	msh_unset(char ***envp, t_list **env_lst, char **arg)
-{
-	t_list	*current;
-	t_list	*prev;
-	t_list	*next;
+	t_list	*lst_t_var;
+	t_list	*prev_t_var;
+	t_list	*next_t_var;
 	int		i;
 
 	i = -1;
@@ -129,22 +87,22 @@ int	msh_unset(char ***envp, t_list **env_lst, char **arg)
 		return (built_end("unset", "Invalid flags", "[name ...]", arg[0][1]));
 	while (arg[++i])
 	{
-		prev = NULL;
-		current = *env_lst;
-		while (current && current->content)
+		prev_t_var = NULL;
+		lst_t_var = *head_t_var;
+		while (lst_t_var && lst_t_var->content)
 		{
-			next = current->next;
-			if (check_name(envp, arg[i], &current))
+			next_t_var = lst_t_var->next;
+			if (check_name(arg[i], envp, &lst_t_var))
 			{
-				if (!prev)
-					*env_lst = current;
+				if (!prev_t_var)
+					*head_t_var = lst_t_var;
 				else
-					prev->next = current;
+					prev_t_var->next = lst_t_var;
 			}
 			else
 			{
-				prev = current;
-				current = next;
+				prev_t_var = lst_t_var;
+				lst_t_var = next_t_var;
 			}
 		}
 	}

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:07:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/09 05:56:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "msh_cmd.h"
+#include "msh_bin.h"
 
 static int	change_pwd(t_list **envp)
 {
@@ -41,18 +41,7 @@ static int	change_pwd(t_list **envp)
 }
 
 /**
- * Built-in 'cd' command for msh.
- * 
- * @param args Argument array for cd (args[0] is "cd").
- * @param envp Pointer-to-list head of environment variables
- * (used to update PWD).
- * 
- * Changes the working directory to the specified path or HOME if no arg
- * provided.
- * Reports errors and returns corresponding error.
- * 
- * @return 0 on success, non-zero on error.
- * @note - Print errors directly.
+ * Builterr
  */
 int	msh_cd(char **args, t_list **envp)
 {
@@ -60,7 +49,7 @@ int	msh_cd(char **args, t_list **envp)
 
 	if (!args[1])
 	{
-		dir = shell_getenv(*envp, "HOME");
+		dir = shell_envchr(NULL, *envp, "HOME");
 		if (!dir)
 			return (built_end(args[0], "HOME", NULL, '\0'));
 	}

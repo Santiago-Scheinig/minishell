@@ -10,98 +10,47 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "msh.h"
 #include <sys/stat.h>
-#include <unistd.h>
+#include "msh_psr.h"
+#include "msh_exe.h"
 
 /**
- * @brief Initializes the shell environment variables.
+ * @brief	Initializes the main minishell state and terminal environment.
  *
- * Duplicates the provided environment array, converts it into a linked
- * list of t_var, sorts it, and ensures that the PS1 prompt variable
- * exists. Allocates memory for the internal shell structures.
+ *			Sets up the t_body structure, configures terminal attributes
+ *			for interactive sessions, applies signal handlers, and loads
+ *			the environment variables into both array and list formats.
  *
- * @param envp	Pointer to the array of environment variable strings.
- * @param msh	Pointer to the shell state structure (t_body) to update.
+ * @param	msh	Pointer to the main shell structure to initialize.
  *
- * @note	Exits the shell using forcend on any memory allocation failure.
- * @note	Sets msh->envp (duplicated array) and msh->lst_t_var (linked list).
- * @note	If PS1 is not defined in envp, a default prompt is created and
- *			added to the environment.
- * @note	Memory allocated for PS1 strings is freed appropriately.
- * @note	Helper functions:
- *			 - shell_ functions return NULL on failure (except sortenv).
- *			 - msh_ functions return 1 on failure, 2 on misusage, 0 on success.
+ * @note	If the shell runs interactively, echo control characters
+ *			(like ^C) are displayed using ECHOCTL mode.
+ * @note	On any initialization error (termios or malloc failure),
+ *			the shell terminates immediately through shell_forcend().
  *
- * @return	Nothing (void function). Exits on fatal error.
+ * @return	None. Exits the program if any step fails.
  */
-static void	init_envp(const char **envp, t_body *msh)
-{
-	char	**ps1;
-
-	msh->envp = shell_envpdup(envp);
-	if (!msh->envp)
-		forcend(msh, "malloc", MSHELL_FAILURE);
-	msh->lst_t_var = shell_newlst_var(msh->envp);
-	if (!msh->lst_t_var && errno)
-		forcend(msh, "malloc", MSHELL_FAILURE);
-	shell_sortenv(&(msh->lst_t_var));
-	ps1 = shell_pmtstr(msh->lst_t_var);
-	if (!ps1)
-		forcend(msh, "malloc", MSHELL_FAILURE);
-	shell_sortenv(&(msh->lst_t_var));
-	if (!shell_getenv(msh->lst_t_var, "PS1"))
-	{
-		if (msh_export(&msh->envp, &msh->lst_t_var, &ps1[1]))
-			forcend(msh, "malloc", MSHELL_FAILURE);
-		if (msh_import(&msh->envp, &msh->lst_t_var, ps1))
-			forcend(msh, "malloc", MSHELL_FAILURE);
-		shell_sortenv(&msh->lst_t_var);
-		ft_split_free(ps1);
-	}
-	else
-		free(ps1);
-}
-
-/**
- * @brief Initializes the shell's terminal settings and signal handlers.
- *
- * Resets the provided t_body structure, checks whether the shell is running
- * in interactive mode, and configures terminal attributes accordingly.
- * In interactive mode, it enables the ECHOCTL flag and sets up signal
- * handlers for SIGINT and SIGQUIT. In non-interactive mode, it sets up
- * a SIGINT handler for abrupt exit.
- *
- * @param msh	Pointer to the shell state structure (t_body) to initialize.
- *
- * @note	Uses fstat and isatty to determine if the shell is interactive.
- * @note	In interactive mode, stores the original terminal settings in
- *			msh->orig_term.
- * @note	Calls forcend on error conditions (tcgetattr, tcsetattr, or
- *			signal setup) and exits the shell.
- * @return	Nothing (void function). Exits the program on critical errors.
- */
-static void	init_term(t_body *msh)
+static void	msh_init(t_body *msh)
 {
 	struct termios	new_term;
-	struct stat		st;
 
 	ft_memset(msh, 0, sizeof(t_body));
-	fstat(STDIN_FILENO, &st);
 	msh->interactive = isatty(STDIN_FILENO);
 	if (msh->interactive)
 	{
 		if (tcgetattr(STDIN_FILENO, &(msh->orig_term)))
-			forcend(msh, "tcgetattr", MSHELL_FAILURE);
+			shell_forcend(MSHELL_FATAL, "tcgetattr", msh);
 		new_term = msh->orig_term;
 		new_term.c_lflag |= ECHOCTL;
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &new_term))
-			forcend(msh, "tcsetattr", MSHELL_FAILURE);
+			shell_forcend(MSHELL_FATAL, "tcsetattr", msh);
 		if (shell_sigquit() || shell_sigint())
-			forcend(msh, "sigaction", MSHELL_FAILURE);
+			shell_forcend(MSHELL_FAILURE, "sigaction", msh);
 	}
 	else if (shell_signint())
-		forcend(msh, "sigaction", MSHELL_FAILURE);
+		shell_forcend(MSHELL_FAILURE, "sigaction", msh);
+	if (shell_envini(envp, &(msh->envp), &(msh->head_envar)))
+		shell_forcend(MSHELL_FAILURE, "malloc", msh);
 }
 
 
@@ -132,20 +81,26 @@ int	main(int argc, char **argv, const char **envp)
 {
 	t_body	msh;
 
-	errno = 0;
-	init_term(&msh);
-	init_envp(envp, &msh);
+	errno = ENOENT;
+	msh_init(&msh);
 	if (argc > 1 || argv[1])
-	{
-		errno = ENOENT;
-		return (forcend(&msh, argv[1], MSHELL_FAILURE));
-	}
+		return (shell_forcend(MSHELL_FAILURE, argv[1], &msh));
 	while (1)
 	{
 		errno = 0;
+		if (!msh->interactive && g_signal_received)
+		{
+			g_signal_received = 0;
+			shell_forcend(msh.exit_no, NULL, &msh);
+		}
 		if (parser(&msh))
 			continue ;
 		errno = 0;
+		if (!msh->interactive && g_signal_received)
+		{
+			g_signal_received = 0;
+			shell_forcend(msh.exit_no, NULL, &msh);
+		}
 		if (execmd(&msh))
 			continue ;
 		errno = 0;

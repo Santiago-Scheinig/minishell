@@ -6,29 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:58:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 20:46:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/09 02:27:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib/msh_std.h"
+#include "shell_std.h"
 
-/**
- * @brief Copies memory from src to dst upward, respecting a mask.
- *
- * Moves bytes from src_tmp to dst_tmp in forward order (from start to end)
- * to handle overlapping memory regions safely. The src_mask array is used
- * to skip or handle certain bytes marked as 'O'.
- *
- * @param dst_tmp	Pointer to the destination memory.
- * @param src_tmp	Pointer to the source memory.
- * @param src_mask	Pointer to a mask array indicating special bytes.
- * @param n			Number of bytes to copy.
- *
- * @note	This function is called internally by shell_memmove when 
- * 			dest <= src.
- * @note	Memory is assumed to be allocated and valid; no bounds checking
- *			is performed beyond n.
- */
 static void	iq_moveup(char *dst_tmp, char *src_tmp, char *src_mask, size_t n)
 {
 	size_t	i;
@@ -50,23 +33,6 @@ static void	iq_moveup(char *dst_tmp, char *src_tmp, char *src_mask, size_t n)
 	}
 }
 
-/**
- * @brief Copies memory from src to dst downward, respecting a mask.
- *
- * Moves bytes from src_tmp to dst_tmp in reverse order (from end to start)
- * to handle overlapping memory regions safely. The src_mask array is used
- * to skip or handle certain bytes marked as 'O'.
- *
- * @param dst_tmp	Pointer to the destination memory.
- * @param src_tmp	Pointer to the source memory.
- * @param src_mask	Pointer to a mask array indicating special bytes.
- * @param len		Number of bytes to copy.
- *
- * @note	This function is called internally by shell_memmove when 
- * 			dest > src.
- * @note	Memory is assumed to be allocated and valid; no bounds checking
- *			is performed beyond len.
- */
 static void	iq_movedn(char *dst_tmp, char *src_tmp, char *src_mask, size_t len)
 {
 	size_t	i;
@@ -95,22 +61,24 @@ static void	iq_movedn(char *dst_tmp, char *src_tmp, char *src_mask, size_t len)
 }
 
 /**
- * @brief Copies memory from src to dest using a mask.
+ * @brief	Moves memory from src to dest with a mask, safely handling overlap.
  *
- * Moves n bytes from src to dest. If dest > src, copies bytes
- * downward to avoid overlap; otherwise, copies upward. The mask
- * array controls special handling of specific bytes 
- * (implementation-dependent).
+ *			Performs a memory copy of n bytes from src to dest. If dest is
+ *			higher in memory than src, calls iq_movedn() to copy backward.
+ *			Otherwise, calls iq_moveup() to copy forward. Each byte is
+ *			controlled by the corresponding entry in the mask array.
  *
- * @param dest	Pointer to the destination memory.
- * @param src	Pointer to the source memory.
- * @param mask	Pointer to a mask array affecting how bytes are moved.
- * @param n		Number of bytes to copy.
+ * @param	dest	Pointer to the destination memory buffer.
+ * @param	src		Pointer to the source memory buffer.
+ * @param	mask	Pointer to a mask array controlling which bytes are copied.
+ * @param	n		Number of bytes to move.
  *
- * @note	Returns dest even if dest and src are NULL.
- * @note	Uses iq_movedn and iq_moveup internally for handling overlap.
+ * @note	If both dest and src are NULL, returns dest without performing
+ *			any operation.
+ * @note	Mask array should be at least n bytes long to avoid undefined
+ *			behavior.
  *
- * @return	Pointer to the destination memory.
+ * @return	Pointer to the destination memory buffer (dest).
  */
 void	*shell_memmove(void *dest, void *src, void *mask, size_t n)
 {

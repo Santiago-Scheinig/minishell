@@ -6,23 +6,25 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:22:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 21:30:34 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/09 02:58:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib/msh_std.h"
+#include "shell_std.h"
 
 /**
- * @brief Checks if the string represents a shell token divisor.
+ * @brief	Determines if the string starts with a word delimiter or operator.
  *
- * Evaluates the input string to determine if it matches known shell
- * operators or a space. Returns the corresponding token type. If no
- * match is found, returns WORD.
+ *			Checks the input string against known shell operators: PIPE ("|"),
+ *			REDIR_APPEND (">>"), HEREDOC ("<<"), REDIR_IN ("<"), REDIR_OUT
+ *			(">"), and space (" ") as a word delimiter. Returns WORD if none
+ *			match.
  *
- * @param str  The string to check for being a divisor/operator.
+ * @param	str	Pointer to the string to analyze.
  *
- * @return  The t_token_type representing the divisor (PIPE, REDIR_IN, etc.)
- *          or WORD if the string is not a divisor.
+ * @note	The returned values correspond to predefined shell token constants.
+ *
+ * @return	Integer representing the type of delimiter or operator, or WORD.
  */
 int	is_divisor(char *str)
 {
@@ -42,15 +44,19 @@ int	is_divisor(char *str)
 }
 
 /**
- * @brief Determines the type of a shell token from its string value.
+ * @brief	Identifies the type of a shell token from a string.
  *
- * Compares the input string to known shell operators and returns the
- * corresponding token type. If no operator matches, the token is
- * classified as a WORD. Empty or NULL strings return END.
+ *			Checks the input string against known shell operators:
+ *			PIPE ("|"), REDIR_APPEND (">>"), HEREDOC ("<<"), REDIR_IN ("<"),
+ *			and REDIR_OUT (">"). Returns WORD for non-operator strings and
+ *			END for NULL or empty strings.
  *
- * @param str  The token string to evaluate.
+ * @param	str	Pointer to the string to analyze.
  *
- * @return  The t_token_type of the string (WORD, PIPE, REDIR_IN, etc.).
+ * @note	Token types must match the predefined constants used in the shell.
+ *
+ * @return	Integer representing the token type (END, PIPE, REDIR_APPEND,
+ *			HEREDOC, REDIR_IN, REDIR_OUT, or WORD).
  */
 int	get_token_type(char *str)
 {
@@ -70,15 +76,18 @@ int	get_token_type(char *str)
 }
 
 /**
- * @brief Frees a partially allocated array of strings.
+ * @brief	Frees a partially allocated array of strings and returns NULL.
  *
- * Frees each string in wrdstr up to the specified index, then frees
- * the array itself.
+ *			Iterates through the array of strings up to the specified index,
+ *			freeing each allocated string. Finally, frees the array itself
+ *			and returns NULL to simplify error handling.
  *
- * @param wrdstr  Array of strings to free.
- * @param index   Number of elements to free from the array.
+ * @param	wrdstr	Pointer to the array of strings to free.
+ * @param	index	Number of elements to free from the array.
  *
- * @return Always returns NULL to simplify error handling in callers.
+ * @note	Use this function when allocation of string arrays fails mid-way.
+ *
+ * @return	NULL.
  */
 void	*memfree(char **wrdstr, int index)
 {
@@ -95,15 +104,17 @@ void	*memfree(char **wrdstr, int index)
 }
 
 /**
- * @brief Returns the character length of a shell operator token.
+ * @brief	Returns the length in characters of a given shell operator type.
  *
- * Determines the length of a token based on its type. Single-character
- * operators (|, <, >) return 1, double-character operators (>>, <<) return 2.
+ *			Checks the operator type and returns 1 for single-character
+ *			operators (PIPE, REDIR_IN, REDIR_OUT) and 2 for double-character
+ *			operators (HEREDOC, REDIR_APPEND). Returns 0 for unknown types.
  *
- * @param type 	The token type (t_token_type) to evaluate.
+ * @param	type	Integer representing the token/operator type.
  *
- * @return  Number of characters representing the operator.
- *          Returns 0 if type is not a recognized operator.
+ * @note	Operator types must match the predefined constants used by the shell.
+ *
+ * @return	Length of the operator in characters, or 0 if type is unknown.
  */
 int	operator_len(int type)
 {
@@ -115,19 +126,17 @@ int	operator_len(int type)
 }
 
 /**
- * @brief Computes the length of the next word in a string.
+ * @brief	Calculates the length of the next word, ignoring quoted parts.
  *
- * Scans the input string s until it reaches a divisor character or the end
- * of the string. Handles quoted sections (single or double quotes) as a
- * single word, skipping over internal characters until the closing quote.
+ *			Iterates through the string until a divisor character is reached,
+ *			skipping characters inside single or double quotes. Properly handles
+ *			quoted sections to include them in the word length.
  *
- * @param str Input string to measure the word length from.
+ * @param	str	Pointer to the input string to measure.
  *
- * @note  Uses is_divisor() to identify word boundaries.
- * @note  Quotes are handled properly; the length includes all characters
- *        inside the quotes.
+ * @note	Quotes must be properly closed; otherwise, behavior may be undefined.
  *
- * @return Length of the next word in characters.
+ * @return	Length of the next word in characters.
  */
 int	word_len(const char *str)
 {

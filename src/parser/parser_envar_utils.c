@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/30 20:50:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/04 22:42:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 /**
  * Calculates the length of the enviroment variable name.
  * 
- * @param env_var A pointer to the WORD string on the position where the
+ * @param var A pointer to the WORD string on the position where the
  * enviromental variable name starts (Position on the '$').
  * @return The lenght of the enviroment variable name.
  * @note The minimum lenght size of a enviroment variable is always one,
  * on behalf of the '$' sign.
  */
-int	envar_len(char *env_var)
+int	envar_len(char *var)
 {
 	int	i;
 
 	i = 1;
-	if (env_var[i] == '?')
+	if (var[i] == '?')
 		return (++i);
-	while (ft_isalnum(env_var[i]) || env_var[i] == '_')
+	while (ft_isalnum(var[i]) || var[i] == '_')
 		i++;
 	return (i);
 }
@@ -118,17 +118,17 @@ char	*exp_value(char *str, char *value, int start)
 
 int	exp_exitno(char **str, char **mask, int start, int exit_no)
 {
-	char	*env_value;
-	char	*ret;
+	char	*var_value;
+	char	*aux;
 
-	env_value = ft_itoa(exit_no);
-	ret = exp_value((*str), env_value, start);
-	if (!ret || envar_mask((*str), env_value, mask, start))
+	var_value = ft_itoa(exit_no);
+	aux = exp_value((*str), var_value, start);
+	if (!aux || envar_mask((*str), var_value, mask, start))
 		return (MSHELL_FAILURE);
-	free(env_value);
+	free(var_value);
 	if ((*str))
 		free((*str));
-	(*str) = ret;
+	(*str) = aux;
 	return (MSHELL_SUCCESS);
 }
 
@@ -136,23 +136,23 @@ int	exp_exitno(char **str, char **mask, int start, int exit_no)
  * Allocates and returns a clean STRING with only the enviromental variable
  * name, to search into getenv().
  * 
- * @param env_var A pointer to the WORD string on the position where the
+ * @param var A pointer to the WORD string on the position where the
  * enviromental variable name starts (Position after the '$').
  * @return A pointer to a new allocated STRING that only includes the name
  * of the enviromental variable.
  */
-char	*envar_pathname(char *env_var)
+char	*envar_pathname(char *var)
 {
 	char	*new_path;
-	int		env_var_len;
+	int		var_len;
 	int		i;
 
 	i = -1;
-	env_var_len = envar_len(env_var);
-	new_path = ft_calloc((env_var_len + 1), sizeof(char));
+	var_len = envar_len(var);
+	new_path = ft_calloc((var_len + 1), sizeof(char));
 	if (!new_path)
 		return (NULL);
-	while (++i < env_var_len)
-		new_path[i] = env_var[i];
+	while (++i < var_len)
+		new_path[i] = var[i];
 	return (new_path);
 }

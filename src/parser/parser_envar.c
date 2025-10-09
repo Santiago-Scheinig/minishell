@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:13:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/05 18:32:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
  * operator, which aren't protected by quotes.
  * 
  * @param lst_t_token A pointer to the current position on the token list.
- * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param msh A pointer to the main enviroment structure of msh.
  * @note If the ARRAY of STRINGS is just one word, this step is skipped.
  */
-static void	envar_tokenization(t_list *lst_t_token, t_body *minishell)
+static void	envar_tokenization(t_list *lst_t_token, t_body *msh)
 {
 	char	**split;
 	int		i;
@@ -29,7 +29,7 @@ static void	envar_tokenization(t_list *lst_t_token, t_body *minishell)
 	i = 0;
 	split = ft_iq_split(((t_token *) lst_t_token->content)->str, ' ');
 	if (!split)
-		forcend(minishell, "malloc", MSHELL_FAILURE);
+		forcend(msh, "malloc", MSHELL_FAILURE);
 	while (split[i])
 		i++;
 	while (i && split[--i])
@@ -43,7 +43,7 @@ static void	envar_tokenization(t_list *lst_t_token, t_body *minishell)
 		if (shell_addlst_token(split[i], i, lst_t_token))
 		{
 			ft_split_free(split);
-			forcend(minishell, "malloc", MSHELL_FAILURE);
+			forcend(msh, "malloc", MSHELL_FAILURE);
 		}
 	}
 	if (split)
@@ -65,7 +65,7 @@ static void	envar_tokenization(t_list *lst_t_token, t_body *minishell)
  * @param value A pointer to the STRING value of the enviromental variable.
  * @param start The position index of the enviromental variable on 
  * the WORD token string.
- * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param msh A pointer to the main enviroment structure of msh.
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
@@ -109,31 +109,31 @@ int	envar_mask(char *str, char *value, char **mask, int start)
  * @param word A pointer to the T_TOKEN to be expanded.
  * @param start The position index of the enviromental variable on 
  * the WORD token string.
- * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param msh A pointer to the main enviroment structure of msh.
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
-static int	envar_init(char **str, char **mask, int start, t_list *envp)
+static int	envar_init(char **str, char **mask, int start, t_list *lst_t_var)
 {
-	char	*env_pathname;
-	char	*env_value;
+	char	*var_pathname;
+	char	*var_value;
 	char	*ret;
 
-	env_pathname = envar_pathname(&((*str)[start + 1]));
-	if (!env_pathname)
+	var_pathname = envar_pathname(&((*str)[start + 1]));
+	if (!var_pathname)
 		return (MSHELL_FAILURE);
-	env_value = shell_getenv(envp, env_pathname);
-	free(env_pathname);
-	if (!env_value)
+	var_value = shell_getenv(lst_t_var, var_pathname);
+	free(var_pathname);
+	if (!var_value)
 	{
-		if (envar_mask((*str), env_value, mask, start))
+		if (envar_mask((*str), var_value, mask, start))
 			return (MSHELL_FAILURE);
-		ret = exp_value((*str), env_value, start);
+		ret = exp_value((*str), var_value, start);
 	}
 	else
 	{
-		ret = exp_value((*str), env_value, start);
-		if (!ret || envar_mask((*str), env_value, mask, start))
+		ret = exp_value((*str), var_value, start);
+		if (!ret || envar_mask((*str), var_value, mask, start))
 			return (MSHELL_FAILURE);
 		if ((*str))
 			free((*str));
@@ -148,11 +148,11 @@ static int	envar_init(char **str, char **mask, int start, t_list *envp)
  * variables.
  * 
  * @param lst_t_token A pointer with the current position on the lst_t_token.
- * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param msh A pointer to the main enviroment structure of msh.
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
-int	envar_syntax(char **str, char **mask, t_list *envp, int exit_no)
+int	envar_syntax(char **str, char **mask, t_list *lst_t_var, int exit_no)
 {
 	int		i;
 	int		quote;
@@ -173,7 +173,7 @@ int	envar_syntax(char **str, char **mask, t_list *envp, int exit_no)
 				if (exp_exitno(str, mask, i, exit_no))
 					return (MSHELL_FAILURE);
 			}
-			else if (envar_init(str, mask, i, envp))
+			else if (envar_init(str, mask, i, lst_t_var))
 				return (MSHELL_FAILURE);
 		}
 	}
@@ -194,26 +194,26 @@ int	envar_syntax(char **str, char **mask, t_list *envp, int exit_no)
  * tokenized into WORD tokens divided only by ' ' (OPERATORS are treated as 
  * plain text after expansion).
  * 
- * @param minishell A pointer to the main enviroment structure of minishell
+ * @param msh A pointer to the main enviroment structure of msh
  * @note If any error occurs during the tokenization step, the function will
  * end with a sigend([errno]) call.
  */
 void	parser_envar(t_body *msh)
 {
-	t_list	*envp;
+	t_list	*lst_t_var;
 	t_list	*lst_t_token;
-	t_token	*tkn;
+	t_token	*aux;
 
-	envp = msh->lst_t_var;
+	lst_t_var = msh->lst_t_var;
 	lst_t_token = msh->lst_t_token;
 	while (lst_t_token)
 	{
-		tkn = (t_token *) lst_t_token->content;
-		if (tkn->str && tkn->type == WORD)
+		aux = (t_token *) lst_t_token->content;
+		if (aux->str && aux->type == WORD)
 		{
-			if (envar_syntax(&(tkn->str), &(tkn->mask), envp, msh->exit_no))
+			if (envar_syntax(&aux->str, &aux->mask, lst_t_var, msh->exit_no))
 				forcend(msh, "malloc", MSHELL_FAILURE);
-			if (tkn->mask[0] == 'N')
+			if (aux->mask[0] == 'N')
 				envar_tokenization(msh->lst_t_token, msh);
 		}
 		lst_t_token = lst_t_token->next;

@@ -6,14 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:15:51 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/08 19:44:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MSH_PSR_H
 # define MSH_PSR_H
 
-# include "lib/msh_std.h"
+# include "shell_std.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
@@ -41,12 +41,10 @@ typedef struct s_hdoc_tsh
  * Divides user input into tokens catalogated as the enum structure 
  * T_TOKEN_TYPE indicates.
  * 
- * @param minishell A pointer to the main enviroment structure of minishell.
+ * @param msh A pointer to the main enviroment structure of minishell.
  * @param split The user input already divided with shell_split() parameters.
- * @note If any error occurs during the tokenization step, the function will
- * end with a sigend([errno]) call.
  */
-int	parser_token(t_body *msh, char **split);
+int	parser_token(char **split, t_body *msh);
 
 /**
  * Verifies if any WORD token includes a valid '$' OPERATOR. If it does, 

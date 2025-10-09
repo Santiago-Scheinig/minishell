@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:12:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/08 20:07:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 static int	outfd_setdfl(void)
 {
 	int	tty_fd;
-	int	save_out;
+	int	orig_outfd;
 
 	tty_fd = open("/dev/tty", O_RDWR);
 	if (tty_fd == -1)
 		return (-1);
-	save_out = dup(STDOUT_FILENO);
-	if (save_out == -1)
+	orig_outfd = dup(STDOUT_FILENO);
+	if (orig_outfd == -1)
 	{
 		close(tty_fd);
 		return (-1);
@@ -33,19 +33,19 @@ static int	outfd_setdfl(void)
 		return (-1);
 	}
 	close(tty_fd);
-	return (save_out);
+	return (orig_outfd);
 }
 
-static int	outfd_restore(int save_out)
+static int	outfd_restore(int orig_outfd)
 {
-	if (save_out == -1)
+	if (orig_outfd == -1)
 		return (-1);
-	if (dup2(save_out, STDOUT_FILENO))
+	if (dup2(orig_outfd, STDOUT_FILENO))
 	{
-		close(save_out);
+		close(orig_outfd);
 		return (-1);
 	}
-	close(save_out);
+	close(orig_outfd);
 	return (MSHELL_SUCCESS);
 }
 
@@ -68,15 +68,15 @@ static void	parser_prompt(t_body *msh)
 static void	parser_input(t_body *msh)
 {
 	char	*tmp;
-	int		save_out;
+	int		orig_outfd;
 
 	if (msh->interactive && isatty(STDOUT_FILENO))
 		parser_prompt(msh);
 	else if (msh->interactive)
 	{
-		save_out = outfd_setdfl();
+		orig_outfd = outfd_setdfl();
 		parser_prompt(msh);
-		outfd_restore(save_out);
+		outfd_restore(orig_outfd);
 	}
 	else
 	{
@@ -96,6 +96,8 @@ static void	parser_input(t_body *msh)
 		msh->input = NULL;
 		parser_input(msh);
 	}
+	if (!msh->input)
+		msh_exit(NULL, msh);
 }
 
 /**
@@ -125,14 +127,14 @@ int	parser(t_body *msh)
 
 	cleanup(msh);
 	parser_input(msh);
-	if (!msh->input)
-		msh_exit(NULL, msh);
 	if (msh->interactive && msh->input[0] != '\0')
 		add_history(msh->input);
 	split = shell_split(msh->input);
 	if (!split)
 		forcend(msh, "malloc", MSHELL_FAILURE);
-	if (parser_token(msh, split))
+	free(msh->input);
+	msh->input = NULL;
+	if (parser_token(split, msh))
 	{
 		if (msh->exit_no == MSHELL_MISSUSE && !msh->interactive)
 			forcend(msh, NULL, msh->exit_no);

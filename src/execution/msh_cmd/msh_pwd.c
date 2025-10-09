@@ -3,27 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   msh_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:59 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/24 20:26:21 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/09 05:59:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "msh_cmd.h"
+#include "msh_bin.h"
 
 /**
- * Built-in 'pwd' command handler.
- * 
- * @param args Argument array for pwd (args[0] is "pwd").
- * @param envp Linked list or array representing environment variables.
- * 
- * Prints the current working directory. If getcwd fails, attempts to read
- * PWD from env.
- * 
- * @return 0 on success, non-zero on error.
+ * Builterr
  */
-int	msh_pwd(char **args, t_list *envp)
+int	msh_pwd(char **args, t_list *lst_t_var)
 {
 	char	*path;
 
@@ -33,13 +25,17 @@ int	msh_pwd(char **args, t_list *envp)
 	path = getcwd(NULL, 0);
 	if (!path)
 	{
-		path = ft_strdup(shell_getenv(envp, "PWD"));
-		write(1, path, ft_strlen(path));
+		path = ft_strdup(shell_getenv(lst_t_var, "PWD"));
+		if (write(STDOUT_FILENO, path, ft_strlen(path)) == -1)
+			return (built_end(args[0], "System failed", NULL, '\0'));
+
 	}
 	else
 	{
-		write(1, path, ft_strlen(path));
-		write(1, "\n", 1);
+		if (write(STDOUT_FILENO, path, ft_strlen(path)) == -1)
+			return (built_end(args[0], "System failed", NULL, '\0'));
+		if (write(STDOUT_FILENO, "\n", 1) == -1)
+			return (built_end(args[0], "System failed", NULL, '\0'));
 	}
 	free(path);
 	return (0);

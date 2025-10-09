@@ -3,22 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   msh_echo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 18:02:06 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:51:39 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/09 05:56:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "msh_cmd.h"
+#include "msh_bin.h"
 
 /**
- * Prints arguments to standard output, separated by spaces.
- * 
- * @param args Array of arguments passed to the echo command
- * (args[0] is "echo").
- * 
- * @note - If any leading argument(s) are "-n", no trailing newline is printed.
+ * Builterr
  */
 int	msh_echo(char **args)
 {

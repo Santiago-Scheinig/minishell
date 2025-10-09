@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 18:35:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:16:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/08 21:46:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ static int	hdoc_end(char *limit, char *err_ft, int heredoc_fd[2], t_body *msh)
 	};
 
 	if (errno == ENOMEM)
-		msh->exit_ft = "malloc";
+		shell_forcend(MSHELL_FAILURE, "malloc", msh);
 	else if (errno)
-		msh->exit_ft = err_ft;
+		msh->exit_ft = err_ft;// print write or read errors
 	else
 	{
 		ft_printfd(2, "\n%s %s %i %s ", msg[0], msg[1], msh->line, msg[2]);
@@ -52,7 +52,7 @@ static int	hdoc_end(char *limit, char *err_ft, int heredoc_fd[2], t_body *msh)
 	free(limit);
 	close(heredoc_fd[0]);
 	close(heredoc_fd[2]);
-	return (-1);
+	return (MSHELL_FAILURE);
 }
 
 /**

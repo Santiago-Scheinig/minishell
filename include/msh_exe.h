@@ -6,20 +6,33 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:09:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/09 06:06:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MSH_EXE_H
 # define MSH_EXE_H
 
-# include "lib/msh_std.h"
+# include "shell_std.h"
 # include <sys/wait.h>
 # include <fcntl.h>
 
 /*--------------------------------------------------------------------------*/
 /*-----------------------------EXECUTION CHECK------------------------------*/
 /*--------------------------------------------------------------------------*/
+
+typedef enum e_bicmd
+{
+	BICMD_NOEXE,
+	BICMD_CD,
+	BICMD_PWD,
+	BICMD_ENV,
+	BICMD_ECHO,
+	BICMD_IMPORT,
+	BICMD_EXPORT,
+	BICMD_UNSET,
+	BICMD_EXIT,
+}	t_bicmd;
 
 typedef struct s_sig_msg
 {

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:21:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/05 19:37:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	bicmd(t_bicmd name, t_cmd *exe, t_body *msh)
 {
 	if (name == BICMD_EXPORT)
 	{
-		return (msh_export(&(msh->envp), &(msh->lst_t_var), &(exe->argv[1])));
+		return (msh_export(&(exe->argv[1]), &(msh->envp), msh->lst_t_var));
 		
 	}
 	else if (name == BICMD_CD)
@@ -52,11 +52,11 @@ static int	bicmd(t_bicmd name, t_cmd *exe, t_body *msh)
 	else if (name == BICMD_ECHO)
 		return (msh_echo(exe->argv));
 	else if (name == BICMD_UNSET)
-		return (msh_unset(&(msh->envp), &(msh->lst_t_var), &(exe->argv[1])));
+		return (msh_unset(&(exe->argv[1]), &(msh->envp), &(msh->lst_t_var)));
 	else if (name == BICMD_EXIT)
 		return (msh_exit(exe->argv, msh));
 	else if (name == BICMD_IMPORT)
-		return (msh_import(&(msh->envp), &(msh->lst_t_var), exe->argv));
+		return (msh_import(exe->argv, &(msh->envp), &(msh->lst_t_var)));
 	return (MSHELL_FAILURE);
 }
 
@@ -138,10 +138,16 @@ int	father_bicmd(t_cmd *exe, t_body *minishell)
 			return (MSHELL_FAILURE);
 		close(exe->outfd);
 		num = bicmd(num, exe, minishell);
+		if (num == -1)
+			forcend(minishell, "malloc", MSHELL_FAILURE);
 		if (open_pipe(exe->argv[0], i, STDOUT_FILENO))
 			return (MSHELL_FAILURE);
 	}
 	else
+	{
 		num = bicmd(num, exe, minishell);
+		if (num == -1)
+			forcend(minishell, "malloc", MSHELL_FAILURE);
+	}
 	return (num);
 }
