@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   msh_unset.c                                        :+:      :+:    :+:   */
+/*   bin_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/09 05:53:17 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 09:18:27 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static int	check_name(char *name, char ***envp, t_list **head_t_var)
 /**
  * Need fix
  */
-int	msh_unset(char **arg, char ***envp, t_list **head_t_var)
+int	bin_unset(char **arg, char ***envp, t_list **head_t_var)
 {
 	t_list	*lst_t_var;
 	t_list	*prev_t_var;
@@ -84,7 +84,7 @@ int	msh_unset(char **arg, char ***envp, t_list **head_t_var)
 
 	i = -1;
 	if (arg[0][0] == '-')
-		return (built_end("unset", "Invalid flags", "[name ...]", arg[0][1]));
+		return (shell_builterr(INVFLGS, "unset", "[name ...]", arg[0][1]));//como que name ...  que son los corchetes??
 	while (arg[++i])
 	{
 		prev_t_var = NULL;

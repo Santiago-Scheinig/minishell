@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:54:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 02:55:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 06:13:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,46 +78,57 @@ int	shell_sigign_all(void)
 }
 
 /**
- * @brief	Sets up a SIGINT handler that updates the global signal flag.
+ * @brief	Handles SIGINT signal during shell input reading.
  *
- *			Initializes a sigaction structure with sigdlr_setflg as the
- *			handler. Adds SIGQUIT and SIGINT to the signal mask and sets
- *			the SA_RESTART flag. Calls sigaction() to apply the configuration.
+ * 			Checks if a SIGINT (Ctrl+C) was received by inspecting the
+ * 			global flag g_signal_received. If a signal was received, the
+ * 			flag is reset and, for non-interactive shells, forces the
+ * 			shell to terminate with the stored exit code.
  *
- * @note	Allows the shell to track when Ctrl+C is pressed without exiting.
+ * @param	msh	Pointer to the shell state structure t_body.
  *
- * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE if sigaction fails.
+ * @note	The function does not terminate the shell if it is in interactive
+ *			mode; it only resets the signal flag.
+ *
+ * @return	MSHELL_SIG_HANDLR constant indicating a handled SIGINT.
  */
-int shell_sigint_setflg(void)
+int	shell_sigint_read(t_body *msh)
 {
-	struct sigaction	sa_int;
-
-	sa_int.sa_handler = sigdlr_setflg;
-	sigemptyset(&sa_int.sa_mask);
-	sigaddset(&sa_int.sa_mask, SIGQUIT);
-	sigaddset(&sa_int.sa_mask, SIGINT);
-	sa_int.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &sa_int, NULL))
-		return (MSHELL_FAILURE);
-	return (MSHELL_SUCCESS);
+	errno = 0;
+	if (g_signal_received)
+	{
+		g_signal_received = 0;
+		if (!msh->interactive)
+			shell_forcend(msh.exit_no, NULL, &msh);
+	}
+	return (MSHELL_SIG_HANDLR);
 }
 
 /**
- * @brief	Sets up a custom SIGINT handler for the shell prompt.
+ * @brief	Sets up the SIGINT handler for the shell.
  *
- *			Initializes a sigaction structure with sigdlr_newpmt as the
- *			handler. Adds SIGQUIT and SIGINT to the signal mask and sets
- *			the SA_RESTART flag. Calls sigaction() to apply the configuration.
+ * 			Configures a sigaction structure to handle SIGINT depending
+ * 			on whether the shell is in interactive mode. Blocks SIGQUIT
+ * 			and SIGINT during handler execution, and uses SA_RESTART
+ * 			to automatically restart interrupted system calls.
  *
- * @note	Allows the shell to handle Ctrl+C gracefully without terminating.
+ * @param	interactive	Integer flag indicating shell mode:
+ *						1 for interactive, 0 for non-interactive.
  *
- * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE if sigaction fails.
+ * @note	Interactive mode uses sigdlr_newpmt handler to refresh prompt.
+ * @note	Non-interactive mode uses sigdlr_setflg handler to set signal flag.
+ *
+ * @return	MSHELL_SUCCESS on successful registration, MSHELL_FAILURE if
+ *			sigaction fails.
  */
-int	shell_sigint_newpmt(void)
+int	shell_sigint(int interactive)
 {
 	struct sigaction	sa_int;
 
-	sa_int.sa_handler = sigdlr_newpmt;
+	if (interactive)
+		sa_int.sa_handler = sigdlr_newpmt;
+	else
+		sa_int.sa_handler = sigdlr_setflg;
 	sigemptyset(&sa_int.sa_mask);
 	sigaddset(&sa_int.sa_mask, SIGQUIT);
 	sigaddset(&sa_int.sa_mask, SIGINT);

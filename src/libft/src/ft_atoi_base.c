@@ -6,81 +6,66 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:52:46 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:28:09 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:41:59 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/**
- * @brief   Checks if a character is part of a given base string.
- *
- *          Iterates through the @p base string to see if @p c matches any
- *          character. Used to validate characters when converting numbers
- *          from a specific base.
- *
- * @param   c       The character to check.
- * @param   base    The string representing allowed digits for the base.
- *
- * @return  Returns 1 if @p c is found in @p base, 0 otherwise.
- */
-static int	ft_isbase(char c, char const *base)
+
+static int	isbase(char c, char const *base)
 {
 	int	i;
 
 	i = 0;
 	while (base[i])
 		if (base[i++] == c)
-			return (1);
-	return (0);
+			return (true);
+	return (false);
 }
 
-/**
- * @brief   Validates that a string contains only characters from a given base.
- *
- *          Iterates through @p str and checks that every character exists in
- *          the @p base string using ft_isbase. If any character is not part
- *          of the base, the string is considered invalid.
- *
- * @param   str     The string to validate.
- * @param   base    The string representing allowed digits for the base.
- *
- * @return  Returns 0 if all characters in @p str are in @p base.
- *          Returns 1 if @p str contains invalid characters or if
- *          @p str or @p base is NULL.
- */
-static int	ft_check_base(char *str, const char *base)
+
+static int	check_base(char *str, const char *base)
 {
 	size_t	i;
 
 	i = 0;
 	if (!str || !base)
-		return (1);
-	while (ft_isbase(str[i], base))
+		return (false);
+	while (isbase(str[i], base))
 		i++;
 	if (ft_strlen(str) != i)
-		return (1);
-	return (0);
+		return (false);
+	return (true);
 }
 
 /**
- * @brief   Converts a string representing a number in a custom base to an int.
+ * @brief	Converts a string representing a number in a custom base to int.
  *
- *          Iterates through the string @p str, finds each character's index
- *          in the provided @p base, and accumulates the result as a decimal
- *          integer. Supports arbitrary bases defined by the order of
- *          characters in @p base.
+ * 			Parses the string 'str' as a number in the base defined by the
+ *			string 'base', and returns its integer value. Each character in
+ *			'str' must belong to the provided base, which defines the symbol
+ *			set and its positional value order.
  *
- * @param   str     The string representing the number in the given base.
- * @param   base    A string of characters representing the digits of the base.
- *                  Each character must be unique.
+ *			Static helpers:
  *
- * @note    If the input string contains characters not in @p base, or if
- *          the base is invalid, the function returns 0.
- * @note    This function does not handle negative numbers.
+ *				- isbase():		Checks if a character exists within
+ *								the base.
  *
- * @return  The integer value of the string in base 10. Returns 0 on invalid
- *          input or base.
+ *				- check_base():	Validates that 'str' contains only base
+ *								characters and no invalid symbols.
+ *
+ *			The conversion multiplies the accumulated result by the base length
+ * 			and adds the positional value of each character from left to right.
+ *
+ * @param	str		String to convert. Must only contain characters from base.
+ * @param	base	String containing all valid symbols of the base.
+ *
+ * @note	If 'str' or 'base' contains invalid input, returns 0.
+ * @note	Base length determines the radix (e.g., 2 for binary, 16 for hex).
+ *
+ * @return	Integer value represented by 'str' in the given base, or 0 on
+ *			invalid input.
  */
 int	ft_atoi_base(char *str, const char *base)
 {
@@ -89,7 +74,7 @@ int	ft_atoi_base(char *str, const char *base)
 	int	i;
 	int	index;
 
-	if (ft_check_base(str, base))
+	if (!check_base(str, base))
 		return (0);
 	i = -1;
 	ans = 0;

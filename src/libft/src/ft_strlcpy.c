@@ -6,22 +6,24 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 19:26:08 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/30 19:06:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:11:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Copies size bytes from a CONST STRING src at the end of a STRING des.
- * 
- * @param dst The STRING where to copy src.
- * @param src The CONST STRING to copy from.
- * @param size The amount of bytes to be copied from src into des.
- * @return The total lenght of the STRING tried to copy, in this case,
- * the lenght of src.
- * @note - If size >= src_len + 1, it copies all of src into des.
- * @note - Else, it truncates the copy after size - 1 bytes.
+ * @brief	Copies a string into a buffer, respecting its size.
+ *
+ * 			Copies up to 'size - 1' characters from 'src' into 'dst' and
+ *			NULL-terminates the result if 'size' is not zero. Returns the
+ *			length of 'src'.
+ *
+ * @param	dst	Destination buffer.
+ * @param	src	Source string to copy.
+ * @param	size	Size of the destination buffer.
+ *
+ * @return	Length of the source string 'src'.
  */
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {

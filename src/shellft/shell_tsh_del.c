@@ -6,11 +6,53 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 03:02:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 06:58:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_std.h"
+
+/**
+ * @brief	Cleans up allocated resources of the shell.
+ *
+ * 			Frees memory and clears structures related to environment
+ * 			variables, child processes, command lists, token lists, and
+ * 			error file descriptors. Optionally clears readline history if
+ * 			the shell is in interactive mode and end flag is set.
+ *
+ * @param	end		Integer flag indicating if shell is terminating. If
+ *					true, additional cleanup is performed for interactive
+ *					mode and environment variables.
+ * @param	msh		Pointer to the shell state structure containing all
+ *					allocated resources and metadata.
+ *
+ * @note	After cleanup, all pointers in the msh structure are set to NULL.
+ * @note	Do not use msh pointers after this function without reinitializing.
+ */
+void	shell_cleanup(int end, t_body *msh)
+{
+	if (end && msh->interactive)
+		rl_clear_history();
+	if (end && msh->envp)
+		ft_split_free(msh->envp);
+	if (msh->err_fd)
+		free(msh->err_fd);
+	if (msh->childs_pid)
+		free(msh->childs_pid);
+	if (msh->head_token)
+		ft_lstclear(&(msh->head_token), shell_deltkn);
+	if (msh->head_cmd)
+		ft_lstclear(&(msh->head_cmd), shell_delcmd);
+	if (msh->head_envar)
+		ft_lstclear(&msh->head_envar, shell_delenvar);
+	msh->err_fd = NULL;
+	msh->childs_pid = NULL;
+	msh->head_token = NULL;
+	msh->head_envar = NULL;
+	msh->head_cmd = NULL;
+	if (end)
+		msh->envp = NULL;
+}
 
 /**
  * @brief	Frees a t_var structure and its allocated name and value strings.

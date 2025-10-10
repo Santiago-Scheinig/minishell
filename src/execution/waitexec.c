@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   waitcmd.c                                          :+:      :+:    :+:   */
+/*   waitexec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:11:35 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:21:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 10:43:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,14 @@ static int	check_status(int status, int errfd)
  * @note If any waitpid fails to execute, the program will exit by
  * force and non waited childs will remain as zombie.
  */
-int	waitcmd(t_body *minishell)
+int	waitexec(t_body *minishell)
 {
 	int		i;
 	int 	status;
 	t_list	*lst_t_cmd;
 
 	i = -1;
+	errno = 0;
 	lst_t_cmd = minishell->lst_t_cmd;
 	while (lst_t_cmd)
 	{

@@ -6,11 +6,38 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 04:38:52 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 05:04:51 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 06:08:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_std.h"
+
+/**
+ * @brief	Creates a string representing the current working directory.
+ *
+ * 			Calls getcwd() to retrieve the current working directory and
+ * 			prefixes it with "PWD=" to form a standard environment variable
+ * 			string.
+ *
+ * @note	The returned string must be freed by the caller to avoid memory leaks.
+ *
+ * @return	Pointer to a newly allocated string in the format "PWD=/path/to/dir",
+ * 			or NULL if getcwd() fails or memory allocation fails.
+ */
+char	*pwdstr(void)
+{
+	char	*tmp;
+	char	*pwd;
+
+	tmp = getcwd(NULL, 0);
+	if (!tmp)
+		return (NULL);
+	pwd = ft_strjoin("PWD=", tmp);
+	free(tmp);
+	if (!pwd)
+		return (NULL);
+	return (pwd);
+}
 
 /**
  * @brief	Extracts the name part of an environment variable string.

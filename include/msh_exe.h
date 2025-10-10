@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 06:06:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 09:19:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@
 
 typedef enum e_bicmd
 {
-	BICMD_NOEXE,
-	BICMD_CD,
-	BICMD_PWD,
-	BICMD_ENV,
-	BICMD_ECHO,
-	BICMD_IMPORT,
-	BICMD_EXPORT,
-	BICMD_UNSET,
-	BICMD_EXIT,
+	BINCMD_NOEXE,
+	BINCMD_CD,
+	BINCMD_PWD,
+	BINCMD_ENV,
+	BINCMD_ECHO,
+	BINCMD_IMPORT,
+	BINCMD_EXPORT,
+	BINCMD_UNSET,
+	BINCMD_EXIT,
 }	t_bicmd;
 
 typedef struct s_sig_msg
@@ -39,6 +39,8 @@ typedef struct s_sig_msg
 	int		sig;
 	char	*msg;
 }	t_sig_msg;
+
+int	execmd(t_body *msh);
 
 /**
  * Verifies the existence of path enviroment.
@@ -86,4 +88,5 @@ int		setup_pipeline(t_list *cmd_lst);
 int		exend(int exit_no, char *err_msg, t_list *cmd_lst);
 
 int		waitcmd(t_body *minishell);
+
 #endif

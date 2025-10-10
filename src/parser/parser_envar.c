@@ -6,30 +6,37 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 13:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/05 18:32:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 07:33:14 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
 
 /**
- * Splits the WORD string and adds the words in sequence after the current
- * position of lst_t_token, expanding the tokens using 'space' as the divisor
- * operator, which aren't protected by quotes.
- * 
- * @param lst_t_token A pointer to the current position on the token list.
- * @param msh A pointer to the main enviroment structure of msh.
- * @note If the ARRAY of STRINGS is just one word, this step is skipped.
+ * @brief	Splits a token into multiple tokens after variable expansion.
+ *
+ *			When an environment variable expansion produces multiple
+ *			space-separated words, this function splits them into new
+ *			tokens and inserts them into the token list.
+ *
+ *			Uses ft_split_iq() to respect quoted substrings during the
+ *			split process. If memory allocation fails, forces a shell
+ *			exit with an error.
+ *
+ * @param	lst_token	List node containing the original token.
+ * @param	msh			Pointer to main shell structure (t_body).
+ *
+ * @note	Frees split array after processing. Updates token list.
  */
-static void	envar_tokenization(t_list *lst_t_token, t_body *msh)
+static void	envar_tokenization(t_list *lst_token, t_body *msh)
 {
 	char	**split;
 	int		i;
 
 	i = 0;
-	split = ft_iq_split(((t_token *) lst_t_token->content)->str, ' ');
+	split = ft_split_iq(((t_token *) lst_token->content)->str, ' ');
 	if (!split)
-		forcend(msh, "malloc", MSHELL_FAILURE);
+		shell_forcend(MSHELL_FAILURE, "malloc", msh);
 	while (split[i])
 		i++;
 	while (i && split[--i])
@@ -40,10 +47,10 @@ static void	envar_tokenization(t_list *lst_t_token, t_body *msh)
 			split = NULL;
 			break ;
 		}
-		if (shell_addlst_token(split[i], i, lst_t_token))
+		if (shell_lstadd_newtkn(i, split[i], lst_token))
 		{
 			ft_split_free(split);
-			forcend(msh, "malloc", MSHELL_FAILURE);
+			shell_forcend(MSHELL_FAILURE, "malloc", msh);
 		}
 	}
 	if (split)
@@ -51,27 +58,27 @@ static void	envar_tokenization(t_list *lst_t_token, t_body *msh)
 }
 
 /**
- * COMMENT UPDATE
- * Updates the WORD string mask to the new value of the declared enviromental 
- * variable if any, and expands it accordingly.
- * 
- * - If there's a value, the WORD token mask becomes reallocated and 
- * expanded with the same mask value.
- * 
- * - Otherwise, the WORD token mask string becomes cut from memory, without 
- * realocation, ereasing every character of the enviromental variable's mask.
- * 
- * @param word A pointer to the T_TOKEN to be expanded.
- * @param value A pointer to the STRING value of the enviromental variable.
- * @param start The position index of the enviromental variable on 
- * the WORD token string.
- * @param msh A pointer to the main enviroment structure of msh.
- * @note If any error occurs during the tokenization step, the function will
- * end with a sigend([errno]) call.
+ * @brief	Updates the mask string after environment variable expansion.
+ *
+ *			Adjusts the mask for a string segment expanded from an
+ *			environment variable, ensuring character classification
+ *			remains consistent (e.g., quoted, normal, expanded).
+ *
+ *			Calls exp_mask() to rebuild the mask substring around the
+ *			expansion site.
+ *
+ * @param	start	Index in str where expansion begins.
+ * @param	str		Original string containing the variable.
+ * @param	value	Value string of the variable (may be NULL).
+ * @param	mask	Pointer to mask string associated with str.
+ *
+ * @note	If mask is NULL, the function does nothing.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on allocation error.
  */
-int	envar_mask(char *str, char *value, char **mask, int start)
+int	envar_mask(int start, char *str, char *value, char **mask)
 {
-	char			*ret;
+	char			*tmp;
 	t_envar_pair	len;
 
 	if (!mask)
@@ -80,79 +87,97 @@ int	envar_mask(char *str, char *value, char **mask, int start)
 	if (!value)
 	{
 		len.val = 0;
-		ret = exp_mask(value, (*mask), start, len);
+		tmp = exp_mask(start, value, (*mask), len);
 	}
 	else
 	{
 		len.val = ft_strlen(str);
-		ret = exp_mask(value, (*mask), start, len);
-		if (!ret)
+		tmp = exp_mask(start, value, (*mask), len);
+		if (!tmp)
 			return (MSHELL_FAILURE);
 		if ((*mask))
 			free((*mask));
-		(*mask) = ret;
+		(*mask) = tmp;
 	}
 	return (MSHELL_SUCCESS);
 }
 
 /**
- * COMMENT UPDATE
- * Finds the value of the declared enviromental variable if any, then expands 
- * it accordingly.
- * 
- * - If there's a value, the WORD token string becomes reallocated and 
- * expanded with the new value.
- * 
- * - Otherwise, the WORD token string becomes cut from memory, without 
- * realocation, ereasing every character of the enviromental variable's name.
- * 
- * @param word A pointer to the T_TOKEN to be expanded.
- * @param start The position index of the enviromental variable on 
- * the WORD token string.
- * @param msh A pointer to the main enviroment structure of msh.
- * @note If any error occurs during the tokenization step, the function will
- * end with a sigend([errno]) call.
+ * @brief	Expands a single environment variable reference in a string.
+ *
+ *			Extracts the variable name after a '$' at index 'start',
+ *			retrieves its value from the environment list, and replaces
+ *			the reference with the corresponding value. Updates both
+ *			the string and its mask to reflect the change.
+ *
+ *			Static helpers:
+ *
+ *				- envar_mask():		Rebuilds the mask after expansion.
+ *
+ * @param	start		Position in str where '$' occurs.
+ * @param	str			Pointer to string to expand.
+ * @param	mask		Pointer to mask string (may be NULL).
+ * @param	head_envar	List of environment variables.
+ *
+ * @note	If the variable is undefined, replaces it with an empty
+ *			string and adjusts the mask accordingly.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on memory error.
  */
-static int	envar_init(char **str, char **mask, int start, t_list *lst_t_var)
+static int	envar_init(int start, char **str, char **mask, t_list *head_envar)
 {
-	char	*var_pathname;
-	char	*var_value;
-	char	*ret;
+	char	*envar_path;
+	char	*envar_value;
+	char	*tmp;
 
-	var_pathname = envar_pathname(&((*str)[start + 1]));
-	if (!var_pathname)
+	envar_path = envar_pathname(&((*str)[start + 1]));
+	if (!envar_path)
 		return (MSHELL_FAILURE);
-	var_value = shell_getenv(lst_t_var, var_pathname);
-	free(var_pathname);
-	if (!var_value)
+	envar_value = shell_envchr(NULL, envar_path, head_envar);
+	free(envar_path);
+	if (!envar_value)
 	{
-		if (envar_mask((*str), var_value, mask, start))
+		if (envar_mask(start, (*str), envar_value, mask))
 			return (MSHELL_FAILURE);
-		ret = exp_value((*str), var_value, start);
+		tmp = exp_value(start, (*str), envar_value);
 	}
 	else
 	{
-		ret = exp_value((*str), var_value, start);
-		if (!ret || envar_mask((*str), var_value, mask, start))
+		tmp = exp_value(start, (*str), envar_value);
+		if (!tmp || envar_mask(start, (*str), envar_value, mask))
 			return (MSHELL_FAILURE);
 		if ((*str))
 			free((*str));
-		(*str) = ret;
+		(*str) = tmp;
 	}
 	return (MSHELL_SUCCESS);
 }
 
 /**
- * Analizes the WORD syntaxis and expands all enviromental variables avalible
- * inside of it following the quoting rules for expansion of enviromental
- * variables.
- * 
- * @param lst_t_token A pointer with the current position on the lst_t_token.
- * @param msh A pointer to the main enviroment structure of msh.
- * @note If any error occurs during the tokenization step, the function will
- * end with a sigend([errno]) call.
+ * @brief	Parses and expands environment variables in a string.
+ *
+ *			Iterates through 'str', replacing every valid '$VAR' or
+ *			'$?' pattern with its corresponding value. Ignores '$'
+ *			inside single-quoted segments marked in 'mask'.
+ *
+ *			Calls envar_init() for named variables and exp_exitno()
+ *			for special '$?' cases. The mask is updated accordingly.
+ *
+ *			Static helpers:
+ *
+ *				- envar_init():		Expands named variables.
+ *				- exp_exitno():		Handles '$?' exit code expansion.
+ *
+ * @param	exit_no	Last command's exit status (for $? replacement).
+ * @param	str		Pointer to string to expand.
+ * @param	mask	Optional mask string marking quoted regions.
+ * @param	head_envar	Linked list of environment variables.
+ *
+ * @note	Expands variables only outside single quotes.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on allocation error.
  */
-int	envar_syntax(char **str, char **mask, t_list *lst_t_var, int exit_no)
+int	envar_syntax(int exit_no, char **str, char **mask, t_list *envar)
 {
 	int		i;
 	int		quote;
@@ -170,10 +195,10 @@ int	envar_syntax(char **str, char **mask, t_list *lst_t_var, int exit_no)
 				break ;
 			if ((*str)[i + 1] == '?')
 			{
-				if (exp_exitno(str, mask, i, exit_no))
+				if (exp_exitno(i, exit_no, str, mask))
 					return (MSHELL_FAILURE);
 			}
-			else if (envar_init(str, mask, i, lst_t_var))
+			else if (envar_init(i, str, mask, envar))
 				return (MSHELL_FAILURE);
 		}
 	}
@@ -181,41 +206,40 @@ int	envar_syntax(char **str, char **mask, t_list *lst_t_var, int exit_no)
 }
 
 /**
- * Loops through all the token list and expands every valid enviromental 
- * variable found in WORD tokens. If an expansion is made, the list expands
- * following the quoting rules for expansion of enviromental variables:
- * 
- * - Single quote enclosing: The enviromental variable remains as plain text.
- * 
- * - Double quote enclosing: The enviromental variable expands, but remains as
- * part of the WORD token it was enclosed into.
- * 
- * - No quote enclosing: The enviromental variable expands and becomes 
- * tokenized into WORD tokens divided only by ' ' (OPERATORS are treated as 
- * plain text after expansion).
- * 
- * @param msh A pointer to the main enviroment structure of msh
- * @note If any error occurs during the tokenization step, the function will
- * end with a sigend([errno]) call.
+ * @brief	Expands environment variables in all word tokens.
+ *
+ *			Traverses the token list, expanding variables within each
+ *			token string using envar_syntax(). Tokens marked with 'N'
+ *			in their mask after expansion are split again via
+ *			envar_tokenization() to handle multi-word expansions.
+ *
+ *			Static helpers:
+ *
+ *				- envar_syntax():	Performs actual string expansion.
+ *				- envar_tokenization():	Splits expanded tokens.
+ *
+ * @param	msh	Pointer to main shell structure (t_body).
+ *
+ * @note	Modifies token list in-place. May allocate new tokens.
  */
 void	parser_envar(t_body *msh)
 {
-	t_list	*lst_t_var;
-	t_list	*lst_t_token;
+	t_list	*head_envar;
+	t_list	*lst_token;
 	t_token	*aux;
 
-	lst_t_var = msh->lst_t_var;
-	lst_t_token = msh->lst_t_token;
-	while (lst_t_token)
+	head_envar = msh->head_envar;
+	lst_token = msh->head_token;
+	while (lst_token)
 	{
-		aux = (t_token *) lst_t_token->content;
+		aux = (t_token *) lst_token->content;
 		if (aux->str && aux->type == WORD)
 		{
-			if (envar_syntax(&aux->str, &aux->mask, lst_t_var, msh->exit_no))
-				forcend(msh, "malloc", MSHELL_FAILURE);
+			if (envar_syntax(msh->exit_no, &aux->str, &aux->mask, head_envar))
+				shell_forcend(MSHELL_FAILURE, "malloc", msh);
 			if (aux->mask[0] == 'N')
-				envar_tokenization(msh->lst_t_token, msh);
+				envar_tokenization(msh->lst_token, msh);
 		}
-		lst_t_token = lst_t_token->next;
+		lst_token = lst_token->next;
 	}
 }

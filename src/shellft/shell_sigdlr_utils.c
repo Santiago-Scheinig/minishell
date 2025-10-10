@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 21:53:23 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 03:01:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 00:08:18 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 void	sigdlr_setflg(int signum)
 {
 	g_signal_received = signum;
-}
+}	
 
 /**
  * @brief	Signal handler to refresh the shell prompt.

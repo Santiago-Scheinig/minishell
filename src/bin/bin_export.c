@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   msh_export.c                                       :+:      :+:    :+:   */
+/*   bin_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:05:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/09 06:04:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 09:18:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static char	*get_name(char *var)
 /**
  * Builterr
  */
-int	msh_export(char **argv, char ***envp, t_list *lst_envp)
+int	bin_export(char **argv, char ***envp, t_list *lst_envp)
 {
 	char	*envar_name;
 	int		swp;
@@ -47,14 +47,14 @@ int	msh_export(char **argv, char ***envp, t_list *lst_envp)
 			continue;
 		envar_name = get_name(argv[i]);
 		if (!envar_name)
-			return (MSHELL_FAILURE);//Builterr: -1
+			return (shell_builterr(SYSFAIL, "export", NULL, 0));
 		if (shell_envchr(NULL, envar_name, lst_envp))
 			swp = true;
 		free(envar_name);
 		if (swp && shell_envlst_swp(true, argv[i], envp, lst_envp))
-			return (MSHELL_FAILURE);//Builterr: -1
+			return (shell_builterr(SYSFAIL, "export", NULL, 0));
 		if (!swp && shell_envlst_add(true, argv[i], envp, lst_envp))
-			return (MSHELL_FAILURE)//Builterr: -1
+			return (shell_builterr(SYSFAIL, "export", NULL, 0));
 	}
 	return (MSHELL_SUCCESS);
 }

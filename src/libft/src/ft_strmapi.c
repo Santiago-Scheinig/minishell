@@ -6,21 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 12:07:52 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:02:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:12:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Creates and allocates a new STRING with the result of iterate a 
- * FUNCTION on every character of a CONST STRING.
- * 
- * @param s The CONST STRING to be iterated.
- * @param f The FUNCTION to be iterated on every character of the
- * CONST STRING.
- * @return A pointer to the new allocated STRING with the results of
- * all the iterations in order; Or NULL in case of error.
+ * @brief	Creates a new string by applying a function to each character.
+ *
+ * 			Allocates a new string where each character is the result of
+ *			applying the function 'f' to the corresponding character of 's'.
+ *
+ * @param	s	String to map.
+ * @param	f	Function to apply to each character and its index.
+ *
+ * @return	New string with mapped characters, or NULL on allocation failure.
  */
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {

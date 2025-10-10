@@ -6,21 +6,14 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 19:49:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:02:06 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:05:48 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "libft_utils.h"
 
-/**
- * Counts the amount of words found on a STRING; a word being all the 
- * characters included between the divisor character and/or '\0'.
- * 
- * @param s The STRING where to count words.
- * @param c The character which divides each word.
- * @return An INT with the amount of words counted.
- */
-static	int	ft_wrdcount(char const *s, char c)
+static	int	wrdcount(char const *s, char c)
 {
 	char	*tmp;
 	int		count;
@@ -34,19 +27,11 @@ static	int	ft_wrdcount(char const *s, char c)
 		count++;
 	tmp = ft_strchr(s, c);
 	if (tmp != NULL && tmp[1])
-		count += ft_wrdcount(&tmp[1], c);
+		count += wrdcount(&tmp[1], c);
 	return (count);
 }
 
-/**
- * Counts the lenght of the first word on a STRING, until it reaches the 
- * divisor character or '\0'.
- * 
- * @param s The STRING where to count the lenght of the first word.
- * @param c The character which divides each word.
- * @return An INT with the lenght of the word.
- */
-static	int	ft_wrdlen(char const *s, char c)
+static	int	wrdlen(char const *s, char c)
 {
 	int	i;
 
@@ -57,32 +42,26 @@ static	int	ft_wrdlen(char const *s, char c)
 }
 
 /**
- * Frees every pointer on an ARRAY of STRINGS and the ARRAY pointer, even
- * if it's not NULL terminated.
- * 
- * @param wrdstr The ARRAY of STRINGS to free.
- * @param index The amount of STRINGS to free inside of the array.
- */
-static	void	ft_memfree(char **wrdstr, int index)
-{
-	int	i;
-
-	i = 0;
-	while (i < index)
-	{
-		free(wrdstr[i]);
-		i++;
-	}
-	free(wrdstr);
-}
-
-/**
- * Splits a STRING into an ARRAY of STRINGS, using a divisor character.
- * @param s The STRING to split.
- * 
- * @param c The character which divides each word.
- * @return An ARRAY of STRINGS that includes every divided word and is 
- * NULL terminated.
+ * @brief	Splits a string into an array of strings using a delimiter.
+ *
+ * 			Splits the string 's' at each occurrence of the delimiter 'c'.
+ *			Returns a NULL-terminated array of strings.
+ *
+ *			Static helpers:
+ *
+ *				- wrdcount():	Counts the number of words in 's' separated
+ *								by 'c'.
+ *
+ *				- wrdlen():		Calculates the length of a word in 's' until
+ *								the next 'c' or string end.
+ *
+ * @param	s	String to split.
+ * @param	c	Delimiter character.
+ *
+ * @note	Memory is allocated for the returned array and its strings.
+ *			Caller must free it using a function like ft_split_free.
+ *
+ * @return	NULL-terminated array of strings, or NULL on allocation failure.
  */
 char	**ft_split(char const *s, char c)
 {
@@ -95,7 +74,7 @@ char	**ft_split(char const *s, char c)
 	if (s[0] == 0)
 		return (ft_calloc(1, sizeof(char *)));
 	i = 0;
-	w = ft_wrdcount(s, c);
+	w = wrdcount(s, c);
 	wrdstr = (char **) malloc((w + 1) * sizeof(char *));
 	if (!wrdstr)
 		return (NULL);
@@ -103,9 +82,9 @@ char	**ft_split(char const *s, char c)
 	{
 		while (s[0] == c)
 			s = ft_strchr(s, c) + 1;
-		wrdstr[i] = ft_substr(s, 0, ft_wrdlen(s, c));
+		wrdstr[i] = ft_substr(s, 0, wrdlen(s, c));
 		if (!wrdstr[i])
-			return (ft_memfree(wrdstr, i), NULL);
+			return (memfree(wrdstr, i), NULL);
 		s = ft_strchr(s, c) + 1;
 		i++;
 	}

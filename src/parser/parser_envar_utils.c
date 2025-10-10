@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:42:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 07:20:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,41 @@
  * @note The minimum lenght size of a enviroment variable is always one,
  * on behalf of the '$' sign.
  */
-int	envar_len(char *var)
+int	envar_len(char *envar)
 {
 	int	i;
 
 	i = 1;
-	if (var[i] == '?')
+	if (envar[i] == '?')
 		return (++i);
 	while (ft_isalnum(var[i]) || var[i] == '_')
 		i++;
 	return (i);
+}
+
+/**
+ * Allocates and returns a clean STRING with only the enviromental variable
+ * name, to search into getenv().
+ * 
+ * @param var A pointer to the WORD string on the position where the
+ * enviromental variable name starts (Position after the '$').
+ * @return A pointer to a new allocated STRING that only includes the name
+ * of the enviromental variable.
+ */
+char	*envar_pathname(char *envar)
+{
+	char	*new_path;
+	int		envar_len;
+	int		i;
+
+	i = -1;
+	envar_len = envar_len(envar);
+	new_path = ft_calloc((envar_len + 1), sizeof(char));
+	if (!new_path)
+		return (NULL);
+	while (++i < envar_len)
+		new_path[i] = envar[i];
+	return (new_path);
 }
 
 /**
@@ -47,7 +72,7 @@ int	envar_len(char *var)
  * Otherwise, it reallocates the new expanded string and returns
  * it.
  */
-char	*exp_mask(char *str, char *mask, int start, t_envar_pair len)
+char	*exp_mask(int start, char *str, char *mask, t_envar_pair len)
 {
 	int		aux_len;
 	int		aux_start;
@@ -69,7 +94,7 @@ char	*exp_mask(char *str, char *mask, int start, t_envar_pair len)
 		return (NULL);
 	ft_strlcpy(new_mask, mask, aux_len);
 	aux_len = ft_strlen(str);
-	memset(&new_mask[start], mask[start], aux_len);
+	ft_memset(&new_mask[start], mask[start], aux_len);
 	aux_start = start + aux_len;
 	aux_mask = &(mask[start + len.var]);
 	ft_strlcpy(&new_mask[aux_start], aux_mask, ft_strlen(aux_mask) + 1);
@@ -89,7 +114,7 @@ char	*exp_mask(char *str, char *mask, int start, t_envar_pair len)
  * Otherwise, it reallocates the new expanded string and returns
  * it.
  */
-char	*exp_value(char *str, char *value, int start)
+char	*exp_value(int start, char *str, char *value)
 {
 	int		aux_len;
 	int		aux_start;
@@ -116,43 +141,18 @@ char	*exp_value(char *str, char *value, int start)
 	return (exp_str);
 }
 
-int	exp_exitno(char **str, char **mask, int start, int exit_no)
+int	exp_exitno(int start, int exit_no, char **str, char **mask)
 {
-	char	*var_value;
+	char	*envar_value;
 	char	*aux;
 
-	var_value = ft_itoa(exit_no);
-	aux = exp_value((*str), var_value, start);
-	if (!aux || envar_mask((*str), var_value, mask, start))
+	envar_value = ft_itoa(exit_no);
+	aux = exp_value(start, (*str), envar_value);
+	if (!aux || envar_mask(start, (*str), envar_value, mask))
 		return (MSHELL_FAILURE);
-	free(var_value);
+	free(envar_value);
 	if ((*str))
 		free((*str));
 	(*str) = aux;
 	return (MSHELL_SUCCESS);
-}
-
-/**
- * Allocates and returns a clean STRING with only the enviromental variable
- * name, to search into getenv().
- * 
- * @param var A pointer to the WORD string on the position where the
- * enviromental variable name starts (Position after the '$').
- * @return A pointer to a new allocated STRING that only includes the name
- * of the enviromental variable.
- */
-char	*envar_pathname(char *var)
-{
-	char	*new_path;
-	int		var_len;
-	int		i;
-
-	i = -1;
-	var_len = envar_len(var);
-	new_path = ft_calloc((var_len + 1), sizeof(char));
-	if (!new_path)
-		return (NULL);
-	while (++i < var_len)
-		new_path[i] = var[i];
-	return (new_path);
 }

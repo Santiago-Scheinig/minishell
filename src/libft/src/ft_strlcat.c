@@ -6,23 +6,25 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 17:16:10 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/30 18:36:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:11:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Concatenates size bytes from a CONST STRING src at the end of a STRING des.
- * 
- * @param dst The STRING where to concatenate src.
- * @param src The CONST STRING to be concatenated into des.
- * @param size The amount of bytes to be concatenated from src into des.
- * @return The total lenght of the STRING tried to concatenate, in this case,
- * the initial lenght of des plus the lenght of src.
- * @note - If size <= dst_len, it doesn't concatenate.
- * @note - If size >= dst_len + src_len + 1, it concatenates all of src.
- * @note - Else, it truncates the concatenation after size - 1 bytes.
+ * @brief	Appends a string to another, respecting buffer size.
+ *
+ * 			Appends the string 'src' to the end of 'dst', ensuring that
+ *			at most 'size - 1' characters are written and the result is
+ *			NULL-terminated. Returns the total length of the string it tried
+ *			to create.
+ *
+ * @param	dst	Destination buffer.
+ * @param	src	Source string to append.
+ * @param	size	Size of the destination buffer.
+ *
+ * @return	Total length of the string it tried to create (dst + src length).
  */
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {

@@ -6,30 +6,25 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 18:25:37 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:27:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:34:59 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * @brief   Calculates the number of elements in a NULL-terminated array.
+ * @brief	Calculates the number of elements in a NULL-terminated array.
  *
- *          This function iterates through the given array of pointers until
- *          it reaches a NULL terminator, counting the number of valid
- *          elements. It can be used for arrays of strings or any other
- *          pointer-based structures that follow the NULL-termination
- *          convention.
+ * 			Counts the number of non-NULL elements in the array pointed to
+ * 			by arr, stopping when a NULL pointer is encountered. Returns 0
+ * 			if arr is NULL or if the first element is NULL.
  *
- * @param   arr     Pointer to a NULL-terminated array of pointers. The array
- *                  elements may point to any type of data.
+ * @param	arr	Pointer to a NULL-terminated array of pointers.
  *
- * @note    The function performs no validation on the contents of the array
- *          elements — it only counts how many non-NULL entries appear before
- *          the NULL terminator.
+ * @note	This function works for any array of pointer types, such as
+ *			strings or generic pointer lists.
  *
- * @return  The number of non-NULL elements in the array.
- *          Returns 0 if @p arr is NULL or if the first element is NULL.
+ * @return	Number of elements in the array before the terminating NULL.
  */
 int	ft_arrlen(const void **arr)
 {

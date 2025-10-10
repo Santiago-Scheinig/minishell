@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_iq_strchr.c                                     :+:      :+:    :+:   */
+/*   ft_strchr_iq.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:15:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:00:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:08:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Searches for the first ocurrance of a character on a STRING.
- * 
- * @param s The STRING where to find the ocurrance.
- * @param c The character to be found.
- * @return A pointer to a position of the STRING with the first 
- * character ocurrance. If no ocurrance is found, returns NULL. 
- * @note This function will ignore any C coincidences that happen 
- * to be inside of single and double quotes (as long they open and close).
+ * @brief	Finds a character in a string, ignoring quoted substrings.
+ *
+ * 			Searches for the first occurrence of character 'c' in the
+ *			string 's', skipping characters inside single or double quotes.
+ *			Returns a pointer to the character found or NULL if not found.
+ *
+ * @param	s	String to search in.
+ * @param	c	Character to search for.
+ *
+ * @return	Pointer to the first occurrence of 'c' outside quotes, or NULL.
  */
-char	*ft_iq_strchr(char const *s, char c)
+char	*ft_strchr_iq(char const *s, char c)
 {
 	char	*tmp;
 	int		i;

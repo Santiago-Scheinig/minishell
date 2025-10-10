@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:29:19 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 03:28:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 07:20:36 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static void	rewrite_node(char *str, t_token *tkn)
 	if (tkn->str)
 		free(tkn->str);
 	tkn->str = str;
-	memset(tkn->mask, 0, ft_strlen(tkn->mask));
-	memset(tkn->mask, 'N', ft_strlen(str));
+	ft_memset(tkn->mask, 0, ft_strlen(tkn->mask));
+	ft_memset(tkn->mask, 'N', ft_strlen(str));
 }
 
 /**
@@ -55,7 +55,7 @@ int	shell_lstadd_newtkn(int rewrite, char *str, t_list *lst_tkn)
 	if (!tkn_new)
 		return (MSHELL_FAILURE);
 	tkn_new->type = WORD;
-	memset(tkn_new->mask, 'N', ft_strlen(str));
+	ft_memset(tkn_new->mask, 'N', ft_strlen(str));
 	new_node = ft_lstnew(tkn_new);
 	if (!new_node)
 	{

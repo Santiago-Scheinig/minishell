@@ -3,34 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 18:24:31 by ischeini          #+#    #+#             */
-/*   Updated: 2025/09/27 14:46:23 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:58:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Reallocates a memory block to a new size, preserving existing contents.
- * 
- * @param ptr Pointer to the previously allocated memory block (may be NULL).
- * @param new_size New size in bytes for the allocation.
- * @param old_size Previous size in bytes of the allocation referenced by ptr.
- * 
- * If ptr is NULL and new_size > 0, behaves like malloc(new_size).
- * If new_size is zero and ptr is non-NULL, frees ptr and returns NULL.
- * Otherwise allocates a new block of new_size bytes, copies the minimum
- * of old_size and new_size bytes from the old block into the new one,
- * frees the old block and returns the new pointer.
- * 
- * @return Pointer to the newly allocated block, or NULL on allocation
- * failure.
- * @note - Caller must ensure old_size correctly represents the original
- * allocation size to avoid copying past bounds.
- * @note - On allocation failure the original ptr is left intact by this
- * implementation.
+ * @brief	Resizes a memory block, preserving its content.
+ *
+ * 			Allocates a new memory block of size 'new_size', copies the
+ *			content from 'ptr' up to the smaller of 'old_size' or
+ *			'new_size', and frees the old block. Handles NULL pointers and
+ *			zero-size allocations.
+ *
+ * @param	ptr		Pointer to the old memory block.
+ * @param	new_size	New size in bytes for the memory block.
+ * @param	old_size	Old size in bytes of the memory block.
+ *
+ * @return	Pointer to the new memory block, or NULL on allocation failure.
  */
 void	*ft_realloc(void *ptr, size_t new_size, size_t old_size)
 {

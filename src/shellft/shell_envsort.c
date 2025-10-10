@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 16:43:09 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/09 03:04:53 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 06:10:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static t_list	**swap_env(t_list **lst, t_list *prv, t_list *mid, t_list *nxt)
  * @note	Sorting is done in place; no new list is allocated.
  * @note	Requires that each node's content is a valid t_var structure.
  */
-void	shell_sortenv(t_list **hlst_envp)
+void	shell_envsort(t_list **hlst_envp)
 {
 	t_list	*mid;
 	t_list	*prv;

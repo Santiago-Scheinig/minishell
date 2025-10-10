@@ -6,73 +6,68 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 05:57:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 08:12:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_std.h"
 
-/**
- * @brief	Cleans up all resources associated with the shell session.
- *
- *			Frees memory for the environment array, error file descriptor,
- *			child process IDs, token list, command list, and environment
- *			variable list. Clears the readline history if in interactive mode.
- *			Finally, zeroes the t_body structure using ft_memset.
- *
- * @param	msh	Pointer to the main shell structure (t_body) to clean.
- *
- * @note	Use this function before exiting the shell to prevent memory leaks.
- * @note	After calling, the t_body structure is reset to zero.
- */
-void	shell_cleanup(t_body *msh)
+int	shell_hdocerr(char *limit, char *err_ft, int heredoc_fd[2], t_body *msh)
 {
-	if (msh->interactive)
-		rl_clear_history();
-	if (msh->envp)
-		ft_split_free(msh->envp);
-	if (msh->err_fd)
-		free(msh->err_fd);
-	if (msh->childs_pid)
-		free(msh->childs_pid);
-	if (msh->head_token)
-		ft_lstclear(&(msh->head_token), shell_deltkn);
-	if (msh->head_cmd)
-		ft_lstclear(&(msh->head_cmd), shell_delcmd);
-	if (msh->head_envar)
-		ft_lstclear(&msh->head_envar, shell_delenvar);
-	ft_memset(msh, 0, sizeof(t_body));
+	const char	*msg[3] = {
+		"msh: warning:",
+		"here-document at line",
+		"delimited by end-of-file",
+	};
+
+	if (errno == ENOMEM)
+		shell_forcend(MSHELL_FAILURE, "malloc", msh);
+	else if (errno)
+		msh->exit_ft = err_ft;
+	else
+	{
+		ft_fprintf(2, "\n%s %s %i %s ", msg[0], msg[1], msh->line, msg[2]);
+		ft_fprintf(2, "(wanted '%s')\n", limit);
+		close(heredoc_fd[1]);
+		return (heredoc_fd[0]);
+	}
+	free(limit);
+	close(heredoc_fd[0]);
+	close(heredoc_fd[2]);
+	return (MSHELL_FAILURE);
 }
 
 /**
- * missing modifications
+ * Porque no usamos error directamente para flags y error, al final si queres 
+ * imprimir un solo caracter, podes mandar un string con un solo caracter.
  */
-int	shell_builterr(char *name, char *type, char *flags, char error)
+int	shell_binerr(int binerr, char *cmd, char *flags, char error)
 {
-	char	*shell;
-
-	shell = "msh: ";
-	if (ft_strnstr(type, "Numbers of args", ft_strlen(type)))
-		ft_printfd(2, "%s%s: too many arguments\n", shell, name);
-	else if (ft_strnstr(type, "Invalid flags", ft_strlen(type)))
+	ft_fprintf(STDERR_FILENO, "%s: ", cmd);
+	if (binerr == SYSFAIL)//this is a tricky fail
+	{
+		if (errno == ENOMEM)
+			ft_fprintf(STDERR_FILENO, "malloc: %s\n", strerror(errno));
+		else
+			ft_fprintf(STDERR_FILENO, "write: %s\n", strerror(errno));
+	}
+	if (binerr == INVARGC)
+		ft_fprintf(STDERR_FILENO, "too many arguments\n");
+	if (binerr == INVARGV)
+		ft_fprintf(STDERR_FILENO, "%s: numeric argument required\n", flags);//como que flags? si es un INVARG?
+	if (binerr == INVFLGS)
 	{
 		if (error)
-			ft_printfd(2, "%s%s: -%c: invalid option\n", shell, name, error);
+			ft_fprintf(STDERR_FILENO, "-%c: invalid option\n", error);//Esto es una flag con un character despues del -
 		else
-			ft_printfd(2, "%s%s: -: invalid option\n", shell, name);
-		ft_printfd(2, "%s: usage: %s %s\n", name, name, flags);
-		return (2);
+			ft_fprintf(STDERR_FILENO, "-: invalid option\n");//Osea, esto es una flag sin un character despues del -
+		ft_printfd(STDERR_FILENO, "%s: usage: %s %s\n", cmd, cmd, flags);//Aca me pierdo de nuevo, INVFLGS tira un error por pantalla doble?
+		return (MSHELL_MISSUSE);
 	}
-	else if (ft_strnstr(type, "HOME", ft_strlen(type)))
-		ft_printfd(2, "%s%s: HOME not set\n", shell, name);
-	else if (ft_strnstr(type, "System failed", ft_strlen(type)))
-		ft_printfd(2, "%s%s: %s\n", shell, name, strerror(errno));
-	else if (ft_strnstr(type, "Not valid identifier", ft_strlen(type)))
-		ft_printfd(2, "%s%s: `%s': not a valid identifier\n", shell, name,
-			flags);
-	else if (ft_strnstr(type, "Numeric arg required", ft_strlen(type)))
-		ft_printfd(2, "%s%s: %s: numeric argument required\n", shell, name,
-			flags);
+	if (binerr == INVIDFY)
+		ft_fprintf(STDERR_FILENO, "'%s': not a valid identifier\n", flags);//Sigo sin intender que es flags, si no hay ninguna flag
+	if (binerr == INVHOME)
+		ft_fprintf(STDERR_FILENO, "HOME not set\n");
 	return (MSHELL_FAILURE);
 }
 
@@ -144,14 +139,14 @@ int	shell_parserr(const char *next, t_body *msh)
  */
 void	shell_forcend(int exit_no, const char *argv, t_body *msh)
 {
-	cleanup(msh);
-	if (errno)
+	shell_cleanup(true, msh);
+	if (errno && argv)
 	{
 		ft_printfd(STDERR_FILENO, "msh: ");
 		perror(argv);
-		if (exit_no != MSHELL_FATAL
-			&& tcsetattr(STDIN_FILENO, TCSANOW, &msh->orig_term))
-			exit(exit_no);
 	}
+	if (exit_no != MSHELL_FATAL
+	&& tcsetattr(STDIN_FILENO, TCSANOW, &msh->orig_term))
+		exit(exit_no);
 	exit(exit_no);
 }

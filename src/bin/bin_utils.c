@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:59:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 06:00:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 08:11:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ int	print_lst_t_var(t_list *lst_t_var)
 		if (var->name && var->exported)
 		{
 			if (write(STDOUT_FILENO, "declare -x ", 11) == -1)
-				return (built_end("export", "System failed", NULL, '\0'));//modif
+				return (shell_builterr(SYSFAIL, "export", NULL, '\0'));
 			if (write(STDOUT_FILENO, var->name, ft_strlen(var->name)) == -1)
-				return (built_end("export", "System failed", NULL, '\0'));//modif
+				return (shell_builterr(SYSFAIL, "expor", NULL, '\0'));
 			if (print_t_var(var->value))
-				return (built_end("export", "System failed", NULL, '\0'));//modif
+				return (shell_builterr(SYSFAIL, "export", NULL, '\0'));
 			if (write(STDOUT_FILENO, "\n", 1) == -1)
-				return (built_end("export", "System failed", NULL, '\0'));//modif
+				return (shell_builterr(SYSFAIL, "export", NULL, '\0'));
 		}
 		lst_t_var = lst_t_var->next;
 	}
@@ -63,7 +63,7 @@ int	is_valid_var(char *arg, int print)
 	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
 	{
 		if (print)
-			return (built_end("export", "Not valid identifier", arg, '\0'));
+			return (shell_builterr(INVIDFY, "export", arg, '\0'));//arg no tiene que ser algo entre []??
 		else
 			return (1);
 	}
@@ -72,7 +72,7 @@ int	is_valid_var(char *arg, int print)
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 		{
 			if (print)
-				return (built_end("export", "Not valid identifier", arg, '\0'));
+				return (shell_builterr(INVIDFY, "export", arg, '\0'));//arg no tiene que ser algo entre []??
 			else
 				return (1);
 		}

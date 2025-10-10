@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 02:03:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 05:25:06 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 07:20:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static char	*maskstr(char *str)
 /**
  * @brief	Creates and initializes a new shell token.
  *
- *			Allocates a t_token structure, zeroes it with memset(), and
+ *			Allocates a t_token structure, zeroes it with ft_memset(), and
  *			assigns the input string. Determines the token type using
  *			get_token_type(). For WORD tokens, duplicates the mask with
  *			mask_dup() to track character masking.
@@ -108,7 +108,7 @@ t_token	*shell_newtkn(char *str)
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
-	memset(new_token, 0, sizeof(t_token));
+	ft_memset(new_token, 0, sizeof(t_token));
 	new_token->str = str;
 	new_token->type = get_token_type(str);
 	if (new_token->type == WORD)

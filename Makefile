@@ -15,8 +15,8 @@ LIBFT_USE	:=	1
 
 # The name list for regular and bonus source files.							#
 SRC			=	$(SRC_DIR)/main.c										\
-				$(SRC_DIR)/parser/parser.c								\
 				$(SRC_DIR)/parser/parser_cmd.c							\
+				$(SRC_DIR)/parser/parser_input.c						\
 				$(SRC_DIR)/parser/parser_envar.c						\
 				$(SRC_DIR)/parser/parser_token.c						\
 				$(SRC_DIR)/parser/parser_token_utils.c					\
@@ -44,20 +44,19 @@ SRC			=	$(SRC_DIR)/main.c										\
 				$(SRC_DIR)/shellft/shell_sigdlr_utils.c					\
 				$(SRC_DIR)/shellft/shell_newpmt_utils.c					\
 				$(SRC_DIR)/shellft/shell_lstadd_newtkn.c				\
- 				$(SRC_DIR)/execution/msh_cmd/msh_cd.c					\
- 				$(SRC_DIR)/execution/msh_cmd/msh_env.c					\
- 				$(SRC_DIR)/execution/msh_cmd/msh_pwd.c					\
- 				$(SRC_DIR)/execution/msh_cmd/msh_echo.c					\
- 				$(SRC_DIR)/execution/msh_cmd/msh_exit.c					\
- 				$(SRC_DIR)/execution/msh_cmd/msh_unset.c				\
- 				$(SRC_DIR)/execution/msh_cmd/msh_export.c				\
- 				$(SRC_DIR)/execution/msh_cmd/msh_import.c				\
- 				$(SRC_DIR)/execution/msh_cmd/msh_export_print_utils.c	\
+ 				$(SRC_DIR)/bin/bin_cd.c									\
+ 				$(SRC_DIR)/bin/bin_echo.c								\
+ 				$(SRC_DIR)/bin/bin_env.c								\
+ 				$(SRC_DIR)/bin/bin_exit.c								\
+ 				$(SRC_DIR)/bin/bin_export.c								\
+ 				$(SRC_DIR)/bin/bin_import.c								\
+ 				$(SRC_DIR)/bin/bin_pwd.c								\
+ 				$(SRC_DIR)/bin/bin_unset.c								\
+ 				$(SRC_DIR)/bin/bin_utils.c								\
  				$(SRC_DIR)/execution/waitcmd.c							\
  				$(SRC_DIR)/execution/exemsh.c							\
  				$(SRC_DIR)/execution/execmd.c							\
  				$(SRC_DIR)/execution/execmd_utils.c						\
- 				$(SRC_DIR)/execution/msh_cmd/msh_export_utils.c			\
 
 
 
@@ -70,7 +69,7 @@ CFLAGS		=	-Wall -Wextra -Werror -g
 DFLAGS		=	-MMD -MP
 
 # The preprocess flags used to compile the program.							#
-CPPFLAGS	=	-I$(INC_DIR) -I $(INC_LIB)
+CPPFLAGS	=	$(INC_DIR) $(INC_LIB)
 
 # ----------------------------- Folder Names ------------------------------ #
 
@@ -87,10 +86,10 @@ LIB_DIR		=	lib
 DEP_DIR		=	dep
 
 # The directory name for index files.										#
-INC_DIR		=	include
+INC_DIR		=	-I include -I include/shellft
 
 # The directory name for libft index files.									#
-INC_LIB		=	src/libft/include
+INC_LIB		=	-I src/libft/include
 
 # --------------------------- Object Libraries ---------------------------- #
 
@@ -146,7 +145,7 @@ $(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
 	@mkdir -p $(OBJ_DIR)/shellft
 	@mkdir -p $(OBJ_DIR)/parser
 	@mkdir -p $(OBJ_DIR)/execution
-	@mkdir -p $(OBJ_DIR)/execution/msh_cmd
+	@mkdir -p $(OBJ_DIR)/bin_cmd
 
 # Creates the regular library.												#
 $(LIB_REG): $(OBJ) | $(LIB_DIR)

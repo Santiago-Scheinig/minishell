@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   msh_cd.c                                           :+:      :+:    :+:   */
+/*   bin_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/09 05:56:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 09:18:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	change_pwd(t_list **envp)
 	pwd = ft_strdup(aux);
 	free(aux);
 	if (!pwd)
-		return (built_end("cd", "System failed", NULL, '\0'));
+		return (shell_builterr(SYSFAIL, "cd", NULL, 0));
 	current = *envp;
 	while (current && current->content)
 	{
@@ -43,7 +43,7 @@ static int	change_pwd(t_list **envp)
 /**
  * Builterr
  */
-int	msh_cd(char **args, t_list **envp)
+int	bin_cd(char **args, t_list **envp)
 {
 	char	*dir;
 
@@ -51,15 +51,15 @@ int	msh_cd(char **args, t_list **envp)
 	{
 		dir = shell_envchr(NULL, *envp, "HOME");
 		if (!dir)
-			return (built_end(args[0], "HOME", NULL, '\0'));
+			return (shell_builterr(INVHOME, "cd", NULL, 0));
 	}
 	else if (args[1] && args[1][0] == '-')
-		return (built_end(args[0], "Invalid flags", "[dir]", args[1][1]));
+		return (shell_builterr(INVFLGS, "cd", "[dir]", args[1][1]));//que es lo que va entre corchetes?
 	else if (!args[2])
 		dir = args[1];
 	else
-		return (built_end(args[0], "Numbers of args", NULL, '\0'));
+		return (shell_builterr(INVARGC, "cd", NULL, '\0'));
 	if (chdir(dir) != 0)
-		return (built_end(args[0], "System failed", NULL, '\0'));
+		return (shell_builterr(SYSFAIL, "cd", NULL, '\0'));//Esto es fatal? Hay que terminar la msh si es asi.
 	return (change_pwd(envp));
 }

@@ -6,40 +6,21 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 14:51:52 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 22:29:32 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:43:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/**
- * @brief   Checks if a character is a whitespace character.
- *
- * @param   c   The character to check.
- *
- * @return  1 if the character is a space, tab, newline, vertical tab,
- *          form feed, or carriage return; 0 otherwise.
- *
- * @note    Used by parsing functions like ft_atol to skip leading whitespace.
- */
-static	long	ft_isspace(long c)
+static	long	isspace(long c)
 {
 	if (c == ' ' || c == '\f' || c == '\n'
 		|| c == '\r' || c == '\t' || c == '\v')
-		return (1);
-	return (0);
+		return (true);
+	return (false);
 }
 
-/**
- * @brief   Checks if a character is a sign indicator ('+' or '-').
- *
- * @param   c   The character to check.
- *
- * @return  -1 if c is '-', 1 if c is '+', 0 otherwise.
- *
- * @note    Used by ft_atol to determine the number's sign.
- */
-static	long	ft_issign(long c)
+static	long	issign(long c)
 {
 	if (c == '-')
 		return (-1);
@@ -49,17 +30,27 @@ static	long	ft_issign(long c)
 }
 
 /**
- * @brief   Converts a string to a long integer.
+ * @brief	Converts a string to a long integer, handling optional whitespace
+ *			and sign.
  *
- * @param   nptr    The string containing the number.
+ * 			Parses the string 'nptr' and returns its long integer value.
+ *			Leading whitespace characters are ignored, and an optional '+'
+ *			or '-' sign is handled. Conversion stops at the first non-digit
+ *			character.
  *
- * @return  The converted long integer. Returns 0 if nptr is NULL
- *          or if the first non-whitespace, optional-sign character
- *          is not a digit.
+ *			Static helpers:
  *
- * @note    Skips leading whitespace, handles an optional single
- *          '+' or '-' sign, and parses consecutive digits until
- *          a non-digit is found.
+ *				- isspace():	Checks if a character is a whitespace.
+ *
+ *				- issign():		Determines if a character is '+' or '-',
+ *								returning its sign value.
+ *
+ * @param	nptr	String representing the number to convert.
+ *
+ * @note	Conversion stops at the first non-digit character after optional
+ *			whitespace and sign.
+ *
+ * @return	Long integer value represented by the string, with sign applied.
  */
 long	ft_atol(const char *nptr)
 {
@@ -70,10 +61,10 @@ long	ft_atol(const char *nptr)
 	i = 0;
 	nbr = 0;
 	sign = 1;
-	while (ft_isspace(nptr[i]) == 1)
+	while (isspace(nptr[i]) == 1)
 		i++;
-	if (ft_issign(nptr[i]))
-		sign = ft_issign(nptr[i++]);
+	if (issign(nptr[i]))
+		sign = issign(nptr[i++]);
 	else if (!ft_isdigit(nptr[i]))
 		return (nbr);
 	if (ft_isdigit(nptr[i]))

@@ -6,16 +6,28 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/08 21:39:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 08:59:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
 
 /**
- * COMMENT PENDING
+ * @brief	Resets command data after a redirection error.
+ *
+ *			Frees argv and pathname from the current command and
+ *			clears its structure. Then skips remaining tokens until
+ *			the next PIPE, allowing parsing to continue cleanly for
+ *			the following command segment.
+ *
+ * @param	lst_token	Current token in the token list.
+ * @param	new_cmd		Double pointer to the active command struct.
+ *
+ * @note	Used after a redirection error to safely resume parsing.
+ *
+ * @return	Pointer to the token before the next PIPE or END token.
  */
-t_list	*cmdupd_err(t_list *lst_t_token, t_cmd **new_cmd)
+t_list	*cmdupd_err(t_list *lst_token, t_cmd **new_cmd)
 {
 	t_token	*aux_tkn;
 
@@ -23,57 +35,90 @@ t_list	*cmdupd_err(t_list *lst_t_token, t_cmd **new_cmd)
 		ft_split_free((*new_cmd)->argv);
 	if ((*new_cmd)->pathname)
 		free((*new_cmd)->pathname);
-	memset((*new_cmd), 0, sizeof(t_cmd));
-	while (lst_t_token->next)
+	ft_memset((*new_cmd), 0, sizeof(t_cmd));
+	while (lst_token->next)
 	{
-		aux_tkn = (t_token *) lst_t_token->next->content;
+		aux_tkn = (t_token *) lst_token->next->content;
 		if (aux_tkn->type == PIPE)
-			return (lst_t_token);
-		lst_t_token = lst_t_token->next;
+			return (lst_token);
+		lst_token = lst_token->next;
 	}
-	return (lst_t_token);
+	return (lst_token);
 }
 
 /**
- * COMMENT PENDING
+ * @brief	Updates command input descriptor for '<' redirection.
+ *
+ *			Opens the target file for reading and assigns its file
+ *			descriptor to new->infd. If the file cannot be opened or
+ *			accessed, sets infd to -1 and reports the error.
+ *
+ * @param	tkn_next	Token containing the filename for input.
+ * @param	new			Command to receive the updated input fd.
+ *
+ * @note	Closes previous infd if it was greater than STDERR_FILENO.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE otherwise.
  */
-static int	cmdupd_infile(t_token *next, t_cmd *new)
+static int	cmdupd_infile(t_token *tkn_next, t_cmd *new)
 {
 	if (new->infd > 2)
 		close(new->infd);
-	if (access(next->str, R_OK | F_OK))
+	if (access(tkn_next->str, R_OK | F_OK))
 	{
 		new->infd = -1;
-		return (shell_redirerr(next->str, MSHELL_FAILURE));
+		return (shell_redirerr(MSHELL_FAILURE, tkn_next->str));
 	}
 	else
 	{
-		new->infd = open(next->str, O_RDONLY);
+		new->infd = open(tkn_next->str, O_RDONLY);
 		if (new->infd < 0)
-			return (redirend(next->str, MSHELL_FAILURE));
+			return (shell_redirend(MSHELL_FAILURE, tkn_next->str));
 	}
-	free(next->str);
-	next->str = NULL;
+	free(tkn_next->str);
+	tkn_next->str = NULL;
 	return (MSHELL_SUCCESS);
 }
 
 /**
- * COMMENT PENDING
+ * @brief	Updates command output descriptor for '>' or '>>'.
+ *
+ *			Opens (or creates) a file for writing with the specified
+ *			open_flag. Handles both truncate and append modes, and
+ *			assigns the resulting descriptor to new->outfd.
+ *
+ * @param	open_flag	File open mode (O_TRUNC or O_APPEND).
+ * @param	tkn_next	Token containing the output filename.
+ * @param	new			Command to receive the updated output fd.
+ *
+ * @note	Closes previous outfd if greater than STDERR_FILENO.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on error.
  */
-static int	cmdupd_outfile(int open_flag, t_token *next, t_cmd *new)
+static int	cmdupd_outfile(int open_flag, t_token *tkn_next, t_cmd *new)
 {
 	if (new->outfd > 2)
 		close(new->outfd);
-	new->outfd = open(next->str, O_WRONLY | O_CREAT | open_flag, 0664);
+	new->outfd = open(tkn_next->str, O_WRONLY | O_CREAT | open_flag, 0664);
 	if (new->outfd < 0)
-		return (redirend(next->str, MSHELL_FAILURE));
-	free(next->str);
-	next->str = NULL;
+		return (shell_redirerr(MSHELL_FAILURE, tkn_next->str));
+	free(tkn_next->str);
+	tkn_next->str = NULL;
 	return (MSHELL_SUCCESS);
 }
 
 /**
- * COMMENT PENDING
+ * @brief	Assigns heredoc file descriptor to command input.
+ *
+ *			If heredoc_fd is valid, links it to new->infd. If the
+ *			fd is invalid (-1), signals redirection failure.
+ *
+ * @param	aux		Token containing heredoc information.
+ * @param	new		Command structure to update.
+ *
+ * @note	Closes previous infd if greater than STDERR_FILENO.
+ *
+ * @return	MSHELL_SUCCESS or MSHELL_FAILURE based on heredoc status.
  */
 static int	cmdupd_heredoc(t_token *aux, t_cmd *new)
 {
@@ -86,7 +131,25 @@ static int	cmdupd_heredoc(t_token *aux, t_cmd *new)
 }
 
 /**
- * COMMENT PENDING
+ * @brief	Handles all command redirection updates.
+ *
+ *			Determines the redirection type from aux->type and
+ *			dispatches to the proper helper for handling input,
+ *			output, append, or heredoc redirections.
+ *
+ *			Static helpers:
+ *
+ *				- cmdupd_infile():	Handles '<' input redirection.
+ *				- cmdupd_outfile():	Handles '>' and '>>' output.
+ *				- cmdupd_heredoc():	Handles heredoc linking.
+ *
+ * @param	aux			Current token (redir operator).
+ * @param	aux_next	Next token (target filename or heredoc).
+ * @param	new			Active command structure.
+ *
+ * @note	Returns failure if an unknown redirection type is found.
+ *
+ * @return	MSHELL_SUCCESS or MSHELL_FAILURE depending on result.
  */
 int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
 {

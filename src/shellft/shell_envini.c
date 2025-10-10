@@ -6,11 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 13:51:35 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/09 05:16:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/09 23:44:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_std.h"
+#include "shell_std_utils.h"
 
 static char	*cmdlog_init(char ***envp, t_list *lst_envp)
 {
@@ -48,7 +49,7 @@ static char	*pwd_init(char ***envp, t_list *lst_envp)
 	int		exp;
 
 	exp = false;
-	pwd = getcwd(NULL, 0);
+	pwd = pwdstr();
 	if (!pwd)
 		return (MSHELL_FAILURE);
 	if (shell_envchr(&exp, lst_envp, "PWD"))
@@ -78,8 +79,6 @@ static int	ps1_init(char ***envp, t_list *lst_envp)
 
 	exp = false;
 	ps1 = "PS1=\\u:\\w\\$ ";
-	if (!ps1)
-		return (MSHELL_FAILURE);
 	if (shell_envchr(&exp, lst_envp, "PS1"))
 	{
 		if (shell_envlst_swp(exp, ps1, envp, lst_envp))

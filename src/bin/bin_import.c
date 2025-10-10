@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   msh_import.c                                       :+:      :+:    :+:   */
+/*   bin_import.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:44:12 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/09 06:04:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 09:18:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	check_arguments(char ***argv)
 /**
  * Builterr
  */
-int	msh_import(char ***argv, char ***envp, t_list *lst_envp)
+int	bin_import(char ***argv, char ***envp, t_list *lst_envp)
 {
 	char	*envar_name;
 	int		swp;
@@ -59,21 +59,21 @@ int	msh_import(char ***argv, char ***envp, t_list *lst_envp)
 	int		i;
 
 	if (check_arguments(argv))
-		return (MSHELL_FAILURE);
+		return (shell_builterr(INVIDFY, "import", NULL, 0));//No entiendo cual seria este error
 	i = -1;
 	swp = false;
 	while ((*argv)[++i])
 	{
 		envar_name = get_name((*argv)[i]);
 		if (!envar_name)
-			return (MSHELL_FAILURE);//Builterr: -1
+			return (shell_builterr(SYSFAIL, "import", NULL, 0));
 		if (shell_envchr(&exp, envar_name, lst_envp))
 			swp = true;
 		free(envar_name);
 		if (swp && shell_envlst_swp(exp, argv[i], envp, lst_envp))
-			return (MSHELL_FAILURE);//Builterr: -1
+			return (shell_builterr(SYSFAIL, "import", NULL, 0));
 		if (!swp && shell_envlst_add(exp, argv[i], envp, lst_envp))
-			return (MSHELL_FAILURE);//Builterr: -1
+			return (shell_builterr(SYSFAIL, "import", NULL, 0));
 	}
 	return (MSHELL_SUCCESS);
 }

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_flags_bonus.c                            :+:      :+:    :+:   */
+/*   ft_printf_flg_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 19:58:50 by sscheini          #+#    #+#             */
-/*   Updated: 2025/05/19 17:08:21 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:38:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf_bonus.h"
+#include "libft.h"
 
-static	int	ft_isspecifier(char c)
+static	int	isspecifier(char c)
 {
 	if (c == 'd' || c == 'i' || c == 'u' || c == 'x' || c == 'X')
 		return (1);
@@ -21,11 +21,7 @@ static	int	ft_isspecifier(char c)
 	return (0);
 }
 
-/**
- * Sets the presicion value if any is detailed.
- * Returns a pointer to the last character found after reading the digits.
- */
-static	const char	*ft_precisioncheck(int *precision, const char *s)
+static	const char	*precisioncheck(int *precision, const char *s)
 {
 	if (*s == '.')
 	{
@@ -40,11 +36,7 @@ static	const char	*ft_precisioncheck(int *precision, const char *s)
 	return (s);
 }
 
-/**
- * Sets the width value if any is detailed.
- * Returns a pointer to the last character found after reading the digits.
- */
-static	const char	*ft_widthcheck(int *width, const char *s)
+static	const char	*widthcheck(int *width, const char *s)
 {
 	if (ft_isdigit(*s))
 		*width = ft_atoi(s);
@@ -53,11 +45,7 @@ static	const char	*ft_widthcheck(int *width, const char *s)
 	return (s);
 }
 
-/**
- * Sets the flags | [0 - 1 - 2 - 3 - 4] | to true if called.
- * Returns a pointer to the last character found after reading the flags.
- */
-static	const char	*ft_flagcheck(int *flags, const char *s)
+static	const char	*flagcheck(int *flags, const char *s)
 {
 	while (*s == '-' || *s == '+' || *s == ' ' || *s == '#' || *s == '0')
 	{
@@ -77,17 +65,35 @@ static	const char	*ft_flagcheck(int *flags, const char *s)
 }
 
 /**
- * Creates an INT * that saves the flags information.
- * - Each position of flags represents a different flag or value assigned.
- * - The following flags are represented with true or false:
- *   | [0] -> '-' | [1] -> '+' | [2] -> 'blank' | [3] -> '#' | [4] -> '0' |
- * - Width is set to 0 in position [5], unless a witdh value is detailed.
- * - Presicion is set to -1 in position [6], unless '.' is called.
- * - The specifier character is detailed in position [7] as ascci value.
- *   | [5] -> Width | [6] -> Presicion | [7] -> Specifier |
- * - If the flag format isn't valid, returns NULL.
+ * @brief	Parses format flags, width, precision, and specifier for printf.
+ *
+ *			Analyzes the string 's' for standard printf-style flags,
+ *			width, precision, and conversion specifiers. Returns an
+ *			array representing the parsed values.
+ *
+ *			Static helpers:
+ *
+ *				- isspecifier():	Checks if a character is a valid format
+ *									specifier.
+ *
+ *				- flagcheck():		Sets corresponding flags in the array
+ *									for '-', '+', ' ', '#', and '0'.
+ *
+ *				- widthcheck():		Parses field width and stores in array.
+ *
+ *				- precisioncheck(): Parses precision after '.' and stores
+ *									it in the array.
+ *
+ * @param	s	String containing format specifiers (e.g., "-10.3d").
+ *
+ * @note	Allocates memory for the flags array using ft_calloc.
+ * @note	Flags array structure: [minus, plus, space, hash, zero, width,
+ *			precision, specifier].
+ *
+ * @return	Pointer to an int array with flags, width, precision, and
+ *			specifier. Returns NULL on allocation failure or invalid spec.
  */
-int	*ft_flagdescriptor(const char *s)
+int	*flagdescriptor(const char *s)
 {
 	int		*flags;
 
@@ -95,10 +101,10 @@ int	*ft_flagdescriptor(const char *s)
 	if (!flags)
 		return (NULL);
 	flags[6]--;
-	s = ft_flagcheck(flags, s);
-	s = ft_widthcheck(&flags[5], s);
-	s = ft_precisioncheck(&flags[6], s);
-	if (ft_isspecifier(*s))
+	s = flagcheck(flags, s);
+	s = widthcheck(&flags[5], s);
+	s = precisioncheck(&flags[6], s);
+	if (isspecifier(*s))
 		flags[7] = (int) *s;
 	else
 		return (NULL);

@@ -6,14 +6,131 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 21:24:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/09 05:37:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 06:22:15 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHELL_STD_UTILS_H
 # define SHELL_STD_UTILS_H
 
+/*--------------------------------------------------------------------------*/
+/*--------------------------------INCLUSIONS--------------------------------*/
+/*--------------------------------------------------------------------------*/
+
 # include "shell_std.h"
+
+/*--------------------------------------------------------------------------*/
+/*------------------------------------ENV-----------------------------------*/
+/*--------------------------------------------------------------------------*/
+/**
+ * @brief	Extracts the name part of an environment variable string.
+ *
+ *			Scans the input string until the first '=' character or the end
+ *			of the string, and duplicates that portion as the variable name.
+ *
+ * @param	var	String containing the variable in the form "NAME=VALUE"
+ *				or simply "NAME".
+ *
+ * @note	The returned string is dynamically allocated and must be freed
+ *			by the caller. If memory allocation fails, returns NULL.
+ *
+ * @return	Pointer to the duplicated variable name, or NULL on failure.
+ */
+char		*get_name(char *var);
+
+/**
+ * @brief	Extracts the value part of an environment variable string.
+ *
+ *			Searches for the '=' character in the given variable string.
+ *			If found, duplicates the portion after it as the variable value.
+ *			If '=' is missing, assigns NULL to the output pointer.
+ *
+ * @param	var		String containing the variable in the form "NAME=VALUE".
+ * @param	value	Double pointer where the duplicated value string is stored.
+ *
+ * @note	If the variable has no value (e.g., "NAME="), an empty string is
+ *			duplicated instead of NULL. Caller is responsible for freeing it.
+ *
+ * @return	MSHELL_SUCCESS on success, or MSHELL_FAILURE if memory allocation
+ *			for the duplicated value fails.
+ */
+int			get_value(char *var, char **value);
+
+/**
+ * @brief	Creates a string representing the current working directory.
+ *
+ * 			Calls getcwd() to retrieve the current working directory and
+ * 			prefixes it with "PWD=" to form a standard environment variable
+ * 			string.
+ *
+ * @note	The returned string must be freed by the caller to avoid memory leaks.
+ *
+ * @return	Pointer to a newly allocated string in the format "PWD=/path/to/dir",
+ * 			or NULL if getcwd() fails or memory allocation fails.
+ */
+char		*pwdstr(void);
+
+/*--------------------------------------------------------------------------*/
+/*------------------------------------PMT-----------------------------------*/
+/*--------------------------------------------------------------------------*/
+
+/**
+ * @brief	Calculates the length of the formatted shell prompt string.
+ *
+ *			Iterates through the PS1 format string. For recognized escape
+ *			sequences, adds the length of the corresponding value (user or
+ *			path). For other characters, increments length by 1. Handles
+ *			backslash escapes properly.
+ *
+ * @param	ps1		Pointer to the PS1 format string.
+ * @param	user	Pointer to the username string.
+ * @param	path	Pointer to the path string.
+ *
+ * @note	Returns 0 if ps1 is NULL.
+ * @note	Only handles escape sequences '\u' for user and '\w' for path.
+ *
+ * @return	Total length required for the formatted prompt string.
+ */
+size_t		prompt_len(char *ps1, char *user, char *path);
+
+/**
+ * Need fix
+ */
+char		*transform_format(char *tmp, char *ps1, char *user, char *path);
+
+/*--------------------------------------------------------------------------*/
+/*------------------------------------SIG-----------------------------------*/
+/*--------------------------------------------------------------------------*/
+
+/**
+ * @brief	Signal handler to refresh the shell prompt.
+ *
+ *			Sets the shell signal flag using sigdlr_setflg(), prints a newline,
+ *			clears the current readline input, moves to a new line, and
+ *			redisplays the prompt using the readline library functions.
+ *
+ * @param	signum	The signal number received (ignored in this function).
+ *
+ * @note	Designed to handle SIGINT (Ctrl+C) during prompt input.
+ * @note	Does not terminate the shell; only resets the input line.
+ */
+void		sigdlr_newpmt(int signum);
+
+/**
+ * @brief	Sets the global signal variable to the received signal number.
+ *
+ *			Updates the g_signal_received variable with the value of signum,
+ *			allowing the shell to know exactly which signal was caught.
+ *
+ * @param	signum	The signal number received.
+ *
+ * @note	Used in conjunction with signal handlers to track specific signals.
+ */
+void		sigdlr_setflg(int signum);
+
+/*--------------------------------------------------------------------------*/
+/*------------------------------------END-----------------------------------*/
+/*--------------------------------------------------------------------------*/
 
 /**
  * @brief	Identifies the type of a shell token from a string.
@@ -97,56 +214,6 @@ int			operator_len(int type);
 const char	*operator_strchr(const char *str);
 
 /**
- * @brief	Calculates the length of the formatted shell prompt string.
- *
- *			Iterates through the PS1 format string. For recognized escape
- *			sequences, adds the length of the corresponding value (user or
- *			path). For other characters, increments length by 1. Handles
- *			backslash escapes properly.
- *
- * @param	ps1		Pointer to the PS1 format string.
- * @param	user	Pointer to the username string.
- * @param	path	Pointer to the path string.
- *
- * @note	Returns 0 if ps1 is NULL.
- * @note	Only handles escape sequences '\u' for user and '\w' for path.
- *
- * @return	Total length required for the formatted prompt string.
- */
-size_t		prompt_len(char *ps1, char *user, char *path);
-
-/**
- * @brief	Signal handler to refresh the shell prompt.
- *
- *			Sets the shell signal flag using sigdlr_setflg(), prints a newline,
- *			clears the current readline input, moves to a new line, and
- *			redisplays the prompt using the readline library functions.
- *
- * @param	signum	The signal number received (ignored in this function).
- *
- * @note	Designed to handle SIGINT (Ctrl+C) during prompt input.
- * @note	Does not terminate the shell; only resets the input line.
- */
-void		sigdlr_newpmt(int signum);
-
-/**
- * @brief	Sets the global signal variable to the received signal number.
- *
- *			Updates the g_signal_received variable with the value of signum,
- *			allowing the shell to know exactly which signal was caught.
- *
- * @param	signum	The signal number received.
- *
- * @note	Used in conjunction with signal handlers to track specific signals.
- */
-void		sigdlr_setflg(int signum);
-
-/**
- * Need fix
- */
-char		*transform_format(char *tmp, char *ps1, char *user, char *path);
-
-/**
  * @brief	Calculates the length of the next word, ignoring quoted parts.
  *
  *			Iterates through the string until a divisor character is reached,
@@ -177,6 +244,5 @@ int			word_len(const char *str);
  * @return	Pointer to the first delimiter character in str, or NULL if none.
  */
 const char	*word_strchr(const char *str);
-
 
 #endif
