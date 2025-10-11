@@ -21,11 +21,12 @@ SRC			=	$(SRC_DIR)/main.c								\
 				$(SRC_DIR)/parser/parser_cmd.c					\
 				$(SRC_DIR)/parser/parser_envar.c				\
 				$(SRC_DIR)/parser/parser_token.c				\
-				$(SRC_DIR)/parser/parser_token_utils.c			\
-				$(SRC_DIR)/parser/parser_token_hdoc.c			\
 				$(SRC_DIR)/parser/parser_cmd_utils.c			\
+				$(SRC_DIR)/parser/parser_token_hdoc.c			\
+				$(SRC_DIR)/parser/parser_token_utils.c			\
 				$(SRC_DIR)/parser/parser_envar_utils.c			\
 				$(SRC_DIR)/parser/parser_wildcard_bonus.c		\
+				$(SRC_DIR)/parser/parser_wildcard_utils_bonus.c	\
 				$(SRC_DIR)/shellft/shell_split.c				\
 				$(SRC_DIR)/shellft/shell_envdup.c				\
 				$(SRC_DIR)/shellft/shell_memmove.c				\
@@ -52,7 +53,6 @@ SRC			=	$(SRC_DIR)/main.c								\
  				$(SRC_DIR)/execution/exemsh.c					\
  				$(SRC_DIR)/execution/execmd.c					\
  				$(SRC_DIR)/execution/execmd_utils.c				\
-
 
 
 SRC_BON		=	$(SRC_DIR)/main_bonus.c		\

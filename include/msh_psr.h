@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/05 14:32:19 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/11 18:11:50 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # include <readline/history.h>
 # include <fcntl.h>
 
-void	parser_wildcard(t_body *msh); //bonus
+int		parser_wildcard(t_body *msh); //bonus
+int		wildcard(char **names, char ***matches, t_list *head);
+int		copy_name(char ***names, char *dir);
+
 
 typedef struct s_envar_pair
 {

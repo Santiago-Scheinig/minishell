@@ -6,29 +6,12 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 17:56:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/05 15:35:24 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:40:06 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
 #include <dirent.h> //bonus
-
-static int	copy_name(char ***names, char *dir)
-{
-	char	**tmp;
-	int		i;
-
-	i = ft_arrlen((const void **)names[0]);
-	tmp = ft_realloc(names[0], sizeof(char *) * (i + 2), sizeof(char *) * i);
-	if (!tmp)
-		return (MSHELL_FAILURE);
-	names[0] = tmp;
-	names[0][i] = ft_strdup(dir);
-	if (!names[0][i])
-		return (MSHELL_FAILURE);
-	names[0][i + 1] = NULL;
-	return (MSHELL_SUCCESS);
-}
 
 static int	dir_names(char ***names, t_body *msh)
 {
@@ -55,36 +38,65 @@ static int	dir_names(char ***names, t_body *msh)
 	return (MSHELL_SUCCESS);
 }
 
-
-static int	check_wildcard(char **names, t_body *msh, t_list *head)
+static int	add_to_list(t_list **head, char **matches)
 {
-	t_token	*token;
-	char	**str;
+	t_list	*new_node;
+	t_token	*new_token;
+	int		i;
 
-	str = NULL;
-	token = (t_token *)head->content;
-	if (!token->str)
+	if (!matches || !matches[0])
 		return (MSHELL_SUCCESS);
-	if (!ft_strchr(token->str, '*'))
-		return (MSHELL_SUCCESS);
-	str = ft_split_wildcard(token->mask, token->str, '*');
-	if (!str)
-		forcend(msh, "malloc", MSHELL_FAILURE);
+	i = -1;
+	while (matches[++i])
+	{
+		new_token = token_dup(matches[i]);
+		if (!new_token)
+			break ;
+		ft_memset((void *)new_token->mask, 'N', ft_strlen(matches[i]));
+		if (i == 0)
+		{
+			free(((t_token *)head[0]->content)->mask);
+			free(((t_token *)head[0]->content)->str);
+			free(((t_token *)head[0]->content));
+			head[0]->content = new_token;
+		}
+		else
+		{
+			new_node = ft_lstnew(new_token);
+			if (!new_node)
+				break ;
+			new_node->next = head[0]->next;
+			head[0]->next = new_node;
+			head[0] = new_node;
+		}
+	}
+	if (!new_node || !new_token)
+		return (MSHELL_FAILURE);
 	return (MSHELL_SUCCESS);
 }
 
-void	parser_wildcard(t_body *msh)
+int	parser_wildcard(t_body *msh)
 {
-	t_list	*head;
+	t_list	**head;
+	t_list	*crnt;
+	char	**matches;
 	char	**names;
 	
-	head = msh->token_lst;
+	head = &msh->token_lst;
 	names = NULL;
-	while (head)
+	if (dir_names(&names, msh))
+		return (MSHELL_FAILURE);
+	while (head[0])
 	{
-		if (dir_names(&names, msh))
-			return (MSHELL_FAILURE);
-		check_wildcard(names[0], msh, head);
-		head = head->next;
+		matches = NULL;
+		crnt = head[0];
+		if (wildcard(names, &matches, crnt))
+			forcend(msh, "malloc", MSHELL_FAILURE);
+		if (add_to_list(&crnt, matches))
+			forcend(msh, "malloc", MSHELL_FAILURE);
+		head = &crnt->next;
+		free(matches);
 	}
+	ft_split_free(names);
+	return (MSHELL_SUCCESS);
 }
