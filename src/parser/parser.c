@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:56:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 17:15:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/05 14:31:07 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int	parser(t_body *msh)
 			return (msh->exit_no);
 	}
 	parser_envar(msh);
-	//parser_wildcard(msh);
+	parser_wildcard(msh);
 	parser_cmds(msh);
 	shell_lstclear(&(msh->token_lst), shell_lstdeltkn);
 	msh->token_lst = NULL;

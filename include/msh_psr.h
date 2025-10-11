@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_psr.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 21:07:46 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/05 14:32:19 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
+
+void	parser_wildcard(t_body *msh); //bonus
 
 typedef struct s_envar_pair
 {
