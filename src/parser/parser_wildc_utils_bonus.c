@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_wildcard_utils_bonus.c                      :+:      :+:    :+:   */
+/*   parser_wildc_utils_bonus.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:35:15 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/11 20:47:15 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/12 15:08:56 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,19 @@ static int	add_match(char ***matches, char *names)
 static int	wild_match(char *str, char *mask, char *name)
 {
 	if (!str[0])
-		return (MSHELL_SUCCESS);
-	if (str[0] == '*' && mask[0] == 'N') //cambiar a O
 	{
-		if (wild_match(str + 1, mask + 1, name))
-			return (MSHELL_SUCCESS);
-		if (name[0] && wild_match(str, mask, name + 1))
+		if (!name[0])
 			return (MSHELL_SUCCESS);
 		return (MSHELL_FAILURE);
 	}
-	else
+	if (str[0] == '*' && mask[0] == 'O')
+	{
+		if (!wild_match(str + 1, mask + 1, name))
+			return (MSHELL_SUCCESS);
+		if (name[0] && !wild_match(str, mask, name + 1))
+			return (MSHELL_SUCCESS);
+		return (MSHELL_FAILURE);
+	}
 	if (str[0] == name[0])
 		return (wild_match(str + 1, mask + 1, name + 1));
 	return (MSHELL_FAILURE);
@@ -67,9 +70,9 @@ static int	valid_str(char *str, char *mask)
 		return (0);
 	while (str && str[++i])
 	{
-		if (str[i] == '*' && mask[i] != 'N')//cambiar por O
+		if (str[i] == '*' && mask[i] != 'O')
 			valid = 0;
-		if (str[i] == '*' && mask[i] == 'N')//cambiar por O
+		if (str[i] == '*' && mask[i] == 'O')
 			valid = 1;
 	}
 	return (valid);
