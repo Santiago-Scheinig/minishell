@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:35:15 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/12 15:08:56 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:47:49 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ int	wildcard(char **names, char ***matches, t_list *head)
 			if (add_match(matches, names[i]))
 				return (MSHELL_FAILURE);
 	}
-	if (!matches[0])
-		return (MSHELL_SUCCESS);
 	return (MSHELL_SUCCESS);
 }
 

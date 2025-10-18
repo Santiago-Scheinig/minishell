@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 18:06:13 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/04 17:21:46 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:49:55 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ char	*mask_dup(char *str)
 		if (quote)
 			i += mask_quoted(&str[i], &mask_str[i], quote);
 		else if (str[i] == ';' || str[i] == '\\'
-			|| str[i] == '\'' || str[i] == '\"') 
-			//|| str[i] == '*')
+			|| str[i] == '\'' || str[i] == '\"' || str[i] == '*')
 			mask_str[i] = 'O';
 		else
 			mask_str[i] = 'N';

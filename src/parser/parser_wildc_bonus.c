@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_wildcard_bonus.c                            :+:      :+:    :+:   */
+/*   parser_wildc_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 17:56:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/12 14:26:51 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/18 16:48:21 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static int	dir_names(char ***names, t_body *msh)
 
 	dir = opendir(".");
 	if (!dir)
-		forcend(msh, "opendir", MSHELL_FAILURE);
+	{
+		perror("opendir");
+		return (MSHELL_FAILURE);
+	}
 	while (1)
 	{
 		entry = readdir(dir);
@@ -43,6 +46,8 @@ static void	add_to_list(char **split, t_list *token_lst, t_body *msh)
 	int		i;
 
 	i = 0;
+	if (!split)
+		return ;
 	while (split[i])
 		i++;
 	while (i && split[--i])
@@ -59,8 +64,7 @@ static void	add_to_list(char **split, t_list *token_lst, t_body *msh)
 			forcend(msh, "malloc", MSHELL_FAILURE);
 		}
 	}
-	if (split)
-		free(split);
+	free(split);
 }
 
 int	parser_wildcard(t_body *msh)
@@ -80,7 +84,6 @@ int	parser_wildcard(t_body *msh)
 			forcend(msh, "malloc", MSHELL_FAILURE);
 		add_to_list(matches, token_lst, msh);
 		token_lst = token_lst->next;
-		free(matches);
 	}
 	ft_split_free(names);
 	return (MSHELL_SUCCESS);
