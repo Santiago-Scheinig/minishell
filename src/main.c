@@ -43,7 +43,7 @@
 static int	parser(t_body *msh)
 {
 	char	**split;
-	
+
 	if (shell_sigint_read(msh))
 		return (MSHELL_SIG_HANDLR);
 	shell_cleanup(false, msh);
@@ -57,11 +57,10 @@ static int	parser(t_body *msh)
 		return (msh->exit_no);
 	}
 	parser_envar(msh);
-	//parser_wildcard();
 	parser_cmds(msh);
 	ft_lstclear(&(msh->head_token), shell_deltkn);
 	msh->head_token = NULL;
-	return (msh->exit_no);
+	return (MSHELL_SUCCESS);
 }
 
 /**
@@ -103,7 +102,6 @@ static void	msh_init(const char **envp, t_body *msh)
 		shell_forcend(MSHELL_FAILURE, "malloc", msh);
 }
 
-
 /**
  * @brief Entry point for the mini shell program.
  *
@@ -130,7 +128,6 @@ static void	msh_init(const char **envp, t_body *msh)
 int	main(int argc, char **argv, const char **envp)
 {
 	t_body	msh;
-	int		status;
 
 	errno = ENOENT;
 	msh_init(envp, &msh);
@@ -143,7 +140,7 @@ int	main(int argc, char **argv, const char **envp)
 		if (execution(&msh))
 			continue; //If bonus, continue = input result FAILURE (execution failed) --> Return (status); If MSHELL_SIG_HANDLR (bonus should reset);
 		if (msh.childs_pid)
-			waitexec(&msh) //waitcmd should set one status variable to 1 if any cmd return an error, so status knows input result FAILURE
+			waitexec(&msh); //waitcmd should set one status variable to 1 if any cmd return an error, so status knows input result FAILURE
 	}
 	return (msh.exit_no);
 }
