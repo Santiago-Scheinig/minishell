@@ -36,7 +36,7 @@ OBJECT_DIR = obj
 DEPEND_DIR = dep
 
 #	Include paths for headers
-INCLUDE_DIRS = -I include -I ../ft/include
+INCLUDE_DIRS = -I include -I ../libft/include
 
 #	================================ Compiler Settings =================================	#
 

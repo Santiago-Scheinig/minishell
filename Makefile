@@ -1,33 +1,33 @@
-# ================================ Main Configuration ================================ #
+#	================================ Main Configuration ================================	#
 
-# Executable names
+#	Executable names
 NAME = msh
 NAME_BONUS = msh_bonus
 
-# Source files
+#	Source files
 MAIN_SRC = $(SOURCE_DIR)/main.c
 BONUS_SRC = $(SOURCE_DIR)/main_bonus.c
 
-# ================================ Library Configuration ============================= #
+#	================================ Library Configuration =============================	#
 
-# Libraries to build (in build order)
-LIBS = ft shellft mshft
+#	Libraries to build (in build order)
+LIBS = libft shellft mshft
 
-# Bonus libraries (if needed)
-BONUS_LIBS = 
+#	Library linking order: most dependent first, base libraries last
+LINK_LIBS = -lmshft -lshellft -l:libft.a -lreadline
 
-# Library linking order: most dependent first, base libraries last
-# msh depends on shellft, shellft depends on ft
-LINK_LIBS = -lmshft -lshellft -lft -lreadline
+#	Library linking order for bonus build
+LINK_LIBS_BONUS = -lmshft_bonus -lshellft -l:libft.a -lreadline
 
 # ================================ Directory Structure =============================== #
 
+# Source, Object, and Dependency directories
 SOURCE_DIR = src
 OBJECT_DIR = obj
 DEPEND_DIR = dep
 
 # Include paths for headers
-INCLUDE_DIRS = -I src/mshft/include -I src/shellft/include -I src/ft/include
+INCLUDE_DIRS = -I src/mshft/include -I src/shellft/include -I src/libft/include
 
 # Library paths for linking
 LIBRARY_PATHS = $(addprefix -L $(SOURCE_DIR)/, $(LIBS))
@@ -72,14 +72,17 @@ COLOR_RESET = \033[0m
 
 # Default: build main program
 all: $(NAME)
-	@echo "$(COLOR_GREEN)[✓] $(NAME) - Build complete!$(COLOR_RESET)"
+	@echo "$(COLOR_GREEN)[✓] $(NAME) - Build complete!$(COLOR_RESET)\n"
+
+# Build bonus program
+bonus: $(NAME_BONUS)
+	@echo "$(COLOR_GREEN)[✓] $(NAME) - Bonus build complete!$(COLOR_RESET)\n"
 
 msg:
 	@echo "$(COLOR_BLUE)[i] $(NAME) - Main Compilation:"
 
-# Build bonus program
-bonus: $(NAME_BONUS)
-	@echo "$(COLOR_GREEN)[✓] $(NAME_BONUS) - Bonus build complete!$(COLOR_RESET)"
+msg_bonus:
+	@echo "$(COLOR_BLUE)[i] $(NAME) - Main Bonus Compilation:"
 
 # ================================ Directory Creation ================================ #
 
@@ -91,6 +94,10 @@ $(OBJECT_DIR) $(DEPEND_DIR):
 # Build each library in its subdirectory
 $(LIBS):
 	@$(MAKE) -s -C $(SOURCE_DIR)/$@
+
+# Build each library in its subdirectory
+libs_bonus: $(LIBS)
+	@$(MAKE) bonus -s -C $(SOURCE_DIR)/mshft
 
 # ================================ Object Compilation ================================ #
 
@@ -112,9 +119,10 @@ $(NAME): $(LIBS) msg $(MAIN_OBJ)
 	@echo "$(COLOR_BLUE)[✓] $(NAME) - Linked successfully$(COLOR_RESET)\n"
 
 # Link bonus executable
-$(NAME_BONUS): $(LIBS) msg $(BONUS_OBJ)
-	@$(CC) $(CFLAGS) $(BONUS_OBJ) $(LDFLAGS) $(LINK_LIBS) -o $@
-	@echo "$(COLOR_BLUE)[✓] $(NAME_BONUS) - Linked successfully$(COLOR_RESET)\n"
+$(NAME_BONUS): libs_bonus msg_bonus $(BONUS_OBJ)
+	@printf "\r\t$(COLOR_CYAN)[OK] Main compiled successfully.\n$(COLOR_RESET)"
+	@$(CC) $(CFLAGS) -D BONUS=1 $(BONUS_OBJ) $(LDFLAGS) $(LINK_LIBS_BONUS) -o $@
+	@echo "$(COLOR_BLUE)[✓] $(NAME) - Linked successfully$(COLOR_RESET)\n"
 
 # ================================ Cleanup Rules ===================================== #
 

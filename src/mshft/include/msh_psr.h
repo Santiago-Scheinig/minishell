@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:34:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/04 19:05:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 /*--------------------------------------------------------------------------*/
 
 # if BONUS
-#  include "msh_prs_bonus.h"
+#  include "msh_psr_bonus.h"
 # else
 #  define OPERATORS "\'\"\\;"
 # endif
@@ -80,6 +80,28 @@ typedef struct s_hdoc_tsh
 /*--------------------------------------------------------------------------*/
 
 /**
+ * @brief	Reads input from user or stdin depending on mode.
+ *
+ *			In interactive mode, prompts the user for input using
+ *			reader_prompt(). Otherwise reads the next line from
+ *			stdin using ft_get_next_line() and trims the newline.
+ *
+ *			On read or allocation failure, terminates the shell.
+ *
+ *			Static helpers:
+ *
+ *				- reader_prompt():	Handles prompt display and
+ *									user input capture.
+ *
+ * @param	msh	Pointer to main shell structure (t_body).
+ *
+ * @note	Increments msh->line in non-interactive mode.
+ *
+ * @return	Input string. Exits shell on EOF or fatal error.
+ */
+char		*input_reader(t_body *msh);
+
+/**
  * @brief	Builds command structures from the token list.
  *
  *			Iterates through all tokens and constructs a sequence of
@@ -137,7 +159,7 @@ void		parser_envar(t_body *msh);
  * @note	Frees the input string after splitting.
  * @note	Recursively re-prompts on empty input.
  */
-void		parser_input(char ***split, t_body *msh);
+void	parser_input(char *logic_input, char ***split, t_body *msh);
 
 /**
  * @brief	Converts tokenized strings into a linked token list.

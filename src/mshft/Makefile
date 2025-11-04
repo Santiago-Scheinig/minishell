@@ -2,6 +2,7 @@
 
 #	Library name
 NAME = mshft
+NAME_BONUS = mshft_bonus
 
 #	Source files organized by module
 SOURCES = \
@@ -34,10 +35,17 @@ SOURCE_DIR = src
 OBJECT_DIR = obj
 DEPEND_DIR = dep
 
+# Separate dirs for the bonus build to avoid clobbering normal build artifacts
+OBJECT_DIR_BONUS = obj_bonus
+DEPEND_DIR_BONUS = dep_bonus
+
 #	Include paths for headers
-INCLUDE_DIRS = -I include -I ../ft/include -I ../shellft/include
+INCLUDE_DIRS = -I include -I ../libft/include -I ../shellft/include
 
 #	================================ Compiler Settings =================================	#
+
+#	Bonus flag (1 to enable bonus features, 0 otherwise)
+BFLAG ?= 0
 
 #	Compiler flags
 CFLAGS = -Wall -Wextra -Werror -g
@@ -50,11 +58,14 @@ CPPFLAGS = $(INCLUDE_DIRS)
 
 #	================================ Object Files ======================================	#
 
-#	Object files
+#	Object files for normal build (obj/...)
 OBJECTS = $(SOURCES:$(SOURCE_DIR)/%.c=$(OBJECT_DIR)/%.o)
 
-#	Dependency files
-DEPENDENCIES = $(SOURCES:$(SOURCE_DIR)/%.c=$(DEPEND_DIR)/%.d)
+#	Object files for bonus build (obj_bonus/...)
+BONUS_OBJECTS = $(SOURCES:$(SOURCE_DIR)/%.c=$(OBJECT_DIR_BONUS)/%.o)
+
+#	Dependency files (both builds)
+DEPENDENCIES = $(DEPEND_DIR)/*.d $(DEPEND_DIR_BONUS)/*.d
 
 #	================================ Colors for Output =================================	#
 
@@ -69,55 +80,62 @@ COLOR_RESET = \033[0m
 
 .PHONY: all msg bonus clean fclean re
 
-#	Default: build library
+#	Default: build library (normal)
 all: $(NAME)
 
 #	Display compilation message
 msg:
 	@echo "$(COLOR_BLUE)[i] $(NAME) - Object compilation:$(COLOR_RESET)"
 
+msg_bonus:
+	@echo "$(COLOR_BLUE)[i] $(NAME_BONUS) - Object compilation:$(COLOR_RESET)"
+
 #	================================ Directory Creation ================================	#
 
-#	Create necessary directories including subdirectories
-$(OBJECT_DIR) $(DEPEND_DIR):
-	@mkdir -p $(DEPEND_DIR)
-	@mkdir -p $(OBJECT_DIR)/bin
-	@mkdir -p $(OBJECT_DIR)/execution
-	@mkdir -p $(OBJECT_DIR)/parser
+#	Create necessary directories (both normal and bonus)
+$(OBJECT_DIR) $(DEPEND_DIR) $(OBJECT_DIR_BONUS) $(DEPEND_DIR_BONUS):
+	@mkdir -p $(DEPEND_DIR) $(DEPEND_DIR_BONUS)
+	@mkdir -p $(OBJECT_DIR)/bin $(OBJECT_DIR)/execution $(OBJECT_DIR)/parser
+	@mkdir -p $(OBJECT_DIR_BONUS)/bin $(OBJECT_DIR_BONUS)/execution $(OBJECT_DIR_BONUS)/parser
 
 #	================================ Object Compilation ================================	#
 
-#	Compile source files to object files
-$(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.c | $(DEPEND_DIR) $(OBJECT_DIR)
+#	Compile source files to object files (normal build, DBONUS=0)
+$(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.c | $(OBJECT_DIR) $(DEPEND_DIR)
 	@printf "\r\t$(COLOR_CYAN)[OK] Compiling %-40s\r$(COLOR_RESET)" $<
-	@$(CC) $(CFLAGS) $(DEPFLAGS) $(CPPFLAGS) -c $< -o $@ -MF $(DEPEND_DIR)/$(@F:.o=.d)
+	@$(CC) -DBONUS=0 $(CFLAGS) $(DEPFLAGS) $(CPPFLAGS) -c $< -o $@ -MF $(DEPEND_DIR)/$(@F:.o=.d)
 
-#	Include dependency files for header tracking
--include $(DEPENDENCIES)
+#	Compile source files to object files (bonus build, DBONUS=1) - separate output dirs
+$(OBJECT_DIR_BONUS)/%.o: $(SOURCE_DIR)/%.c | $(OBJECT_DIR_BONUS) $(DEPEND_DIR_BONUS)
+	@printf "\r\t$(COLOR_CYAN)[OK] Compiling %-40s\r$(COLOR_RESET)" $<
+	@$(CC) -DBONUS=1 $(CFLAGS) $(DEPFLAGS) $(CPPFLAGS) -c $< -o $@ -MF $(DEPEND_DIR_BONUS)/$(@F:.o=.d)
+
+#	Include dependency files for header tracking (both builds; safe if none exist)
+-include $(wildcard $(DEPEND_DIR)/*.d) $(wildcard $(DEPEND_DIR_BONUS)/*.d)
 
 #	================================ Library Creation ==================================	#
 
-#	Create static library archive
+#	Create static library archive for normal build
 $(NAME): msg $(OBJECT_DIR) $(OBJECTS)
 	@printf "\r\t$(COLOR_CYAN)[OK] Objects compiled successfully.          \n$(COLOR_RESET)"
 	@ar rcs lib$(NAME).a $(OBJECTS)
 	@echo "$(COLOR_BLUE)[✓] $(NAME) - Library built successfully.$(COLOR_RESET)\n"
 
-#	================================ Bonus Rules =======================================	#
-
-bonus:
-	@echo "$(COLOR_YELLOW)[i] Bonus target - not implemented$(COLOR_RESET)\n"
+bonus: msg_bonus $(OBJECT_DIR_BONUS) $(BONUS_OBJECTS)
+	@printf "\r\t$(COLOR_CYAN)[OK] Objects compiled successfully.          \n$(COLOR_RESET)"
+	@ar rcs lib$(NAME_BONUS).a $(BONUS_OBJECTS)
+	@echo "$(COLOR_BLUE)[✓] $(NAME_BONUS) - Library bonus built successfully.$(COLOR_RESET)\n"
 
 #	================================ Cleanup Rules =====================================	#
 
-#	Remove object and dependency files
+#	Remove object and dependency files (both normal and bonus)
 clean:
-	@rm -rf $(OBJECT_DIR) $(DEPEND_DIR)
+	@rm -rf $(OBJECT_DIR) $(DEPEND_DIR) $(OBJECT_DIR_BONUS) $(DEPEND_DIR_BONUS)
 	@echo "$(COLOR_YELLOW)[!] $(NAME) - Cleaned object files.$(COLOR_RESET)"
 
-#	Remove everything including library
+#	Remove everything including both libraries
 fclean: clean
-	@rm -f lib$(NAME).a
+	@rm -f lib$(NAME).a lib$(NAME_BONUS).a
 	@echo "$(COLOR_RED)[x] $(NAME) - Fully cleaned project files.$(COLOR_RESET)\n"
 
 #	Rebuild from scratch

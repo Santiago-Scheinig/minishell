@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 23:52:57 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:29:07 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/04 19:22:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ static char	*reader_prompt(t_body *msh)
  *
  * @return	Input string. Exits shell on EOF or fatal error.
  */
-static char	*input_reader(t_body *msh)
+char	*input_reader(t_body *msh)
 {
 	char	*input;
 	char	*tmp;
@@ -185,23 +185,26 @@ static char	*input_reader(t_body *msh)
  * @note	Frees the input string after splitting.
  * @note	Recursively re-prompts on empty input.
  */
-void	parser_input(char ***split, t_body *msh)
+void	parser_input(char *logic_input, char ***split, t_body *msh)
 {
 	char		*input;
 	const char	*set[] = {
-		"<<",
-		">>",
-		"<",
-		">",
-		"|",
-		NULL,
+		"<<", ">>", "<", ">", "|", NULL,
 	};
 
-	input = input_reader(msh);
+	if (!logic_input)
+		input = input_reader(msh);
+	else
+		input = logic_input;
 	if (!input[0])
 	{
+		if (!logic_input)
+		{
+			free(input);
+			parser_input(NULL, split, msh);
+		}
 		free(input);
-		parser_input(split, msh);
+		return ;
 	}
 	if (msh->interactive)
 		add_history(input);

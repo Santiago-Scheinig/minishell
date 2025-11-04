@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:29:45 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/04 19:13:23 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ int	is_shell(const char *cmd)
 	const char			*aux;
 	static const char	*shells[] = {
 		"sh", "bash", "dash", "zsh", "ksh", "mksh",
-		"ash", "csh", "tcsh", "fish", NULL
+		"ash", "csh", "tcsh", "fish", "msh", "msh_bonus", NULL
 	};
 
 	i = -1;
 	aux = ft_strrchr(cmd, '/');
 	if (aux)
 		cmd = &aux[1];
-	cmd_len = ft_strlen(cmd);
+	cmd_len = ft_strlen(aux + 1);
 	while (shells[++i])
 	{
 		shell_len = ft_strlen(shells[i]);
