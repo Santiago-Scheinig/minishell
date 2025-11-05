@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parser_wildc_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 17:56:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/18 16:48:21 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:34:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
-#include <dirent.h> //bonus
+#include "msh_psr_bonus.h"
 
 static int	dir_names(char ***names, t_body *msh)
 {
@@ -34,7 +34,7 @@ static int	dir_names(char ***names, t_body *msh)
 		if (copy_name(names, entry->d_name))
 		{
 			closedir(dir);
-			forcend(msh, "malloc", MSHELL_FAILURE);
+			shell_forcend(MSHELL_FAILURE, "malloc", msh);
 		}
 	}
 	closedir(dir);
@@ -58,10 +58,10 @@ static void	add_to_list(char **split, t_list *token_lst, t_body *msh)
 			split = NULL;
 			break ;
 		}
-		if (shell_addlst_token(token_lst, split[i], i))
+		if (shell_lstadd_newtkn(i, split[i], OPERATORS, token_lst))
 		{
 			ft_split_free(split);
-			forcend(msh, "malloc", MSHELL_FAILURE);
+			shell_forcend(MSHELL_FAILURE, "malloc", msh);
 		}
 	}
 	free(split);
@@ -72,16 +72,15 @@ int	parser_wildcard(t_body *msh)
 	t_list	*token_lst;
 	char	**matches;
 	char	**names;
-	
-	token_lst = msh->token_lst;
+
+	token_lst = msh->head_token;
 	names = NULL;
-	if (dir_names(&names, msh))
-		return (MSHELL_FAILURE);
+	dir_names(&names, msh);
 	while (token_lst)
 	{
 		matches = NULL;
 		if (wildcard(names, &matches, token_lst))
-			forcend(msh, "malloc", MSHELL_FAILURE);
+			shell_forcend(MSHELL_FAILURE, "malloc", msh);
 		add_to_list(matches, token_lst, msh);
 		token_lst = token_lst->next;
 	}

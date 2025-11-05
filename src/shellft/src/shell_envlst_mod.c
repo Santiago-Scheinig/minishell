@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 03:21:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:45:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:54:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@ static int	swap_value(int e, char *var, t_var *envar, char ***envp)
 	char	*tmp;
 
 	tmp = envar->value;
-	if (get_value(var, &(envar->value)))
-	{
-		envar->value = tmp;
+	if (get_value(var, &(tmp)))
 		return (MSHELL_FAILURE);
-	}
+	if (!tmp)
+		return (MSHELL_SUCCESS);
 	free(tmp);
 	envar->exported = e;
 	if (e)

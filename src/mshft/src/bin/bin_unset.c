@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:32:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 17:06:04 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,14 @@ static int	check_name(char *name, char ***envp, t_list **lst_var)
 	return (0);
 }
 
+static void	move_lst(t_list **head_var, t_list *prev_t_var, t_list *lst_t_var)
+{
+	if (!prev_t_var)
+		*head_var = lst_t_var;
+	else
+		prev_t_var->next = lst_t_var;
+}
+
 /**
  * @brief	Implements the 'unset' built-in command.
  *
@@ -123,17 +131,10 @@ int	bin_unset(char **arg, char ***envp, t_list **head_t_var)
 		{
 			next_t_var = lst_t_var->next;
 			if (check_name(arg[i], envp, &lst_t_var))
-			{
-				if (!prev_t_var)
-					*head_t_var = lst_t_var;
-				else
-					prev_t_var->next = lst_t_var;
-			}
+				move_lst(head_t_var, prev_t_var, lst_t_var);
 			else
-			{
 				prev_t_var = lst_t_var;
-				lst_t_var = next_t_var;
-			}
+			lst_t_var = next_t_var;
 		}
 	}
 	return (0);

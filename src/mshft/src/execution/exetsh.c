@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:19:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 16:24:57 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:24:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ int	err_endexe(int exit_no, char *err_msg, t_list *lst_cmd)
 		msg = "permission denied";
 	if (exit_no == MSHELL_CMD_NOTEXE)
 		msg = "command not found";
-	if (exit_no == MSHELL_CMD_INVEXE || exit_no == MSHELL_CMD_NOTEXE)
+	if (exit_no == MSHELL_CMD_ISDIR)
+		msg = "is a directory";
+	if (exit_no == MSHELL_CMD_INVEXE || exit_no == MSHELL_CMD_NOTEXE
+		|| exit_no == MSHELL_CMD_ISDIR)
 		ft_fprintf(STDERR_FILENO, "msh: %s: %s\n", err_msg, msg);
 	else if (err_msg)
 		perror(err_msg);

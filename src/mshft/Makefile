@@ -28,6 +28,10 @@ SOURCES = \
 	$(SOURCE_DIR)/parser/parser_input.c			\
 	$(SOURCE_DIR)/parser/parser_token.c
 
+SOURCES_BONUS = \
+	$(SOURCE_DIR)/parser/parser_wildc_bonus.c		\
+	$(SOURCE_DIR)/parser/parser_wildc_utils_bonus.c
+
 #	================================ Directory Structure ===============================	#
 
 #	Source, Object, and Dependency directories names
@@ -37,7 +41,6 @@ DEPEND_DIR = dep
 
 # Separate dirs for the bonus build to avoid clobbering normal build artifacts
 OBJECT_DIR_BONUS = obj_bonus
-DEPEND_DIR_BONUS = dep_bonus
 
 #	Include paths for headers
 INCLUDE_DIRS = -I include -I ../libft/include -I ../shellft/include
@@ -62,7 +65,8 @@ CPPFLAGS = $(INCLUDE_DIRS)
 OBJECTS = $(SOURCES:$(SOURCE_DIR)/%.c=$(OBJECT_DIR)/%.o)
 
 #	Object files for bonus build (obj_bonus/...)
-BONUS_OBJECTS = $(SOURCES:$(SOURCE_DIR)/%.c=$(OBJECT_DIR_BONUS)/%.o)
+BONUS_OBJECTS = $(SOURCES_BONUS:$(SOURCE_DIR)/%.c=$(OBJECT_DIR_BONUS)/%.o) \
+				$(SOURCES:$(SOURCE_DIR)/%.c=$(OBJECT_DIR_BONUS)/%.o)
 
 #	Dependency files (both builds)
 DEPENDENCIES = $(DEPEND_DIR)/*.d $(DEPEND_DIR_BONUS)/*.d
@@ -93,8 +97,8 @@ msg_bonus:
 #	================================ Directory Creation ================================	#
 
 #	Create necessary directories (both normal and bonus)
-$(OBJECT_DIR) $(DEPEND_DIR) $(OBJECT_DIR_BONUS) $(DEPEND_DIR_BONUS):
-	@mkdir -p $(DEPEND_DIR) $(DEPEND_DIR_BONUS)
+$(OBJECT_DIR) $(DEPEND_DIR) $(OBJECT_DIR_BONUS):
+	@mkdir -p $(DEPEND_DIR)
 	@mkdir -p $(OBJECT_DIR)/bin $(OBJECT_DIR)/execution $(OBJECT_DIR)/parser
 	@mkdir -p $(OBJECT_DIR_BONUS)/bin $(OBJECT_DIR_BONUS)/execution $(OBJECT_DIR_BONUS)/parser
 
@@ -107,8 +111,8 @@ $(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.c | $(OBJECT_DIR) $(DEPEND_DIR)
 
 #	Compile source files to object files (bonus build, DBONUS=1) - separate output dirs
 $(OBJECT_DIR_BONUS)/%.o: $(SOURCE_DIR)/%.c | $(OBJECT_DIR_BONUS) $(DEPEND_DIR_BONUS)
-	@printf "\r\t$(COLOR_CYAN)[OK] Compiling %-40s\r$(COLOR_RESET)" $<
-	@$(CC) -DBONUS=1 $(CFLAGS) $(DEPFLAGS) $(CPPFLAGS) -c $< -o $@ -MF $(DEPEND_DIR_BONUS)/$(@F:.o=.d)
+	@printf "\r\t$(COLOR_CYAN)[OK] Compiling %-60s\r$(COLOR_RESET)" $<
+	@$(CC) -DBONUS=1 $(CFLAGS) $(DEPFLAGS) $(CPPFLAGS) -c $< -o $@ -MF $(DEPEND_DIR)/$(@F:.o=.d)
 
 #	Include dependency files for header tracking (both builds; safe if none exist)
 -include $(wildcard $(DEPEND_DIR)/*.d) $(wildcard $(DEPEND_DIR_BONUS)/*.d)
@@ -117,12 +121,12 @@ $(OBJECT_DIR_BONUS)/%.o: $(SOURCE_DIR)/%.c | $(OBJECT_DIR_BONUS) $(DEPEND_DIR_BO
 
 #	Create static library archive for normal build
 $(NAME): msg $(OBJECT_DIR) $(OBJECTS)
-	@printf "\r\t$(COLOR_CYAN)[OK] Objects compiled successfully.          \n$(COLOR_RESET)"
+	@printf "\r\t$(COLOR_CYAN)[OK] Objects compiled successfully.%-40s\n$(COLOR_RESET)"
 	@ar rcs lib$(NAME).a $(OBJECTS)
 	@echo "$(COLOR_BLUE)[✓] $(NAME) - Library built successfully.$(COLOR_RESET)\n"
 
 bonus: msg_bonus $(OBJECT_DIR_BONUS) $(BONUS_OBJECTS)
-	@printf "\r\t$(COLOR_CYAN)[OK] Objects compiled successfully.          \n$(COLOR_RESET)"
+	@printf "\r\t$(COLOR_CYAN)[OK] Objects compiled successfully.%-40s\n$(COLOR_RESET)"
 	@ar rcs lib$(NAME_BONUS).a $(BONUS_OBJECTS)
 	@echo "$(COLOR_BLUE)[✓] $(NAME_BONUS) - Library bonus built successfully.$(COLOR_RESET)\n"
 

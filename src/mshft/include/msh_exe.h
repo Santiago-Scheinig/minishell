@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:33:37 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:21:43 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include "shell_std.h"
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <fcntl.h>
 
 /*--------------------------------------------------------------------------*/
@@ -58,6 +59,7 @@ int	err_msgfd(int status, int errfd, int interactive, int line);
 int	err_endexe(int exit_no, char *err_msg, t_list *lst_cmd);
 
 int	is_shell(const char *cmd);
+int	is_directory(const char *path);
 
 void	exe_endfd(t_list *lst_cmd, pid_t child);
 

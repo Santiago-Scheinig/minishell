@@ -6,12 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 17:10:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 15:17:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:07:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
 #include "msh_psr.h"
+#include "msh_psr_bonus.h"
 #include "msh_exe.h"
 
 /**
@@ -57,6 +58,7 @@ static int	parser(char *logic_input, t_body *msh)
 		return (msh->exit_no);
 	}
 	parser_envar(msh);
+	parser_wildcard(msh);
 	parser_cmds(msh);
 	ft_lstclear(&(msh->head_token), shell_deltkn);
 	msh->head_token = NULL;

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:38:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:22:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef enum e_error
 	MSHELL_MISSUSE,			// Incorrect usage of shell or function
 	MSHELL_CMD_INVEXE = 126,// Command invoked cannot execute
 	MSHELL_CMD_NOTEXE,		// Command not found or not executable
+	MSHELL_CMD_ISDIR,		// Command is a directory
 	MSHELL_SIG_HANDLR,		// Error in setting up signal handler
 }	t_error;
 

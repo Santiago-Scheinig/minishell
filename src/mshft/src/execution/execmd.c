@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 10:15:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/04 19:16:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:26:54 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ static void	try_absolut_path(int orig_errfd, char **argv, char **envp)
 {
 	if (ft_strchr(argv[0], '/'))
 	{
+		if (is_directory(argv[0]))
+			err_endexe(MSHELL_CMD_ISDIR, argv[0], NULL);
 		if (is_shell(argv[0]) && access(argv[0], X_OK) && orig_errfd != -1)
 			dup2(orig_errfd, STDERR_FILENO);
 		if (execve(argv[0], argv, envp))
-			err_endexe(MSHELL_FAILURE, "msh: execve: ", NULL);
+			err_endexe(MSHELL_FAILURE, "msh: execve", NULL);
 	}
 }
 
@@ -40,6 +42,8 @@ static void	execmd(int orig_errfd, char **argv, char **envp, char **path)
 		free(tmp);
 		if (!pathname)
 			err_endexe(MSHELL_FAILURE, "msh: malloc: ", NULL);
+		if (is_directory(pathname))
+			err_endexe(MSHELL_CMD_ISDIR, argv[0], NULL);
 		if (is_shell(pathname) && !access(pathname, X_OK) && orig_errfd != -1)
 			dup2(orig_errfd, STDERR_FILENO);
 		execve(pathname, argv, envp);

@@ -6,11 +6,17 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 15:32:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/18 17:58:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:59:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_std.h"
+
+static int	replace(char *tmp, char *value, int size)
+{
+	ft_memcpy(tmp, value, size);
+	return (ft_strlen(value));
+}
 
 /**
  * Need fix
@@ -27,15 +33,9 @@ char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 		if (ps1[i] == '\\' && ps1[i + 1] && ps1[i + 1] != '\\')
 		{
 			if (ps1[i + 1] == 'u')
-			{
-				ft_memcpy(&tmp[j], user, ft_strlen(user));
-				j += ft_strlen(user);
-			}
+				j += replace(&tmp[j], user, ft_strlen(user));
 			else if (ps1[i + 1] == 'w')
-			{
-				ft_memcpy(&tmp[j], path, ft_strlen(path));
-				j += ft_strlen(path);
-			}
+				j += replace(&tmp[j], path, ft_strlen(path));
 			else
 				tmp[j++] = ps1[i + 1];
 			i += 2;

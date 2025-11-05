@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 17:56:59 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/21 20:30:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:38:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	shell_lastcmd_upd(char *cmd, char ***envp, t_list *head_envp)
 				return (MSHELL_FAILURE);
 		}
 	}
-	if (shell_envlst_add(export, var, envp, head_envp))
+	else if (shell_envlst_add(export, var, envp, head_envp))
 	{
 		free(var);
 		if (errno == ENOMEM)

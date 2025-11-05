@@ -1,0 +1,260 @@
+GJS_DEBUG_TOPICS=JS ERROR;JS LOG
+LANGUAGE=en
+USER=sscheini
+FONTCONFIG_PATH=/etc/fonts
+OPAMSWITCH=default
+GIO_MODULE_DIR=/home/sscheini/snap/code/common/.cache/gio-modules
+XDG_SESSION_TYPE=x11
+GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=
+GDK_BACKEND_VSCODE_SNAP_ORIG=
+SHLVL=2
+HOME=/home/sscheini
+LOCPATH_VSCODE_SNAP_ORIG=
+DESKTOP_SESSION=ubuntu
+GTK_PATH=/snap/code/211/usr/lib/x86_64-linux-gnu/gtk-3.0
+XDG_DATA_HOME_VSCODE_SNAP_ORIG=
+GTK_IM_MODULE_FILE=/home/sscheini/snap/code/common/.cache/immodules/immodules.cache
+GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
+GTK_MODULES=gail:atk-bridge
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=
+MACADDRESS=3c:7d:0a:1b:a0:c3
+MANAGERPID=4109374
+SYSTEMD_EXEC_PID=4110021
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/105393/bus
+LIBVIRT_DEFAULT_URI=qemu:///system
+GIO_LAUNCHED_DESKTOP_FILE_PID=4163305
+IM_CONFIG_PHASE=1
+GTK_IM_MODULE=ibus
+LOGNAME=sscheini
+JOURNAL_STREAM=9:29013669
+XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG=/etc/xdg/xdg-ubuntu:/etc/xdg
+XDG_SESSION_CLASS=user
+XDG_DATA_DIRS_VSCODE_SNAP_ORIG=/usr/share/ubuntu:/usr/share/gnome:/home/sscheini/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+OPAMROOT=/home/sscheini/.opam
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+FT_HOOK_PATHNAME=login-user.d
+RUSTUP_HOME=/usr/local/rustup
+PATH=/home/sscheini/bin:/home/sscheini/bin:/home/sscheini/.cargo/bin:/usr/local/cargo/bin:/home/sscheini/.opam/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/sscheini/.dotnet/tools:/usr/local/go/bin:/home/sscheini/.config/Code/User/globalStorage/github.copilot-chat/debugCommand
+SESSION_MANAGER=local/c2r4s4.42malaga.com:@/tmp/.ICE-unix/4109996,unix/c2r4s4.42malaga.com:/tmp/.ICE-unix/4109996
+GTK_EXE_PREFIX=/snap/code/211/usr
+GDM_LANG=en
+INVOCATION_ID=45418ac4ccc24dd895fa6fa88ffc1956
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session6
+XDG_MENU_PREFIX=gnome-
+XDG_RUNTIME_DIR=/run/user/105393
+DISPLAY=:0
+LOCPATH=/snap/code/211/usr/lib/locale
+LANG=en_US.UTF-8
+XDG_CURRENT_DESKTOP=Unity
+DOTNET_BUNDLE_EXTRACT_BASE_DIR=/home/sscheini/.cache/dotnet_bundle_extract
+GIO_MODULE_DIR_VSCODE_SNAP_ORIG=
+XDG_DATA_HOME=/home/sscheini/snap/code/211/.local/share
+XMODIFIERS=@im=ibus
+XDG_SESSION_DESKTOP=ubuntu
+XAUTHORITY=/home/sscheini/.Xauthority
+SSH_AGENT_LAUNCHER=gnome-keyring
+SSH_AUTH_SOCK=/run/user/105393/keyring/ssh
+GSETTINGS_SCHEMA_DIR=/home/sscheini/snap/code/211/.local/share/glib-2.0/schemas
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/sscheini
+SHELL=/bin/zsh
+KRB5CCNAME=FILE:/tmp/krb5cc_105393_Ix5z3n
+QT_ACCESSIBILITY=1
+GDMSESSION=ubuntu
+GTK_PATH_VSCODE_SNAP_ORIG=
+FONTCONFIG_FILE=/etc/fonts/fonts.conf
+FT_HOOK_NAME=login-user
+GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=
+DOCKER_HOST=unix:///run/user/105393/docker.sock
+GPG_AGENT_INFO=/run/user/105393/gnupg/S.gpg-agent:0:1
+GJS_DEBUG_OUTPUT=stderr
+QT_IM_MODULE=ibus
+PWD=/home/sscheini/Desktop/42Cursus/Proyects/minishell
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+CARGO_HOME=/home/sscheini/.cargo
+XDG_DATA_DIRS=/home/sscheini/snap/code/211/.local/share:/home/sscheini/snap/code/211:/snap/code/211/usr/share:/usr/share/ubuntu:/usr/share/gnome:/home/sscheini/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+CHROME_DESKTOP=code.desktop
+ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
+GDK_BACKEND=x11
+OLDPWD=/home/sscheini/Desktop/42Cursus
+_=/home/sscheini/Desktop/42Cursus/Proyects/minishell/./msh
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.105.1
+COLORTERM=truecolor
+GIT_ASKPASS=/snap/code/211/usr/share/code/resources/app/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/snap/code/211/usr/share/code/code
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VSCODE_GIT_ASKPASS_MAIN=/snap/code/211/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
+VSCODE_GIT_IPC_HANDLE=/run/user/105393/vscode-git-a8e91c663a.sock
+VSCODE_INJECTION=1
+ZDOTDIR=/home/sscheini
+USER_ZDOTDIR=/home/sscheini
+TERM=xterm-256color
+VSCODE_PYTHON_AUTOACTIVATE_GUARD=1
+/home/sscheini/Desktop/42Cursus/Proyects/minishell
+/tmp
+hello_world
+value with spaces
+start-hello_world-end
+will_remove
+
+status_after_true: 0
+status_after_false: 1
+no_newline <-- should appear right after previous
+single quoted: $TEST_VAR | > | | will not expand
+double quoted: hello_world | 0 | literal pipe stays inside quotes
+line1
+line1
+line2
+2
+one
+three
+four
+3
+three
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+a
+b
+c
+start
+append1
+append2
+This is a heredoc test.
+It contains multiple lines.
+It also contains an unexpanded variable reference: hello_world
+5
+alpha
+beta
+START-GREET-END
+TEST_VAR = 0
+SPACED_VAR = 0
+MIXED = 0
+TEMP_TO_UNSET = 0
+GMSG = 0
+status_after_false_pipe_true: 0
+status_after_true_pipe_false: 1
+     1	a | b > c GREET
+     2	TEST_VAR = 0
+     3	SPACED_VAR = 0
+     4	MIXED = 0
+     5	TEMP_TO_UNSET = 0
+     6	GMSG = 0
+y
+path_length: 
+418
+/tmp/msh_test_dir
+/tmp/msh_test_dir/subdir
+/tmp/msh_test_dir
+GJS_DEBUG_TOPICS=JS ERROR;JS LOG
+LANGUAGE=en
+USER=sscheini
+FONTCONFIG_PATH=/etc/fonts
+OPAMSWITCH=default
+double 'single' escaped quotes nest
+line before
+delimiter-like EOT line
+first line
+second line
+hello_world
+after_unset_TEMPX: ?
+2
+-rw-r--r-- 1 sscheini 2024_42malaga  17 Nov  5 16:53 alphabets.txt
+-rw-r--r-- 1 sscheini 2024_42malaga 156 Nov  5 16:53 append_test.txt
+-rw-r--r-- 1 sscheini 2024_42malaga   2 Nov  5 16:53 apples_count.txt
+-rw-r--r-- 1 sscheini 2024_42malaga   2 Nov  5 16:53 chaining_out.txt
+-rw-r--r-- 1 sscheini 2024_42malaga  22 Nov  5 16:53 combo.txt
+-rw-r--r-- 1 sscheini 2024_42malaga  19 Nov  5 16:53 fruits.txt
+-rw-r--r-- 1 sscheini 2024_42malaga 115 Nov  5 16:53 heredoc_out.txt
+-rw-r--r-- 1 sscheini 2024_42malaga   2 Nov  5 16:53 heredoc_wc.txt
+-rw-r--r-- 1 sscheini 2024_42malaga  23 Nov  5 16:53 large_test.txt
+-rw-r--r-- 1 sscheini 2024_42malaga  12 Nov  5 16:53 msh_test_out.txt
+-rw-r--r-- 1 sscheini 2024_42malaga  19 Nov  5 16:53 numbers.txt
+-rw-r--r-- 1 sscheini 2024_42malaga  81 Nov  5 16:53 pipeline_msg.txt
+line A
+line B
+final check
+final_status: 0
+TEST_VAR = 0
+SPACED_VAR = 0
+MIXED = 0
+TEMP_TO_UNSET = 0
+GMSG = 0
+PATH = 1
+NESTED = 0
+TEST_VAR = 1
+TEST_VAR = 1
+TEMPX = 0

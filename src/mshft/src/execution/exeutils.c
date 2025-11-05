@@ -6,11 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/04 19:13:23 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:26:10 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
+
+int	is_directory(const char *path)
+{
+	struct stat	path_stat;
+
+	if (stat(path, &path_stat) == -1)
+		return (false);
+	if (S_ISDIR(path_stat.st_mode))
+		return (true);
+	return (false);
+}
 
 int	is_shell(const char *cmd)
 {

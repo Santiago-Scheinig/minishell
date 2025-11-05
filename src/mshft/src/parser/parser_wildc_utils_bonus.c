@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parser_wildc_utils_bonus.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:35:15 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/18 16:47:49 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:40:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
+#include "msh_psr_bonus.h"
 
 static int	add_match(char ***matches, char *names)
 {
