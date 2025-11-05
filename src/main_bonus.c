@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 17:10:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/04 19:01:40 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:17:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ static void	msh_init(const char **envp, t_body *msh)
 int	main(int argc, char **argv, const char **envp)
 {
 	t_body	msh;
+	// char	*logic_input;
 
 	errno = ENOENT;
 	msh_init(envp, &msh);
@@ -135,6 +136,8 @@ int	main(int argc, char **argv, const char **envp)
 		shell_forcend(MSHELL_FAILURE, argv[1], &msh);
 	while (1)
 	{
+/* 		if (logic_input(&msh))
+			continue; */
 		if (parser(NULL, &msh))
 			continue; //If bonus, continue = input result FAILURE (execution failed) --> Return (status); If MSHELL_SIG_HANDLR (bonus should reset);
 		if (execution(&msh))
