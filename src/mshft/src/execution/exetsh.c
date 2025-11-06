@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:19:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:24:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 12:31:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	err_msgfd(int status, int errfd, int interactive, int line)
 	err_line = NULL;
 	if (errfd > 2)
 		err_line = ft_get_next_line(errfd);
+	else
+		return (status);
 	while (err_line)
 	{
 		if (!interactive)
@@ -38,8 +40,7 @@ int	err_msgfd(int status, int errfd, int interactive, int line)
 			while (err_line[++i] != ' ')
 				write(STDERR_FILENO, &err_line[i], 1);
 			write(STDERR_FILENO, &err_line[i], 1);
-			ft_fprintf(STDERR_FILENO, "line %i: ", line);
-			ft_fprintf(STDERR_FILENO, "%s", &err_line[++i]);
+			ft_fprintf(STDERR_FILENO, "line %i: %s", line, &err_line[++i]);
 		}
 		else
 			ft_fprintf(STDERR_FILENO, "%s", err_line);

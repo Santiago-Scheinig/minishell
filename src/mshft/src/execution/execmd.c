@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 10:15:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:26:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 09:37:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,12 @@ int	execmd_child(char **path, t_list *lst_cmd, t_body *msh)
 			continue ;
 		}
 		last_cmd = exe->argv[0];
-		execmd_ini(i, path, lst_cmd, msh);
+		if (last_cmd)
+			execmd_ini(i, path, lst_cmd, msh);
 		lst_cmd = lst_cmd->next;
 	}
 	ft_split_free(path);
-	if (shell_lastcmd_upd(last_cmd, &(msh->envp), msh->head_envar))
+	if (last_cmd && shell_lastcmd_upd(last_cmd, &(msh->envp), msh->head_envar))
 		shell_forcend(MSHELL_FAILURE, "malloc", msh);
 	return (MSHELL_SUCCESS);
 }

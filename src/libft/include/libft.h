@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:13:42 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:09:55 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -754,6 +754,8 @@ void		*ft_split_free(char **split);
  */
 char		*ft_strchr(const char *s, int c);
 
+char		*ft_strchr_ip(const char *s, char c);
+
 /**
  * @brief	Finds a character in a string, considering quoted substrings.
  *
@@ -766,7 +768,7 @@ char		*ft_strchr(const char *s, int c);
  *
  * @return	Pointer to the first occurrence of 'c' outside quotes, or NULL.
  */
-char		*ft_strchr_iq(char const *s, char c);
+char		*ft_strchr_iq(const char *s, char c);
 
 /**
  * @brief	Creates a duplicate of a string.
@@ -891,6 +893,8 @@ char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
  *			less than, equal to, or greater than 's2'.
  */
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
+
+char		*ft_strnstr_ip(const char *big, const char *little, size_t len);
 
 /**
  * @brief	Searches for a substring within a limited length of a string.

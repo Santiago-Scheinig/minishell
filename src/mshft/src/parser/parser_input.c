@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 23:52:57 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/04 19:22:50 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:21:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,8 @@ char	*input_reader(t_body *msh)
 	}
 	if (!input)
 		bin_exit(NULL, msh);
+	if (msh->interactive && input[0])
+		add_history(input);
 	return (input);
 }
 
@@ -185,7 +187,7 @@ char	*input_reader(t_body *msh)
  * @note	Frees the input string after splitting.
  * @note	Recursively re-prompts on empty input.
  */
-void	parser_input(char *logic_input, char ***split, t_body *msh)
+int	parser_input(char *logic_input, char ***split, t_body *msh)
 {
 	char		*input;
 	const char	*set[] = {
@@ -198,18 +200,12 @@ void	parser_input(char *logic_input, char ***split, t_body *msh)
 		input = logic_input;
 	if (!input[0])
 	{
-		if (!logic_input)
-		{
-			free(input);
-			parser_input(NULL, split, msh);
-		}
 		free(input);
-		return ;
+		return (MSHELL_FAILURE);
 	}
-	if (msh->interactive)
-		add_history(input);
 	(*split) = ft_split_iqbase(input, ' ', set);
+	free(input);
 	if (!(*split))
 		shell_forcend(MSHELL_FAILURE, "malloc", msh);
-	free(input);
+	return (MSHELL_SUCCESS);
 }

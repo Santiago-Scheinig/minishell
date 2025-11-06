@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:05:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 09:44:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void		parser_envar(t_body *msh);
  * @note	Frees the input string after splitting.
  * @note	Recursively re-prompts on empty input.
  */
-void	parser_input(char *logic_input, char ***split, t_body *msh);
+int			parser_input(char *logic_input, char ***split, t_body *msh);
 
 /**
  * @brief	Converts tokenized strings into a linked token list.

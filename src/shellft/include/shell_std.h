@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:22:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:17:56 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct s_body
 	int				interactive;// < If shell runs interactively, otherwise 0
 	int				line;		// < Current input line number or count
 	int				exit_no;	// < Last command's exit code
+	int				input_result;// < Result of the last input processing
 	int				*err_fd;	// < Pipe fds for child error handling
 	const char		*exit_ft;	// < Function name causing last failure
 	char			**envp;		// < Array of environment strings

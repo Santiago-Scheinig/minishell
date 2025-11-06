@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:35:34 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:21:43 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:07:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ int	is_directory(const char *path);
 void	exe_endfd(t_list *lst_cmd, pid_t child);
 
 void	err_endfd(int *errfd);
+
+int	check_status(int status, int errfd, int inter, int line);
 
 /**
  * Executes the appropriate built-in shell command based on the

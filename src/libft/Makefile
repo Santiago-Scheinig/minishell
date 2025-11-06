@@ -51,6 +51,7 @@ SOURCES = \
 	$(SOURCE_DIR)/ft_split_iqbase.c			\
 	$(SOURCE_DIR)/ft_split_utils.c			\
 	$(SOURCE_DIR)/ft_split.c				\
+	$(SOURCE_DIR)/ft_strchr_ip.c			\
 	$(SOURCE_DIR)/ft_strchr_iq.c			\
 	$(SOURCE_DIR)/ft_strchr.c				\
 	$(SOURCE_DIR)/ft_strdup.c				\
@@ -62,6 +63,7 @@ SOURCES = \
 	$(SOURCE_DIR)/ft_strlen.c				\
 	$(SOURCE_DIR)/ft_strmapi.c				\
 	$(SOURCE_DIR)/ft_strncmp.c				\
+	$(SOURCE_DIR)/ft_strnstr_ip.c			\
 	$(SOURCE_DIR)/ft_strnstr.c				\
 	$(SOURCE_DIR)/ft_strrchr.c				\
 	$(SOURCE_DIR)/ft_strtrim.c				\
