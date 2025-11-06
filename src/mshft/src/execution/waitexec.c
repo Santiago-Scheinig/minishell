@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:11:35 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:31:59 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:06:59 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static const char	*status_sigmsg(int sig)
 	return (NULL);
 }
 
-static int	check_status(int status, int errfd, int inter, int line)
+int	check_status(int status, int errfd, int inter, int line)
 {
 	const char	*msg = NULL;
 	int			sig;
@@ -56,8 +56,6 @@ static int	check_status(int status, int errfd, int inter, int line)
 		}
 		return (128 + sig);
 	}
-	if (inter || line)
-		sig = 0;
 	if (WIFEXITED(status))
 		return (err_msgfd(WEXITSTATUS(status), errfd, inter, line));
 	return (MSHELL_FAILURE);
@@ -93,6 +91,8 @@ int	waitexec(t_body *msh)
 			if (waitpid(msh->childs_pid[i], &status, 0) == -1)
 				perror("msh: waitpid");
 			msh->exit_no = check_status(status, msh->err_fd[i], inter, line);
+			if (msh->exit_no)
+				msh->input_result = MSHELL_FAILURE;
 		}
 		lst_cmd = lst_cmd->next;
 	}

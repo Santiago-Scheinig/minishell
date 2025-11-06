@@ -47,7 +47,8 @@ static int	parser(t_body *msh)
 	if (shell_sigint_read(msh))
 		return (MSHELL_SIG_HANDLR);
 	shell_cleanup(false, msh);
-	parser_input(NULL, &split, msh);
+	if (parser_input(NULL, &split, msh))
+		return (MSHELL_FAILURE);
 	if (parser_token(split, msh))
 	{
 		if (!msh->interactive && msh->exit_no == MSHELL_MISSUSE)

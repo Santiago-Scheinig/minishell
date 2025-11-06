@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 17:10:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:07:29 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:14:26 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,13 @@
  * @return	MSHELL_SUCCESS on success, MSHELL_SIG_HANDLR if a
  *			signal was caught during input.
  */
-static int	parser(char *logic_input, t_body *msh)
+static int	parser(char *input, t_body *msh)
 {
 	char	**split;
 
-	if (shell_sigint_read(msh))
-		return (MSHELL_SIG_HANDLR);
 	shell_cleanup(false, msh);
-	parser_input(logic_input, &split, msh);
+	if (parser_input(input, &split, msh))
+		return (MSHELL_FAILURE);
 	if (parser_token(split, msh))
 	{
 		if (!msh->interactive && msh->exit_no == MSHELL_MISSUSE)
@@ -62,7 +61,66 @@ static int	parser(char *logic_input, t_body *msh)
 	parser_cmds(msh);
 	ft_lstclear(&(msh->head_token), shell_deltkn);
 	msh->head_token = NULL;
+	if (execution(msh))
+		return (MSHELL_FAILURE);
+	if (msh->childs_pid)
+		waitexec(msh);
+	if (msh->input_result == MSHELL_FAILURE)
+		return (MSHELL_FAILURE);
 	return (MSHELL_SUCCESS);
+}
+
+int	logic_subshell(char	*input, t_body *msh)
+{
+	char	*smallest_input;
+	int		subshell_pid;
+	int		status;
+
+	subshell_pid = fork();
+	if (!subshell_pid)
+	{
+		input = ft_strchr(input, '(') + 1;
+		smallest_input = ft_calloc(ft_strlen_chr(input, ')') + 1, sizeof(char));
+		if (!smallest_input)
+			shell_forcend(MSHELL_FAILURE, "malloc", msh);
+		ft_strlcpy(smallest_input, input, ft_strlen_chr(input, ')'));
+		exit (logic_execution(smallest_input, msh));
+	}
+	if (waitpid(subshell_pid, &status, 0) == -1)
+		perror("msh: waitpid");
+	msh->exit_no = check_status(status, STDERR_FILENO, 0, 0);
+	if (msh->exit_no)
+		return (MSHELL_FAILURE);
+	return (MSHELL_SUCCESS);	
+}
+
+int	logic_execution(char *input, t_body *msh)
+{
+	char		*smallest_input;
+	const char	*operator = NULL;
+
+	if (ft_strnstr_ip(input, "||", ft_strlen(input)))
+		operator = "||";
+	else if (ft_strnstr_ip(input, "&&", ft_strlen(input)))
+		operator = "&&";
+	if (operator)
+	{
+		smallest_input = ft_calloc(ft_strlen_chr(input, operator) + 1, sizeof(char));
+		if (!smallest_input)
+			shell_forcend(MSHELL_FAILURE, "malloc", msh);
+		ft_strlcpy(smallest_input, input, ft_strlen_chr(input, operator) + 1);
+		logic_execution(smallest_input, msh);
+		if (operator == "||" && msh->input_result)
+			logic_execution(ft_strnstr_ip(input, operator, ft_strlen(input)) + 2, msh);
+		else if (operator == "&&" && !msh->input_result)
+			logic_execution(ft_strnstr_ip(input, operator, ft_strlen(input)) + 2, msh);
+		return (MSHELL_SUCCESS);
+	}
+	else if (ft_strchr(input, '('))
+		return (logic_subshell(input, msh));
+	if (shell_sigint_read(msh))
+		return (MSHELL_SIG_HANDLR);
+	return (parser(input, msh));
 }
 
 /**
@@ -130,7 +188,7 @@ static void	msh_init(const char **envp, t_body *msh)
 int	main(int argc, char **argv, const char **envp)
 {
 	t_body	msh;
-	// char	*logic_input;
+	char	*logic_input;
 
 	errno = ENOENT;
 	msh_init(envp, &msh);
@@ -138,14 +196,13 @@ int	main(int argc, char **argv, const char **envp)
 		shell_forcend(MSHELL_FAILURE, argv[1], &msh);
 	while (1)
 	{
-/* 		if (logic_input(&msh))
-			continue; */
-		if (parser(NULL, &msh))
-			continue; //If bonus, continue = input result FAILURE (execution failed) --> Return (status); If MSHELL_SIG_HANDLR (bonus should reset);
-		if (execution(&msh))
-			continue; //If bonus, continue = input result FAILURE (execution failed) --> Return (status); If MSHELL_SIG_HANDLR (bonus should reset);
-		if (msh.childs_pid)
-			waitexec(&msh); //waitcmd should set one status variable to 1 if any cmd return an error, so status knows input result FAILURE
+		logic_input = NULL;
+		if (logic_parser(&logic_input, &msh))
+			continue;
+		if (shell_sigint_read(&msh))
+			continue;
+		logic_execution(logic_input, &msh);
+		free(logic_input);
 	}
 	return (msh.exit_no);
 }

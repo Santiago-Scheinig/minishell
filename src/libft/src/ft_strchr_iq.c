@@ -6,11 +6,23 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:15:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/10 05:08:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 12:53:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+int is_quote(char c)
+{
+	int	i;
+
+	i = -1;
+	if (c == '\'')
+		return ('\'');
+	if (c == '\"')
+		return ('\"');
+	return (0);
+}
 
 /**
  * @brief	Finds a character in a string, ignoring quoted substrings.
@@ -24,19 +36,19 @@
  *
  * @return	Pointer to the first occurrence of 'c' outside quotes, or NULL.
  */
-char	*ft_strchr_iq(char const *s, char c)
+char	*ft_strchr_iq(const char *s, char c)
 {
 	char	*tmp;
 	int		i;
+	int		quote;
 
 	i = 0;
 	tmp = NULL;
 	while (s[i] && s[i] != c)
 	{
-		if (s[i] == '\'' && s[i + 1])
-			tmp = ft_strchr(&s[i + 1], '\'');
-		if (s[i] == '\"' && s[i + 1])
-			tmp = ft_strchr(&s[i + 1], '\"');
+		quote = is_quote(s[i]);
+		if (quote && s[i + 1])
+			tmp = ft_strchr(&s[i + 1], quote);
 		if (tmp)
 		{
 			s = tmp;

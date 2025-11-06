@@ -6,20 +6,29 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:29:19 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:48:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 09:53:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_std.h"
 #include "shell_std_utils.h"
 
-static void	rewrite_node(char *str, t_token *tkn)
+static int	rewrite_node(char *str, t_token *tkn)
 {
+	int	str_len;
+
+	str_len = ft_strlen(str);
 	if (tkn->str)
 		free(tkn->str);
+	if (tkn->mask)
+		free(tkn->mask);
+	tkn->mask = ft_calloc(str_len + 1, sizeof(char));
+	if (!tkn->mask)
+		return (MSHELL_FAILURE);
 	tkn->str = str;
-	ft_memset(tkn->mask, 0, ft_strlen(tkn->mask));
-	ft_memset(tkn->mask, 'N', ft_strlen(str));
+	ft_memset(tkn->mask, 0, str_len + 1);
+	ft_memset(tkn->mask, 'N', str_len + 1);
+	return (MSHELL_SUCCESS);
 }
 
 /**
@@ -31,10 +40,7 @@ int	shell_lstadd_newtkn(int i, char *str, char *base, t_list *lst_tkn)
 	t_list	*new_node;
 
 	if (!i)
-	{
-		rewrite_node(str, ((t_token *) lst_tkn->content));
-		return (MSHELL_SUCCESS);
-	}
+		return (rewrite_node(str, ((t_token *) lst_tkn->content)));
 	tkn_new = shell_newtkn(str, base);
 	if (!tkn_new)
 		return (MSHELL_FAILURE);
