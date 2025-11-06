@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 13:09:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:12:33 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -864,6 +864,8 @@ size_t		ft_strlen(const char *s);
  * @return	Number of characters before 'c' or end of string.
  */
 int			ft_strlen_chr(char *str, char c);
+
+int			ft_strlen_str(char *str, const char *end);
 
 /**
  * @brief	Creates a new string by applying a function to each character.

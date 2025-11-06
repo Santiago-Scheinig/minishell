@@ -32,7 +32,8 @@ SOURCES_BONUS = \
 	$(SOURCE_DIR)/parser/parser_wildc_bonus.c		\
 	$(SOURCE_DIR)/parser/parser_wildc_utils_bonus.c	\
 	$(SOURCE_DIR)/parser/parser_logic_bonus.c		\
-	$(SOURCE_DIR)/parser/parser_logic_utils_bonus.c 
+	$(SOURCE_DIR)/parser/parser_logic_utils_bonus.c \
+	$(SOURCE_DIR)/execution/exelogic_bonus.c		
 
 #	================================ Directory Structure ===============================	#
 

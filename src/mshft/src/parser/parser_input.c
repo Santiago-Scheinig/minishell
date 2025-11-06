@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 23:52:57 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 11:21:53 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/06 15:38:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ static char	*reader_prompt(t_body *msh)
 		shell_forcend(MSHELL_FAILURE, "malloc", msh);
 	input_usr = readline(tmp); //ft_readline();
 	free(tmp);
-	if (!input_usr && errno)
+	if (!input_usr && errno == ENOMEM)
 		shell_forcend(MSHELL_FAILURE, "readline", msh);
 	if (!tty && fd_outcpy)
 		ttyout_to_stdout(fd_outcpy, msh);

@@ -59,6 +59,7 @@ SOURCES = \
 	$(SOURCE_DIR)/ft_strjoin.c				\
 	$(SOURCE_DIR)/ft_strlcat.c				\
 	$(SOURCE_DIR)/ft_strlcpy.c				\
+	$(SOURCE_DIR)/ft_strlen_str.c			\
 	$(SOURCE_DIR)/ft_strlen_chr.c			\
 	$(SOURCE_DIR)/ft_strlen.c				\
 	$(SOURCE_DIR)/ft_strmapi.c				\
