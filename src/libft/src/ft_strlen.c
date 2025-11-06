@@ -6,18 +6,21 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:50:20 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:02:22 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:11:46 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Counts the amount of characters on a CONST STRING.
- * 
- * @param s The CONST STRING to count characters from.
- * @return An INT with the amount of characters counted.
- * @note This function doesn't count the '\0' character.
+ * @brief	Calculates the length of a string.
+ *
+ * 			Counts the number of characters in the string 's' until the
+ *			NULL terminator. Returns 0 if 's' is NULL.
+ *
+ * @param	s	String to measure.
+ *
+ * @return	Number of characters in 's', excluding the NULL terminator.
  */
 size_t	ft_strlen(const char *s)
 {

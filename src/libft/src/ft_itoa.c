@@ -6,20 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:44:50 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:00:55 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:49:12 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/**
- * Swap and reverses all the characters of a STRING.
- * 
- * @param str The string to swap.
- * @return The modified string.
- * @note This functions modifies the original str, doesn't allocate
- * a new one.
- */
 static	char	*ft_swap(char *str)
 {
 	char	swap;
@@ -41,13 +33,6 @@ static	char	*ft_swap(char *str)
 	return (str);
 }
 
-/**
- * Allocates a STRING to save an INT number into.
- * 
- * @param n The number to be written.
- * @param len The digit lenght of the number.
- * @return A pointer to the STRING.
- */
 static	char	*ft_setstr(int n, int len)
 {
 	char	*str;
@@ -68,12 +53,6 @@ static	char	*ft_setstr(int n, int len)
 	return (str);
 }
 
-/**
- * Creates and allocates a STRING with the INT_MIN number
- * writen on it.
- * 
- * @return A pointer to the STRING.
- */
 static	char	*ft_min(void)
 {
 	char	*str;
@@ -85,12 +64,6 @@ static	char	*ft_min(void)
 	return (str);
 }
 
-/**
- * Counts the amount of digits that an INT variable has.
- * 
- * @param n The number which to count it's digits.
- * @return The amount of digits counted. 
- */
 static	int	ft_nbrlen(int n)
 {
 	int	count;
@@ -108,11 +81,27 @@ static	int	ft_nbrlen(int n)
 }
 
 /**
- * Creates and allocates a STRING writen with the INT passed as
- * argument.
- * 
- * @param n The number to write inside of the STRING.
- * @return A pointer to the STRING.
+ * @brief	Converts an integer to a null-terminated string.
+ *
+ * 			Allocates memory and creates a string representing the integer
+ *			'n'. Handles negative numbers and the special case of INT_MIN.
+ *
+ *			Static helpers:
+ *
+ *				- ft_swap():	Reverses the string, handling negative sign.
+ *
+ *				- ft_setstr():	Allocates the string and sets '-' if needed.
+ *
+ *				- ft_min():		Handles INT_MIN conversion safely.
+ *
+ *				- ft_nbrlen():	Calculates the number of digits in 'n'.
+ *
+ * @param	n	Integer to convert.
+ *
+ * @note	Memory is allocated for the returned string. Caller must free it.
+ *
+ * @return	Pointer to the newly allocated string representing 'n', or NULL
+ *			on allocation failure.
  */
 char	*ft_itoa(int n)
 {

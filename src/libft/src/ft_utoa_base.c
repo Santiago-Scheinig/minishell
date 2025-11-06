@@ -6,21 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 14:47:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:02:52 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:19:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/**
- * Counts the amount of digits of a SIZE_T.
- * 
- * @param n The number to count digits from.
- * @param base_len The base lenght that defines the digit size.
- * @return An INT with the amount of digits counted.
- * @note For function recicling purposes, accepts a SIZE_T base_len 
- * as argument.
- */
 static int	ft_nbrlen(size_t n, size_t base_len)
 {
 	int	count;
@@ -35,12 +26,25 @@ static int	ft_nbrlen(size_t n, size_t base_len)
 }
 
 /**
- * Creates and allocates a STRING writen with the UNSIGNED LONG INT 
- * passed as argument, following the specified base.
- 
- * @param n The number to write inside of the STRING.
- * @param base The base in which the number must be found
- * @return A pointer to the new allocated STRING; Or NULL in case of error.
+ * @brief	Converts an unsigned integer to a string in a given base.
+ *
+ *			Converts the number 'n' to a string representation using
+ *			the symbols provided in 'base'. The returned string is
+ *			dynamically allocated and null-terminated.
+ *
+ *			Static helpers:
+ *
+ *				- ft_nbrlen():	Calculates the number of digits needed
+ *								to represent 'n' in the given base.
+ *
+ * @param	n		Unsigned integer to convert.
+ * @param	base	String containing all symbols of the target base.
+ *
+ * @note	The returned string must be freed by the caller.
+ * @note	'base' length determines the radix (e.g., 2 for binary, 16 for hex).
+ *
+ * @return	Dynamically allocated string representing 'n' in the given base,
+ *			or NULL if memory allocation fails.
  */
 char	*ft_utoa_base(size_t n, const char *base)
 {

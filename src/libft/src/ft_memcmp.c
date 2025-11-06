@@ -6,22 +6,26 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 13:39:12 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:19 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:53:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Compares two VOID pointers for n bytes.
- * 
- * @param s1 The first VOID pointer to be compared.
- * @param s2 The second VOID pointer to be compared.
- * @param n The amount of bytes to be compared.
- * @return 0 if the comparation is true; else a positive or negative INT if
- * false.
- * @note The positive or negative value returned if false is the ASCII 
- * difference between the two characters which trigger the false comparation.
+ * @brief	Compares two memory blocks byte by byte.
+ *
+ * 			Compares the first 'n' bytes of the memory areas 's1' and 's2'.
+ *			Returns the difference between the first pair of differing bytes.
+ *
+ * @param	s1	Pointer to the first memory block.
+ * @param	s2	Pointer to the second memory block.
+ * @param	n	Number of bytes to compare.
+ *
+ * @note	If either 's1' or 's2' is NULL, returns 'n'.
+ *
+ * @return	Integer less than, equal to, or greater than zero if 's1' is
+ *			respectively less than, equal to, or greater than 's2'.
  */
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {

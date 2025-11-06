@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 17:36:37 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/25 18:17:55 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:49:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/lib/msh_std.h"
 #include "libft.h"
 
 /**
- * Adds a LIST node at the end of a LIST HEAD.
- * 
- * @param lst The LIST HEAD where to add the new node.
- * @param new The new LIST node to add.
- * @note If the LIST HEAD is empty, sets the new LIST node at the start
- * of it.
+ * @brief	Adds a new element at the end of a linked list.
+ *
+ * 			Appends the 'new' node at the end of the list pointed to by
+ *			'lst'. If the list is empty, 'new' becomes the first element.
+ *
+ * @param	lst	Pointer to the pointer of the first node of the list.
+ * @param	new	Node to add at the end of the list.
+ *
+ * @note	Does nothing if 'new' is NULL.
  */
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {

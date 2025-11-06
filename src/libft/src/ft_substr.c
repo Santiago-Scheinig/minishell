@@ -6,22 +6,29 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 17:53:07 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:02:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:17:37 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Creates and allocates a new STRING with len bytes copied from the 
- * CONST STRING starting on the start position.
- * 
- * @param s The CONST STRING to copy from.
- * @param start The index of the CONST STRING to start copying from.
- * @param len The amount of bytes to be copied.
- * @return A pointer to a new STRING resultant of the copy.
- * @note - If start > s_len, it returns a pointer to a new STRING 
- * with one '\0' byte allocated.
+ * @brief	Extracts a substring from a given string.
+ *
+ *			Allocates and returns a new string that is a substring of
+ *			's', starting at index 'start' and up to 'len' characters.
+ *			If 'start' is beyond the end of 's', returns an empty string.
+ *			If 'len' exceeds the remaining string length, it is reduced.
+ *
+ * @param	s		Original string to extract from.
+ * @param	start	Starting index for the substring.
+ * @param	len		Maximum number of characters to include.
+ *
+ * @note	Returns NULL if 's' is NULL or memory allocation fails.
+ * @note	The returned string must be freed by the caller.
+ *
+ * @return	Newly allocated substring, empty string if start > strlen(s),
+ *			or NULL on allocation failure.
  */
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {

@@ -6,20 +6,24 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 12:55:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:17 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:53:32 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Searches for an INT value inside of a VOID pointer for n bytes.
- * 
- * @param s The VOID pointer where to search the INT.
- * @param int The int to be searched.
- * @param n The amount of bytes to search inside of the pointer.
- * @return A VOID pointer to the first match; or NULL if no coincidence 
- * is found.
+ * @brief	Searches for a byte in a memory block.
+ *
+ * 			Scans the first 'n' bytes of the memory area pointed to by 's'
+ *			for the first occurrence of byte 'c'.
+ *
+ * @param	s	Pointer to the memory area to search.
+ * @param	c	Byte to search for (converted to unsigned char).
+ * @param	n	Number of bytes to examine.
+ *
+ * @return	Pointer to the first occurrence of 'c' in 's', or NULL if not
+ *			found within the first 'n' bytes.
  */
 void	*ft_memchr(const void *s, int c, size_t n)
 {

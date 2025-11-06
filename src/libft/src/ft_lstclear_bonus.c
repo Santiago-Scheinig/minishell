@@ -6,18 +6,23 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:03:17 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:50:38 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Frees every node included on the LIST HEAD. 
- * 
- * @param lst The LIST HEAD to free.
- * @param del The function used to free each node.
- * @note In general, the del function should be free().
+ * @brief	Clears a linked list and frees its memory.
+ *
+ * 			Iterates through the list pointed to by 'lst', applies the
+ *			'del' function to free the content of each node, and frees
+ *			each node. Sets '*lst' to NULL after clearing.
+ *
+ * @param	lst	Pointer to the pointer of the first node of the list.
+ * @param	del	Function used to free the content of each node.
+ *
+ * @note	After this function, the list pointer will be NULL.
  */
 void	ft_lstclear(t_list **lst, void (*del)(void *))
 {

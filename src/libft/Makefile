@@ -1,121 +1,162 @@
-# --------------------------------- Makefile Main ---------------------------------- #
+#	================================ Main Configuration ================================	#
 
-SRC		=	$(SRCDIR)ft_argjoin.c					\
-			$(SRCDIR)ft_arrlen.c					\
-			$(SRCDIR)ft_atoi.c						\
-			$(SRCDIR)ft_atol.c						\
-			$(SRCDIR)ft_atoi_base.c					\
-			$(SRCDIR)ft_bzero.c						\
-			$(SRCDIR)ft_calloc.c					\
-			$(SRCDIR)ft_iq_split.c					\
-			$(SRCDIR)ft_iq_strchr.c					\
-			$(SRCDIR)ft_itoa.c						\
-			$(SRCDIR)ft_isalnum.c					\
-			$(SRCDIR)ft_isascii.c					\
-			$(SRCDIR)ft_isalpha.c					\
-			$(SRCDIR)ft_isdigit.c					\
-			$(SRCDIR)ft_isprint.c					\
-			$(SRCDIR)ft_lstnew_bonus.c				\
-			$(SRCDIR)ft_lstmap_bonus.c				\
-			$(SRCDIR)ft_lstiter_bonus.c				\
-			$(SRCDIR)ft_lstlast_bonus.c				\
-			$(SRCDIR)ft_lstsize_bonus.c				\
-			$(SRCDIR)ft_lstclear_bonus.c			\
-			$(SRCDIR)ft_lstdelone_bonus.c			\
-			$(SRCDIR)ft_lstadd_back_bonus.c			\
-			$(SRCDIR)ft_lstadd_front_bonus.c		\
-			$(SRCDIR)ft_memchr.c					\
-			$(SRCDIR)ft_memcmp.c					\
-			$(SRCDIR)ft_memcpy.c					\
-			$(SRCDIR)ft_memset.c					\
-			$(SRCDIR)ft_memmove.c					\
-			$(SRCDIR)ft_printfd.c					\
-			$(SRCDIR)ft_printf_utils.c				\
-			$(SRCDIR)ft_printf_bonus.c				\
-			$(SRCDIR)ft_printf_flags_bonus.c		\
-			$(SRCDIR)ft_printf_utils_bonus.c		\
-			$(SRCDIR)ft_putnbr_fd.c					\
-			$(SRCDIR)ft_putstr_fd.c					\
-			$(SRCDIR)ft_putchar_fd.c				\
-			$(SRCDIR)ft_putendl_fd.c				\
-			$(SRCDIR)ft_read_file.c					\
-			$(SRCDIR)ft_realloc.c					\
-			$(SRCDIR)ft_split.c						\
-			$(SRCDIR)ft_split_free.c				\
-			$(SRCDIR)ft_strchr.c					\
-			$(SRCDIR)ft_strdup.c					\
-			$(SRCDIR)ft_strlen.c					\
-			$(SRCDIR)ft_strjoin.c					\
-			$(SRCDIR)ft_strlcat.c					\
-			$(SRCDIR)ft_strlcpy.c					\
-			$(SRCDIR)ft_strmapi.c					\
-			$(SRCDIR)ft_strncmp.c					\
-			$(SRCDIR)ft_strnstr.c					\
-			$(SRCDIR)ft_strrchr.c					\
-			$(SRCDIR)ft_strtarr.c					\
-			$(SRCDIR)ft_strtrim.c					\
-			$(SRCDIR)ft_striteri.c					\
-			$(SRCDIR)ft_strlenchr.c					\
-			$(SRCDIR)ft_substr.c					\
-			$(SRCDIR)ft_tolower.c					\
-			$(SRCDIR)ft_toupper.c					\
-			$(SRCDIR)ft_utoa_base.c					\
-			$(SRCDIR)get_next_line.c				\
-			$(SRCDIR)get_next_line_utils.c			\
-#
-SRCDIR	=	src/
-OBJDIR	=	obj/
-INCDIR	=	-I include/
+#	Library name
+NAME = ft
 
-NAME	=	libft.a
+# 	Source files
+SOURCES = \
+	$(SOURCE_DIR)/ft_argjoin.c 				\
+	$(SOURCE_DIR)/ft_arradd_str.c 			\
+	$(SOURCE_DIR)/ft_arrlen.c 				\
+	$(SOURCE_DIR)/ft_atoi_base.c			\
+	$(SOURCE_DIR)/ft_atoi.c					\
+	$(SOURCE_DIR)/ft_atol.c 				\
+	$(SOURCE_DIR)/ft_bzero.c 				\
+	$(SOURCE_DIR)/ft_calloc.c 				\
+	$(SOURCE_DIR)/ft_fprintf.c 				\
+	$(SOURCE_DIR)/ft_get_next_line_utils.c	\
+	$(SOURCE_DIR)/ft_get_next_line.c		\
+	$(SOURCE_DIR)/ft_isalnum.c				\
+	$(SOURCE_DIR)/ft_isascii.c				\
+	$(SOURCE_DIR)/ft_isalpha.c				\
+	$(SOURCE_DIR)/ft_isdigit.c				\
+	$(SOURCE_DIR)/ft_isprint.c				\
+	$(SOURCE_DIR)/ft_itoa.c					\
+	$(SOURCE_DIR)/ft_lstadd_back_bonus.c	\
+	$(SOURCE_DIR)/ft_lstadd_front_bonus.c	\
+	$(SOURCE_DIR)/ft_lstclear_bonus.c		\
+	$(SOURCE_DIR)/ft_lstdelone_bonus.c		\
+	$(SOURCE_DIR)/ft_lstiter_bonus.c		\
+	$(SOURCE_DIR)/ft_lstlast_bonus.c		\
+	$(SOURCE_DIR)/ft_lstmap_bonus.c			\
+	$(SOURCE_DIR)/ft_lstnew_bonus.c			\
+	$(SOURCE_DIR)/ft_lstsize_bonus.c		\
+	$(SOURCE_DIR)/ft_memchr.c				\
+	$(SOURCE_DIR)/ft_memcmp.c				\
+	$(SOURCE_DIR)/ft_memcpy.c				\
+	$(SOURCE_DIR)/ft_memmove.c				\
+	$(SOURCE_DIR)/ft_memset.c				\
+	$(SOURCE_DIR)/ft_printf_dup_utils.c		\
+	$(SOURCE_DIR)/ft_printf_flg_utils.c		\
+	$(SOURCE_DIR)/ft_printf_utils.c			\
+	$(SOURCE_DIR)/ft_printf.c				\
+	$(SOURCE_DIR)/ft_putchar_fd.c			\
+	$(SOURCE_DIR)/ft_putendl_fd.c			\
+	$(SOURCE_DIR)/ft_putnbr_fd.c			\
+	$(SOURCE_DIR)/ft_putstr_fd.c			\
+	$(SOURCE_DIR)/ft_read_file.c			\
+	$(SOURCE_DIR)/ft_realloc.c				\
+	$(SOURCE_DIR)/ft_split_free.c			\
+	$(SOURCE_DIR)/ft_split_iq.c				\
+	$(SOURCE_DIR)/ft_split_iqbase.c			\
+	$(SOURCE_DIR)/ft_split_utils.c			\
+	$(SOURCE_DIR)/ft_split.c				\
+	$(SOURCE_DIR)/ft_strchr_iq.c			\
+	$(SOURCE_DIR)/ft_strchr.c				\
+	$(SOURCE_DIR)/ft_strdup.c				\
+	$(SOURCE_DIR)/ft_striteri.c				\
+	$(SOURCE_DIR)/ft_strjoin.c				\
+	$(SOURCE_DIR)/ft_strlcat.c				\
+	$(SOURCE_DIR)/ft_strlcpy.c				\
+	$(SOURCE_DIR)/ft_strlen_chr.c			\
+	$(SOURCE_DIR)/ft_strlen.c				\
+	$(SOURCE_DIR)/ft_strmapi.c				\
+	$(SOURCE_DIR)/ft_strncmp.c				\
+	$(SOURCE_DIR)/ft_strnstr.c				\
+	$(SOURCE_DIR)/ft_strrchr.c				\
+	$(SOURCE_DIR)/ft_strtrim.c				\
+	$(SOURCE_DIR)/ft_substr.c				\
+	$(SOURCE_DIR)/ft_tolower.c				\
+	$(SOURCE_DIR)/ft_toupper.c				\
+	$(SOURCE_DIR)/ft_utoa_base.c
 
-CC		=	cc
-GCC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror $(INCDIR) -g
+#	================================ Directory Structure ===============================	#
 
-# --------------------------- Makefile Object Compilation -------------------------- #
+#	Source, Object, and Dependency directories names
+SOURCE_DIR = src
+OBJECT_DIR = obj
+DEPEND_DIR = dep
 
-OBJ		=	$(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
+#	Include paths for headers
+INCLUDE_DIRS = -I include
 
-# ------------------------------- Makefile Cosmetics ------------------------------- #
+#	================================ Compiler Settings =================================	#
 
-CNAME			=	Libft
-COLOUR_GREEN	=	\033[0;32m
-COLOUR_RED		=	\033[0;31m
-COLOUR_BLUE		=	\033[0;34m
-COLOUR_CIAN		=	\033[0;35m
-COLOUR_END		=	\033[0m
+#	Compiler flags
+CFLAGS = -Wall -Wextra -Werror -g
 
-# --------------------------------- Makefile Body ---------------------------------- #
+#	Dependency generation flags
+DEPFLAGS = -MMD -MP
+
+#	Preprocessor flags (includes)
+CPPFLAGS = $(INCLUDE_DIRS)
+
+#	================================ Object Files ======================================	#
+
+#	Object files
+OBJECTS = $(SOURCES:$(SOURCE_DIR)/%.c=$(OBJECT_DIR)/%.o)
+
+#	Dependency files
+DEPENDENCIES = $(SOURCES:$(SOURCE_DIR)/%.c=$(DEPEND_DIR)/%.d)
+
+#	================================ Colors for Output =================================	#
+
+COLOR_RED = \033[0;31m
+COLOR_GREEN = \033[0;32m
+COLOR_YELLOW = \033[0;33m
+COLOR_BLUE = \033[0;34m
+COLOR_CYAN = \033[0;35m
+COLOR_RESET = \033[0m
+
+#	================================ Build Rules =======================================	#
 
 .PHONY: all msg clean fclean re
 
+#	Default: build library
 all: $(NAME)
 
-#- Creates a directory named $(OBJDIR).												-#
-$(OBJDIR):
-	@echo "$(COLOUR_GREEN)Libft - Object compilation:\n"
-	@mkdir -p $@
-#
-#- Compiles each %(generic).c source into its respective %(generic).o				-#
-$(OBJDIR)%.o: $(SRCDIR)%.c
-	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo "$(COLOUR_CIAN)\t-$@ created."
-#
-#- Complies the $(NAME) library.													-#
-$(NAME): $(OBJDIR) $(OBJ)
-	@ar rcs $(NAME) $(OBJ) $(LIBDIR)
-	@echo "$(COLOUR_GREEN)\n$(CNAME) - Library $@ linked.$(COLOUR_END)"
-#
-#- Removes every object inside $(OBJDIR) and the directory itself.					-#
+#	Display compilation message
+msg:
+	@echo "$(COLOR_BLUE)[i] $(NAME) - Object compilation:$(COLOR_RESET)"
+
+#	================================ Directory Creation ================================	#
+
+#	Create necessary directories
+$(OBJECT_DIR) $(DEPEND_DIR):
+	@mkdir -p $(DEPEND_DIR)
+	@mkdir -p $(OBJECT_DIR)
+
+#	================================ Object Compilation ================================	#
+
+#	Compile source files to object files
+$(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.c | $(DEPEND_DIR) $(OBJECT_DIR)
+	@printf "\t$(COLOR_CYAN)[OK] Compiling %-30s\r$(COLOR_RESET)" $<
+	@$(CC) $(CFLAGS) $(DEPFLAGS) $(CPPFLAGS) -c $< -o $@ -MF $(DEPEND_DIR)/$(@F:.o=.d)
+
+#	Include dependency files for header tracking
+-include $(DEPENDENCIES)
+
+#	================================ Library Creation ==================================	#
+
+#	Create static library archive
+$(NAME): msg $(OBJECT_DIR) $(OBJECTS)
+	@echo "\r\t$(COLOR_CYAN)[OK] Objects compiled successfully.$(COLOR_RESET)"
+	@ar rcs lib$(NAME).a $(OBJECTS)
+	@echo "$(COLOR_BLUE)[✓] $(NAME) - Library built successfully.$(COLOR_RESET)\n"
+
+#	================================ Cleanup Rules =====================================	#
+
+#	Remove object and dependency files
 clean:
-	@rm -rf $(OBJDIR)
-	@echo "$(COLOUR_RED)$(CNAME) - Object cleaning complete.\n$(COLOUR_END)"
-#
-#- Removes the final files made with this makefile, executing clean as well.		-#
+	@rm -rf $(OBJECT_DIR) $(DEPEND_DIR)
+	@echo "$(COLOR_YELLOW)[!] $(NAME) - Cleaned object files.$(COLOR_RESET)"
+
+#	Remove everything including library
 fclean: clean
-	@rm -f $(NAME)
-	@echo "$(COLOUR_RED)$(CNAME) - Files removed.\n$(COLOUR_END)"
-#
-#- Restarts the Makefile. Erases everything to default, and executes again.			-#
+	@rm -f lib$(NAME).a
+	@echo "$(COLOR_RED)[x] $(NAME) - Fully cleaned project files.$(COLOR_RESET)\n"
+
+#	Rebuild from scratch
 re: fclean all
+
+#	================================ Makefile End ======================================	#

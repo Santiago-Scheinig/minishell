@@ -6,18 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:21:10 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:57:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Writes a STRING into a specific file descriptor.
- * 
- * @param s The STRING to be printed.
- * @param fd The file descriptor to print into.
- * @return The amount of characters printed.
+ * @brief	Writes a string to a given file descriptor.
+ *
+ * 			Sends the string 's' to the file or output stream associated
+ *			with the file descriptor 'fd'.
+ *
+ * @param	s	String to write.
+ * @param	fd	File descriptor where the string will be written.
+ *
+ * @return	Number of bytes written, or -1 on error.
  */
 int	ft_putstr_fd(char *s, int fd)
 {

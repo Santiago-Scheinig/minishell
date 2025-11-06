@@ -6,16 +6,21 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 19:58:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:57 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:59:09 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Frees an ARRAY of STRINGS, usually allocated by ft_split().
- * 
- * @param split The ARRAY of STRINGS to free.
+ * @brief	Frees a NULL-terminated array of strings.
+ *
+ * 			Frees each string in the array 'split' and then frees the array
+ *			itself. Returns NULL for convenience in assignment.
+ *
+ * @param	split	Array of strings to free.
+ *
+ * @return	NULL.
  */
 void	*ft_split_free(char **split)
 {

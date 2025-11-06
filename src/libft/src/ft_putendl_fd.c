@@ -6,20 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:23:46 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:57:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Writes a STRING into a specific file descriptor.
- * 
- * @param s The STRING to be printed.
- * @param fd The file descriptor to print into.
- * @return The amount of characters printed.
- * @note After the STRING is printed, it also writes a '\n' on the file
- * descriptor.
+ * @brief	Writes a string followed by a newline to a file descriptor.
+ *
+ * 			Sends the string 's' to the file or output stream associated
+ *			with 'fd', then writes a newline character.
+ *
+ * @param	s	String to write.
+ * @param	fd	File descriptor where the string will be written.
+ *
+ * @return	Total number of bytes written, or -1 on error.
  */
 int	ft_putendl_fd(char *s, int fd)
 {

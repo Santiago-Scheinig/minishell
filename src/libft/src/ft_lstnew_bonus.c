@@ -6,19 +6,21 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:49:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:52:42 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Creates and allocates a new LIST node.
- * 
- * @param content A pointer to the content to be included inside of the new
- * node.
- * @return A pointer to the new LIST node; or NULL in case of error.
- * @note The next node inside of the LIST node is set to NULL.
+ * @brief	Creates a new node for a linked list.
+ *
+ * 			Allocates memory for a new list node, assigns 'content' to it,
+ *			and sets the 'next' pointer to NULL.
+ *
+ * @param	content	Pointer to the content to store in the new node.
+ *
+ * @return	Pointer to the newly created node, or NULL if allocation fails.
  */
 t_list	*ft_lstnew(void *content)
 {

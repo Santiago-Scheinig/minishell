@@ -6,21 +6,23 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 18:32:09 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:50 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 06:07:11 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Reads and saves a file until EOF, specified by a file descriptor and 
- * dividing it by lines.
- * 
- * @param lines The LIST HEAD where to create new nodes for every line read.
- * @param fd The file descriptor to read from.
- * @return The amount of lines read or -1 in case of error.
- * @note A line that is just conformed by a single '\n' character isn't saved
- * and doesn't sum for the amount of lines read.
+ * @brief	Reads all lines from a file descriptor into a linked list.
+ *
+ * 			Reads lines from the file descriptor 'fd' using get_next_line
+ *			and stores each line as a new node in the linked list 'lines'.
+ *			Frees all allocated memory and returns -1 if allocation fails.
+ *
+ * @param	lines	Pointer to the pointer of the first node of the list.
+ * @param	fd		File descriptor to read from.
+ *
+ * @return	Number of lines read, or -1 on allocation failure.
  */
 int	ft_read_file(t_list **lines, int fd)
 {
@@ -29,7 +31,7 @@ int	ft_read_file(t_list **lines, int fd)
 	int		count;
 
 	count = 0;
-	str = get_next_line(fd);
+	str = ft_get_next_line(fd);
 	while (str)
 	{
 		new = ft_lstnew(str);
@@ -45,7 +47,7 @@ int	ft_read_file(t_list **lines, int fd)
 			return (-1);
 		}
 		count++;
-		str = get_next_line(fd);
+		str = ft_get_next_line(fd);
 	}
 	return (count);
 }

@@ -6,32 +6,40 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 17:43:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/30 18:40:03 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:17:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_istrim(char c, char const *set)
+static int	istrim(char c, char const *set)
 {
 	int	i;
 
 	i = -1;
 	while (set[++i])
 		if (set[i] == c)
-			return (1);
-	return (0);
+			return (true);
+	return (false);
 }
 
 /**
- * Creates and allocates a new STRING resultant of the trimming of a 
- * CONST STRING set in a CONST STRING s1.
- * 
- * @param s1 The CONST STRING to be compared for trimming.
- * @param set The character base to be trimmed.
- * @return A pointer to the new STRING resultant of the trimming.
- * @note - Cuts every match of 'set' from the start of 's1' until a non match.
- * @note - Cuts every match of 'set' from the end of 's1' until a non match.
+ * @brief	Trims all characters in 'set' from start and end of 's1'.
+ *
+ *			Allocates and returns a new string with all leading and
+ *			trailing characters found in 'set' removed from 's1'.
+ *			Returns an empty string if 's1' only contains characters
+ *			from 'set'.
+ *
+ *			Static helpers:
+ *
+ *				- istrim():		Checks if a character exists in the set.
+ *
+ * @param	s1		String to trim.
+ * @param	set		String containing characters to remove from 's1'.
+ *
+ * @return	New trimmed string, empty string if all chars trimmed, or
+ *			NULL on allocation failure or invalid input.
  */
 char	*ft_strtrim(char const *s1, char const *set)
 {
@@ -42,12 +50,12 @@ char	*ft_strtrim(char const *s1, char const *set)
 	i = 0;
 	if (!s1 || !set)
 		return (NULL);
-	while (ft_istrim(s1[i], set))
+	while (istrim(s1[i], set))
 		i++;
 	s1_len = ft_strlen(&s1[i]);
 	if (s1_len == 0)
 		return (ft_strdup(""));
-	while (ft_istrim(s1[s1_len + i - 1], set))
+	while (istrim(s1[s1_len + i - 1], set))
 		s1_len--;
 	tmp = ft_calloc(s1_len + 1, sizeof(char));
 	if (!tmp)

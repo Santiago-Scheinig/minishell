@@ -6,18 +6,23 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 18:02:12 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:55:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Sets n bytes of a VOID pointer with a specified INT.
- * 
- * @param s The VOID pointer to set bytes into.
- * @param c The INT value to be set on each byte.
- * @param n The amount of bytes to be set on the VOID pointer.
+ * @brief	Fills a memory area with a constant byte.
+ *
+ * 			Sets the first 'n' bytes of the memory area pointed to by 's'
+ *			to the byte value 'c'.
+ *
+ * @param	s	Pointer to the memory area to fill.
+ * @param	c	Byte value to set (converted to unsigned char).
+ * @param	n	Number of bytes to set.
+ *
+ * @return	Pointer to the memory area 's'.
  */
 void	*ft_memset(void *s, int c, size_t n)
 {

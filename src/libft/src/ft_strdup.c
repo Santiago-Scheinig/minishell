@@ -6,18 +6,21 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 17:24:31 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:02:12 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:09:20 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Creates and allocates a STRING that includes all the characters of a CONST
- * STRING.
- * 
- * @param s The CONST STRING to allocate.
- * @return A pointer to the new allocated STRING.
+ * @brief	Creates a duplicate of a string.
+ *
+ * 			Allocates memory and copies the content of the string 's' into
+ *			the new memory. Returns a pointer to the duplicated string.
+ *
+ * @param	s	String to duplicate.
+ *
+ * @return	Pointer to the duplicated string, or NULL on allocation failure.
  */
 char	*ft_strdup(const char *s)
 {

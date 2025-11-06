@@ -6,18 +6,23 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 16:28:59 by sscheini          #+#    #+#             */
-/*   Updated: 2025/09/18 20:01:38 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/10/10 04:57:41 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * Writes an INT into a specific file descriptor.
- * 
- * @param n The INT to be printed.
- * @param fd The file descriptor to print into.
- * @return The amount of characters printed.
+ * @brief	Writes an integer to a given file descriptor.
+ *
+ * 			Sends the integer 'n' as a sequence of characters to the file
+ *			or output stream associated with 'fd'. Handles negative numbers
+ *			and the special case of INT_MIN.
+ *
+ * @param	n	Integer to write.
+ * @param	fd	File descriptor where the number will be written.
+ *
+ * @return	Total number of bytes written, or -1 on error.
  */
 int	ft_putnbr_fd(int n, int fd)
 {

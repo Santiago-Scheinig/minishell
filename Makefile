@@ -1,202 +1,142 @@
-# -------------------------------- README --------------------------------- #
+#	================================ Main Configuration ================================	#
 
-# This Makefile only works with programs executables by a main().
+#	Executable names
+NAME = msh
+NAME_BONUS = msh_bonus
 
-# The files where you have the main(), should be named main.c and		 	\
-  main_bonus.c respectibly.
+#	Source files
+MAIN_SRC = $(SOURCE_DIR)/main.c
+BONUS_SRC = $(SOURCE_DIR)/main_bonus.c
 
-# ----------------------------- Makefile Main ----------------------------- #
+#	================================ Library Configuration =============================	#
 
-# The name of the final executable.											#
-NAME		=	minishell
+#	Libraries to build (in build order)
+LIBS = libft shellft mshft
 
-# Set LIBFT_USE to 1 if you are using the libft for the project.			#
-LIBFT_USE	:=	1
+#	Library linking order: most dependent first, base libraries last
+LINK_LIBS = -lmshft -lshellft -l:libft.a -lreadline
 
-# The name list for regular and bonus source files.							#
-SRC			=	$(SRC_DIR)/main.c								\
-				$(SRC_DIR)/troubleshoot/sigend.c				\
-				$(SRC_DIR)/troubleshoot/troublend.c				\
-				$(SRC_DIR)/parser/parser.c						\
-				$(SRC_DIR)/parser/parser_cmd.c					\
-				$(SRC_DIR)/parser/parser_envar.c				\
-				$(SRC_DIR)/parser/parser_token.c				\
-				$(SRC_DIR)/parser/parser_cmd_utils.c			\
-				$(SRC_DIR)/parser/parser_token_hdoc.c			\
-				$(SRC_DIR)/parser/parser_token_utils.c			\
-				$(SRC_DIR)/parser/parser_envar_utils.c			\
-				$(SRC_DIR)/parser/parser_wildc_bonus.c		\
-				$(SRC_DIR)/parser/parser_wildc_utils_bonus.c	\
-				$(SRC_DIR)/shellft/shell_split.c				\
-				$(SRC_DIR)/shellft/shell_envdup.c				\
-				$(SRC_DIR)/shellft/shell_memmove.c				\
-				$(SRC_DIR)/shellft/shell_pmtstr.c				\
-				$(SRC_DIR)/shellft/shell_pmtexp.c				\
-				$(SRC_DIR)/shellft/shell_strchr.c				\
-				$(SRC_DIR)/shellft/shell_getenv.c				\
-				$(SRC_DIR)/shellft/shell_sortenv.c				\
-				$(SRC_DIR)/shellft/shell_lstclear.c				\
-				$(SRC_DIR)/shellft/shell_newlst_var.c			\
-				$(SRC_DIR)/shellft/shell_split_utils.c			\
-				$(SRC_DIR)/shellft/shell_addlst_token.c			\
-				$(SRC_DIR)/shellft/shell_pmtexp_utils.c			\
- 				$(SRC_DIR)/execution/msh_cmd/msh_cd.c			\
- 				$(SRC_DIR)/execution/msh_cmd/msh_env.c			\
- 				$(SRC_DIR)/execution/msh_cmd/msh_pwd.c			\
- 				$(SRC_DIR)/execution/msh_cmd/msh_echo.c			\
- 				$(SRC_DIR)/execution/msh_cmd/msh_exit.c			\
- 				$(SRC_DIR)/execution/msh_cmd/msh_unset.c		\
- 				$(SRC_DIR)/execution/msh_cmd/msh_export.c		\
- 				$(SRC_DIR)/execution/msh_cmd/msh_import.c		\
- 				$(SRC_DIR)/execution/msh_cmd/msh_export_utils.c	\
- 				$(SRC_DIR)/execution/waitcmd.c					\
- 				$(SRC_DIR)/execution/exemsh.c					\
- 				$(SRC_DIR)/execution/execmd.c					\
- 				$(SRC_DIR)/execution/execmd_utils.c				\
+#	Library linking order for bonus build
+LINK_LIBS_BONUS = -lmshft_bonus -lshellft -l:libft.a -lreadline
 
+# ================================ Directory Structure =============================== #
 
-SRC_BON		=	$(SRC_DIR)/main_bonus.c		\
+# Source, Object, and Dependency directories
+SOURCE_DIR = src
+OBJECT_DIR = obj
+DEPEND_DIR = dep
 
-# The flags used to compile the objects.									#
-CFLAGS		=	-Wall -Wextra -Werror -g
+# Include paths for headers
+INCLUDE_DIRS = -I src/mshft/include -I src/shellft/include -I src/libft/include
 
-# The flags used to create dependency files.								#
-DFLAGS		=	-MMD -MP
+# Library paths for linking
+LIBRARY_PATHS = $(addprefix -L $(SOURCE_DIR)/, $(LIBS))
 
-# The preprocess flags used to compile the program.							#
-CPPFLAGS	=	-I$(INC_DIR) -I $(INC_LIB)
+# ================================ Compiler Settings ================================= #
 
-# ----------------------------- Folder Names ------------------------------ #
+# Compiler flags
+CFLAGS = -Wall -Wextra -Werror -g
 
-# The directory name for source files.										#
-SRC_DIR		=	src
+# Dependency generation flags
+DEPFLAGS = -MMD -MP
 
-# The directory name for object files.										#
-OBJ_DIR		=	obj
+# Preprocessor flags (includes)
+CPPFLAGS = $(INCLUDE_DIRS)
 
-# The directory name for library files.										#
-LIB_DIR		=	lib
+# Linker flags (library paths)
+LDFLAGS = $(LIBRARY_PATHS)
 
-# The directory name for dependency files.									#
-DEP_DIR		=	dep
+# ================================ Object Files ====================================== #
 
-# The directory name for index files.										#
-INC_DIR		=	include
+# Main program objects
+MAIN_OBJ = $(MAIN_SRC:$(SOURCE_DIR)/%.c=$(OBJECT_DIR)/%.o)
 
-# The directory name for libft index files.									#
-INC_LIB		=	src/libft/include
+# Bonus program objects
+BONUS_OBJ = $(BONUS_SRC:$(SOURCE_DIR)/%.c=$(OBJECT_DIR)/%.o)
 
-# --------------------------- Object Libraries ---------------------------- #
+# Dependency files
+ALL_SOURCES = $(MAIN_SRC) $(BONUS_SRC)
+DEPENDENCIES = $(ALL_SOURCES:$(SOURCE_DIR)/%.c=$(DEPEND_DIR)/%.d)
 
-# The name of the regular project library.									#
-LIB_REG		=	$(LIB_DIR)/$(NAME).a
+# ================================ Colors for Output ================================= #
 
-# The name of the bonus project library.									#
-LIB_BON		=	$(LIB_DIR)/$(NAME)_bonus.a
+COLOR_RED = \033[0;31m
+COLOR_GREEN = \033[0;32m
+COLOR_BLUE = \033[0;34m
+COLOR_CYAN = \033[0;35m
+COLOR_RESET = \033[0m
 
-# The total name list for both regular and bonus source files.				#
-ALL_SRC		=	$(SRC) $(SRC_BON)
+# ================================ Build Rules ======================================= #
 
-# The formulas used to search for specific files.							#
-OBJ			=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-OBJ_BON		=	$(SRC_BON:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-DEP			=	$(ALL_SRC:$(SRC_DIR)/%.c=$(DEP_DIR)/%.d)
+.PHONY: all bonus clean fclean re
 
-# --------------------------------- Libft --------------------------------- #
-
-LIBFT_ABS	=	$(LIBFT_DIR)/$(LIBFT)
-LIBFT_DIR	=	$(SRC_DIR)/libft
-LIBFT		=	libft.a
-
-ifeq ($(LIBFT_USE), 1)
-	NAME_DEPS	= $(LIB_REG) $(LIBFT)
- 	NAME_LIBS	= $(LIB_REG) $(LIBFT_ABS)
-	CPPFLAGS	+=	-Ilibft/include
-else
-	NAME_DEPS	= $(LIB_REG)
-	NAME_LIBS	= $(LIB_REG)
-endif
-
-# ------------------------------- Cosmetics ------------------------------- #
-
-C_R			=	\033[0;31m
-C_G			=	\033[0;32m
-C_B			=	\033[0;34m
-C_C			=	\033[0;35m
-C_END		=	\033[0m
-
-# ----------------------------- Makefile Body ----------------------------- #
-
-.PHONY: all clean fclean re bonus
-
+# Default: build main program
 all: $(NAME)
-	@echo "$(C_G)[✓] $(NAME) - Program built successfully.$(C_END)"
+	@echo "$(COLOR_GREEN)[✓] $(NAME) - Build complete!$(COLOR_RESET)\n"
 
-# Creates an object directory named $@, and subdirectories.					#
-$(OBJ_DIR) $(DEP_DIR) $(LIB_DIR):
-	@mkdir -p $(OBJ_DIR)
-	@mkdir -p $(DEP_DIR)
-	@mkdir -p $(LIB_DIR)
-	@mkdir -p $(OBJ_DIR)/shellft
-	@mkdir -p $(OBJ_DIR)/parser
-	@mkdir -p $(OBJ_DIR)/execution
-	@mkdir -p $(OBJ_DIR)/execution/msh_cmd
-	@mkdir -p $(OBJ_DIR)/troubleshoot
+# Build bonus program
+bonus: $(NAME_BONUS)
+	@echo "$(COLOR_GREEN)[✓] $(NAME) - Bonus build complete!$(COLOR_RESET)\n"
 
-# Creates the regular library.												#
-$(LIB_REG): $(OBJ) | $(LIB_DIR)
-	@ar rcs $@ $^
+msg:
+	@echo "$(COLOR_BLUE)[i] $(NAME) - Main Compilation:"
 
-# Creates the bonus library.												#
-$(LIB_BON): $(OBJ_BON) | $(LIB_DIR)
-	@ar rcs $@ $^
+msg_bonus:
+	@echo "$(COLOR_BLUE)[i] $(NAME) - Main Bonus Compilation:"
 
-# Compiles each %(generic).c source into its respective %(generic).o		#
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(DEP_DIR) $(OBJ_DIR)
-	@$(CC) $(CPPFLAGS) $(CFLAGS) $(DFLAGS) -c $< -o $@ -MF $(DEP_DIR)/$(@F:.o=.d)
-	@echo "$(C_C)[OK] Compiled $<$(C_END)"
+# ================================ Directory Creation ================================ #
 
-# Includes the dependencies used to verify index files changes				#
--include $(DEP)
+$(OBJECT_DIR) $(DEPEND_DIR):
+	@mkdir -p $@
 
-# Creates the libft.a library.												#
-ifeq ($(LIBFT_USE), 1)
-$(LIBFT):
-	@make -s -C $(LIBFT_DIR)
-	@echo "$(C_G)[✓] Libft - Compiled.$(C_END)"
-endif
+# ================================ Library Building ================================== #
 
-# Compiles the main with the program library into the final executable.		#
-$(NAME): $(NAME_DEPS) src/main.c
-	@$(CC) $(CPPFLAGS) $(CFLAGS) src/main.c -lreadline $(NAME_LIBS) -o $@
+# Build each library in its subdirectory
+$(LIBS):
+	@$(MAKE) -s -C $(SOURCE_DIR)/$@
 
-# Compiles the bonus and the program library into the bonus executable.		#
-bonus: $(NAME_DEPS) $(LIB_BON) src/main_bonus.c
-	@$(CC) $(CPPFLAGS) $(CFLAGS) \
-	src/main_bonus.c $(NAME_LIBS) $(LIB_BON) -o $(NAME)_bonus
-	@echo "$(C_G)[✓] $(NAME)_bonus - Program built successfully.$(C_END)"
+# Build each library in its subdirectory
+libs_bonus: $(LIBS)
+	@$(MAKE) bonus -s -C $(SOURCE_DIR)/mshft
 
-# Removes every object inside $(OBJ_DIR) and the directory itself.			#
+# ================================ Object Compilation ================================ #
+
+# Compile source files to object files
+$(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.c | $(DEPEND_DIR) $(OBJECT_DIR)
+	@$(CC) $(CPPFLAGS) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(DEPEND_DIR)/$(@F:.o=.d)
+	@printf "\r\t$(COLOR_GREEN)[OK] Compiled $<$(COLOR_RESET)"
+
+# Include dependency files for header tracking
+-include $(DEPENDENCIES)
+
+# ================================ Linking =========================================== #
+
+# Link main executable
+# Order: compiler, object files, library paths, libraries, output
+$(NAME): $(LIBS) msg $(MAIN_OBJ)
+	@printf "\r\t$(COLOR_CYAN)[OK] Main compiled successfully.\n$(COLOR_RESET)"
+	@$(CC) $(CFLAGS) $(MAIN_OBJ) $(LDFLAGS) $(LINK_LIBS) -o $@
+	@echo "$(COLOR_BLUE)[✓] $(NAME) - Linked successfully$(COLOR_RESET)\n"
+
+# Link bonus executable
+$(NAME_BONUS): libs_bonus msg_bonus $(BONUS_OBJ)
+	@printf "\r\t$(COLOR_CYAN)[OK] Main compiled successfully.\n$(COLOR_RESET)"
+	@$(CC) $(CFLAGS) -D BONUS=1 $(BONUS_OBJ) $(LDFLAGS) $(LINK_LIBS_BONUS) -o $@
+	@echo "$(COLOR_BLUE)[✓] $(NAME) - Linked successfully$(COLOR_RESET)\n"
+
+# ================================ Cleanup Rules ===================================== #
+
+# Remove object and dependency files
 clean:
-ifeq ($(LIBFT_USE), 1)
-	@make clean -s -C $(LIBFT_DIR)
-endif
-	@rm -rf $(OBJ_DIR)
-	@echo "$(C_B)[i] $(NAME) - Cleaned object files.$(C_END)"
+	@$(foreach lib, $(LIBS), $(MAKE) -s -C $(SOURCE_DIR)/$(lib) clean;)
+	@rm -rf $(OBJECT_DIR) $(DEPEND_DIR)
+	@echo "$(COLOR_BLUE)[i] Cleaned build artifacts$(COLOR_RESET)"
 
-# Removes all the files made with this makefile.							#
+# Remove everything including executables
 fclean:
-ifeq ($(LIBFT_USE), 1)
-	@make fclean -s -C $(LIBFT_DIR)
-endif
-	@rm -rf $(OBJ_DIR)
-	@rm -rf $(LIB_DIR)
-	@rm -rf $(DEP_DIR)
-	@rm -f $(NAME)
-	@rm -f $(NAME)_bonus
-	@echo "$(C_R)[x] $(NAME) - Fully cleaned project files.$(C_END)"
+	@$(foreach lib, $(LIBS), $(MAKE) -s -C $(SOURCE_DIR)/$(lib) fclean;)
+	@rm -f $(NAME) $(NAME_BONUS)
+	@echo "$(COLOR_RED)[x] Full clean complete$(COLOR_RESET)\n"
 
-#- Restarts the Makefile. Erases everything to default, and executes again.	#
+# Rebuild from scratch
 re: fclean all
-
-# ----------------------------- Makefile End ------------------------------ #
