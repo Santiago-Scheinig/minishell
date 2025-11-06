@@ -6,10 +6,11 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 13:27:57 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/06 13:47:13 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:03:56 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -25,7 +26,7 @@ static char	*create_buffer(void)
 		i = read(STDIN_FILENO, &c, 1);
 		if (i <= 0 || c == '\n')
 			break ;
-		buffer = ft_realloc()
+		buffer = ft_realloc((void *))
 	}
 	
 }
