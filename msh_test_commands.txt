@@ -1,0 +1,109 @@
+env
+pwd
+cd /tmp
+pwd
+export TEST_VAR=hello_world
+echo $TEST_VAR
+export SPACED_VAR='value with spaces'
+echo $SPACED_VAR
+export MIXED="start-$TEST_VAR-end"
+echo "$MIXED"
+export TEMP_TO_UNSET=will_remove
+echo $TEMP_TO_UNSET
+unset TEMP_TO_UNSET
+echo "$TEMP_TO_UNSET"
+true
+echo "status_after_true: $?"
+false
+echo "status_after_false: $?"
+echo -n "no_newline"
+echo " <-- should appear right after previous"
+echo 'single quoted: $TEST_VAR | > | | will not expand'
+echo "double quoted: $TEST_VAR | $? | literal pipe stays inside quotes"
+echo "line1" > msh_test_out.txt
+cat < msh_test_out.txt
+echo "line2" >> msh_test_out.txt
+cat msh_test_out.txt
+printf "apple\nbanana\napple\n" > fruits.txt
+cat fruits.txt | grep apple | wc -l > apples_count.txt
+cat apples_count.txt
+printf "one\ntwo\nthree\nfour\n" > numbers.txt
+cat numbers.txt | grep -v two | tee filtered.txt | wc -l > count_filtered.txt
+cat filtered.txt
+cat count_filtered.txt
+grep three < numbers.txt
+echo "a" >> append_test.txt
+echo "b" >> append_test.txt
+echo "c" >> append_test.txt
+cat append_test.txt
+echo "start" > combo.txt
+echo "append1" >> combo.txt
+echo "append2" >> combo.txt
+cat combo.txt
+cat <<EOF > heredoc_out.txt
+This is a heredoc test.
+It contains multiple lines.
+It also contains an unexpanded variable reference: $TEST_VAR
+EOF
+cat heredoc_out.txt
+wc -w <<DELIM > heredoc_wc.txt
+one two three
+four five
+DELIM
+cat heredoc_wc.txt
+printf "alpha\nbeta\ngamma\n" > alphabets.txt
+cat alphabets.txt | head -n 2 > first_two.txt
+cat first_two.txt
+export GMSG="GREET"
+echo "start-$GMSG-end" | tr 'a-z' 'A-Z' > pipeline_msg.txt
+cat pipeline_msg.txt
+false | true
+echo "status_after_false_pipe_true: $?"
+true | false
+echo "status_after_true_pipe_false: $?"
+echo "a | b > c $GMSG" | cat -n
+printf "x\ny\nz\n" > chaining_in.txt
+grep y < chaining_in.txt > chaining_out.txt
+cat chaining_out.txt
+export PATH="$PATH"
+echo "path_length: "
+echo "$PATH" | wc -c
+mkdir -p msh_test_dir/subdir
+cd msh_test_dir
+pwd
+cd subdir
+pwd
+cd ..
+pwd
+cd ..
+rm -r msh_test_dir
+env | head -n 5
+export NESTED=nest
+echo "double 'single' "escaped quotes" $NESTED"
+cat <<EOT > heredoc_edge.txt
+line before
+delimiter-like EOT line
+EOT
+cat heredoc_edge.txt
+echo "first line" > mix.txt
+echo "second line" >> mix.txt
+cat mix.txt | sed -n '1,2p' > mix_out.txt
+cat mix_out.txt
+export TEST_VAR=hello_world
+export TEST_VAR
+echo $TEST_VAR
+export TEMPX=to_be_unset
+unset TEMPX
+echo "after_unset_TEMPX:$TEMPX" ?
+cat mix.txt >large_test.txt
+cat large_test.txt | wc -l
+ls -l msh_test_out.txt fruits.txt apples_count.txt numbers.txt append_test.txt combo.txt heredoc_out.txt heredoc_wc.txt alphabets.txt pipeline_msg.txt chaining_out.txt large_test.txt
+cat <<H1 | grep line > heredoc_pipe_out.txt
+line A
+line B
+not this
+H1
+cat heredoc_pipe_out.txt
+echo "final check"
+echo "final_status: $?"
+exit
