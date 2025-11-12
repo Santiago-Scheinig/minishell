@@ -137,11 +137,11 @@ int	main(int argc, char **argv, const char **envp)
 	while (1)
 	{
 		if (parser(&msh))
-			continue; //If bonus, continue = input result FAILURE (execution failed) --> Return (status); If MSHELL_SIG_HANDLR (bonus should reset);
+			continue ;
 		if (execution(&msh))
-			continue; //If bonus, continue = input result FAILURE (execution failed) --> Return (status); If MSHELL_SIG_HANDLR (bonus should reset);
+			continue ;
 		if (msh.childs_pid)
-			waitexec(&msh); //waitcmd should set one status variable to 1 if any cmd return an error, so status knows input result FAILURE
+			waitexec(&msh);
 	}
 	return (msh.exit_no);
 }

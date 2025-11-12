@@ -6,12 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:00:26 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:26:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:05:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
 
+/**
+ * @brief	Checks if a given path is a directory.
+ *
+ *			Uses stat() to determine if the path exists and is a
+ *			directory.
+ *
+ * @param	path	Path to check.
+ *
+ * @return	true if path is a directory, false otherwise.
+ */
 int	is_directory(const char *path)
 {
 	struct stat	path_stat;
@@ -23,6 +33,16 @@ int	is_directory(const char *path)
 	return (false);
 }
 
+/**
+ * @brief	Determines if a command corresponds to a known shell.
+ *
+ *			Checks the basename of cmd against a static list of known
+ *			shell names.
+ *
+ * @param	cmd	Command string to check.
+ *
+ * @return	true if cmd is a recognized shell, false otherwise.
+ */
 int	is_shell(const char *cmd)
 {
 	int					i;
@@ -48,6 +68,16 @@ int	is_shell(const char *cmd)
 	return (false);
 }
 
+/**
+ * @brief	Identifies which built-in command a string represents.
+ *
+ *			Matches cmd against known built-in commands like export,
+ *			cd, env, pwd, echo, unset, exit, or import (assignment).
+ *
+ * @param	cmd	Command string.
+ *
+ * @return	Identifier for the built-in, or BINCMD_NOEXE if none.
+ */
 int	getbin(char *cmd)
 {
 	if (!cmd)
@@ -71,6 +101,15 @@ int	getbin(char *cmd)
 	return (BINCMD_NOEXE);
 }
 
+/**
+ * @brief	Closes file descriptors associated with a command or pipeline.
+ *
+ *			Closes exe->infd and exe->outfd if >2. If child == 0, also
+ *			closes pipefds for all commands in the list.
+ *
+ * @param	lst_cmd	Command or list of commands.
+ * @param	child	Flag indicating child process (0 closes all pipefds).
+ */
 void	exe_endfd(t_list *lst_cmd, pid_t child)
 {
 	t_cmd	*exe;
@@ -93,14 +132,18 @@ void	exe_endfd(t_list *lst_cmd, pid_t child)
 }
 
 /**
- * Connects all the file descriptors between the cmd to execute
- * and the following cmd.
- * 
- * @param exe A pointer to the cmd to be executed in this current iteration.
- * @param exe_next A pointer to the next cmd to be executed.
- * @param pipefd An array of INT which saves an already initialized pipe().
- * @note Also handles heredoc redirections, saving the reading end of that
- * pipe as the [exe] infile, and closing the previous one.
+ * @brief	Sets up file descriptors for a command pipeline.
+ *
+ *			Creates a pipe if exe_next exists, assigns exe->outfd and
+ *			exe_next->infd accordingly, and stores the read end in exe.
+ *			Closes unnecessary pipe ends to avoid leaks.
+ *
+ * @param	exe			Command to execute.
+ * @param	exe_next	Next command in the pipeline.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on pipe error.
+ *
+ * @note	Also handles heredoc input by updating exe->infd.
  */
 int	exe_setfd(t_cmd *exe, t_cmd *exe_next)
 {

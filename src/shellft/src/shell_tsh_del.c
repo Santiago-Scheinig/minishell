@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 21:32:21 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 10:09:26 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:53:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,6 @@ void	shell_cleanup(int end, t_body *msh)
 	msh->head_cmd = NULL;
 	if (end && msh->head_envar)
 		ft_lstclear(&msh->head_envar, shell_delenvar);
-	if (end)
-	{
-		msh->head_envar = NULL;
-		msh->envp = NULL;
-	}
 }
 
 /**

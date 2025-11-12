@@ -6,11 +6,12 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 17:10:04 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 14:48:47 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:31:45 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
+#include "msh_psr.h"
 #include "msh_psr_bonus.h"
 #include "msh_exe_bonus.h"
 
@@ -34,6 +35,7 @@ static void	msh_init(const char **envp, t_body *msh)
 {
 	struct termios	new_term;
 
+	errno = ENOENT;
 	ft_memset(msh, 0, sizeof(t_body));
 	msh->interactive = isatty(STDIN_FILENO);
 	if (msh->interactive)
@@ -79,20 +81,24 @@ static void	msh_init(const char **envp, t_body *msh)
 int	main(int argc, char **argv, const char **envp)
 {
 	t_body	msh;
-	char	*logic_input;
+	char	*input;
 
-	errno = ENOENT;
 	msh_init(envp, &msh);
 	if (argc > 1 || argv[1])
 		shell_forcend(MSHELL_FAILURE, argv[1], &msh);
 	while (1)
 	{
-		logic_input = NULL;
-		if (logic_parser(&logic_input, &msh))
-			continue;
+		input = input_reader(&msh);
+		if (!input[0])
+		{
+			free(input);
+			continue ;
+		}
+		if (logic_parser(input, &msh))
+			continue ;
 		if (shell_sigint_read(&msh))
-			continue;
-		logic_execution(logic_input, &msh);
+			continue ;
+		logic_execution(input, &msh);
 	}
 	return (msh.exit_no);
 }

@@ -6,13 +6,27 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:29:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:30:10 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
 #include "msh_bin.h"
 
+/**
+ * @brief	Executes the corresponding built-in shell command.
+ *
+ *			Dispatches execution based on 'bin_no' to built-in
+ *			functions like export, cd, env, pwd, echo, unset,
+ *			exit, and import.
+ *
+ * @param	bin_no	Identifier of the built-in command.
+ * @param	exe		Command structure containing arguments.
+ * @param	msh		Shell context containing environment and state.
+ *
+ * @return	Exit code returned by the executed command, or
+ *			MSHELL_FAILURE if the command is invalid.
+ */
 static int	exebin(int bin_no, t_cmd *exe, t_body *msh)
 {
 	if (bin_no == BINCMD_EXPORT)
@@ -34,6 +48,19 @@ static int	exebin(int bin_no, t_cmd *exe, t_body *msh)
 	return (MSHELL_FAILURE);
 }
 
+/**
+ * @brief	Restores standard output and error after command execution.
+ *
+ *			Uses saved file descriptors in 'fd' to restore STDOUT
+ *			and STDERR. Sends any error messages read from 'errfd_read'.
+ *
+ * @param	exit_no	Exit code from executed command.
+ * @param	fd		Original file descriptors for STDOUT/STDERR.
+ * @param	errfd_read	File descriptor to read error messages.
+ * @param	msh		Shell context for interactive mode and line info.
+ *
+ * @return	0 on success, or error code from shell_redirerr().
+ */
 static int	exebin_end(int exit_no, t_orig fd, int errfd_read, t_body *msh)
 {
 	if (fd.orig_stdout > -1)
@@ -51,6 +78,18 @@ static int	exebin_end(int exit_no, t_orig fd, int errfd_read, t_body *msh)
 	return (err_msgfd(exit_no, errfd_read, msh->interactive, msh->line));
 }
 
+/**
+ * @brief	Prepares file descriptors for command execution.
+ *
+ *			Saves original STDOUT/STDERR, redirects output if necessary,
+ *			and sets up error redirection for child execution.
+ *
+ * @param	fd				Pointer to t_orig struct storing original fds.
+ * @param	errfd_write		Error redirection write descriptor.
+ * @param	exe				Command structure containing arguments and fds.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on redirection error.
+ */
 static int	exebin_ini(t_orig *fd, int *errfd_write, t_cmd *exe)
 {
 	fd->orig_stdout = -1;
@@ -71,16 +110,17 @@ static int	exebin_ini(t_orig *fd, int *errfd_write, t_cmd *exe)
 }
 
 /**
- * Executes the appropriate built-in shell command based on the
- * command name.
- * Calls the corresponding function for commands like export, cd, env, pwd,
- * echo, exit, unset, and unexport(envp not exported).
+ * @brief	Executes a built-in command in a child process.
  *
- * @param cmds An array of the comands to execute.
- * @param envp A linked list node containing environment variable data.
- * @return Returns a -1 if there is not execution inside, else exit with 0 if
- * the executed comand works, and 1 or 2 in case an error inside of the
- * commands.
+ *			Handles environment duplication if needed, calls the
+ *			corresponding built-in via exebin(), and exits with
+ *			the command's exit code.
+ *
+ * @param	exe		Command to execute with arguments.
+ * @param	envp	Environment array.
+ *
+ * @note	Memory cleanup is handled via shell_cleanup().
+ * @note	Exits the process with the proper exit code.
  */
 int	exebin_child(t_cmd *exe, char **envp)
 {
@@ -99,13 +139,27 @@ int	exebin_child(t_cmd *exe, char **envp)
 	{
 		msh.head_envar = shell_envdup_lst(envp);
 		if (!msh.head_envar)
-			err_endexe(MSHELL_FAILURE, "msh: malloc: ", NULL);
+			err_endexe(MSHELL_FAILURE, "malloc: ", NULL);
 	}
 	exit_no = exebin(bin_no, exe, &msh);
 	shell_cleanup(true, &msh);
 	exit(exit_no);
 }
 
+/**
+ * @brief	Executes a built-in command in the parent process.
+ *
+ *			Handles redirection initialization, calls exebin(),
+ *			restores original fds, and updates msh->exit_no.
+ *
+ * @param	bin_no	Identifier of the built-in command.
+ * @param	exe		Command structure containing arguments.
+ * @param	msh		Shell context containing environment and state.
+ *
+ * @note	Handles memory allocation errors and forced cleanup.
+ *
+ * @return	Exit code from the executed command.
+ */
 int	exebin_parent(int bin_no, t_cmd *exe, t_body *msh)
 {
 	t_orig	fd;

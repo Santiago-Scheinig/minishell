@@ -65,6 +65,7 @@ SOURCES = \
 	$(SOURCE_DIR)/ft_strmapi.c				\
 	$(SOURCE_DIR)/ft_strncmp.c				\
 	$(SOURCE_DIR)/ft_strnstr_ip.c			\
+	$(SOURCE_DIR)/ft_strrstr_ip.c			\
 	$(SOURCE_DIR)/ft_strnstr.c				\
 	$(SOURCE_DIR)/ft_strrchr.c				\
 	$(SOURCE_DIR)/ft_strtrim.c				\

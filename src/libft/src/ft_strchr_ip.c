@@ -6,13 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 12:53:18 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 12:54:14 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:24:53 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int is_parenthesis(char c)
+static int	is_parenthesis(char c)
 {
 	int	i;
 
@@ -22,6 +22,28 @@ int is_parenthesis(char c)
 	return (0);
 }
 
+/**
+ * @brief	Searches for a character in a string, ignoring sections
+ *			enclosed in parentheses.
+ *
+ *			Scans the string 's' for the first occurrence of 'c',
+ *			skipping any text found inside parentheses. Uses
+ *			is_parenthesis() to detect and skip balanced pairs.
+ *
+ *			Static helpers:
+ *
+ *				- is_parenthesis():	Detects '(' and returns ')'
+ *									to identify matching pairs.
+ *
+ * @param	s	String to search within.
+ * @param	c	Character to find.
+ *
+ * @note	Returns a pointer to the first valid match outside
+ *			of any parentheses, or NULL if not found.
+ *
+ * @return	Pointer to the matching character in 's', or NULL
+ *			if not found.
+ */
 char	*ft_strchr_ip(const char *s, char c)
 {
 	char	*tmp;

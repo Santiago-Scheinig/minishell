@@ -6,12 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/05 17:06:04 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:29:05 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_bin.h"
 
+/**
+ * @brief	Frees and removes a node from the environment list.
+ *
+ *			Frees the t_var struct inside 'lst_t_var' and its
+ *			name/value strings. Returns the next node in the list.
+ *
+ * @param	lst_t_var	Node to remove.
+ *
+ * @return	Pointer to the next node, or NULL if none.
+ */
 static t_list	*remove_lst(t_list *lst_t_var)
 {
 	t_list	*next_node;
@@ -29,6 +39,17 @@ static t_list	*remove_lst(t_list *lst_t_var)
 	return (next_node);
 }
 
+/**
+ * @brief	Checks if an environment string matches a variable name.
+ *
+ *			Compares characters up to '=' in 'env' and full 'name'.
+ *			Returns 1 if they match, 0 otherwise.
+ *
+ * @param	env		Environment string (e.g., "VAR=value").
+ * @param	name	Variable name to compare.
+ *
+ * @return	1 if 'env' matches 'name', 0 otherwise.
+ */
 static int	same_name_env(const char *env, const char *name)
 {
 	size_t	i;
@@ -45,6 +66,18 @@ static int	same_name_env(const char *env, const char *name)
 	return (0);
 }
 
+/**
+ * @brief	Searches for a variable and removes it if found.
+ *
+ *			Checks if the variable in '*lst_var' matches 'name'.
+ *			If found, removes it from 'envp' and the linked list.
+ *
+ * @param	name	Variable name to remove.
+ * @param	envp	Double pointer to environment array.
+ * @param	lst_var	Double pointer to current node in linked list.
+ *
+ * @return	1 if a variable was removed, 0 otherwise.
+ */
 static int	check_name(char *name, char ***envp, t_list **lst_var)
 {
 	size_t	lst_len;
@@ -73,6 +106,16 @@ static int	check_name(char *name, char ***envp, t_list **lst_var)
 	return (0);
 }
 
+/**
+ * @brief	Updates linked list pointers when a node is removed.
+ *
+ *			Sets the head pointer or the previous node's next pointer
+ *			to 'lst_t_var' after a removal operation.
+ *
+ * @param	head_var	Double pointer to head of the list.
+ * @param	prev_t_var	Previous node, or NULL if removing head.
+ * @param	lst_t_var	Current node to attach.
+ */
 static void	move_lst(t_list **head_var, t_list *prev_t_var, t_list *lst_t_var)
 {
 	if (!prev_t_var)
@@ -82,36 +125,26 @@ static void	move_lst(t_list **head_var, t_list *prev_t_var, t_list *lst_t_var)
 }
 
 /**
- * @brief	Implements the 'unset' built-in command.
+ * @brief	Implements the 'unset' shell built-in command.
  *
- *			Removes one or more variables from the shell's environment
- *			and from the linked list of stored variables.
+ *			Removes variables from the environment array and the
+ *			t_var linked list. Frees memory of removed variables.
  *
  *			Static helpers:
  *
- *				- remove_lst():		Frees and removes a node from the
- *									variable list.
+ *				- remove_lst():	Frees a node from the linked list.
+ *				- same_name_env():	Checks if env string matches a name.
+ *				- check_name():		Removes a variable from envp/list.
+ *				- move_lst():		Updates linked list pointers.
  *
- *				- same_name_env():	Checks if an environment string
- *									matches a given variable name.
+ * @param	arg			Array of variable names to unset.
+ * @param	envp		Double pointer to environment array.
+ * @param	head_t_var	Double pointer to head of t_var linked list.
  *
- *				- check_name():		Searches and removes a matching
- *									variable from both the environment
- *									array and the linked list.
+ * @note	Invalid flags (starting with '-') trigger an error.
+ * @note	Removes variables from both envp and the linked list.
  *
- * @param	arg			Array of variable names to unset. Flags
- *						(e.g., starting with '-') are rejected.
- * @param	envp		Double pointer to the environment array.
- * @param	head_t_var	Double pointer to the head of the t_var
- *						linked list storing environment variables.
- *
- * @note	If a variable exists in both envp and the linked list,
- *			it will be removed from both. The memory of its name and
- *			value is freed.
- * @note	Invalid flags trigger an error through shell_builterr().
- *
- * @return	0 on success, or an error code if input validation or
- *			memory operations fail.
+ * @return	0 on success, or error code on invalid input.
  */
 int	bin_unset(char **arg, char ***envp, t_list **head_t_var)
 {

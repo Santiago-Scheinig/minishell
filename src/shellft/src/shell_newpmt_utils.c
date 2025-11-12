@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 15:32:54 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:59:02 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:44:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,18 @@ static int	replace(char *tmp, char *value, int size)
 }
 
 /**
- * Need fix
+ * @brief	Transforms a prompt string replacing placeholders with values.
+ *
+ * 			Parses the PS1 string and replaces escape sequences with
+ *			actual values: '\u' is replaced by the username, '\w' by the
+ *			current path. Other characters after '\' are copied literally.
+ *
+ * @param	tmp		Pre-allocated buffer to store the transformed string.
+ * @param	ps1		Original prompt format string containing placeholders.
+ * @param	user	String representing the username for '\u' replacement.
+ * @param	path	String representing the path for '\w' replacement.
+ *
+ * @return	Pointer to the buffer tmp containing the transformed prompt.
  */
 char	*transform_format(char *tmp, char *ps1, char *user, char *path)
 {

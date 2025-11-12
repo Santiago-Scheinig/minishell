@@ -6,13 +6,24 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:35:15 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/05 15:40:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:48:17 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
 #include "msh_psr_bonus.h"
 
+/**
+ * @brief	Appends a new match string to the matches array.
+ *
+ * 			Allocates memory to expand the array of strings, copies
+ *			existing matches, and adds a new name at the end.
+ *
+ * @param	matches	Double pointer to the array of matched strings.
+ * @param	names	New string to append to the matches array.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on allocation error.
+ */
 static int	add_match(char ***matches, char *names)
 {
 	char	**aux;
@@ -39,6 +50,18 @@ static int	add_match(char ***matches, char *names)
 	return (MSHELL_SUCCESS);
 }
 
+/**
+ * @brief	Recursively matches a string against a wildcard mask.
+ *
+ * 			Supports '*' wildcards and literal character matching.
+ *			Returns success if the name fits the pattern and mask.
+ *
+ * @param	str		String pattern containing wildcards.
+ * @param	mask	Mask indicating valid wildcard positions ('O').
+ * @param	name	String to match against the pattern.
+ *
+ * @return	MSHELL_SUCCESS if match succeeds, MSHELL_FAILURE otherwise.
+ */
 static int	wild_match(char *str, char *mask, char *name)
 {
 	if (!str[0])
@@ -60,6 +83,16 @@ static int	wild_match(char *str, char *mask, char *name)
 	return (MSHELL_FAILURE);
 }
 
+/**
+ * @brief	Validates if a string contains usable wildcard positions.
+ *
+ * 			Checks that '*' characters in str correspond to 'O' in mask.
+ *
+ * @param	str		String pattern to validate.
+ * @param	mask	Mask indicating which '*' positions are valid.
+ *
+ * @return	1 if valid wildcards exist, 0 if no wildcards, 0 if invalid.
+ */
 static int	valid_str(char *str, char *mask)
 {
 	int	valid;
@@ -79,6 +112,18 @@ static int	valid_str(char *str, char *mask)
 	return (valid);
 }
 
+/**
+ * @brief	Expands wildcard patterns by matching names in a directory.
+ *
+ * 			Iterates over the names array, matches each name against
+ *			the token's wildcard pattern, and appends matches to matches.
+ *
+ * @param	names	Array of strings (e.g., filenames) to match against.
+ * @param	matches	Double pointer to store matched strings.
+ * @param	head	Linked list node containing the current token.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on memory error.
+ */
 int	wildcard(char **names, char ***matches, t_list *head)
 {
 	t_token	*token;
@@ -97,6 +142,17 @@ int	wildcard(char **names, char ***matches, t_list *head)
 	return (MSHELL_SUCCESS);
 }
 
+/**
+ * @brief	Copies a directory entry name into a dynamic names array.
+ *
+ * 			Reallocates the array to add one more entry, then duplicates
+ *			the directory name into the new slot.
+ *
+ * @param	names	Double pointer to the array of names.
+ * @param	dir		Name of the directory entry to copy.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on memory error.
+ */
 int	copy_name(char ***names, char *dir)
 {
 	char	**tmp;

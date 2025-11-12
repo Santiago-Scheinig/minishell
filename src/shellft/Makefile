@@ -22,9 +22,6 @@ SOURCES = \
 	$(SOURCE_DIR)/shell_newtkn.c 		\
 	$(SOURCE_DIR)/shell_sigdlr.c 		\
 	$(SOURCE_DIR)/shell_sigdlr_utils.c 	\
-	$(SOURCE_DIR)/shell_split.c 		\
-	$(SOURCE_DIR)/shell_split_chr.c 	\
-	$(SOURCE_DIR)/shell_split_utils.c 	\
 	$(SOURCE_DIR)/shell_tsh.c 			\
 	$(SOURCE_DIR)/shell_tsh_del.c
 

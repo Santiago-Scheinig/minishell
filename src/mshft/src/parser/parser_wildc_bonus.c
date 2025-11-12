@@ -6,13 +6,26 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 17:56:02 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:34:00 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:39:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
 #include "msh_psr_bonus.h"
 
+/**
+ * @brief	Reads the current directory and collects visible file names.
+ *
+ *			Opens the current directory (".") and iterates over all
+ *			entries. Hidden files (starting with '.') are skipped.
+ *			Each name is copied into the provided names array via
+ *			copy_name(). On allocation failure, exits via shell_forcend().
+ *
+ * @param	names	Pointer to an array of strings to store file names.
+ * @param	msh		Pointer to the shell state for memory/error handling.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on opendir failure.
+ */
 static int	dir_names(char ***names, t_body *msh)
 {
 	struct dirent	*entry;
@@ -41,6 +54,18 @@ static int	dir_names(char ***names, t_body *msh)
 	return (MSHELL_SUCCESS);
 }
 
+/**
+ * @brief	Adds a list of strings as new tokens to a token list.
+ *
+ *			Iterates through split[] in reverse order and adds each
+ *			element to token_lst as a new token. Frees the split array
+ *			after insertion. On memory allocation failure, calls
+ *			shell_forcend().
+ *
+ * @param	split		Array of strings to add as tokens.
+ * @param	token_lst	Linked list of tokens to append to.
+ * @param	msh			Shell state pointer for memory/error handling.
+ */
 static void	add_to_list(char **split, t_list *token_lst, t_body *msh)
 {
 	int		i;
@@ -67,6 +92,18 @@ static void	add_to_list(char **split, t_list *token_lst, t_body *msh)
 	free(split);
 }
 
+/**
+ * @brief	Expands wildcard patterns in tokens to matching filenames.
+ *
+ *			Builds a list of names in the current directory, then for
+ *			each token in msh->head_token, finds matches via wildcard().
+ *			Matching strings are added as new tokens. Frees temporary
+ *			memory arrays. On allocation failure, calls shell_forcend().
+ *
+ * @param	msh		Shell state containing token list and environment.
+ *
+ * @return	MSHELL_SUCCESS on success.
+ */
 int	parser_wildcard(t_body *msh)
 {
 	t_list	*token_lst;

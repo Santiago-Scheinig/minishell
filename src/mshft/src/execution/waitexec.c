@@ -6,12 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 21:11:35 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 13:06:59 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:36:39 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
 
+/**
+ * @brief	Returns a string describing a signal code.
+ *
+ *			Matches sig against a static array of known signals
+ *			and returns the corresponding message string.
+ *
+ * @param	sig	Signal number.
+ *
+ * @return	Message string if found, or NULL otherwise.
+ */
 static const char	*status_sigmsg(int sig)
 {
 	int						i;
@@ -35,6 +45,20 @@ static const char	*status_sigmsg(int sig)
 	return (NULL);
 }
 
+/**
+ * @brief	Checks a child process exit status and prints errors.
+ *
+ *			Handles both normal exit codes and signals. Prints
+ *			signal messages (with "core dumped" if applicable)
+ *			or forwards exit codes to err_msgfd().
+ *
+ * @param	status	Status from waitpid().
+ * @param	errfd	File descriptor for error messages.
+ * @param	inter	Interactive mode flag.
+ * @param	line	Input line number for reporting.
+ *
+ * @return	Exit code for the child process or MSHELL_FAILURE.
+ */
 int	check_status(int status, int errfd, int inter, int line)
 {
 	const char	*msg = NULL;
@@ -62,14 +86,18 @@ int	check_status(int status, int errfd, int inter, int line)
 }
 
 /**
- * Waits for every child process executed to finish before exiting the
- * pipex program.
- * 
- * @param env The main enviroment pipex structure.
- * @param exit_status The status which the pipex program will exit.
- * @return If exit_error is false returns 0; else will return -1;
- * @note If any waitpid fails to execute, the program will exit by
- * force and non waited childs will remain as zombie.
+ * @brief	Waits for all child processes and updates shell status.
+ *
+ *			Iterates through msh->childs_pid, waits for each child,
+ *			and updates msh->exit_no and msh->input_result. Handles
+ *			errors from waitpid().
+ *
+ * @param	msh		Shell context containing child pids, error fds,
+ *					line number, and interactive mode flag.
+ *
+ * @return	MSHELL_SUCCESS after all children have been waited for.
+ *
+ * @note	Non-waited children may become zombies if waitpid fails.
  */
 int	waitexec(t_body *msh)
 {
@@ -93,6 +121,7 @@ int	waitexec(t_body *msh)
 			msh->exit_no = check_status(status, msh->err_fd[i], inter, line);
 			if (msh->exit_no)
 				msh->input_result = MSHELL_FAILURE;
+			msh->childs_pid[i] = -1;
 		}
 		lst_cmd = lst_cmd->next;
 	}

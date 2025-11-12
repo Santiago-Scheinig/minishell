@@ -6,12 +6,24 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 17:56:59 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/05 16:38:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:43:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_std.h"
 
+/**
+ * @brief	Updates the special environment variable '_' with last cmd.
+ *
+ * 			Creates a string "_=cmd" and updates the linked list of
+ *			environment variables and envp array. Adds it if it doesn't exist.
+ *
+ * @param	cmd		Last executed command string to store.
+ * @param	envp	Double pointer to the environment variables array.
+ * @param	head_envp	Linked list head of environment variables (t_var nodes).
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on memory error.
+ */
 int	shell_lastcmd_upd(char *cmd, char ***envp, t_list *head_envp)
 {
 	char	*var;

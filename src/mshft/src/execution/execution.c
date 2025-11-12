@@ -6,12 +6,23 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 09:25:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:32:57 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_exe.h"
 
+/**
+ * @brief	Extracts and splits the PATH variable from the environment.
+ *
+ *			Searches envp for the variable "PATH=" and splits its
+ *			value into an array of directory strings using ':' as
+ *			delimiter.
+ *
+ * @param	envp	Environment array.
+ *
+ * @return	Array of PATH directories, or NULL if PATH not found.
+ */
 static char	**setup_path(const char **envp)
 {
 	int	i;
@@ -23,6 +34,16 @@ static char	**setup_path(const char **envp)
 	return (NULL);
 }
 
+/**
+ * @brief	Configures file descriptors for all commands in the pipeline.
+ *
+ *			Iterates through lst_cmd and calls exe_setfd() for each
+ *			command, connecting stdout of one to stdin of the next.
+ *
+ * @param	lst_cmd	Linked list of commands to set up.
+ *
+ * @return	MSHELL_SUCCESS on success, or error code if redirection fails.
+ */
 static int	setup_pipeline(t_list *lst_cmd)
 {
 	t_list	*aux;
@@ -48,6 +69,14 @@ static int	setup_pipeline(t_list *lst_cmd)
 	return (MSHELL_SUCCESS);
 }
 
+/**
+ * @brief	Prepares the shell structure for command execution.
+ *
+ *			Allocates msh->childs_pid and msh->err_fd arrays based
+ *			on the number of commands to be executed.
+ *
+ * @param	msh		Shell context to initialize.
+ */
 static void	setup_waitexec(t_body *msh)
 {
 	int	cmd_len;
@@ -62,6 +91,17 @@ static void	setup_waitexec(t_body *msh)
 	ft_memset(msh->err_fd, -1, cmd_len * sizeof(int));
 }
 
+/**
+ * @brief	Performs all setup required before executing commands.
+ *
+ *			Calls setup_waitexec(), setup_pipeline(), and
+ *			setup_path(). Handles allocation errors and ensures
+ *			PATH array exists.
+ *
+ * @param	msh		Shell context to prepare.
+ *
+ * @return	Array of PATH directories for command search, or NULL on failure.
+ */
 static char	**setup(t_body *msh)
 {
 	char	**path;
@@ -86,6 +126,19 @@ static char	**setup(t_body *msh)
 	return (path);
 }
 
+/**
+ * @brief	Main execution function for the minishell.
+ *
+ *			Handles single built-in commands via exebin_parent(),
+ *			or multiple commands via execmd_child(). Sets up signal
+ *			handling and PATH array.
+ *
+ * @param	msh		Shell context with commands, environment, and state.
+ *
+ * @note	Handles interactive mode signals and cleans up on errors.
+ *
+ * @return	Exit code of the executed commands, or MSHELL_FAILURE on error.
+ */
 int	execution(t_body *msh)
 {
 	t_cmd	*exe;

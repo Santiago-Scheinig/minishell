@@ -6,14 +6,25 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 17:11:59 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 11:11:25 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:48:09 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
 #include "msh_psr_bonus.h"
 
-static int logic_parser_parenthesis(t_list *head_logic)
+/**
+ * @brief	Checks for balanced parentheses in a token list.
+ *
+ *			Increments count for '(' and decrements for ')'. Prints
+ *			error if closing parenthesis occurs without matching open
+ *			or if any are left unmatched at the end.
+ *
+ * @param	head_logic	Linked list of logic tokens.
+ *
+ * @return	MSHELL_SUCCESS if balanced, error code otherwise.
+ */
+static int	logic_parser_parenthesis(t_list *head_logic)
 {
 	t_logic		*aux;
 	const char	*errmsh = "msh: syntax error: unclosed parenthesis\n";
@@ -38,7 +49,18 @@ static int logic_parser_parenthesis(t_list *head_logic)
 	return (MSHELL_SUCCESS);
 }
 
-static int logic_parser_operators(t_list *head_logic, t_body *msh)
+/**
+ * @brief	Validates logical operator placement in token list.
+ *
+ *			Ensures '&&' and '||' only follow an input token or ')'.
+ *			Also ensures input does not end with an operator.
+ *
+ * @param	head_logic	Linked list of logic tokens.
+ * @param	msh			Main shell structure for error handling.
+ *
+ * @return	MSHELL_SUCCESS if syntax valid, error code otherwise.
+ */
+static int	logic_parser_operators(t_list *head_logic, t_body *msh)
 {
 	t_logic	*aux;
 	char	*current;
@@ -64,6 +86,17 @@ static int logic_parser_operators(t_list *head_logic, t_body *msh)
 	return (MSHELL_SUCCESS);
 }
 
+/**
+ * @brief	Tokenizes a split string into logic token linked list.
+ *
+ *			Creates a t_logic struct for each string, wraps it in
+ *			a t_list node, and appends to head_logic.
+ *
+ * @param	split		NULL-terminated array of token strings.
+ * @param	head_logic	Pointer to head of token list to populate.
+ *
+ * @return	MSHELL_SUCCESS if successful, MSHELL_FAILURE on malloc error.
+ */
 static int	logic_tknizer(char **split, t_list **head_logic)
 {
 	t_list	*new_node;
@@ -92,6 +125,17 @@ static int	logic_tknizer(char **split, t_list **head_logic)
 	return (MSHELL_SUCCESS);
 }
 
+/**
+ * @brief	Performs syntax checks on logical token array.
+ *
+ *			Calls logic_tknizer(), then validates parentheses and
+ *			operator placement. Frees token list on failure.
+ *
+ * @param	split	Array of split strings to parse.
+ * @param	msh		Main shell structure for error handling.
+ *
+ * @return	MSHELL_SUCCESS if syntax valid, MSHELL_FAILURE otherwise.
+ */
 static int	logic_syntax(char **split, t_body *msh)
 {
 	t_list		*head_logic;
@@ -103,7 +147,7 @@ static int	logic_syntax(char **split, t_body *msh)
 		shell_forcend(MSHELL_FAILURE, "malloc", msh);
 	}
 	if (logic_parser_parenthesis(head_logic)
-	|| logic_parser_operators(head_logic, msh))
+		|| logic_parser_operators(head_logic, msh))
 	{
 		ft_lstclear(&head_logic, shell_dellogic);
 		return (MSHELL_FAILURE);
@@ -112,31 +156,31 @@ static int	logic_syntax(char **split, t_body *msh)
 	return (MSHELL_SUCCESS);
 }
 
-int	logic_parser(char **logic_input, t_body *msh)
+/**
+ * @brief	Main logic parser for input with &&, ||, and parentheses.
+ *
+ *			Splits input based on operators and spaces, then performs
+ *			syntax validation.
+ *
+ * @param	input	Input string from user.
+ * @param	msh		Main shell structure.
+ *
+ * @return	MSHELL_SUCCESS if input is syntactically correct,
+ *			MSHELL_FAILURE otherwise.
+ */
+int	logic_parser(char *input, t_body *msh)
 {
-	char		*input;
+	int			i;
 	char		**split;
 	const char	*l_base[] = {
 		"(", ")", "&&", "||", NULL,
 	};
 
-	input = input_reader(msh);
-	if (!input[0])
-	{
-		free(input);
-		return (MSHELL_FAILURE);
-	}
+	i = -1;
 	split = ft_split_iqbase(input, ' ', l_base);
 	if (!split)
-	{
-		free(input);
 		shell_forcend(MSHELL_FAILURE, "malloc", msh);
-	}
 	if (logic_syntax(split, msh))
-	{
-		free(input);
 		return (MSHELL_FAILURE);
-	}
-	(*logic_input) = input;
 	return (MSHELL_SUCCESS);
 }

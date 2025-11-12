@@ -6,20 +6,22 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 14:58:42 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/20 16:06:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:47:31 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_psr.h"
 
 /**
- * Calculates the length of the enviroment variable name.
- * 
- * @param var A pointer to the WORD string on the position where the
- * enviromental variable name starts (Position on the '$').
- * @return The lenght of the enviroment variable name.
- * @note The minimum lenght size of a enviroment variable is always one,
- * on behalf of the '$' sign.
+ * @brief	Calculates the length of an environment variable name.
+ *
+ *			Starts at the '$' sign and counts alphanumeric characters
+ *			and underscores, or '?' as a special variable.
+ *
+ * @param	envar	Pointer to string starting at '$'.
+ *
+ * @return	Length of the variable name including '$' or '?'.
+ * @note	The minimum length is always 1 for the '$' character.
  */
 int	envar_len(char *envar)
 {
@@ -34,13 +36,14 @@ int	envar_len(char *envar)
 }
 
 /**
- * Allocates and returns a clean STRING with only the enviromental variable
- * name, to search into getenv().
- * 
- * @param var A pointer to the WORD string on the position where the
- * enviromental variable name starts (Position after the '$').
- * @return A pointer to a new allocated STRING that only includes the name
- * of the enviromental variable.
+ * @brief	Extracts the environment variable name into a new string.
+ *
+ *			Allocates memory and copies only the variable name (with '$')
+ *			from envar to a clean string for getenv-like lookup.
+ *
+ * @param	envar	String starting at the '$' of the variable name.
+ *
+ * @return	Pointer to newly allocated string containing the variable.
  */
 char	*envar_pathname(char *envar)
 {
@@ -59,18 +62,19 @@ char	*envar_pathname(char *envar)
 }
 
 /**
- * Expands an enviromental variable mask and returs the modified value.
- * 
- * @param word A pointer to the WORD token where to expand.
- * @param start The position index of the enviromental variable on 
- * the WORD token string.
- * @param envar_len The length of the enviromental variable's name.
- * @param value_len The length of the enviromental variable's value.
- * @return A pointer to the expanded STRING.
- * @note If value_len is zero, no allocation is made and the original
- * [mask] becomes cut removing the enviromental variable name mask of it.
- * Otherwise, it reallocates the new expanded string and returns
- * it.
+ * @brief	Expands a masked environment variable in a string.
+ *
+ *			Replaces the mask of length len.var at start with a string
+ *			of length len.val. Shifts the rest of the string to accommodate.
+ *
+ * @param	start	Index in mask to start expansion.
+ * @param	str		String to insert (value of env variable).
+ * @param	mask	String containing original mask.
+ * @param	len		Pair struct containing variable and value lengths.
+ *
+ * @return	Expanded string or original mask if value length is zero.
+ * @note	Mallocs a new string if expansion length differs;
+ * 			else shifts in-place.
  */
 char	*exp_mask(int start, char *str, char *mask, t_envar_pair len)
 {
@@ -102,17 +106,17 @@ char	*exp_mask(int start, char *str, char *mask, t_envar_pair len)
 }
 
 /**
- * Expands an enviromental variable and returs the modified value.
- * 
- * @param str A pointer to the WORD string where to expand.
- * @param value A pointer to the STRING value of the enviromental variable.
- * @param start An index to the start position of the enviromental
- * variable on [str].
- * @return A pointer to the expanded STRING.
- * @note If value is NULL, no allocation is made and the original
- * [str] becomes cut removing the enviromental variable name of it.
- * Otherwise, it reallocates the new expanded string and returns
- * it.
+ * @brief	Expands an environment variable with a specific value.
+ *
+ *			If value is NULL, removes the variable mask from str.
+ *			Otherwise, allocates a new string with the value inserted.
+ *
+ * @param	start	Index in str where variable begins.
+ * @param	str		Original string containing variable mask.
+ * @param	value	Value to replace the mask with.
+ *
+ * @return	Newly allocated string with expansion, or modified str.
+ * @note	Frees original str if allocation occurs.
  */
 char	*exp_value(int start, char *str, char *value)
 {
@@ -141,6 +145,18 @@ char	*exp_value(int start, char *str, char *value)
 	return (exp_str);
 }
 
+/**
+ * @brief	Expands the special $? variable with the last exit number.
+ *
+ *			Converts exit_no to string and replaces variable at start.
+ *
+ * @param	start	Index in str where '$?' begins.
+ * @param	exit_no	Last command exit code.
+ * @param	str		Pointer to original string.
+ * @param	mask	Pointer to mask string.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on allocation error.
+ */
 int	exp_exitno(int start, int exit_no, char **str, char **mask)
 {
 	char	*envar_value;

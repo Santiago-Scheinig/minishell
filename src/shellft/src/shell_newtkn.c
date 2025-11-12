@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 02:03:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:46:31 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:53:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,38 @@ static char	*maskstr(char *str, char *base)
 			mask_str[i] = 'N';
 	}
 	return (mask_str);
+}
+
+/**
+ * @brief	Identifies the type of a shell token from a string.
+ *
+ *			Checks the input string against known shell operators:
+ *			PIPE ("|"), REDIR_APPEND (">>"), HEREDOC ("<<"), REDIR_IN ("<"),
+ *			and REDIR_OUT (">"). Returns WORD for non-operator strings and
+ *			END for NULL or empty strings.
+ *
+ * @param	str	Pointer to the string to analyze.
+ *
+ * @note	Token types must match the predefined constants used in the shell.
+ *
+ * @return	Integer representing the token type (END, PIPE, REDIR_APPEND,
+ *			HEREDOC, REDIR_IN, REDIR_OUT, or WORD).
+ */
+int	get_token_type(char *str)
+{
+	if (!str || !str[0])
+		return (END);
+	if (!ft_strncmp(str, "|", 1))
+		return (PIPE);
+	if (!ft_strncmp(str, ">>", 2))
+		return (REDIR_APPEND);
+	if (!ft_strncmp(str, "<<", 2))
+		return (HEREDOC);
+	if (!ft_strncmp(str, "<", 1))
+		return (REDIR_IN);
+	if (!ft_strncmp(str, ">", 1))
+		return (REDIR_OUT);
+	return (WORD);
 }
 
 /**

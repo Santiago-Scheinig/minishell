@@ -114,14 +114,14 @@ $(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.c | $(DEPEND_DIR) $(OBJECT_DIR)
 # Link main executable
 # Order: compiler, object files, library paths, libraries, output
 $(NAME): $(LIBS) msg $(MAIN_OBJ)
-	@printf "\r\t$(COLOR_CYAN)[OK] Main compiled successfully.\n$(COLOR_RESET)"
 	@$(CC) $(CFLAGS) $(MAIN_OBJ) $(LDFLAGS) $(LINK_LIBS) -o $@
+	@printf "\r\t$(COLOR_CYAN)[OK] Main compiled successfully.\n$(COLOR_RESET)"
 	@echo "$(COLOR_BLUE)[✓] $(NAME) - Linked successfully$(COLOR_RESET)\n"
 
 # Link bonus executable
 $(NAME_BONUS): libs_bonus msg_bonus $(BONUS_OBJ)
-	@printf "\r\t$(COLOR_CYAN)[OK] Main compiled successfully.\n$(COLOR_RESET)"
 	@$(CC) $(CFLAGS) -D BONUS=1 $(BONUS_OBJ) $(LDFLAGS) $(LINK_LIBS_BONUS) -o $@
+	@printf "\r\t$(COLOR_CYAN)[OK] Main compiled successfully.\n$(COLOR_RESET)"
 	@echo "$(COLOR_BLUE)[✓] $(NAME) - Linked successfully$(COLOR_RESET)\n"
 
 # ================================ Cleanup Rules ===================================== #
@@ -130,10 +130,10 @@ $(NAME_BONUS): libs_bonus msg_bonus $(BONUS_OBJ)
 clean:
 	@$(foreach lib, $(LIBS), $(MAKE) -s -C $(SOURCE_DIR)/$(lib) clean;)
 	@rm -rf $(OBJECT_DIR) $(DEPEND_DIR)
-	@echo "$(COLOR_BLUE)[i] Cleaned build artifacts$(COLOR_RESET)"
+	@echo "$(COLOR_BLUE)[i] Cleaned build artifacts$(COLOR_RESET)\n"
 
 # Remove everything including executables
-fclean:
+fclean: clean
 	@$(foreach lib, $(LIBS), $(MAKE) -s -C $(SOURCE_DIR)/$(lib) fclean;)
 	@rm -f $(NAME) $(NAME_BONUS)
 	@echo "$(COLOR_RED)[x] Full clean complete$(COLOR_RESET)\n"

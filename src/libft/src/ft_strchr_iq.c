@@ -6,13 +6,13 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:15:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 12:53:00 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:18:59 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int is_quote(char c)
+int	is_quote(char c)
 {
 	int	i;
 

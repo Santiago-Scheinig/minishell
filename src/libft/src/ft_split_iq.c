@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:45:24 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/10 06:07:30 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 13:12:19 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static	int	wrdlen(char const *s, char c)
 
 	i = 0;
 	tmp = NULL;
-	while (s[i] != c && s[i])
+	while (s[i] && s[i] != c)
 	{
 		if (s[i] == '\'')
 		{
@@ -34,7 +34,7 @@ static	int	wrdlen(char const *s, char c)
 			quote = '\"';
 		}
 		if (tmp && ++i)
-			while (s[i] != quote)
+			while (s[i] && s[i] != quote)
 				i++;
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 05:11:45 by root              #+#    #+#             */
-/*   Updated: 2025/10/10 06:06:15 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:23:24 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,35 @@
 #include "libft_utils.h"
 
 /**
- * @brief	Frees a NULL-terminated array of strings.
+ * @brief	Frees a NULL-terminated array of strings or one entry.
  *
- *			Iterates through the array 'txt', freeing each string
- *			and setting its pointer to NULL. Returns NULL for
- *			convenience in assignments.
+ *			If errno equals ENOMEM, frees all strings in 'txt' and
+ *			sets them to NULL. Otherwise, frees only the element
+ *			at index 'fd'. Always returns NULL for convenience.
  *
- * @param	txt		Array of strings to free.
+ * @param	txt		Array of strings (buffers per file descriptor).
+ * @param	fd		File descriptor index to free if not ENOMEM.
+ *
+ * @note	Used as a cleanup helper for ft_get_next_line() on
+ *			allocation failure or end of input.
  *
  * @return	NULL always.
  */
-static	void	*forcend(char **txt)
+static	void	*forcend(char **txt, int fd)
 {
 	int		i;
 
 	i = -1;
-	while (txt[++i])
+	if (errno == ENOMEM)
 	{
-		free(txt[i]);
-		txt[i] = NULL;
+		while (txt[++i])
+		{
+			free(txt[i]);
+			txt[i] = NULL;
+		}
 	}
+	else
+		free(txt[fd]);
 	return (NULL);
 }
 
@@ -176,7 +185,7 @@ char	*ft_get_next_line(int fd)
 		return (NULL);
 	txt[fd] = read_text(txt[fd], fd);
 	if (!txt[fd])
-		return (forcend(txt));
+		return (forcend(txt, fd));
 	if (!txt[fd][0])
 	{
 		free(txt[fd]);
@@ -186,6 +195,6 @@ char	*ft_get_next_line(int fd)
 	else
 		line = line_text(&txt[fd]);
 	if (!line && txt[fd])
-		return (forcend(txt));
+		return (forcend(txt, fd));
 	return (line);
 }

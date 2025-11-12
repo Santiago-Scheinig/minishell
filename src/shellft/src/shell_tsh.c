@@ -6,12 +6,28 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:47:44 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:45:00 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell_std.h"
 
+/**
+ * @brief	Handles errors related to here-documents.
+ *
+ * 			Checks errno and prints appropriate warnings for
+ *			here-document issues. Handles memory allocation errors,
+ *			end-of-file without delimiter, and normal closure of
+ *			the here-document pipe.
+ *
+ * @param	limit	String used as the delimiter for the here-document.
+ * @param	errft	Pointer to store the error function context if needed.
+ * @param	hdoc_fd	Array containing here-document pipe file descriptors.
+ * @param	msh		Pointer to the shell context structure.
+ *
+ * @return	On success returns the reading end of the here-doc pipe,
+ *			else returns MSHELL_FAILURE.
+ */
 int	shell_hderr(char *limit, char *errft, int hdoc_fd[2], t_body *msh)
 {
 	const char	*msg[3] = {
@@ -37,13 +53,28 @@ int	shell_hderr(char *limit, char *errft, int hdoc_fd[2], t_body *msh)
 	return (MSHELL_FAILURE);
 }
 
+/**
+ * @brief	Prints standardized error messages for built-in commands.
+ *
+ * 			Handles multiple types of errors: invalid flags, numeric
+ *			argument errors, too many arguments, invalid identifiers,
+ *			and system call failures. Prints usage messages as needed.
+ *
+ * @param	binerr	Integer code representing the type of error.
+ * @param	cmd		Command name associated with the error.
+ * @param	usage	String describing expected usage or argument.
+ * @param	flag	Character representing the invalid flag, if any.
+ *
+ * @return	MSHELL_FAILURE in general, or MSHELL_MISSUSE if a flag
+ *			error is present.
+ */
 int	shell_binerr(int binerr, char *cmd, char *usage, char flag)
 {
 	if (binerr == INVFLGS && flag)
-		ft_fprintf(STDERR_FILENO, "msh: -%c: invalid option\n", flag);
+		ft_fprintf(STDERR_FILENO, "-%c: invalid option\n", flag);
 	else if (binerr == INVFLGS)
-		ft_fprintf(STDERR_FILENO, "msh: -: invalid option\n");
-	ft_fprintf(STDERR_FILENO, "msh: %s: ", cmd);
+		ft_fprintf(STDERR_FILENO, "-: invalid option\n");
+	ft_fprintf(STDERR_FILENO, "%s: ", cmd);
 	if (binerr == SYSFAIL)
 		perror(usage);
 	if (binerr == INVARGC)

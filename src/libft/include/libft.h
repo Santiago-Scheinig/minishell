@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 14:12:33 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:01:30 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -754,6 +754,28 @@ void		*ft_split_free(char **split);
  */
 char		*ft_strchr(const char *s, int c);
 
+/**
+ * @brief	Searches for a character in a string, ignoring sections
+ *			enclosed in parentheses.
+ *
+ *			Scans the string 's' for the first occurrence of 'c',
+ *			skipping any text found inside parentheses. Uses
+ *			is_parenthesis() to detect and skip balanced pairs.
+ *
+ *			Static helpers:
+ *
+ *				- is_parenthesis():	Detects '(' and returns ')'
+ *									to identify matching pairs.
+ *
+ * @param	s	String to search within.
+ * @param	c	Character to find.
+ *
+ * @note	Returns a pointer to the first valid match outside
+ *			of any parentheses, or NULL if not found.
+ *
+ * @return	Pointer to the matching character in 's', or NULL
+ *			if not found.
+ */
 char		*ft_strchr_ip(const char *s, char c);
 
 /**
@@ -865,6 +887,20 @@ size_t		ft_strlen(const char *s);
  */
 int			ft_strlen_chr(char *str, char c);
 
+/**
+ * @brief	Calculates length of a string until a given substring.
+ *
+ *			Iterates through 'str' counting characters until the
+ *			substring 'end' is found. Stops when 'end' matches or
+ *			when the end of 'str' is reached.
+ *
+ * @param	str		String to measure.
+ * @param	end		Substring marking the stopping point.
+ *
+ * @note	If 'end' is not found, returns the full string length.
+ *
+ * @return	Number of characters read before 'end' or end of string.
+ */
 int			ft_strlen_str(char *str, const char *end);
 
 /**
@@ -896,7 +932,56 @@ char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
  */
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 
+/**
+ * @brief	Finds a substring in a string, ignoring quotes and
+ *			parentheses.
+ *
+ *			Searches for the substring 'little' in the string 'big'
+ *			up to 'len' characters, skipping over segments inside
+ *			parentheses or quotes. Behaves like ft_strnstr() but
+ *			with syntax-aware parsing.
+ *
+ *			Static helpers:
+ *
+ *				- jump_parenthesis():	Skips text inside '()'.
+ *				- jump_quotes():		Skips text inside quotes.
+ *
+ * @param	big		String to search within.
+ * @param	little	Substring to find.
+ * @param	len		Maximum number of characters to search.
+ *
+ * @note	Search stops when 'little' is found outside ignored
+ *			sections or end of string is reached.
+ *
+ * @return	Pointer to first match of 'little' in 'big', or NULL
+ *			if not found.
+ */
 char		*ft_strnstr_ip(const char *big, const char *little, size_t len);
+
+/**
+ * @brief	Finds the last occurrence of a substring ignoring quotes
+ *			and parentheses.
+ *
+ *			Searches backward in 'big' up to 'len' characters,
+ *			skipping sections inside parentheses or quotes. Returns
+ *			the last occurrence found outside ignored segments.
+ *
+ *			Static helpers:
+ *
+ *				- match_at():		Checks if substring matches at index.
+ *				- update_state():	Tracks parentheses and quote state.
+ *
+ * @param	big			String to search in.
+ * @param	little		Substring to find.
+ * @param	len			Maximum number of characters to search.
+ *
+ * @note	Returns NULL if 'little' is empty or not found outside
+ *			ignored segments.
+ *
+ * @return	Pointer to last match of 'little' in 'big', or
+ *			NULL if not found.
+ */
+char		*ft_strrstr_ip(const char *big, const char *little, size_t len);
 
 /**
  * @brief	Searches for a substring within a limited length of a string.

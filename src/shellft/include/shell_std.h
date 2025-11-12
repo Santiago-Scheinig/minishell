@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 11:17:56 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:56:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,10 +357,33 @@ int			shell_envlst_swp(int e, char *var, char ***envp, t_list *lst_envp);
 void		shell_envsort(t_list **hlst_envp);
 
 /**
- * REWRITE
+ * @brief	Adds a new token node after the given list node or rewrites it.
+ *
+ * 			If i is 0, rewrites the current token node using rewrite_node().
+ *			Otherwise, creates a new t_token with the string and base,
+ *			marks it as WORD, and inserts it after lst_tkn in the list.
+ *
+ * @param	i		Index flag; 0 = rewrite, otherwise insert new node.
+ * @param	str		String to store in the token.
+ * @param	base	Base/mask information for the token.
+ * @param	lst_tkn	List node after which to add the new token.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on memory error.
  */
 int			shell_lstadd_newtkn(int i, char *str, char *base, t_list *lst_tkn);
 
+/**
+ * @brief	Updates the special environment variable '_' with last cmd.
+ *
+ * 			Creates a string "_=cmd" and updates the linked list of
+ *			environment variables and envp array. Adds it if it doesn't exist.
+ *
+ * @param	cmd		Last executed command string to store.
+ * @param	envp	Double pointer to the environment variables array.
+ * @param	head_envp	Linked list head of environment variables (t_var nodes).
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on memory error.
+ */
 int			shell_lastcmd_upd(char *cmd, char ***envp, t_list *head_envp);
 
 /**
@@ -421,7 +444,20 @@ t_var		*shell_newenv(const char *envp, int exported);
 char		*shell_newpmt(t_list *lst_envp);
 
 /**
- * REWRITE
+ * @brief	Creates and initializes a new shell token.
+ *
+ *			Allocates a t_token structure, zeroes it with ft_memset(), and
+ *			assigns the input string. Determines the token type using
+ *			get_token_type(). For WORD tokens, duplicates the mask with
+ *			mask_dup() to track character masking.
+ *
+ * @param	str	Pointer to the string representing the token.
+ *
+ * @note	Returns NULL if memory allocation fails.
+ * @note	The mask field is only set for WORD tokens; other types leave it
+ * 			NULL.
+ *
+ * @return	Pointer to the newly allocated t_token structure, or NULL on error.
  */
 t_token		*shell_newtkn(char *str, char *base);
 
@@ -529,8 +565,39 @@ int			shell_sigquit(void);
 /*-----------------------------SHELL TROUBLESHOOT---------------------------*/
 /*--------------------------------------------------------------------------*/
 
+/**
+ * @brief	Handles errors related to here-documents.
+ *
+ * 			Checks errno and prints appropriate warnings for
+ *			here-document issues. Handles memory allocation errors,
+ *			end-of-file without delimiter, and normal closure of
+ *			the here-document pipe.
+ *
+ * @param	limit	String used as the delimiter for the here-document.
+ * @param	errft	Pointer to store the error function context if needed.
+ * @param	hdoc_fd	Array containing here-document pipe file descriptors.
+ * @param	msh		Pointer to the shell context structure.
+ *
+ * @return	On success returns the reading end of the here-doc pipe,
+ *			else returns MSHELL_FAILURE.
+ */
 int			shell_hderr(char *limit, char *errft, int hdoc_fd[2], t_body *msh);
 
+/**
+ * @brief	Prints standardized error messages for built-in commands.
+ *
+ * 			Handles multiple types of errors: invalid flags, numeric
+ *			argument errors, too many arguments, invalid identifiers,
+ *			and system call failures. Prints usage messages as needed.
+ *
+ * @param	binerr	Integer code representing the type of error.
+ * @param	cmd		Command name associated with the error.
+ * @param	usage	String describing expected usage or argument.
+ * @param	flag	Character representing the invalid flag, if any.
+ *
+ * @return	MSHELL_FAILURE in general, or MSHELL_MISSUSE if a flag
+ *			error is present.
+ */
 int			shell_binerr(int binerr, char *cmd, char *usage, char flag);
 
 /**

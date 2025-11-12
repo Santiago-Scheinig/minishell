@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 14:28:31 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/06 15:17:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:17:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,24 @@
 #include "msh_exe.h"
 #include "msh_exe_bonus.h"
 
-
 /**
- * @brief	Main parsing routine for minishell input processing.
+ * @brief	Parses and executes a shell input string.
  *
- *			Coordinates all parsing stages required to transform
- *			user input into executable command structures. Handles
- *			signal interruptions, lexical splitting, tokenization,
- *			environment variable expansion, and command setup.
+ *			Performs tokenization, variable expansion, wildcard
+ *			expansion, command parsing, and execution. Waits for
+ *			child processes if needed and handles cleanup.
  *
- *			Parsing sequence:
+ * @param	input	Input command line string.
+ * @param	msh		Shell context containing environment and state.
  *
- *				1. shell_sigint_read() — handles SIGINT on input.
- *				2. shell_cleanup() — resets parser state.
- *				3. parser_input() — retrieves and splits input line.
- *				4. parser_token() — builds token list.
- *				5. parser_envar() — expands environment variables.
- *				6. parser_cmds() — builds executable command list.
- *
- * @param	msh	Main shell structure holding runtime state,
- *			environment, tokens, and command lists.
- *
- * @note	On parsing or memory errors, exits via shell_forcend().
- * @note	Frees token list before returning successfully.
- *
- * @return	MSHELL_SUCCESS on success, MSHELL_SIG_HANDLR if a
- *			signal was caught during input.
+ * @return	MSHELL_SUCCESS if execution succeeds, MSHELL_FAILURE
+ *			or exit code on error.
  */
 static int	parser(char *input, t_body *msh)
 {
 	char	**split;
 
-	shell_cleanup(false, msh);
+	msh->input_result = MSHELL_SUCCESS;
 	if (parser_input(input, &split, msh))
 		return (MSHELL_FAILURE);
 	if (parser_token(split, msh))
@@ -60,99 +46,85 @@ static int	parser(char *input, t_body *msh)
 	parser_envar(msh);
 	parser_wildcard(msh);
 	parser_cmds(msh);
-	ft_lstclear(&(msh->head_token), shell_deltkn);
-	msh->head_token = NULL;
 	if (execution(msh))
 		return (MSHELL_FAILURE);
 	if (msh->childs_pid)
 		waitexec(msh);
+	shell_cleanup(false, msh);
 	if (msh->input_result == MSHELL_FAILURE)
 		return (MSHELL_FAILURE);
 	return (MSHELL_SUCCESS);
 }
 
-static char	*get_logic_input_right(char *input, const char *operator, t_body *msh)
+/**
+ * @brief	Determines the highest-priority logical operator in input.
+ *
+ *			Searches for "||" and "&&" operators, returning the one
+ *			that occurs last (highest evaluation priority).
+ *
+ * @param	input	Command line string to search.
+ *
+ * @return	Pointer to "||" or "&&" in the input, or NULL if none.
+ */
+const char	*get_operator_priority(char *input)
 {
-	int		i;
-	char	*right_input;
+	char	*operator_or;
+	char	*operator_and;
 
-	i = -1;
-	right_input = NULL;
-	input = ft_strnstr_ip(input, operator, ft_strlen(input) + 1);
-	if (!input)
-		return (right_input);
-	right_input = ft_substr(input, 2, ft_strlen(&input[2]) + 1);
-	if (!right_input)
-		shell_forcend(MSHELL_FAILURE, "malloc", msh);
-	return (right_input);
-}
-
-static char	*get_logic_input_left(char *input, const char *operator, t_body *msh)
-{
-	int		i;
-	char	*left_input;
-
-	i = -1;
-	left_input = NULL;
-	while (input[++i])
+	operator_or = ft_strrstr_ip(input, "||", ft_strlen(input));
+	operator_and = ft_strrstr_ip(input, "&&", ft_strlen(input));
+	if (operator_or && operator_and)
 	{
-		if (input[i] == '(')
-			while (input[i] != ')')
-				i++;
-		if (!ft_strncmp(&input[i], operator, ft_strlen(operator)))
-		{
-			left_input = ft_substr(input, 0, i);
-			if (!left_input)
-				shell_forcend(MSHELL_FAILURE, "malloc", msh);
-		}
+		if (operator_or > operator_and)
+			return ("||");
+		else
+			return ("&&");
 	}
-	return (left_input);
+	if (!operator_or && operator_and)
+		return ("&&");
+	if (operator_or && !operator_and)
+		return ("||");
+	return (NULL);
 }
 
-int	logic_subshell(char	*input, t_body *msh)
-{
-	char	*sub_input;
-	int		subshell_pid;
-	int		status;
-
-	subshell_pid = fork();
-	if (!subshell_pid)
-	{
-		input = ft_strchr(input, '(') + 1;
-		sub_input = ft_substr(input, 0, ft_strlen_chr(input, ')'));
-		exit (logic_execution(sub_input, msh));
-	}
-	if (waitpid(subshell_pid, &status, 0) == -1)
-		perror("msh: waitpid");
-	msh->exit_no = check_status(status, STDERR_FILENO, 0, 0);
-	if (msh->exit_no)
-		return (MSHELL_FAILURE);
-	return (MSHELL_SUCCESS);	
-}
-
+/**
+ * @brief	Executes a command line with logical operators handling.
+ *
+ *			Recursively executes left and right sides of "&&" and "||"
+ *			operators according to shell logic rules. Handles subshells
+ *			and signal interruptions.
+ *
+ * @param	input	Input command line string.
+ * @param	msh		Shell context containing environment and state.
+ *
+ * @note	Signals (SIGINT) during input reading are handled via
+ *			shell_sigint_read().
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE, or a special
+ *			signal handling code.
+ */
 int	logic_execution(char *input, t_body *msh)
 {
-	char		*smallest_input;
+	char		*left_input;
 	const char	*operator = NULL;
 
 	if (shell_sigint_read(msh))
+	{
+		free(input);
 		return (MSHELL_SIG_HANDLR);
-	if (ft_strnstr_ip(input, "&&", ft_strlen(input)))
-		operator = "&&";
-	else if (ft_strnstr_ip(input, "||", ft_strlen(input)))
-		operator = "||";
+	}
+	operator = get_operator_priority(input);
 	if (operator)
 	{
-		smallest_input = get_logic_input_left(input, operator, msh);
-		logic_execution(smallest_input, msh);
-		if (!ft_strncmp(operator, "||", 2) && msh->input_result)
-			logic_execution(get_logic_input_right(input, operator, msh), msh);
-		else if (!ft_strncmp(operator, "&&", 2) && !msh->input_result)
-			logic_execution(get_logic_input_right(input, operator, msh), msh);
+		left_input = logic_input_left(input, operator, msh);
+		logic_execution(left_input, msh);
+		if ((!ft_strncmp(operator, "||", 2) && msh->input_result)
+			|| (!ft_strncmp(operator, "&&", 2) && !msh->input_result))
+			logic_execution(logic_input_right(input, operator, msh), msh);
 		free(input);
 		return (MSHELL_SUCCESS);
 	}
-	else if (ft_strchr(input, '('))
+	else if (ft_strchr_iq(input, '('))
 		return (logic_subshell(input, msh));
 	return (parser(input, msh));
 }
