@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 20:36:36 by sscheini          #+#    #+#             */
-/*   Updated: 2025/10/20 16:04:49 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:50:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,25 +55,27 @@ t_list	*cmdupd_err(t_list *lst_token, t_cmd **new_cmd)
  *
  * @param	tkn_next	Token containing the filename for input.
  * @param	new			Command to receive the updated input fd.
+ * @param	l			The line number where the redirection is being
+ * 			execited.
  *
  * @note	Closes previous infd if it was greater than STDERR_FILENO.
  *
  * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE otherwise.
  */
-static int	cmdupd_infile(t_token *tkn_next, t_cmd *new)
+static int	cmdupd_infile(t_token *tkn_next, t_cmd *new, int l)
 {
 	if (new->infd > 2)
 		close(new->infd);
 	if (access(tkn_next->str, R_OK | F_OK))
 	{
 		new->infd = -1;
-		return (shell_redirerr(MSHELL_FAILURE, tkn_next->str));
+		return (shell_redirerr(MSHELL_FAILURE, tkn_next->str, l));
 	}
 	else
 	{
 		new->infd = open(tkn_next->str, O_RDONLY);
 		if (new->infd < 0)
-			return (shell_redirerr(MSHELL_FAILURE, tkn_next->str));
+			return (shell_redirerr(MSHELL_FAILURE, tkn_next->str, l));
 	}
 	free(tkn_next->str);
 	tkn_next->str = NULL;
@@ -90,18 +92,20 @@ static int	cmdupd_infile(t_token *tkn_next, t_cmd *new)
  * @param	open_flag	File open mode (O_TRUNC or O_APPEND).
  * @param	tkn_next	Token containing the output filename.
  * @param	new			Command to receive the updated output fd.
+ * @param	l			The line number where the redirection is being
+ * 			executed.
  *
  * @note	Closes previous outfd if greater than STDERR_FILENO.
  *
  * @return	MSHELL_SUCCESS on success, MSHELL_FAILURE on error.
  */
-static int	cmdupd_outfile(int open_flag, t_token *tkn_next, t_cmd *new)
+static int	cmdupd_outfile(int open_f, t_token *tkn_next, t_cmd *new, int l)
 {
 	if (new->outfd > 2)
 		close(new->outfd);
-	new->outfd = open(tkn_next->str, O_WRONLY | O_CREAT | open_flag, 0664);
+	new->outfd = open(tkn_next->str, O_WRONLY | O_CREAT | open_f, 0664);
 	if (new->outfd < 0)
-		return (shell_redirerr(MSHELL_FAILURE, tkn_next->str));
+		return (shell_redirerr(MSHELL_FAILURE, tkn_next->str, l));
 	free(tkn_next->str);
 	tkn_next->str = NULL;
 	return (MSHELL_SUCCESS);
@@ -146,19 +150,21 @@ static int	cmdupd_heredoc(t_token *aux, t_cmd *new)
  * @param	aux			Current token (redir operator).
  * @param	aux_next	Next token (target filename or heredoc).
  * @param	new			Active command structure.
+ * @param	line		The line number where the redirection is being 
+ * 			sexecuted.
  *
  * @note	Returns failure if an unknown redirection type is found.
  *
  * @return	MSHELL_SUCCESS or MSHELL_FAILURE depending on result.
  */
-int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new)
+int	cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new, int line)
 {
 	if (aux->type == REDIR_IN)
-		return (cmdupd_infile(aux_next, new));
+		return (cmdupd_infile(aux_next, new, line));
 	if (aux->type == REDIR_OUT)
-		return (cmdupd_outfile(O_TRUNC, aux_next, new));
+		return (cmdupd_outfile(O_TRUNC, aux_next, new, line));
 	if (aux->type == REDIR_APPEND)
-		return (cmdupd_outfile(O_APPEND, aux_next, new));
+		return (cmdupd_outfile(O_APPEND, aux_next, new, line));
 	if (aux->type == HEREDOC)
 		return (cmdupd_heredoc(aux, new));
 	return (MSHELL_FAILURE);

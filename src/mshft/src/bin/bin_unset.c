@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:11:20 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/12 17:29:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 10:33:08 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int	bin_unset(char **arg, char ***envp, t_list **head_t_var)
 	int		i;
 
 	i = -1;
-	if (arg[0][0] == '-')
+	if (arg[0] && arg[0][0] == '-')
 		return (shell_binerr(INVFLGS, "unset", "name ...", arg[0][1]));
 	while (arg[++i])
 	{

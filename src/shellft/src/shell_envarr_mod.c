@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 03:18:38 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:44:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 15:04:06 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static int	swap_value(char	**envp, char *var)
 {
 	char	*tmp;
 
+	if (!ft_strchr(var, '='))
+		return (MSHELL_SUCCESS);
 	tmp = (*envp);
 	(*envp) = ft_strdup(var);
 	if (!(*envp))

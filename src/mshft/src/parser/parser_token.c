@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:02:55 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:22:35 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 14:28:21 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ static int	token_hdoc(t_token *aux_token, t_token *next_token, t_body *msh)
 		{
 			aux_token->heredoc_fd = -1;
 			msh->exit_no = MSHELL_FAILURE;
-			shell_redirerr(msh->exit_no, NULL);
+			shell_redirerr(msh->exit_no, NULL, 0);
 			return (MSHELL_SUCCESS);
 		}
 		if (shell_sigign_all())

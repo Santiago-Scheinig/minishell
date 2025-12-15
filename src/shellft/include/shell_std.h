@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 20:39:28 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/12 17:56:58 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:50:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -689,12 +689,13 @@ int			shell_parserr(const char *next, t_body *msh);
  * @param	exit_no	The exit code to return after reporting the error.
  * @param	argv	Pointer to the string describing the failing operation,
  *			or NULL to default to "pipe".
- *
+ * @param	line	For non interactive shell, the line where the redirection
+ * 			is being executed.
  * @note	Does not terminate the shell; caller handles continuation or exit.
  *
  * @return	The provided exit code (exit_no).
  */
-int			shell_redirerr(int exit_no, char *argv);
+int			shell_redirerr(int exit_no, char *argv, int line);
 
 /**
  * @brief	Forcefully exits the shell, optionally printing an error.

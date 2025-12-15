@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 23:52:57 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/12 17:31:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:05:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,5 +207,10 @@ int	parser_input(char *logic_input, char ***split, t_body *msh)
 	free(input);
 	if (!(*split))
 		shell_forcend(MSHELL_FAILURE, "malloc", msh);
+	if (!(*split)[0])
+	{
+		ft_split_free((*split));
+		return (MSHELL_FAILURE);
+	}
 	return (MSHELL_SUCCESS);
 }

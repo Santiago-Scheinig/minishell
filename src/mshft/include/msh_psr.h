@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:57:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/12 18:11:39 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:49:45 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,12 +343,14 @@ t_list		*cmdupd_err(t_list *lst_token, t_cmd **new_cmd);
  * @param	aux			Current token (redir operator).
  * @param	aux_next	Next token (target filename or heredoc).
  * @param	new			Active command structure.
+ * @param	line		The line number where the redirection is being 
+ * 			sexecuted.
  *
  * @note	Returns failure if an unknown redirection type is found.
  *
  * @return	MSHELL_SUCCESS or MSHELL_FAILURE depending on result.
  */
-int			cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new);
+int			cmdupd_redir(t_token *aux, t_token *aux_next, t_cmd *new, int l);
 
 /*--------------------------------------------------------------------------*/
 /*------------------------------------END-----------------------------------*/

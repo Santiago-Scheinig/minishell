@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:01:44 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:27:05 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 12:41:50 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,29 +173,29 @@ static void	cmdupd_save(t_list *lst_token, t_cmd **new_cmd, t_body *msh)
  */
 void	parser_cmds(t_body *msh)
 {
-	t_cmd	*new_cmd;
-	t_list	*lst_token;
+	t_cmd	*new;
+	t_list	*lst_tkn;
 	t_token	*tkn;
 
-	lst_token = msh->head_token;
-	new_cmd = cmd_init(msh->head_token);
-	if (!new_cmd)
+	lst_tkn = msh->head_token;
+	new = cmd_init(msh->head_token);
+	if (!new)
 		shell_forcend(MSHELL_FAILURE, "malloc", msh);
-	while (lst_token)
+	while (lst_tkn)
 	{
-		tkn = (t_token *) lst_token->content;
+		tkn = (t_token *) lst_tkn->content;
 		if (tkn->type && tkn->type != PIPE && tkn->type != END)
 		{
-			lst_token = lst_token->next;
-			msh->exit_no = cmdupd_redir(tkn, lst_token->content, new_cmd);
+			lst_tkn = lst_tkn->next;
+			msh->exit_no = cmdupd_redir(tkn, lst_tkn->content, new, msh->line);
 			if (msh->exit_no)
-				lst_token = cmdupd_err(lst_token, &new_cmd);
+				lst_tkn = cmdupd_err(lst_tkn, &new);
 		}
 		else if (tkn->type == WORD)
-			cmdupd_argv(tkn, new_cmd);
+			cmdupd_argv(tkn, new);
 		else if (tkn->type == PIPE)
-			cmdupd_save(lst_token, &new_cmd, msh);
-		lst_token = lst_token->next;
+			cmdupd_save(lst_tkn, &new, msh);
+		lst_tkn = lst_tkn->next;
 	}
-	cmdupd_save(NULL, &new_cmd, msh);
+	cmdupd_save(NULL, &new, msh);
 }

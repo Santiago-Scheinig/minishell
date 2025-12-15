@@ -6,11 +6,31 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 14:51:38 by ischeini          #+#    #+#             */
-/*   Updated: 2025/10/21 20:27:28 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 11:32:51 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "msh_bin.h"
+
+int	get_exit_no(char *arg_no)
+{
+	int	i;
+	int	exit_no;
+
+	exit_no = MSHELL_SUCCESS;
+	if (!ft_isdigit(arg_no[0]) && arg_no[0] != '+' && arg_no[0] != '-')
+	{
+		shell_binerr(INVARGV, "exit", arg_no, 0);
+		return (exit_no);
+	}
+	i = 1;
+	while (ft_isdigit(arg_no[i]))
+		i++;
+	if (!arg_no[i])
+		return (ft_atoi(arg_no));
+	shell_binerr(INVARGV, "exit", arg_no, 0);
+	return (exit_no);
+}
 
 /**
  * @brief	Implements the 'exit' built-in command.
@@ -39,7 +59,8 @@
  */
 int	bin_exit(char **args, t_body *msh)
 {
-	int	i;
+	int			i;
+	int			exit_no;
 
 	i = 0;
 	if (msh && msh->interactive)
@@ -49,13 +70,12 @@ int	bin_exit(char **args, t_body *msh)
 		return (shell_binerr(INVARGC, "exit", NULL, '\0'));
 	if (args && args[1])
 	{
+		exit_no = get_exit_no(args[1]);
 		if (msh)
 			shell_cleanup(true, msh);
-		while (ft_isdigit(args[1][i]))
-			i++;
-		if (!args[1][i])
-			exit(ft_atoi(args[1]));
-		exit(shell_binerr(INVARGV, "exit", args[1], 0));
+		if (exit_no)
+			exit(exit_no);
+		exit(MSHELL_FAILURE);
 	}
 	if (msh)
 		shell_cleanup(true, msh);

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 10:15:22 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/12 17:31:07 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 12:31:28 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	try_absolut_path(int orig_errfd, char **argv, char **envp)
 		if (is_shell(argv[0]) && access(argv[0], X_OK) && orig_errfd != -1)
 			dup2(orig_errfd, STDERR_FILENO);
 		if (execve(argv[0], argv, envp))
-			err_endexe(MSHELL_FAILURE, "execve", NULL);
+			err_endexe(MSHELL_FAILURE, argv[0], NULL);
 	}
 }
 
@@ -66,7 +66,7 @@ static void	execmd(int orig_errfd, char **argv, char **envp, char **path)
 		if (!pathname)
 			err_endexe(MSHELL_FAILURE, "malloc", NULL);
 		if (is_directory(pathname))
-			err_endexe(MSHELL_CMD_ISDIR, argv[0], NULL);
+			err_endexe(MSHELL_CMD_ISDIR, pathname, NULL);
 		if (is_shell(pathname) && !access(pathname, X_OK) && orig_errfd != -1)
 			dup2(orig_errfd, STDERR_FILENO);
 		execve(pathname, argv, envp);
@@ -103,7 +103,7 @@ static int	exe_setup(int errfd[2], t_cmd *exe, t_list *lst_cmd, t_body *msh)
 	{
 		orig_errfd = -1;
 		close(errfd[1]);
-		shell_redirerr(MSHELL_FAILURE, NULL);
+		shell_redirerr(MSHELL_FAILURE, NULL, 0);
 	}
 	if (dup2(exe->infd, STDIN_FILENO) == -1)
 		err_endexe(MSHELL_FAILURE, "dup2", lst_cmd);
@@ -137,7 +137,7 @@ static void	execmd_ini(int index, char **path, t_list *lst_cmd, t_body *msh)
 	ft_memset(errfd, -1, 2 * sizeof(int));
 	exe = (t_cmd *) lst_cmd->content;
 	if (pipe(errfd) == -1)
-		shell_redirerr(MSHELL_FAILURE, NULL);
+		shell_redirerr(MSHELL_FAILURE, NULL, 0);
 	msh->childs_pid[index] = fork();
 	if (!msh->childs_pid[index])
 	{

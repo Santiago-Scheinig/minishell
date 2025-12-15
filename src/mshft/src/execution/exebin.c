@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/21 14:57:49 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/12 17:30:10 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:51:29 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ static int	exebin_end(int exit_no, t_orig fd, int errfd_read, t_body *msh)
 	if (fd.orig_stdout > -1)
 	{
 		if (dup2(fd.orig_stdout, STDOUT_FILENO) == -1)
-			return (shell_redirerr(MSHELL_FATAL, "STDOUT_FILENO:"));
+			return (shell_redirerr(MSHELL_FATAL, "STDOUT_FILENO:", 0));
 		close(fd.orig_stdout);
 	}
 	if (fd.orig_stderr > -1)
 	{
 		if (dup2(fd.orig_stderr, STDERR_FILENO) == -1)
-			return (shell_redirerr(MSHELL_FATAL, "STDERR_FILENO:"));
+			return (shell_redirerr(MSHELL_FATAL, "STDERR_FILENO:", 0));
 		close(fd.orig_stderr);
 	}
 	return (err_msgfd(exit_no, errfd_read, msh->interactive, msh->line));
@@ -98,11 +98,11 @@ static int	exebin_ini(t_orig *fd, int *errfd_write, t_cmd *exe)
 	{
 		fd->orig_stdout = dup(STDOUT_FILENO);
 		if (dup2(exe->outfd, STDOUT_FILENO) == -1)
-			return (shell_redirerr(MSHELL_FAILURE, exe->argv[0]));
+			return (shell_redirerr(MSHELL_FAILURE, exe->argv[0], 0));
 		close(exe->outfd);
 	}
 	if ((*errfd_write) != -1 && dup2((*errfd_write), STDERR_FILENO) == -1)
-		shell_redirerr(MSHELL_FAILURE, exe->argv[0]);
+		shell_redirerr(MSHELL_FAILURE, exe->argv[0], 0);
 	if ((*errfd_write) != -1)
 		close((*errfd_write));
 	(*errfd_write) = -1;
@@ -169,8 +169,8 @@ int	exebin_parent(int bin_no, t_cmd *exe, t_body *msh)
 	ft_memset(&fd, -1, sizeof(t_orig));
 	ft_memset(errfd, -1, 2 * sizeof(int));
 	if (pipe(errfd) == -1)
-		shell_redirerr(MSHELL_FAILURE, NULL);
-	if (exebin_ini(&fd, &errfd[1], exe))
+		shell_redirerr(MSHELL_FAILURE, NULL, 0);
+	if (bin_no != BINCMD_EXIT && exebin_ini(&fd, &errfd[1], exe))
 		return (MSHELL_FAILURE);
 	exit_no = exebin(bin_no, exe, msh);
 	if (exit_no == MSHELL_FAILURE)
@@ -180,8 +180,9 @@ int	exebin_parent(int bin_no, t_cmd *exe, t_body *msh)
 			exebin_end(exit_no, fd, errfd[0], msh);
 			shell_forcend(MSHELL_FAILURE, NULL, msh);
 		}
+		exit_no = MSHELL_SUCCESS;
 	}
-	if (exebin_end(exit_no, fd, errfd[0], msh))
+	if (bin_no != BINCMD_EXIT && exebin_end(exit_no, fd, errfd[0], msh))
 		shell_forcend(MSHELL_FAILURE, NULL, msh);
 	msh->exit_no = exit_no;
 	return (exit_no);

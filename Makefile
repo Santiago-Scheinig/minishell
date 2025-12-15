@@ -1,8 +1,8 @@
 #	================================ Main Configuration ================================	#
 
 #	Executable names
-NAME = msh
-NAME_BONUS = msh_bonus
+NAME = minishell
+NAME_BONUS = minishell_bonus
 
 #	Source files
 MAIN_SRC = $(SOURCE_DIR)/main.c

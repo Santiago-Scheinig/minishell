@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 18:04:07 by ischeini          #+#    #+#             */
-/*   Updated: 2025/11/05 15:27:11 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 14:45:49 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,12 @@ int	bin_cd(char **args, t_list **envp)
 		if (!dir)
 			return (shell_binerr(INVHOME, "cd", "malloc", '\0'));
 	}
+	else if (args[2])
+		return (shell_binerr(INVARGC, "cd", "malloc", '\0'));
 	else if (args[1] && args[1][0] == '-')
 		return (shell_binerr(INVFLGS, "cd", "dir", args[1][1]));
 	else if (!args[2])
 		dir = args[1];
-	else
-		return (shell_binerr(INVARGC, "cd", "malloc", '\0'));
 	if (chdir(dir) != 0)
 		return (shell_binerr(SYSFAIL, "cd", dir, '\0'));
 	return (change_pwd(envp));

@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 04:38:52 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/03 17:43:36 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 15:20:22 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*get_name(char *var)
  *			If '=' is missing, assigns NULL to the output pointer.
  *
  * @param	var		String containing the variable in the form "NAME=VALUE".
- * @param	value	Double pointer where the duplicated value string is stored.
+ * @param	envar	Pointer where the enviromental value string is stored.
  *
  * @note	If the variable has no value (e.g., "NAME="), an empty string is
  *			duplicated instead of NULL. Caller is responsible for freeing it.
@@ -85,19 +85,26 @@ char	*get_name(char *var)
  * @return	MSHELL_SUCCESS on success, or MSHELL_FAILURE if memory allocation
  *			for the duplicated value fails.
  */
-int	get_value(char *var, char **value)
+int	get_value(char *var, t_var *envar)
 {
+	char	*aux;
+
 	if (!ft_strchr(var, '='))
-		(*value) = NULL;
-	else
+		return (MSHELL_SUCCESS);
+	aux = envar->value;
+	if (ft_strchr(var, '='))
 	{
 		var = ft_strchr(var, '=');
 		if (!var[1])
-			(*value) = ft_strdup("");
+			envar->value = ft_strdup("");
 		else
-			(*value) = ft_strdup(++var);
-		if (!(*value))
+			envar->value = ft_strdup(++var);
+		if (!envar->value)
+		{
+			envar->value = aux;
 			return (MSHELL_FAILURE);
+		}
 	}
+	free(aux);
 	return (MSHELL_SUCCESS);
 }

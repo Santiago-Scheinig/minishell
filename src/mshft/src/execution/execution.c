@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:06:14 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/12 17:32:57 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 12:21:52 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	setup_pipeline(t_list *lst_cmd)
 		if (exe_setfd(exe, exe_next))
 		{
 			exe_endfd(aux, 1);
-			return (shell_redirerr(MSHELL_FAILURE, NULL));
+			return (shell_redirerr(MSHELL_FAILURE, NULL, 0));
 		}
 		lst_cmd = lst_cmd->next;
 	}

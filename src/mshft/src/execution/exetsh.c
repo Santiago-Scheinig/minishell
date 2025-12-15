@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:19:03 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/12 17:34:54 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 12:13:25 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	err_endfd(int *errfd)
 int	err_msgfd(int status, int errfd, int interactive, int line)
 {
 	char	*err_line;
-	int		i;
 
 	err_line = NULL;
 	if (errfd > 2)
@@ -56,12 +55,9 @@ int	err_msgfd(int status, int errfd, int interactive, int line)
 		return (status);
 	while (err_line)
 	{
+		write(STDERR_FILENO, "msh: ", 5);
 		if (!interactive)
-		{
-			i = -1;
-			write(STDERR_FILENO, "msh: ", 5);
-			ft_fprintf(STDERR_FILENO, "line %i: %s", line, &err_line[++i]);
-		}
+			ft_fprintf(STDERR_FILENO, "line %i: %s", line, err_line);
 		else
 			ft_fprintf(STDERR_FILENO, "%s", err_line);
 		free(err_line);

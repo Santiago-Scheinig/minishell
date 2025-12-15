@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 21:24:41 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/12 18:03:08 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:49:58 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char		*get_name(char *var);
  *			If '=' is missing, assigns NULL to the output pointer.
  *
  * @param	var		String containing the variable in the form "NAME=VALUE".
- * @param	value	Double pointer where the duplicated value string is stored.
+ * @param	envar	Pointer where the enviromental value string is stored.
  *
  * @note	If the variable has no value (e.g., "NAME="), an empty string is
  *			duplicated instead of NULL. Caller is responsible for freeing it.
@@ -54,7 +54,7 @@ char		*get_name(char *var);
  * @return	MSHELL_SUCCESS on success, or MSHELL_FAILURE if memory allocation
  *			for the duplicated value fails.
  */
-int			get_value(char *var, char **value);
+int			get_value(char *var, t_var *envar);
 
 /**
  * @brief	Creates a string representing the current working directory.

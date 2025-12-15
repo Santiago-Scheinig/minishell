@@ -6,7 +6,7 @@
 /*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 19:58:43 by sscheini          #+#    #+#             */
-/*   Updated: 2025/11/12 17:45:00 by sscheini         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:48:02 by sscheini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,19 @@ int	shell_binerr(int binerr, char *cmd, char *usage, char flag)
  * @param	exit_no	The exit code to return after reporting the error.
  * @param	argv	Pointer to the string describing the failing operation,
  *			or NULL to default to "pipe".
- *
+ * @param	line	For non interactive shell, the line where the redirection
+ * 			is being executed.
  * @note	Does not terminate the shell; caller handles continuation or exit.
  *
  * @return	The provided exit code (exit_no).
  */
-int	shell_redirerr(int exit_no, char *argv)
+int	shell_redirerr(int exit_no, char *argv, int line)
 {
 	if (!argv)
 		argv = "pipe";
 	ft_fprintf(STDERR_FILENO, "msh: ");
+	if (line)
+		ft_fprintf(STDERR_FILENO, "line %i: ", line);
 	perror(argv);
 	return (exit_no);
 }
