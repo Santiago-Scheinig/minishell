@@ -10,75 +10,138 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "signals.h"
-#include "parser.h"
+#include <sys/stat.h>
+#include "msh_psr.h"
+#include "msh_exe.h"
 
 /**
- * Short description of the function porpuse.
- * 
- * @param argc What this argument should be
- * @param argv What this argument should be
- * @param envp What this argument should be
- *  
- * Additional information about behaivor and how it works.
- * 
- * Verifies if [argc] is valid and works on [envp] to find cmd binaries.
- * 
- * To jump lines you must leave an empty one.
- * 
- * @return What does the function returns (If it returns something)
- * @note - A specific note about a particular behaivor or error.
- * @note - [argv] is not used
- * @note - You can add snippets using the "-" character at the beggining
- * 
+ * @brief	Main parsing routine for minishell input processing.
+ *
+ *			Coordinates all parsing stages required to transform
+ *			user input into executable command structures. Handles
+ *			signal interruptions, lexical splitting, tokenization,
+ *			environment variable expansion, and command setup.
+ *
+ *			Parsing sequence:
+ *
+ *				1. shell_sigint_read() — handles SIGINT on input.
+ *				2. shell_cleanup() — resets parser state.
+ *				3. parser_input() — retrieves and splits input line.
+ *				4. parser_token() — builds token list.
+ *				5. parser_envar() — expands environment variables.
+ *				6. parser_cmds() — builds executable command list.
+ *
+ * @param	msh	Main shell structure holding runtime state,
+ *			environment, tokens, and command lists.
+ *
+ * @note	On parsing or memory errors, exits via shell_forcend().
+ * @note	Frees token list before returning successfully.
+ *
+ * @return	MSHELL_SUCCESS on success, MSHELL_SIG_HANDLR if a
+ *			signal was caught during input.
  */
+static int	parser(t_body *msh)
+{
+	char	**split;
 
-// temporal cleanup for tests
-
-void	cleanup(t_body *minishell)
-https://github.com/Santiago-Scheinig/minishell/pull/35/conflict?name=include%252Fminishell.h&ancestor_oid=0ca17f3df83afadea873b14aaf06c1326bdcb304&base_oid=f9b00f86bd4b4724c87fe68c4ae9f23e3abc27ba&head_oid=adfface19af4da9339a85db904208a67719edd83{
-	if (minishell->input)
+	if (shell_sigint_read(msh))
+		return (MSHELL_SIG_HANDLR);
+	shell_cleanup(false, msh);
+	if (parser_input(NULL, &split, msh))
+		return (MSHELL_FAILURE);
+	if (parser_token(split, msh))
 	{
-		free(minishell->input);
-		minishell->input = NULL;
+		if (!msh->interactive && msh->exit_no == MSHELL_MISSUSE)
+			shell_forcend(msh->exit_no, NULL, msh);
+		if (msh->exit_no == MSHELL_FAILURE)
+			shell_forcend(msh->exit_no, msh->exit_ft, msh);
+		return (msh->exit_no);
 	}
-	if (minishell->token_lst)
-	{
-		shell_lstclear(&(minishell->token_lst), shell_lstdeltkn);
-		minishell->token_lst = NULL;
-	}
-	if (minishell->cmd_lst)
-	{
-		shell_lstclear(&(minishell->cmd_lst), shell_lstdelcmd);
-		minishell->cmd_lst = NULL;
-	}
-	if (minishell->childs_pid)
-	{
-		free(minishell->childs_pid);
-		minishell->childs_pid = NULL;
-	}
+	parser_envar(msh);
+	parser_cmds(msh);
+	ft_lstclear(&(msh->head_token), shell_deltkn);
+	msh->head_token = NULL;
+	return (MSHELL_SUCCESS);
 }
 
-int	main(int argc, char **argv, char **envp)
+/**
+ * @brief	Initializes the main minishell state and terminal environment.
+ *
+ *			Sets up the t_body structure, configures terminal attributes
+ *			for interactive sessions, applies signal handlers, and loads
+ *			the environment variables into both array and list formats.
+ *
+ * @param	msh	Pointer to the main shell structure to initialize.
+ *
+ * @note	If the shell runs interactively, echo control characters
+ *			(like ^C) are displayed using ECHOCTL mode.
+ * @note	On any initialization error (termios or malloc failure),
+ *			the shell terminates immediately through shell_forcend().
+ *
+ * @return	None. Exits the program if any step fails.
+ */
+static void	msh_init(const char **envp, t_body *msh)
 {
-	t_body	minishell;
-	t_list	*aux;
+	struct termios	new_term;
 
-	if (argc != 1 || !argv[0])
-		return (1);
-	initialization();
-  ft_memset(&minishell, 0, sizeof(t_body));
-	if (!shell_prompt(&minishell))
-		return (1);
-	minishell.lst_env = init_envp(envp);
-	minishell.lst_export = init_envp(envp);
+	ft_memset(msh, 0, sizeof(t_body));
+	msh->interactive = isatty(STDIN_FILENO);
+	if (msh->interactive)
+	{
+		if (tcgetattr(STDIN_FILENO, &(msh->orig_term)))
+			shell_forcend(MSHELL_FATAL, "tcgetattr", msh);
+		new_term = msh->orig_term;
+		new_term.c_lflag |= ECHOCTL;
+		if (tcsetattr(STDIN_FILENO, TCSANOW, &new_term))
+			shell_forcend(MSHELL_FATAL, "tcsetattr", msh);
+		if (shell_sigquit() || shell_sigint(msh->interactive))
+			shell_forcend(MSHELL_FAILURE, "sigaction", msh);
+	}
+	else if (shell_sigint(msh->interactive))
+		shell_forcend(MSHELL_FAILURE, "sigaction", msh);
+	if (shell_envini((char **) envp, &(msh->envp), &(msh->head_envar)))
+		shell_forcend(MSHELL_FAILURE, "malloc", msh);
+}
+
+/**
+ * @brief Entry point for the mini shell program.
+ *
+ * Initializes the shell environment, including terminal settings and
+ * environment variables. Enters the main shell loop, handling parsing,
+ * command execution, and waiting for child processes.
+ *
+ * @param argc	Number of command-line arguments.
+ * @param argv	Array of command-line argument strings.
+ * @param envp	Array of environment variable strings.
+ *
+ * @note	If command-line arguments are provided, the shell returns an error
+ *			(ENOENT) and exits immediately.
+ * @note	The main loop normally runs indefinitely in interactive mode until
+ *			the shell is externally terminated. In non-interactive mode, the
+ *			loop continues until input ends or a syntax error occurs.
+ * @note	errno is reset to 0 before parsing, executing, and waiting for
+ *			commands to ensure accurate error handling.
+ *
+ * @return	The exit status stored in 'msh.exit_no', which reflects the last
+ *			executed command's exit code, or MSHELL_FAILURE if an invalid
+ *			argument is provided at startup.
+ */
+int	main(int argc, char **argv, const char **envp)
+{
+	t_body	msh;
+
+	errno = ENOENT;
+	msh_init(envp, &msh);
+	if (argc > 1 || argv[1])
+		shell_forcend(MSHELL_FAILURE, argv[1], &msh);
 	while (1)
 	{
-		recive_signals(&minishell);
-		parser(&minishell); // <-- An place it inside of parser as the first step "recive_user_input()"
-		//execute(commands)
-		//if only one cmd and it's built in - don't fork, any other way we fork.
+		if (parser(&msh))
+			continue ;
+		if (execution(&msh))
+			continue ;
+		if (msh.childs_pid)
+			waitexec(&msh);
 	}
-	return (0);
+	return (msh.exit_no);
 }

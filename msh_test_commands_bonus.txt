@@ -1,0 +1,146 @@
+#!/bin/bash
+# Minishell functional test suite
+# Tests logical operators, globbing, pipes, redirections, and quoting.
+
+echo "=== BASIC LOGICAL TESTS ==="
+echo "1:"
+echo Hello && echo World
+echo "2:"
+false && echo should_not_print
+echo "3:"
+true || echo should_not_print
+echo "4:"
+false || echo should_print
+
+echo
+echo "=== MIXED AND/OR LOGIC ==="
+echo "5:"
+true && echo A || echo B
+echo "6:"
+false && echo A || echo B
+echo "7:"
+true || echo A && echo B
+echo "8:"
+false || echo A && echo B
+echo "9:"
+true && false || echo after_and_fail
+echo "10:"
+false || true && echo mixed_logic
+echo "11:"
+false && true || false && echo complex
+echo "12:"
+true && echo ok && false || echo fallback
+
+echo
+echo "=== PRECEDENCE TESTS ==="
+echo "13:"
+false && true || echo "|| wins"
+echo "14:"
+true || echo "|| skipped" && echo "&& still runs"
+
+echo
+echo "=== GROUPING (if supported) ==="
+(true && false) || echo "15: grouped_or"
+(false || true) && echo "16: grouped_and"
+(true && (false || true)) && echo "17: nested_logic"
+
+echo
+echo "=== EXIT CODE CHECKS ==="
+(ls nonexistent_dir) && echo "18: ls succeeded" || echo "18: ls failed"
+(grep something nonexistent_file) && echo "19: found" || echo "19: not found"
+
+echo
+echo "=== WILDCARD / GLOBBING TESTS ==="
+mkdir -p tmp_globdir && cd tmp_globdir
+touch a.c b.c c.sh d.txt "a*file" "no.match"
+echo "20:"
+echo *
+echo "21:"
+echo *.c
+echo "22:"
+echo *.sh
+echo "23:"
+echo /
+echo "24:"
+echo *.*
+echo "25:"
+echo no_match_*
+echo "26:"
+echo a/file
+echo "27:"
+echo "*"
+echo "28:"
+echo '*'
+echo "29:"
+echo "Files: "*
+echo "30:"
+echo Files: /
+cd ..
+
+echo
+echo "=== GLOBBING WITH LOGIC ==="
+echo "31:"
+echo *.c && echo "expanded ok"
+echo "32:"
+echo no_match_* || echo "no files matched"
+echo "33:"
+cd tmp_globdir | ls *.txt && echo "txts found" || echo "no txts"
+
+echo
+echo "=== ERROR PROPAGATION ==="
+echo "34:"
+ls missing_file && echo ok
+echo "35:"
+ls missing_file || echo "handled error"
+echo "36:"
+false && true || true && echo "chained fallback"
+
+echo
+echo "=== PIPES AND REDIRECTIONS ==="
+echo "37:"
+echo "foo bar baz" | grep bar && echo "pipe success"
+echo "38:"
+echo "foo" | grep bar || echo "pipe fail"
+echo "39:"
+echo "test redir" > tmp_output.txt && cat tmp_output.txt
+echo "40:"
+echo "append" >> tmp_output.txt && cat tmp_output.txt
+echo "41:"
+cat < tmp_output.txt | grep append && echo "redir+pipe ok"
+echo "42:"
+cat < tmp_output.txt | grep missing || echo "grep failed"
+echo "43:"
+ls missing > tmp_error.log || echo "stderr redirected"
+
+echo
+echo "=== QUOTING EDGE CASES ==="
+echo "44:"
+echo "*"
+echo "45:"
+echo '*'
+echo "46:"
+echo "Files: "* 
+echo "47:"
+echo Files: /
+echo "48:"
+echo "Quotes with && and ||" && echo "still works"
+echo "49:"
+echo 'Single quote test' || echo "should not trigger"
+
+echo
+echo "=== COMPLEX CHAINED LOGIC ==="
+echo "50:"
+false && echo a || false && echo b || echo c
+echo "51:"
+true && false && echo never || echo always
+echo "52:"
+(true && echo yes) || (false && echo no)
+echo "53:"
+echo start && ls * && false || echo recovered
+echo "54:"
+echo begin || echo alt && echo end
+
+echo
+echo "=== CLEANUP ==="
+rm -rf tmp_globdir tmp_output.txt tmp_error.log
+echo "All tests completed."
